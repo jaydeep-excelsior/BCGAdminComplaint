@@ -565,15 +565,26 @@ namespace BarCouncilComplaint.Controllers
                     bool smsSent = false;
                     try
                     {
-                        string sContactNumber = memberMobile;
+                        string sContactNumber = !string.IsNullOrEmpty(mobileNumber) ? mobileNumber.Trim() : memberMobile;
                         if (!string.IsNullOrEmpty(sContactNumber))
                         {
-                            string message = "Complaint Assigned to You – The Bar Council of Gujarat. Please click the link below to view the complaint details and take the necessary action: " + link;
+                            // Keep digits only
+                            sContactNumber = System.Text.RegularExpressions.Regex.Replace(sContactNumber, @"[^\d]", "");
+                            if (sContactNumber.Length == 12 && sContactNumber.StartsWith("91"))
+                            {
+                                sContactNumber = sContactNumber.Substring(2);
+                            }
+
+                            // Standard ASCII hyphen (-) to match registered DLT template
+                            string message = "Complaint Assigned to You - The Bar Council of Gujarat. Please click the link below to view the complaint details and take the necessary action: " + link;
                             string url = "http://sms.hspsms.com/sendSMS?username=BCGSMS&message=" + HttpUtility.UrlEncode(message) + "&sendername=BCGMSG&smstype=TRANS&numbers=" + sContactNumber + "&apikey=8f381652-f622-4473-b934-212a9ff295f0&pe_id=1201160742985056427&template_id=1707173416339106900";
                             using (WebClient webClient = new WebClient())
                             {
-                                webClient.DownloadString(url);
-                                smsSent = true;
+                                string smsResponse = webClient.DownloadString(url);
+                                if (!string.IsNullOrEmpty(smsResponse) && smsResponse.IndexOf("Success", StringComparison.OrdinalIgnoreCase) >= 0)
+                                {
+                                    smsSent = true;
+                                }
                             }
                         }
                     }
