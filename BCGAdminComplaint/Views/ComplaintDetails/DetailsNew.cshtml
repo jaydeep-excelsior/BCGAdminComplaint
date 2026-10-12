@@ -2897,6 +2897,17 @@
     }
 
     function sendComplaintLink(dcId, mobileNumber, emailAddress) {
+        if (typeof Swal !== 'undefined') {
+            Swal.fire({
+                title: 'Sending Link...',
+                text: 'Please wait while sending the complaint link to ' + (emailAddress || 'member') + '...',
+                allowOutsideClick: false,
+                didOpen: function () {
+                    Swal.showLoading();
+                }
+            });
+        }
+
         $.ajax({
             type: "POST",
             url: "/ComplaintDetails/SendComplaintLinkSMS",
@@ -2905,13 +2916,25 @@
             dataType: "json",
             success: function (response) {
                 if (response.IsSuccess) {
-                    Swal.fire("Success!", response.Message, "success");
+                    if (typeof Swal !== 'undefined') {
+                        Swal.fire("Sent!", response.Message, "success");
+                    } else {
+                        swal("Sent!", response.Message, "success");
+                    }
                 } else {
-                    Swal.fire("Error!", response.Message || "Something went wrong!", "error");
+                    if (typeof Swal !== 'undefined') {
+                        Swal.fire("Error!", response.Message || "Something went wrong!", "error");
+                    } else {
+                        swal("Error!", response.Message || "Something went wrong!", "error");
+                    }
                 }
             },
             error: function (result) {
-                Swal.fire('Something went wrong!', '', 'error');
+                if (typeof Swal !== 'undefined') {
+                    Swal.fire('Something went wrong!', '', 'error');
+                } else {
+                    swal('Something went wrong!', '', 'error');
+                }
             }
         });
     }

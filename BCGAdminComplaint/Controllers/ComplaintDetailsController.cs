@@ -479,7 +479,7 @@ namespace BarCouncilComplaint.Controllers
 
                     string complaintLinkBaseUrl = ConfigurationManager.AppSettings["ComplaintLinkBaseUrl"] != null
                         ? ConfigurationManager.AppSettings["ComplaintLinkBaseUrl"].ToString()
-                        : "http://localhost:52274/BoardComplaint/Detail/";
+                        : "https://dcpanel.barcouncilofgujarat.org/BoardComplaint/Detail/";
                     string link = complaintLinkBaseUrl + complaintDetailEncryptCode;
 
                     bool emailSent = false;
@@ -504,6 +504,10 @@ namespace BarCouncilComplaint.Controllers
                         if (r.Read())
                         {
                             host = (r["Host"] ?? "").ToString().Trim();
+                            if (host.Equals("barcouncilofgujarat.org", StringComparison.OrdinalIgnoreCase))
+                            {
+                                host = "mail.barcouncilofgujarat.org";
+                            }
                             port = Convert.ToInt32(r["Port"] != DBNull.Value ? r["Port"] : 25);
                             smtpUser = (r["UserName"] ?? "").ToString().Trim();
                             smtpPass = (r["Password"] ?? "").ToString().Trim();
@@ -521,18 +525,18 @@ namespace BarCouncilComplaint.Controllers
                             {
                                 mail.From = new MailAddress(smtpUser, "Bar Council of Gujarat");
                                 mail.To.Add(memberEmail);
-                                mail.Subject = "Complaint Assigned to You: " + (!string.IsNullOrEmpty(complaintNumber) ? complaintNumber : "Bar Council of Gujarat");
+                                mail.Subject = "Board Complaint Details: " + (!string.IsNullOrEmpty(complaintNumber) ? complaintNumber : "Bar Council of Gujarat");
 
                                 string emailBody = 
                                     "<div style=\"font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; max-width: 650px; margin: 0 auto; background: #ffffff; border: 1px solid #e2e8f0; border-radius: 12px; overflow: hidden;\">" +
                                     "  <div style=\"background: linear-gradient(135deg, #1e3a8a 0%, #3b82f6 100%); color: #ffffff; padding: 24px; text-align: center;\">" +
                                     "    <h2 style=\"margin: 0; font-size: 20px; font-weight: 700;\">Bar Council of Gujarat</h2>" +
-                                    "    <p style=\"margin: 6px 0 0; font-size: 13px; opacity: 0.9;\">Disciplinary Committee - Complaint Portal Notification</p>" +
+                                    "    <p style=\"margin: 6px 0 0; font-size: 13px; opacity: 0.9;\">Board Complaint Details Notification</p>" +
                                     "  </div>" +
                                     "  <div style=\"padding: 28px 24px;\">" +
                                     "    <p style=\"font-size: 15px; color: #1e293b; margin-top: 0;\">Dear <strong>" + HttpUtility.HtmlEncode(memberName) + "</strong>,</p>" +
                                     "    <p style=\"font-size: 14px; color: #475569; line-height: 1.6;\">" +
-                                    "      You have been assigned as a member of the Disciplinary Committee for the following complaint matter. Please click the button below to view the complaint details and proceed with the necessary action:" +
+                                    "      You have been assigned as a committee member for the following complaint. Please click the button below to view the board complaint details and proceed with the necessary action:" +
                                     "    </p>" +
                                     "    <div style=\"background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 8px; padding: 16px; margin: 20px 0;\">" +
                                     "      <table style=\"width: 100%; border-collapse: collapse; font-size: 13px;\">" +
@@ -548,7 +552,7 @@ namespace BarCouncilComplaint.Controllers
                                     "    </div>" +
                                     "    <div style=\"text-align: center; margin: 30px 0;\">" +
                                     "      <a href=\"" + link + "\" target=\"_blank\" style=\"display: inline-block; background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%); color: #ffffff; text-decoration: none; font-size: 14px; font-weight: 600; padding: 12px 28px; border-radius: 8px;\">" +
-                                    "        View Complaint Details" +
+                                    "        View Board Complaint Details" +
                                     "      </a>" +
                                     "    </div>" +
                                     "    <p style=\"font-size: 12px; color: #64748b; line-height: 1.5; margin-bottom: 0;\">" +
