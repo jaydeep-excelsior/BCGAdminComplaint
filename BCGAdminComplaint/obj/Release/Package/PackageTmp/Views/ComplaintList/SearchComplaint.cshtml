@@ -4,6 +4,7 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
+
 <div class="modal fade" id="editComplainantModal" tabindex="-1" role="dialog" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">
@@ -32,8 +33,8 @@
                 </div>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-secondary btn-sm" data-bs-dismiss="modal">Close</button>
-                <button type="button" class="btn btn-primary btn-sm" onclick="saveComplainantDetails()">Update</button>
+                <button type="button" class="btn btn-outline-secondary btn-sm" data-bs-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-outline-primary btn-sm" onclick="saveComplainantDetails()">Update</button>
             </div>
         </div>
     </div>
@@ -54,8 +55,8 @@
                 </div>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-secondary btn-sm" data-bs-dismiss="modal">Close</button>
-                <button type="button" class="btn btn-primary btn-sm" onclick="saveAffidavitCopy()">Upload</button>
+                <button type="button" class="btn btn-outline-secondary btn-sm" data-bs-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-outline-primary btn-sm" onclick="saveAffidavitCopy()">Upload</button>
             </div>
         </div>
     </div>
@@ -81,8 +82,8 @@
                 </div>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-secondary btn-sm" data-bs-dismiss="modal">Close</button>
-                <button type="button" class="btn btn-primary btn-sm" onclick="saveAdditionalAttachment()">Upload</button>
+                <button type="button" class="btn btn-outline-secondary btn-sm" data-bs-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-outline-primary btn-sm" onclick="saveAdditionalAttachment()">Upload</button>
             </div>
         </div>
     </div>
@@ -113,8 +114,8 @@
                 </div>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-secondary btn-sm" data-bs-dismiss="modal">Close</button>
-                <button type="button" class="btn btn-primary btn-sm" onclick="saveGBMeetingLog()">Save</button>
+                <button type="button" class="btn btn-outline-secondary btn-sm" data-bs-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-outline-primary btn-sm" onclick="saveGBMeetingLog()">Save</button>
             </div>
         </div>
     </div>
@@ -130,7 +131,7 @@
                 <div id="lblViewMeetingNoteText" style="white-space: pre-wrap; font-size: 14px; line-height: 1.6; max-height: 400px; overflow-y: auto;"></div>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-secondary btn-sm" data-bs-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-outline-secondary btn-sm" data-bs-dismiss="modal">Close</button>
             </div>
         </div>
     </div>
@@ -196,7 +197,7 @@
                             Complainant's Details (ફરિયાદીની વિગતો)
                         </h5>
                         <div class="me-2 mb-0 d-flex align-items-center">
-                            <span id="txtComplaintStatus" class="btn btn-primary btn-sm fw-bold no-pointer-events">@ViewBag.Status</span>
+                            <span id="txtComplaintStatus" class="btn btn-outline-primary btn-sm fw-bold no-pointer-events">@ViewBag.Status</span>
                         </div>
                     </div>
                     <div class="main_card_list_body">
@@ -520,91 +521,96 @@
         <!-- /.modal-content -->
     </div>
 </div>
-<div class="modal fade" id="manageStatusModal" role="dialog">
-    <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable modal-xl">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title mt-0" id="manageStatusModalLabel">Manage Status</h5>
-                <a class="btn-close btn-sm" data-bs-dismiss="modal" aria-hidden="true"></a>
+<div class="modal fade" id="manageStatusModal" tabindex="-1" role="dialog" aria-labelledby="manageStatusModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable" style="max-width: 780px; width: 95%;">
+        <div class="modal-content status-modal-content border-0 shadow-lg">
+            <div class="modal-header bg-white px-4 py-3 border-bottom d-flex align-items-center justify-content-between">
+                <div class="d-flex align-items-center">
+                    <div class="status-modal-icon-wrap me-3">
+                        <i class="fa-solid fa-clock-rotate-left"></i>
+                    </div>
+                    <div>
+                        <h5 class="modal-title fw-bold text-dark mb-0" id="manageStatusModalLabel">Complaint Status History</h5>
+                        <span class="text-muted font-size-12">Complete activity log & lifecycle remarks</span>
+                    </div>
+                </div>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
-            <div class="modal-body">
-                <div class="complaint_details_status_card complaint_details_status_card_new">
-                    <div id="boardAccept" class="hide-element boxborder">
-                        <h6 class="mb-3 border-bottom pb-2">Board Has Approved Details</h6>
-                        <div class="row align-items-end mb-3">
-                            <div class="col-md-4">
-                                <label>DC Case No.</label>
-                                <input name="txtDCNumber" id="txtDCNumber" type="text" class="form-control">
-                            </div>
-                            <div class="col-md-5">
-                                <label>Select DC Commitee</label>
-                                <div class="d-flex align-items-center">
-                                    <input type="hidden" id="hdfCommitteeId" value="@ViewBag.DcNumber" />
-                                    <select id="drpDcNo" class="form-control" onchange="ddlDcNumber()">
-                                        <option value="">Select DC Commitee</option>
-                                    </select>
-                                </div>
-                            </div>
-                            <div class="col-md-3">
-                                <a id="lnkAddMember" style="margin-top: -20px;" class="btn btn-sm btn-outline-primary waves-effect waves-light text-nowrap">Add Member</a>
+            <div class="modal-body p-4 status-modal-body">
+                <div id="boardAccept" class="hide-element boxborder mb-3 bg-white p-3 rounded-3 shadow-sm">
+                    <h6 class="mb-3 border-bottom pb-2 fw-bold text-primary"><i class="fa-solid fa-gavel me-2"></i>Board Has Approved Details</h6>
+                    <div class="row align-items-end mb-3">
+                        <div class="col-md-4">
+                            <label class="form-label fw-semibold">DC Case No.</label>
+                            <input name="txtDCNumber" id="txtDCNumber" type="text" class="form-control">
+                        </div>
+                        <div class="col-md-5">
+                            <label class="form-label fw-semibold">Select DC Committee</label>
+                            <div class="d-flex align-items-center">
+                                <input type="hidden" id="hdfCommitteeId" value="@ViewBag.DcNumber" />
+                                <select id="drpDcNo" class="form-control" onchange="ddlDcNumber()">
+                                    <option value="">Select DC Committee</option>
+                                </select>
                             </div>
                         </div>
-                        <div id="tbldcDetails">
-                        </div>
-                        <div class="row">
-                            <div class="form-group col-md-12">
-                                <div>
-                                    <a id="lnkSaveBoardAccept" class="btn btn-outline-primary waves-effect waves-light btn-sm"><i class="fa-solid fa-check me-1"></i> Save</a>
-                                    <a id="lnkCancelBoardAccept" class="btn btn-outline-danger waves-effect waves-light btn-sm ms-2"><i class="fa-solid fa-xmark me-1"></i> Cancel</a>
-                                </div>
-                            </div>
+                        <div class="col-md-3">
+                            <a id="lnkAddMember" class="btn btn-sm btn-outline-primary waves-effect waves-light text-nowrap"><i class="fa-solid fa-user-plus me-1"></i> Add Member</a>
                         </div>
                     </div>
-                    <div id="adjuntDetails" class="hide-element boxborder">
-                        <h6 class="mb-3 border-bottom pb-2">Adjunt Details ( Ã ÂªÂ®Ã Â«ÂÃ ÂªÂ²Ã ÂªÂ¤Ã ÂªÂµÃ Â«â‚¬ Ã ÂªÂµÃ ÂªÂ¿Ã Âªâ€”Ã ÂªÂ¤Ã Â«â€¹ )</h6>
-                        <div class="row">
-                            <div class="col-md-3">
-                                <label>Next Date ( Ã Âªâ€ Ã Âªâ€”Ã ÂªÂ¾Ã ÂªÂ®Ã Â«â‚¬ Ã ÂªÂ¤Ã ÂªÂ¾Ã ÂªÂ°Ã Â«â‚¬Ã Âªâ€“ )</label>
-                                <input name="txtNextDate" id="txtNextDate" type="date" placeholder="DD/MM/YYYY" class="form-control" max="2999-12-31">
-                            </div>
-                            <div class="col-md-12 mt-3">
-                                <label>Summary | Short Information ( Ã ÂªÂ¸Ã ÂªÂ¾Ã ÂªÂ°Ã ÂªÂ¾Ã Âªâ€šÃ ÂªÂ¶ | Ã ÂªÅ¸Ã Â«â€šÃ Âªâ€šÃ Âªâ€¢Ã Â«â‚¬ Ã ÂªÂ®Ã ÂªÂ¾Ã ÂªÂ¹Ã ÂªÂ¿Ã ÂªÂ¤Ã Â«â‚¬ )</label>
-                                <textarea name="txtSummary" id="txtSummary" placeholder="Please Enter Summary" class="form-control col-md-12" rows="2" cols="20" width="-webkit-fill-available;"></textarea>
-                            </div>
-                            <div class="form-group col-md-12 mt-3">
-                                <div>
-                                    <a id="lnkSaveAdjuntDetails" class="btn btn-outline-primary waves-effect waves-light btn-sm"><i class="fa-solid fa-check me-1"></i> Save</a>
-                                    <a id="lnkCancelAdjuntDetails" class="btn btn-outline-danger waves-effect waves-light btn-sm ms-2"><i class="fa-solid fa-xmark me-1"></i> Cancel</a>
-                                </div>
-                            </div>
-                        </div>
+                    <div id="tbldcDetails">
                     </div>
-                    <div id="OrderPassed" class="hide-element boxborder">
-                        <h5 class="mb-3 border-bottom pb-2">Order Passed Details</h5>
-                        <label>Order File</label>
-                        <div class="input-group mb-3">
-                            <input type="file" class="form-control uploadbtn" name="orderFile" id="orderFile" onchange="ShowPreview(this,'Order')">
-                            <input type="hidden" id="hdfB64ImagePath" />
-                            <input type="hidden" id="hdfFileName" />
-                            <label class="input-group-text" for="orderFile">Upload</label>
-                        </div>
-                        <div class="col-md-12 d-none">
-                            <label>Last UploadFile : <label id="lblLastUploadFile"></label></label>
-                        </div>
-                        <div class="mt-3">
-                            <label>Summary | Short Information ( Ã ÂªÂ¸Ã ÂªÂ¾Ã ÂªÂ°Ã ÂªÂ¾Ã Âªâ€šÃ ÂªÂ¶ | Ã ÂªÅ¸Ã Â«â€šÃ Âªâ€šÃ Âªâ€¢Ã Â«â‚¬ Ã ÂªÂ®Ã ÂªÂ¾Ã ÂªÂ¹Ã ÂªÂ¿Ã ÂªÂ¤Ã Â«â‚¬ )</label>
-                            <textarea name="txtOrderSummary" id="txtOrderSummary" placeholder="Please Enter Summary" class="form-control col-md-12" rows="2" cols="20" width="-webkit-fill-available;"></textarea>
-
-                        </div>
-                        <div class="form-group mt-3">
+                    <div class="row">
+                        <div class="form-group col-md-12">
                             <div>
-                                <a id="lnkSaveOrderDetails" class="btn btn-outline-primary waves-effect waves-light btn-sm"><i class="fa-solid fa-check me-1"></i> Save</a>
-                                <a id="lnkCancelOrderPassed" class="btn btn-outline-danger waves-effect waves-light btn-sm ms-2"><i class="fa-solid fa-xmark me-1"></i> Cancel</a>
+                                <a id="lnkSaveBoardAccept" class="btn btn-outline-primary waves-effect waves-light btn-sm"><i class="fa-solid fa-check me-1"></i> Save</a>
+                                <a id="lnkCancelBoardAccept" class="btn btn-outline-danger waves-effect waves-light btn-sm ms-2"><i class="fa-solid fa-xmark me-1"></i> Cancel</a>
                             </div>
                         </div>
                     </div>
-                    <div class="main_scroll_complaint_against" id="logDetails">
+                </div>
+                <div id="adjuntDetails" class="hide-element boxborder mb-3 bg-white p-3 rounded-3 shadow-sm">
+                    <h6 class="mb-3 border-bottom pb-2 fw-bold text-primary"><i class="fa-solid fa-calendar-days me-2"></i>Adjournment Details</h6>
+                    <div class="row">
+                        <div class="col-md-4">
+                            <label class="form-label fw-semibold">Next Date</label>
+                            <input name="txtNextDate" id="txtNextDate" type="date" placeholder="DD/MM/YYYY" class="form-control" max="2999-12-31">
+                        </div>
+                        <div class="col-md-12 mt-3">
+                            <label class="form-label fw-semibold">Summary / Remarks</label>
+                            <textarea name="txtSummary" id="txtSummary" placeholder="Please Enter Summary" class="form-control" rows="2"></textarea>
+                        </div>
+                        <div class="form-group col-md-12 mt-3">
+                            <div>
+                                <a id="lnkSaveAdjuntDetails" class="btn btn-outline-primary waves-effect waves-light btn-sm"><i class="fa-solid fa-check me-1"></i> Save</a>
+                                <a id="lnkCancelAdjuntDetails" class="btn btn-outline-danger waves-effect waves-light btn-sm ms-2"><i class="fa-solid fa-xmark me-1"></i> Cancel</a>
+                            </div>
+                        </div>
                     </div>
+                </div>
+                <div id="OrderPassed" class="hide-element boxborder mb-3 bg-white p-3 rounded-3 shadow-sm">
+                    <h6 class="mb-3 border-bottom pb-2 fw-bold text-primary"><i class="fa-solid fa-gavel me-2"></i>Order Passed Details</h6>
+                    <label class="form-label fw-semibold">Order File</label>
+                    <div class="input-group mb-3">
+                        <input type="file" class="form-control uploadbtn" name="orderFile" id="orderFile" onchange="ShowPreview(this,'Order')">
+                        <input type="hidden" id="hdfB64ImagePath" />
+                        <input type="hidden" id="hdfFileName" />
+                        <label class="input-group-text" for="orderFile">Upload</label>
+                    </div>
+                    <div class="col-md-12 d-none">
+                        <label>Last UploadFile : <label id="lblLastUploadFile"></label></label>
+                    </div>
+                    <div class="mt-3">
+                        <label class="form-label fw-semibold">Summary / Remarks</label>
+                        <textarea name="txtOrderSummary" id="txtOrderSummary" placeholder="Please Enter Summary" class="form-control" rows="2"></textarea>
+                    </div>
+                    <div class="form-group mt-3">
+                        <div>
+                            <a id="lnkSaveOrderDetails" class="btn btn-outline-primary waves-effect waves-light btn-sm"><i class="fa-solid fa-check me-1"></i> Save</a>
+                            <a id="lnkCancelOrderPassed" class="btn btn-outline-danger waves-effect waves-light btn-sm ms-2"><i class="fa-solid fa-xmark me-1"></i> Cancel</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="status-timeline-container" id="logDetails">
                 </div>
             </div>
         </div>
@@ -1610,29 +1616,117 @@
         });
     }
 
+    function copyMemberLink(url, btn) {
+        if (!url) return;
+        var originalHtml = $(btn).html();
+        if (navigator.clipboard && navigator.clipboard.writeText) {
+            navigator.clipboard.writeText(url).then(function () {
+                $(btn).html('<i class="fa-solid fa-check text-success me-1"></i>Copied!');
+                setTimeout(function () { $(btn).html(originalHtml); }, 2000);
+            }).catch(function () {
+                fallbackCopyText(url, btn, originalHtml);
+            });
+        } else {
+            fallbackCopyText(url, btn, originalHtml);
+        }
+    }
+
+    function fallbackCopyText(text, btn, originalHtml) {
+        var textArea = document.createElement("textarea");
+        textArea.value = text;
+        textArea.style.position = "fixed";
+        textArea.style.left = "-9999px";
+        document.body.appendChild(textArea);
+        textArea.focus();
+        textArea.select();
+        try {
+            document.execCommand('copy');
+            $(btn).html('<i class="fa-solid fa-check text-success me-1"></i>Copied!');
+            setTimeout(function () { $(btn).html(originalHtml); }, 2000);
+        } catch (err) {
+            prompt("Copy this URL:", text);
+        }
+        document.body.removeChild(textArea);
+    }
+
+    function sendComplaintLink(dcId, mobileNumber, emailAddress) {
+        if (typeof Swal !== 'undefined') {
+            Swal.fire({
+                title: 'Sending Link...',
+                text: 'Please wait while sending the complaint link to ' + (emailAddress || 'member') + '...',
+                allowOutsideClick: false,
+                didOpen: function () {
+                    Swal.showLoading();
+                }
+            });
+        }
+
+        $.ajax({
+            type: "POST",
+            url: "/ComplaintDetails/SendComplaintLinkSMS",
+            data: JSON.stringify({ dcId: dcId, mobileNumber: mobileNumber, emailAddress: emailAddress || "" }),
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            success: function (response) {
+                if (response.IsSuccess) {
+                    if (typeof Swal !== 'undefined') {
+                        Swal.fire("Sent!", response.Message, "success");
+                    } else {
+                        swal("Sent!", response.Message, "success");
+                    }
+                } else {
+                    if (typeof Swal !== 'undefined') {
+                        Swal.fire("Error!", response.Message || "Something went wrong!", "error");
+                    } else {
+                        swal("Error!", response.Message || "Something went wrong!", "error");
+                    }
+                }
+            },
+            error: function (result) {
+                if (typeof Swal !== 'undefined') {
+                    Swal.fire('Something went wrong!', '', 'error');
+                } else {
+                    swal('Something went wrong!', '', 'error');
+                }
+            }
+        });
+    }
+
     function openDcMemberListView(dcId) {
         if (!dcId) return;
         var hdfComplaintIds = '#hdfComplaintid' + dcId;
-        var tblDCMemberDetailsid = '#tblDCMemberDetails' + dcId;
-        var iconId = '#icon_dcMember_' + dcId;
-        var detailsTableHead = $(tblDCMemberDetailsid + " thead");
-        var detailsTableBody = $(tblDCMemberDetailsid + " tbody");
+        var memberContainer = $('#dcMemberList_' + dcId);
+        var chevronId = '#chevron_dcMember_' + dcId;
+        var btnTextId = '#btnText_dcMember_' + dcId;
 
-        // Toggle feature: if data is already filled, clicking again will hide it
-        if ($(detailsTableBody).find("tr").length > 0) {
-            $(detailsTableHead).empty();
-            $(detailsTableBody).empty();
-            $(iconId).removeClass('la-eye-slash').addClass('la-eye');
+        // Toggle: if already visible, slide up
+        if (memberContainer.is(':visible')) {
+            memberContainer.slideUp(200);
+            $(chevronId).removeClass('rotate-180');
+            $(btnTextId).text('View Members');
             return;
         }
 
-        $(detailsTableHead).empty();
-        $(detailsTableBody).empty();
+        // If already rendered, slide down
+        if (memberContainer.find('.dc-member-item-card').length > 0) {
+            memberContainer.slideDown(200);
+            $(chevronId).addClass('rotate-180');
+            $(btnTextId).text('Hide Members');
+            return;
+        }
+
+        memberContainer.html(
+            '<div class="text-center py-3 text-muted">' +
+            '  <div class="spinner-border spinner-border-sm text-primary me-2" role="status"></div>' +
+            '  <span>Loading committee members...</span>' +
+            '</div>'
+        ).show();
 
         var VComplaintId = $(hdfComplaintIds).val();
         var Data = JSON.stringify({
             ComplaintId: VComplaintId
         });
+
         $.ajax({
             type: 'POST',
             url: "/ComplaintList/GetComplaintMemberLogList",
@@ -1641,24 +1735,191 @@
             dataType: "json",
             success: function (response) {
                 if (response != null && response.Data != null && response.Data.length > 0) {
-                    $(iconId).removeClass('la-eye').addClass('la-eye-slash');
-                    var RowItem = '<tr><th style="text-align: center;">#</th><th>Enrollment Number</th><th>Name</th><th>Contact Number</th></tr>';
-                    detailsTableHead.append(RowItem);
+                    $(chevronId).addClass('rotate-180');
+                    $(btnTextId).text('Hide Members (' + response.Data.length + ')');
+
+                    var cardsHtml = '<div class="dc-members-grid">';
 
                     $.each(response.Data, function (index, mvalue) {
-                        var RId = index + 1;
-                        var RowItem1 = '<tr><td style="text-align: center;">' + RId + '</td><td>' + mvalue.EnroNumber + '</td><td>' + mvalue.FullName + '</td><td>' + mvalue.ContactNumber + '</td></tr>';
-                        detailsTableBody.append(RowItem1);
+                        var rIdx = index + 1;
+                        var portalUrl = 'https://dcpanel.barcouncilofgujarat.org/BoardComplaint/Detail/' + (mvalue.ComplaintDetailEncryptCode || '');
+                        var contactNo = (mvalue.ContactNumber || '').toString().trim();
+                        var enroNo = (mvalue.EnroNumber || 'N/A').toString().trim();
+                        var fullName = (mvalue.FullName || 'Member').toString().trim();
+                        var emailAddr = (mvalue.EmailAddress || '').toString().trim();
+
+                        var initials = '';
+                        var nameParts = fullName.split(' ');
+                        if (nameParts.length >= 2 && nameParts[0] && nameParts[1]) {
+                            initials = nameParts[0].charAt(0) + nameParts[1].charAt(0);
+                        } else if (nameParts.length === 1 && nameParts[0]) {
+                            initials = nameParts[0].substring(0, 2);
+                        } else {
+                            initials = '#' + rIdx;
+                        }
+                        initials = initials.toUpperCase();
+
+                        cardsHtml +=
+                            '<div class="dc-member-item-card">' +
+                            '  <div class="dc-member-card-inner">' +
+                            '    <div class="dc-member-header-row">' +
+                            '      <div class="dc-member-profile">' +
+                            '        <div class="dc-member-avatar" title="' + escapeHtml(fullName) + '">' +
+                            '          <span>' + escapeHtml(initials) + '</span>' +
+                            '          <span class="dc-member-seq">#' + rIdx + '</span>' +
+                            '        </div>' +
+                            '        <div class="dc-member-meta">' +
+                            '          <h6 class="dc-member-fullname">' + escapeHtml(fullName) + '</h6>' +
+                            '          <div class="dc-member-tags">' +
+                            '            <span class="dc-enro-badge" title="Enrollment Number">' +
+                            '              <i class="fa-solid fa-id-card me-1 text-primary"></i>' + escapeHtml(enroNo) +
+                            '            </span>' +
+                            '            ' + (contactNo ?
+                                            '<a href="tel:' + escapeHtml(contactNo) + '" class="dc-phone-badge" title="Call Member">' +
+                                            '  <i class="fa-solid fa-phone me-1 text-success"></i>' + escapeHtml(contactNo) +
+                                            '</a>' :
+                                            '<span class="dc-phone-badge text-muted"><i class="fa-solid fa-phone-slash me-1"></i>No Contact</span>') +
+                            '            ' + (emailAddr ?
+                                            '<a href="mailto:' + escapeHtml(emailAddr) + '" class="dc-email-badge" title="Email Member">' +
+                                            '  <i class="fa-solid fa-envelope me-1 text-primary"></i>' + escapeHtml(emailAddr) +
+                                            '</a>' :
+                                            '<span class="dc-email-badge text-muted" title="No Email Address"><i class="fa-solid fa-envelope-open me-1"></i>No Email</span>') +
+                            '          </div>' +
+                            '        </div>' +
+                            '      </div>' +
+                            '    </div>' +
+                            '    <div class="dc-member-footer-row">' +
+                            '      <div class="dc-portal-actions">' +
+                            '        <span class="dc-portal-label"><i class="fa-solid fa-shield-halved me-1 text-primary"></i>Hearing Portal:</span>' +
+                            '        <button type="button" class="btn btn-outline-secondary btn-sm dc-copy-link-btn" onclick="copyMemberLink(\'' + portalUrl.replace(/'/g, "\\'") + '\', this)" title="Copy Portal Link">' +
+                            '          <i class="fa-regular fa-copy me-1"></i>Copy Link' +
+                            '        </button>' +
+                            '      </div>' +
+                            '      <button type="button" class="btn btn-outline-primary btn-sm dc-send-sms-btn" onclick="sendComplaintLink(' + (mvalue.Id || 0) + ', \'' + contactNo.replace(/'/g, "\\'") + '\', \'' + emailAddr.replace(/'/g, "\\'") + '\')">' +
+                            '        <i class="fa-solid fa-paper-plane me-1"></i>Send Complaint Link' +
+                            '      </button>' +
+                            '    </div>' +
+                            '  </div>' +
+                            '</div>';
                     });
+
+                    cardsHtml += '</div>';
+                    memberContainer.html(cardsHtml).slideDown(200);
+                } else {
+                    $(chevronId).removeClass('rotate-180');
+                    $(btnTextId).text('View Members');
+                    memberContainer.html(
+                        '<div class="p-3 text-center text-muted bg-white rounded-3 border mt-2">' +
+                        '  <i class="fa-solid fa-users-slash me-1"></i> No committee members assigned.' +
+                        '</div>'
+                    ).slideDown(200);
                 }
             },
             error: function (result) {
-                $(detailsTableHead).empty();
-                $(detailsTableBody).empty();
-                $(iconId).removeClass('la-eye-slash').addClass('la-eye');
+                $(chevronId).removeClass('rotate-180');
+                $(btnTextId).text('View Members');
+                memberContainer.hide().empty();
                 swal('Something went wrong!', '', 'error');
             }
         });
+    }
+
+    function getStatusTheme(status) {
+        var s = (status || '').toString().trim().toLowerCase();
+        if (s === 'rejected' || s.indexOf('reject') !== -1) {
+            return {
+                markerClass: 'marker-danger',
+                pillClass: 'pill-danger',
+                summaryClass: 'summary-danger',
+                icon: 'fa-solid fa-xmark',
+                title: status || 'Rejected'
+            };
+        } else if (s === 'accepted' || s.indexOf('accept') !== -1) {
+            return {
+                markerClass: 'marker-success',
+                pillClass: 'pill-success',
+                summaryClass: 'summary-success',
+                icon: 'fa-solid fa-check',
+                title: status || 'Accepted'
+            };
+        } else if (s.indexOf('approved') !== -1) {
+            return {
+                markerClass: 'marker-success',
+                pillClass: 'pill-success',
+                summaryClass: 'summary-success',
+                icon: 'fa-solid fa-circle-check',
+                title: status || 'Approved'
+            };
+        } else if (s === 'more detail' || s.indexOf('detail') !== -1 || s.indexOf('query') !== -1) {
+            return {
+                markerClass: 'marker-warning',
+                pillClass: 'pill-warning',
+                summaryClass: 'summary-warning',
+                icon: 'fa-solid fa-circle-question',
+                title: status || 'More Detail'
+            };
+        } else if (s.indexOf('withdraw') !== -1) {
+            return {
+                markerClass: 'marker-secondary',
+                pillClass: 'pill-secondary',
+                summaryClass: 'summary-secondary',
+                icon: 'fa-solid fa-arrow-right-from-bracket',
+                title: status || 'Withdrawal Granted'
+            };
+        } else if (s === 'order passed' || s.indexOf('order') !== -1) {
+            return {
+                markerClass: 'marker-purple',
+                pillClass: 'pill-purple',
+                summaryClass: 'summary-purple',
+                icon: 'fa-solid fa-gavel',
+                title: status || 'Order Passed'
+            };
+        } else if (s === 'adjunt' || s.indexOf('adjourn') !== -1) {
+            return {
+                markerClass: 'marker-teal',
+                pillClass: 'pill-teal',
+                summaryClass: 'summary-teal',
+                icon: 'fa-solid fa-calendar-days',
+                title: status || 'Adjourned'
+            };
+        } else if (s === 'new') {
+            return {
+                markerClass: 'marker-primary',
+                pillClass: 'pill-primary',
+                summaryClass: 'summary-primary',
+                icon: 'fa-solid fa-file-circle-plus',
+                title: status || 'New'
+            };
+        } else if (s === 'refer to board' || s.indexOf('refer') !== -1 || s.indexOf('general board') !== -1) {
+            return {
+                markerClass: 'marker-info',
+                pillClass: 'pill-info',
+                summaryClass: 'summary-info',
+                icon: 'fa-solid fa-gavel',
+                title: status || 'Refer to Board'
+            };
+        } else if (s === 'board accept') {
+            return {
+                markerClass: 'marker-success',
+                pillClass: 'pill-success',
+                summaryClass: 'summary-success',
+                icon: 'fa-solid fa-check-double',
+                title: status || 'Board Accept'
+            };
+        } else {
+            return {
+                markerClass: 'marker-info',
+                pillClass: 'pill-info',
+                summaryClass: 'summary-info',
+                icon: 'fa-solid fa-circle-dot',
+                title: status || 'Updated'
+            };
+        }
+    }
+
+    function escapeHtml(text) {
+        if (!text) return '';
+        return $('<div>').text(text).html();
     }
 
     function GetLogList() {
@@ -1672,77 +1933,131 @@
             contentType: "application/json; charset=utf-8",
             dataType: "json",
             success: function (response) {
-
                 if (response.IsSuccess) {
                     $('#logDetails').empty();
+                    if (!response.Data || response.Data.length === 0) {
+                        $('#logDetails').html(
+                            '<div class="text-center py-5">' +
+                            '  <div class="mb-3 text-muted"><i class="fa-solid fa-clock-rotate-left fa-3x opacity-50"></i></div>' +
+                            '  <h6 class="fw-bold text-secondary">No Status History Available</h6>' +
+                            '  <p class="text-muted small mb-0">No status logs have been recorded for this complaint yet.</p>' +
+                            '</div>'
+                        );
+                        return;
+                    }
                     $.each(response.Data, function (data, value) {
-                        var FilePath = "'" + value.OrderFilePath + "'";
+                        var theme = getStatusTheme(value.Status);
                         var oldStatusHtml = '';
-                        if (value.OldStatus != null && value.OldStatus != '') {
-                            oldStatusHtml = '<div class="complaint_number old_status me-0"><div class="title">Old Status</div><a class="description">' + value.OldStatus + '</a></div>';
+                        if (value.OldStatus && value.OldStatus.toString().trim() !== '') {
+                            oldStatusHtml = '<span class="status-old-pill" title="Previous Status"><i class="fa-solid fa-arrow-left me-1"></i> Prev: ' + escapeHtml(value.OldStatus) + '</span>';
                         }
 
+                        var extraContent = '';
                         if (value.Status == "Adjunt") {
-                            $('#logDetails').append(
-                                '<div class="status_card_details"><div class="check_element"><i class="las la-check-circle"></i></div><div class="main_card_list main_card_list_border main_card_list_border_log w-100"><div class="main_header_card border-0 pb-0"><div class="rigth_side"><div class="user_name_new">' + value.Name + '</div><div class="date_update">' + value.SNextDate + '</div></div><div class="_left_side"><div class="complaint_number paymentstatuspaid"><div class="title">Current Status</div><a class="description">' + value.Status + '</a></div>' + oldStatusHtml + '</div></div><div class="main_card_list_body"><div class="row"><div class="col-md-3 mt-2"><div class="title">Next Date</div><div class="file_name_btn next_date_btn"><div class="name">' + value.SNextDate + '</div></div></div><div class="col-md-12 mt-3"><div class="title">Summary</div><div class="description">' + value.Summary + '</div></div></div></div></div></div>'
-                            );
-                        }
-                        else if (value.Status == "Order Passed") {
-                            $('#logDetails').append(
-                                '<div class="status_card_details"><div class="check_element"><i class="las la-check-circle"></i></div><div class="main_card_list main_card_list_border main_card_list_border_log w-100"><div class="main_header_card border-0 pb-0"><div class="rigth_side"><div class="user_name_new">' + value.Name + '</div><div class="date_update">' + value.SNextDate + '</div></div><div class="_left_side"><div class="complaint_number paymentstatuspaid"><div class="title">Current Status</div><a class="description">' + value.Status + '</a></div>' + oldStatusHtml + '</div></div><div class="main_card_list_body"><div class="row"><div class="col-md-12 mt-2"><div class="title">File Name</div><div class="file_name_btn" onclick="getFile(' + FilePath + ')"><div class="name">' + value.OrderFileName + '</div><div class="view_file"><i class="las la-eye"></i></div></div></div><div class="col-md-12 mt-3"><div class="title">Summary</div><div class="description">' + value.Summary + '</div></div></div></div></div></div>'
-                            );
-                        }
-                        else if (value.Status == "Board Has Approved") {
-                            var tblDCMemberDetailsid = 'tblDCMemberDetails' + value.Id;
+                            extraContent = '<div class="status-next-date-box mt-3">' +
+                                '<i class="fa-regular fa-calendar-check text-primary"></i>' +
+                                '<span><strong>Next Hearing Date:</strong> ' + escapeHtml(value.SNextDate || '-') + '</span>' +
+                                '</div>';
+                        } else if (value.Status == "Order Passed") {
+                            var FilePath = "'" + (value.OrderFilePath || '').replace(/'/g, "\\'") + "'";
+                            extraContent = '<div class="mt-3">' +
+                                '<a href="javascript:void(0);" class="status-doc-chip" onclick="getFile(' + FilePath + ')">' +
+                                '  <i class="fa-solid fa-file-pdf text-danger fs-5"></i>' +
+                                '  <span class="doc-name">' + escapeHtml(value.OrderFileName || 'Order Document') + '</span>' +
+                                '  <span class="badge bg-primary-subtle text-primary ms-2"><i class="fa-solid fa-arrow-up-right-from-square me-1"></i>View</span>' +
+                                '</a>' +
+                                '</div>';
+                        } else if (value.Status == "Board Has Approved") {
+                            var dcMemberListId = 'dcMemberList_' + value.Id;
                             var hdfCommitteeIds = 'hdfCommitteeId' + value.Id;
                             var hdfComplaintIds = 'hdfComplaintid' + value.Id;
-                            var logDetailsitem = '<div class="status_card_details">'
-                                                    + '<div class="check_element">'
-                                                        + '<i class="las la-check-circle"></i>'
-                                                    + '</div>'
-                                                    + '<div class="main_card_list main_card_list_border main_card_list_border_log w-100">'
-                                                        + '<div class="main_header_card border-0 pb-0">'
-                                                            + '<div class="rigth_side">'
-                                                                + '<div class="user_name_new">' + value.Name + '</div>'
-                                                                + '<div class="date_update">' + value.SNextDate + '</div>'
-                                                            + '</div>'
-                                                            + '<div class="_left_side">'
-                                                                + '<div class="complaint_number paymentstatuspaid">'
-                                                                    + '<div class="title">Current Status</div>'
-                                                                    + '<a class="description">' + value.Status + '</a>'
-                                                                + '</div>'
-                                                                + oldStatusHtml
-                                                            + '</div>'
-                                                        + '</div>'
-                                                        + '<div class="main_card_list_body">'
-                                                            + '<div class="row">'
-                                                                + '<div class="col-md-12 mt-3">'
-                                                                    + '<div class="title">Assign DC Committee</div>'
-                                                                    + '<div class="file_name_btn" style="cursor:pointer;" onclick="openDcMemberListView(' + value.Id + ')">'
-                                                                        + '<div class="name">' + value.CommitteTitle + '</div>'
-                                                                        + '<div class="view_file"><i id="icon_dcMember_' + value.Id + '" class="las la-eye"></i></div>'
-                                                                    + '</div>'
-                                                                + '</div>'
-                                                                + '<input type="hidden" id="' + hdfCommitteeIds + '" value="' + value.CommitteeId + '">'
-                                                                + '<input type="hidden" id="' + hdfComplaintIds + '" value="' + value.ComplaintId + '">'
-                                                                + '<div><table class="table table-bordered table-sm mt-2" id="' + tblDCMemberDetailsid + '"><thead></thead><tbody></tbody></table></div>'
-                                                            + '</div>'
-                                                        + '</div>'
-                                                     + '</div>'
-                                               + '</div>';
-                            $('#logDetails').append(logDetailsitem);
+                            extraContent =
+                                '<div class="dc-approved-section">' +
+                                '  <div class="dc-committee-card">' +
+                                '    <div class="dc-committee-card-header">' +
+                                '      <div class="dc-committee-info-group">' +
+                                '        <div class="dc-committee-badge-icon">' +
+                                '          <i class="fa-solid fa-users-line"></i>' +
+                                '        </div>' +
+                                '        <div>' +
+                                '          <div class="dc-committee-subtitle">Assigned Disciplinary Committee</div>' +
+                                '          <div class="dc-committee-main-title">' +
+                                '            <span class="dc-title-text">' + escapeHtml(value.CommitteTitle || 'Disciplinary Committee') + '</span>' +
+                                '            <span class="dc-status-chip"><i class="fa-solid fa-circle-check me-1"></i>Allocated</span>' +
+                                '          </div>' +
+                                '        </div>' +
+                                '      </div>' +
+                                '      <button type="button" class="btn dc-view-members-btn" onclick="openDcMemberListView(' + value.Id + ')">' +
+                                '        <i id="icon_dcMember_' + value.Id + '" class="fa-solid fa-users-viewfinder"></i>' +
+                                '        <span id="btnText_dcMember_' + value.Id + '">View Members</span>' +
+                                '        <i id="chevron_dcMember_' + value.Id + '" class="fa-solid fa-chevron-down transition-transform"></i>' +
+                                '      </button>' +
+                                '    </div>' +
+                                '    <input type="hidden" id="' + hdfCommitteeIds + '" value="' + (value.CommitteeId || '') + '">' +
+                                '    <input type="hidden" id="' + hdfComplaintIds + '" value="' + (value.ComplaintId || '') + '">' +
+                                '    <div id="' + dcMemberListId + '" class="dc-members-container" style="display:none;"></div>' +
+                                '  </div>' +
+                                '</div>';
                         }
-                        else {
-                            $('#logDetails').append(
-                                '<div class="status_card_details"><div class="check_element"><i class="las la-check-circle"></i></div><div class="main_card_list main_card_list_border main_card_list_border_log w-100"><div class="main_header_card border-0 pb-0"><div class="rigth_side"><div class="user_name_new">' + value.Name + '</div><div class="date_update">' + value.SNextDate + '</div></div><div class="_left_side"><div class="complaint_number paymentstatuspaid"><div class="title">Current Status</div><a class="description">' + value.Status + '</a></div>' + oldStatusHtml + '</div></div></div></div>'
-                            );
-                        }
-                    })
-                }
-                else {
 
+                        var summaryText = (value.Summary || '').toString().trim();
+                        var st = (value.Status || '').toString().trim().toLowerCase();
+                        if (!summaryText) {
+                            if (st === 'new') {
+                                summaryText = 'Complaint has been successfully registered in the system. It is currently under initial administrative verification and scrutiny.';
+                            } else if (st === 'accepted') {
+                                summaryText = 'Complaint has been scrutinized and accepted for further proceedings. The matter will be placed before the General Board for consideration.';
+                            } else if (st === 'refer to board' || st === 'next general board') {
+                                summaryText = "Complaint has been referred to the General Board for consideration. Awaiting the Board's review and decision in the upcoming meeting.";
+                            } else if (st === 'board accept') {
+                                summaryText = "The General Board has accepted the complaint. Pending formal board approval and committee allocation.";
+                            }
+                        }
+
+                        var summaryHtml = '';
+                        if (summaryText !== '') {
+                            var isStatusNote = (st === 'new' || st === 'accepted' || st === 'refer to board' || st === 'next general board' || st === 'board accept');
+                            var summaryLabel = isStatusNote ? 'Status Remarks' : 'Reason / Remarks';
+                            summaryHtml = '<div class="status-summary-callout ' + theme.summaryClass + '">' +
+                                '  <div class="status-summary-label">' +
+                                '    <i class="fa-solid fa-quote-left opacity-75"></i> ' + summaryLabel +
+                                '  </div>' +
+                                '  <div class="status-summary-text">' + escapeHtml(summaryText) + '</div>' +
+                                '</div>';
+                        }
+
+                        var itemHtml =
+                            '<div class="status-timeline-item">' +
+                            '  <div class="status-timeline-marker ' + theme.markerClass + '" title="' + escapeHtml(theme.title) + '">' +
+                            '    <i class="' + theme.icon + '"></i>' +
+                            '  </div>' +
+                            '  <div class="status-timeline-card">' +
+                            '    <div class="status-timeline-header">' +
+                            '      <div class="status-badge-group">' +
+                            '        <span class="status-pill ' + theme.pillClass + '">' +
+                            '          <i class="' + theme.icon + '"></i>' + escapeHtml(value.Status) +
+                            '        </span>' +
+                            '        ' + oldStatusHtml +
+                            '      </div>' +
+                            '      <div class="status-meta">' +
+                            '        <span class="status-user" title="Updated by">' +
+                            '          <i class="fa-solid fa-user-shield text-primary opacity-75 me-1"></i>' + escapeHtml(value.Name || 'Admin') +
+                            '        </span>' +
+                            '        <span class="status-date" title="Timestamp">' +
+                            '          <i class="fa-regular fa-clock text-muted me-1"></i>' + escapeHtml(value.SNextDate || '') +
+                            '        </span>' +
+                            '      </div>' +
+                            '    </div>' +
+                            '    ' + extraContent +
+                            '    ' + summaryHtml +
+                            '  </div>' +
+                            '</div>';
+
+                        $('#logDetails').append(itemHtml);
+                    });
                 }
-            }, failure: function (result) {
+            },
+            failure: function (result) {
                 swal('Something went wrong!', '', 'error');
             },
             error: function (result) {
@@ -1818,7 +2133,7 @@
                 Status: status
             });
 
-            if (status == 'New' || status == 'Accepted' || status == 'Rejected' || status == 'Rejected' || status == 'More Detail' || status == 'Payment Done' || status == 'Next General Board' || status == 'Board Has Rejected' || status == 'Hearing') {
+            if (status == 'New' || status == 'Accepted' || status == 'Rejected' || status == 'More Detail' || status == 'Payment Done' || status == 'Next General Board' || status == 'Refer to Board' || status == 'Board Accept' || status == 'Board Has Rejected' || status == 'Hearing') {
                 $.ajax({
                     type: 'POST',
                     url: "/ComplaintDetails/StatusUpdate",
@@ -3030,16 +3345,20 @@
 
     function updateActionButtonsUI(status) {
         var html = '';
-        if (status == 'New' || status == 'Old' ||  status == 'More Detail' || status == 'Payment Done') {
-            html = '<a href="javascript:void(0);" class="btn btn-success waves-effect waves-light white-space-nowrap btn-sm me-2" onclick="updateStatusDirectly(\'Accepted\')"><i class="fa-solid fa-check me-1"></i> Accept</a>' +
-                   '<a href="javascript:void(0);" class="btn btn-warning waves-effect waves-light white-space-nowrap btn-sm me-2" onclick="updateStatusDirectly(\'More Detail\')"><i class="fa-solid fa-info-circle me-1"></i> More Detail</a>' +
-                   '<a href="javascript:void(0);" class="btn btn-danger waves-effect waves-light white-space-nowrap btn-sm me-2" onclick="updateStatusDirectly(\'Rejected\')"><i class="fa-solid fa-times me-1"></i> Reject</a>' +
-                   '<a href="javascript:void(0);" class="btn btn-secondary waves-effect waves-light white-space-nowrap btn-sm" onclick="updateStatusWithNote(\'Withdrawal Granted\')"><i class="fa-solid fa-arrow-right-from-bracket me-1"></i> Withdrawal Granted</a>';
-        } else if (status == 'Accepted') {
-            html = '<a href="javascript:void(0);" class="btn btn-info waves-effect waves-light white-space-nowrap btn-sm" onclick="updateStatusDirectly(\'Next General Board\')"><i class="fa-solid fa-gavel me-1"></i> Next General Board</a>';
-        } else if (status == 'Next General Board') {
-            html = '<a href="javascript:void(0);" class="btn btn-success waves-effect waves-light white-space-nowrap btn-sm me-2" onclick="triggerBoardHasApproved()"><i class="fa-solid fa-check-double me-1"></i> Board Has Approved</a>' +
-                   '<a href="javascript:void(0);" class="btn btn-danger waves-effect waves-light white-space-nowrap btn-sm" onclick="updateStatusDirectly(\'Board Has Rejected\')"><i class="fa-solid fa-ban me-1"></i> Board Has Rejected</a>';
+        var s = (status || '').toString().trim().toLowerCase();
+        if (s === 'new' || s === 'old' || s === 'more detail' || s === 'payment done') {
+            html = '<a href="javascript:void(0);" class="btn btn-outline-success waves-effect waves-light white-space-nowrap btn-sm me-2" onclick="updateStatusDirectly(\'Accepted\')"><i class="fa-solid fa-check me-1"></i> Accept</a>' +
+                   '<a href="javascript:void(0);" class="btn btn-outline-warning waves-effect waves-light white-space-nowrap btn-sm me-2" onclick="updateStatusWithReason(\'More Detail\')"><i class="fa-solid fa-info-circle me-1"></i> More Detail</a>' +
+                   '<a href="javascript:void(0);" class="btn btn-outline-danger waves-effect waves-light white-space-nowrap btn-sm me-2" onclick="updateStatusWithReason(\'Rejected\')"><i class="fa-solid fa-times me-1"></i> Reject</a>' +
+                   '<a href="javascript:void(0);" class="btn btn-outline-secondary waves-effect waves-light white-space-nowrap btn-sm" onclick="updateStatusWithReason(\'Withdrawal Granted\')"><i class="fa-solid fa-arrow-right-from-bracket me-1"></i> Withdrawal Granted</a>';
+        } else if (s === 'accepted') {
+            html = '<a href="javascript:void(0);" class="btn btn-outline-info waves-effect waves-light white-space-nowrap btn-sm" onclick="updateStatusDirectly(\'Refer to Board\')"><i class="fa-solid fa-gavel me-1"></i> Refer to Board</a>';
+        } else if (s === 'next general board' || s === 'refer to board') {
+            html = '<a href="javascript:void(0);" class="btn btn-outline-success waves-effect waves-light white-space-nowrap btn-sm me-2" onclick="updateStatusDirectly(\'Board Accept\')"><i class="fa-solid fa-check-double me-1"></i> Board Accept</a>' +
+                   '<a href="javascript:void(0);" class="btn btn-outline-danger waves-effect waves-light white-space-nowrap btn-sm" onclick="updateStatusWithReason(\'Board Has Rejected\')"><i class="fa-solid fa-ban me-1"></i> Board Reject</a>';
+        } else if (s === 'board accept') {
+            html = '<a href="javascript:void(0);" class="btn btn-outline-success waves-effect waves-light white-space-nowrap btn-sm me-2" onclick="triggerBoardHasApproved()"><i class="fa-solid fa-check-double me-1"></i> Board Has Approved</a>' +
+                   '<a href="javascript:void(0);" class="btn btn-outline-danger waves-effect waves-light white-space-nowrap btn-sm" onclick="updateStatusWithReason(\'Board Has Rejected\')"><i class="fa-solid fa-ban me-1"></i> Board Has Rejected</a>';
         }
 
         $('#divActionButtons').html(html);
@@ -3062,7 +3381,105 @@
         // Update the dropdown values in the background for consistency
     }
 
+    function updateStatusWithReason(status) {
+        var title = status;
+        var labelText = "Please enter reason/detail:";
+        var placeholderText = "Enter details here...";
+        var confirmColor = "#DD6B55";
+        var confirmBtnText = "Submit";
+        var iconType = "warning";
+
+        if (status === 'Rejected' || status === 'Board Has Rejected' || status === 'Board Reject') {
+            var isBoardReject = (status === 'Board Has Rejected' || status === 'Board Reject');
+            title = isBoardReject ? "Board Reject" : "Reject Complaint";
+            labelText = isBoardReject ? "Please enter reason for board rejection:" : "Please enter reason for rejection:";
+            placeholderText = isBoardReject ? "Enter board rejection reason here..." : "Enter rejection reason here...";
+            confirmBtnText = "Reject";
+        } else if (status === 'More Detail') {
+            title = "More Detail";
+            labelText = "Please enter reason/detail:";
+            placeholderText = "Enter more details here...";
+            confirmColor = "#ffb822";
+            confirmBtnText = "Submit";
+            iconType = "info";
+        } else if (status === 'Withdrawal Granted') {
+            title = "Withdrawal Granted";
+            labelText = "Please enter reason for withdrawal:";
+            placeholderText = "Enter withdrawal reason here...";
+            confirmColor = "#6c757d";
+            confirmBtnText = "Submit";
+            iconType = "info";
+        }
+
+        Swal.fire({
+            title: title,
+            html: '<p class="text-start">' + labelText + ' <span class="text-danger fw-bold">*</span></p>',
+            icon: iconType,
+            input: 'textarea',
+            inputPlaceholder: placeholderText,
+            showCancelButton: true,
+            confirmButtonColor: confirmColor,
+            confirmButtonText: confirmBtnText,
+            cancelButtonText: "Cancel",
+            customClass: {
+                popup: 'swal2-reason-modal'
+            },
+            inputValidator: function (value) {
+                if (!value || !value.trim()) {
+                    return (status === 'Board Has Rejected' || status === 'Board Reject')
+                        ? 'Please enter reason for board rejection is required'
+                        : 'Please enter reason is required';
+                }
+            }
+        }).then(function (result) {
+            if (result.isConfirmed) {
+                var reason = result.value.trim();
+                var Data = JSON.stringify({
+                    NextDate: "",
+                    Summary: reason,
+                    ComplaintId: $("#hdfComplaintId").val(),
+                    CompalintStatus: status,
+                    OrderFileName: "",
+                    OrderFilePath: ""
+                });
+
+                $.ajax({
+                    type: 'POST',
+                    url: "/ComplaintDetails/SaveComplaintStatusLog",
+                    contentType: "application/json; charset=utf-8",
+                    data: Data,
+                    dataType: "json",
+                    success: function (response) {
+                        if (response.IsSuccess) {
+                            Swal.fire("Success!", "Status updated successfully.", "success");
+                            GetComplaintCurrentStatus();
+                            GetLogList();
+                        } else {
+                            Swal.fire("Error!", response.Message || "Something went wrong!", "error");
+                        }
+                    },
+                    error: function () {
+                        Swal.fire('Something went wrong!', '', 'error');
+                    }
+                });
+            }
+        });
+    }
+
+    function rejectComplaint(status) {
+        updateStatusWithReason(status || 'Rejected');
+    }
+
+    function updateStatusWithNote(status) {
+        updateStatusWithReason(status);
+    }
+
     function updateStatusDirectly(status) {
+        if (status === 'Rejected' || status === 'Board Has Rejected' || status === 'More Detail' || status === 'Withdrawal Granted') {
+            updateStatusWithReason(status);
+            return;
+        }
+
         Swal.fire({
             title: "Are you sure?",
             text: "You want to change the status to " + status + "?",
@@ -3097,61 +3514,6 @@
                         Swal.fire('Something went wrong!', '', 'error');
                     },
                     error: function (result) {
-                        Swal.fire('Something went wrong!', '', 'error');
-                    }
-                });
-            }
-        });
-    }
-
-    function updateStatusWithNote(status) {
-        Swal.fire({
-            title: status,
-            text: "Please enter a note for this action:",
-            icon: "info",
-            input: 'textarea',
-            inputPlaceholder: 'Enter your note here...',
-            inputAttributes: {
-                'aria-label': 'Enter your note here'
-            },
-            showCancelButton: true,
-            confirmButtonColor: "#DD6B55",
-            confirmButtonText: "Submit",
-            cancelButtonText: "Cancel",
-            preConfirm: (note) => {
-                if (!note || note.trim() === "") {
-                    Swal.showValidationMessage('A note is required to proceed.');
-                }
-                return note;
-            }
-        }).then((result) => {
-            if (result.isConfirmed) {
-                var note = result.value;
-                var Data = JSON.stringify({
-                    NextDate: "",
-                    Summary: note,
-                    ComplaintId: $("#hdfComplaintId").val(),
-                    CompalintStatus: status,
-                    OrderFileName: "",
-                    OrderFilePath: ""
-                });
-
-                $.ajax({
-                    type: 'POST',
-                    url: "/ComplaintDetails/SaveComplaintStatusLog",
-                    contentType: "application/json; charset=utf-8",
-                    data: Data,
-                    dataType: "json",
-                    success: function (response) {
-                        if (response.IsSuccess) {
-                            Swal.fire("Success!", "Status updated successfully.", "success");
-                            GetComplaintCurrentStatus();
-                            GetLogList();
-                        } else {
-                            Swal.fire("Error!", response.Message || "Something went wrong!", "error");
-                        }
-                    },
-                    error: function () {
                         Swal.fire('Something went wrong!', '', 'error');
                     }
                 });

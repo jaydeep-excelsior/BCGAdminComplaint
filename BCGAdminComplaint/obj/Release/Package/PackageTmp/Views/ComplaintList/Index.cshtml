@@ -22,7 +22,7 @@
                         <span class="input-group-text"><i class="fa-solid fa-magnifying-glass text-muted"></i></span>
                         <input id="txtQuickSearch" class="form-control quicksearchcomplaintmanagement" placeholder="Quick Search (Name or contact number or email id or Complaint Number)">
                     </div>
-                    <a href="/ComplaintList/AddComplaint" class="btn btn-sm btn-primary me-2 text-nowrap"><i class="fa-solid fa-plus me-1"></i> Add Complaint</a>
+                    <a href="/ComplaintList/AddComplaint" class="btn btn-sm btn-outline-primary me-2 text-nowrap"><i class="fa-solid fa-plus me-1"></i> Add Complaint</a>
                     <a class="btn btn-sm btn-outline-primary text-nowrap" id="addfilter"><i class="fa-solid fa-filter me-1"></i> Filter</a>
                 </div>
             </div>
@@ -200,8 +200,8 @@
                 </div>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-secondary btn-sm" data-bs-dismiss="modal">Close</button>
-                <button type="button" class="btn btn-primary btn-sm" id="btnShareWithSelectedMembers">Share</button>
+                <button type="button" class="btn btn-outline-secondary btn-sm" data-bs-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-outline-primary btn-sm" id="btnShareWithSelectedMembers">Share</button>
             </div>
         </div>
     </div>
@@ -332,7 +332,7 @@
                                                             + (value.NewStatusCount > 0 ? '<a class="me-2 btn btn-sm btn-outline-warning waves-effect waves-light btn-sm" id="lnkOldComplaint" role="button"><i class="fa-solid fa-clock-rotate-left me-1"></i> Old</a>' : '')
                                                             + (value.OldStatusCount > 0 ? '<a class="me-2 btn btn-sm btn-outline-info waves-effect waves-light btn-sm" id="lnkNewComplaint" role="button"><i class="fa-solid fa-clock me-1"></i> New</a>' : '')
                                                             + '<a class="me-2 btn btn-sm btn-outline-primary waves-effect waves-light btn-sm" id="lnkUpdateComplaintNumber" role="button"><i class="fa-solid fa-pen-to-square me-1"></i> Update Complaint Number</a>'
-                                                            + ((value.Status === 'Accepted' || value.Status === 'Next General Board') ? '<a class="me-2 btn btn-sm btn-outline-primary waves-effect waves-light btn-sm" id="lnkShareWithDC" role="button"><i class="fa-solid fa-share-nodes me-1"></i> Share with D.C. Committee</a>' : '')
+                                                            + ((value.Status === 'Accepted' || value.Status === 'Next General Board' || value.Status === 'Refer to Board') ? '<a class="me-2 btn btn-sm btn-outline-primary waves-effect waves-light btn-sm" id="lnkShareWithDC" role="button"><i class="fa-solid fa-share-nodes me-1"></i> Share with D.C. Committee</a>' : '')
                                                             + '<a class="me-2 btn btn-sm btn-outline-primary waves-effect waves-light btn-sm" id="lnkViewDocument" data-toggle="modal" data-target="#document" role="button"><i class="fa-solid fa-file-lines me-1"></i> View Document</a>'
                                                             + '<a class="btn btn-outline-primary btn-sm waves-effect waves-light btn-sm" id="lnkViewAdjunt" data-toggle="modal" data-target="#Adjunt" role="button"><i class="fa-solid fa-file-lines me-1"></i> &nbsp;View Adjunt</a>'
                                                             + '<a class="ms-2 btn btn-sm btn-outline-danger waves-effect waves-light btn-sm" id="lnkDeleteComplaint" role="button"><i class="fa-solid fa-trash me-1"></i> Delete</a>'

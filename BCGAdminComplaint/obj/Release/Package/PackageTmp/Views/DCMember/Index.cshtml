@@ -19,9 +19,9 @@
                 <div class="page-title-right d-flex align-items-center">
                     <div class="input-group input-group-sm me-2">
                         <span class="input-group-text"><i class="fa-solid fa-magnifying-glass text-muted"></i></span>
-                        <input id="txtQuickSearch" class="form-control quicksearchcomplaintmanagement" placeholder="Quick Search">
+                        <input id="txtQuickSearch" class="form-control quicksearchcomplaintmanagement" placeholder="Quick Search (Name, Contact, Email or Member No.)">
                     </div>
-                    <a href="/DCMember/Add" class="btn btn-sm btn-primary me-2 text-nowrap"><i class="fa-solid fa-plus me-1"></i> Add New</a>
+                    <a href="/DCMember/Add" class="btn btn-sm btn-outline-primary me-2 text-nowrap"><i class="fa-solid fa-plus me-1"></i> Add New</a>
                     <a class="btn btn-sm btn-outline-primary text-nowrap" id="addfilter"><i class="fa-solid fa-filter me-1"></i> Filter</a>
                 </div>
             </div>
@@ -110,9 +110,22 @@
     $(document).ready(function () {
         GetRecordList();
 
-        $("[id=txtRecordSearch]").on('change keyup', function () {
-            $("#hdfPageNumber").val(1);
-            GetRecordList();
+        var searchTimer = null;
+        $('#txtQuickSearch, #txtRecordSearch').on('input keyup paste', function () {
+            clearTimeout(searchTimer);
+            searchTimer = setTimeout(function () {
+                $("#hdfPageNumber").val(1);
+                GetRecordList();
+            }, 300);
+        });
+
+        $('#txtQuickSearch, #txtRecordSearch').on('keypress', function (e) {
+            if (e.which === 13) {
+                e.preventDefault();
+                clearTimeout(searchTimer);
+                $("#hdfPageNumber").val(1);
+                GetRecordList();
+            }
         });
     });
 
@@ -125,15 +138,21 @@
     });
 
     $('#lnkDCMemberDataSearch').click(function () {
+        $("#hdfPageNumber").val(1);
         GetRecordList();
     });
 
     $('#ddlDCMemberDatarecordsize').on('change', function () {
+        $("#hdfPageNumber").val(1);
         GetRecordList();
     });
 
     $('#lnkDCMemberDataSearchCancel').click(function () {
-        $('#ddlDCMemberDataRecordStatus option:selected').val('');
+        $('#ddlDCMemberDataRecordStatus').val('');
+        $('#txtDCMemberDataFromDate').val('');
+        $('#txtDCMemberDataToDate').val('');
+        $('#txtQuickSearch, #txtRecordSearch').val('');
+        $("#hdfPageNumber").val(1);
         GetRecordList();
     });
 
@@ -149,9 +168,10 @@
 
     function GetRecordList() {
         $('#loader_bcg').css('display', 'block');
+        var searchValue = ($('#txtQuickSearch').val() || $('#txtRecordSearch').val() || '').trim();
         var data = {
             Id: '0',
-            SearchValue: $("#txtRecordSearch").val(),
+            SearchValue: searchValue,
             FromDate: $("#txtDCMemberDataFromDate").val(),
             ToDate: $("#txtDCMemberDataToDate").val(),
             RecordStatus: $("#ddlDCMemberDataRecordStatus option:selected").val(),
@@ -175,9 +195,11 @@
         $('#tblDCMemberDataList tbody').empty();
         var data = response.data;
 
-        console.log(data);
-
-        if (!data || data.length === 0) { $("#MyPager").empty(); return; }
+        if (!data || data.length === 0) {
+            $("#MyPager").empty();
+            $('#tblDCMemberDataList tbody').html('<tr><td colspan="9" class="text-center text-muted py-4"><i class="fa-solid fa-circle-exclamation me-1"></i> No records found</td></tr>');
+            return;
+        }
 
         var VTotalRecord = parseInt(data[0].TotalRecord || 0);
         var VDisplayRecordCount = parseInt($("#ddlDCMemberDatarecordsize").val() || 25);
@@ -189,15 +211,17 @@
                 : '<span class="badge bg-danger">Inactive</span>';
 
             var VDeleteButton = "";
-            if (row.DeleteRights === 'A') {
+            if (row.DeleteRights === 'A' || !row.DeleteRights) {
                 if (VActive === 'A') {
-                    VDeleteButton = '<a class="btn mr-2 btn-outline-danger actionbutton waves-effect waves-light btn-sm" title="Inactivate Record" onclick="DCMemberDataInActiveStatus(' + row.Id + ')"><i class="fa-solid fa-trash custom-icon"></i></a>';
+                    VDeleteButton = '<a class="btn btn-outline-danger actionbutton waves-effect waves-light btn-sm" title="Inactivate Record" onclick="DCMemberDataInActiveStatus(' + row.Id + ')"><i class="fa-solid fa-trash custom-icon"></i></a>';
                 } else {
-                    VDeleteButton = '<a class="btn mr-2 btn-outline-success actionbutton waves-effect waves-light btn-sm" title="Activate Record" onclick="DCMemberDataActiveStatus(' + row.Id + ')"><i class="fa-solid fa-check custom-icon"></i></a>';
+                    VDeleteButton = '<a class="btn btn-outline-success actionbutton waves-effect waves-light btn-sm" title="Activate Record" onclick="DCMemberDataActiveStatus(' + row.Id + ')"><i class="fa-solid fa-check custom-icon"></i></a>';
                 }
             }
 
-            var VEditButton = ''; // (row.EditRights === 'A') ? '<a class="btn mr-2 me-1 btn-outline-primary actionbutton waves-effect waves-light btn-sm" title="Edit Record" onclick="EditDCMemberDataTypeRecord(' + row.Id + ')"><i class="fa-solid fa-pencil custom-icon"></i></a>' : '';
+            var VEditButton = (row.EditRights === 'A' || !row.EditRights)
+                ? '<a class="btn btn-outline-primary actionbutton waves-effect waves-light btn-sm me-1" title="Edit Record" onclick="EditDCMemberDataTypeRecord(' + row.Id + ')"><i class="fa-solid fa-pencil custom-icon"></i></a>'
+                : '';
 
             var RowItemDetail =
                 '<tr>' +
@@ -247,7 +271,7 @@
 
     function EditDCMemberDataTypeRecord(EditRecordId) {
         localStorage.setItem("EditDCMemberId", EditRecordId);
-        location.href = '/DCMember/Edit';
+        location.href = '/DCMember/Edit?id=' + EditRecordId;
     }
 
     function DCMemberDataInActiveStatus(Id) {

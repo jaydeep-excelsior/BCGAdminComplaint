@@ -94,7 +94,12 @@
     });
 
     function GetRecordDetail() {
-        var VEditDCMemberDataId = localStorage.getItem("EditDCMemberId") == null ? '0' : localStorage.getItem("EditDCMemberId") == '' ? '0' : localStorage.getItem("EditDCMemberId");
+        var urlParams = new URLSearchParams(window.location.search);
+        var urlId = urlParams.get('id');
+        var VEditDCMemberDataId = urlId || localStorage.getItem("EditDCMemberId") || '0';
+        if (urlId) {
+            localStorage.setItem("EditDCMemberId", urlId);
+        }
         $.ajax({
             type: "POST",
             url: "/DCMember/DCMemberDataEdit",

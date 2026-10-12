@@ -1,28 +1,9 @@
-﻿
+
 @{
     ViewBag.Title = "OnlineComplaintList";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<style>
-    .swal2-reason-modal .swal2-html-container {
-        margin: 0.8em 2em 0 2em !important;
-        padding: 0 !important;
-        text-align: left !important;
-    }
-    .swal2-reason-modal .swal2-html-container p {
-        margin: 0 0 4px 0 !important;
-        padding: 0 !important;
-        font-size: 14.5px;
-        color: #495057;
-    }
-    .swal2-reason-modal .swal2-textarea {
-        margin: 0 2em 0.5em 2em !important;
-        width: calc(100% - 4em) !important;
-        box-sizing: border-box !important;
-        font-size: 14px;
-    }
-</style>
 
 <div>
     <div class="row mb-2">
@@ -42,7 +23,7 @@
                         <span class="input-group-text"><i class="fa-solid fa-magnifying-glass text-muted"></i></span>
                         <input id="txtQuickSearch" class="form-control quicksearchcomplaintmanagement" placeholder="Quick Search (Name or contact number or email id or Complaint Number)">
                     </div>
-                    <a href="/ComplaintList/AddComplaint" class="btn btn-sm btn-primary me-2 text-nowrap"><i class="fa-solid fa-plus me-1"></i> Add Complaint</a>
+                    <a href="/ComplaintList/AddComplaint" class="btn btn-sm btn-outline-primary me-2 text-nowrap"><i class="fa-solid fa-plus me-1"></i> Add Complaint</a>
                     <a class="btn btn-sm btn-outline-primary text-nowrap" id="addfilter"><i class="fa-solid fa-filter me-1"></i> Filter</a>
                 </div>
             </div>
