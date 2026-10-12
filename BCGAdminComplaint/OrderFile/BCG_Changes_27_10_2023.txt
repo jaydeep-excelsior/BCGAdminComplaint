@@ -1,0 +1,31 @@
+New SP (24/25/27-10-2023)
+--------------------------------------
+
+- SP_Complaint_FileUpload
+- SP_Complaint_Against
+- SP_Complaints_Manage
+- SP_Enrollment_Details
+- SP_Complaint_OTP
+- SP_Get_ComplaintList (01-11) (21-11)
+- SP_Complaint_Status_Log (02-11)
+- SP_Member_Mst (03-11)
+- SP_Commitee_Details (03-11)
+- SP_DcCommittee_Mst (03-11)
+- SP_Complaint_Member_Log (04-11)
+- SP_DcMember_Notes (07-11)
+
+--------------------------------------
+New Table (24/27-10-2023)
+--------------------------------------
+- tbl_Complaints_Manage
+- tbl_Complaint_Against
+- tbl_Complaint_FileUpload
+- tbl_Complaint_OTP
+- tbl_Complaint_Status_Log (02-11)
+- tbl_Member (02-11)
+- tbl_DcCommittee_Mst (02-11)
+- tbl_Commitee_Details (02-11)
+- tbl_Complaint_Member_Log (04-11)
+- tbl_DcMember_Notes (07-11)
+
+--------------------------------------

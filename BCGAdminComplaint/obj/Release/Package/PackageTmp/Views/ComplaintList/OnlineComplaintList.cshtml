@@ -1,0 +1,642 @@
+﻿
+@{
+    ViewBag.Title = "OnlineComplaintList";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<style>
+    .swal2-reason-modal .swal2-html-container {
+        margin: 0.8em 2em 0 2em !important;
+        padding: 0 !important;
+        text-align: left !important;
+    }
+    .swal2-reason-modal .swal2-html-container p {
+        margin: 0 0 4px 0 !important;
+        padding: 0 !important;
+        font-size: 14.5px;
+        color: #495057;
+    }
+    .swal2-reason-modal .swal2-textarea {
+        margin: 0 2em 0.5em 2em !important;
+        width: calc(100% - 4em) !important;
+        box-sizing: border-box !important;
+        font-size: 14px;
+    }
+</style>
+
+<div>
+    <div class="row mb-2">
+        <div class="col-12">
+            <div class="page-title-box d-sm-flex align-items-center justify-content-between">
+                <div>
+                    <h4 class="mb-sm-0 font-size-18">Online Complaint Management</h4>
+                    <div class="page-title-left mt-1">
+                        <ol class="breadcrumb m-0 font-size-13">
+                            <li class="breadcrumb-item"><a href="/Home/Index" class="text-muted">Dashboard</a></li>
+                            <li class="breadcrumb-item active">Online Complaint Management</li>
+                        </ol>
+                    </div>
+                </div>
+                <div class="page-title-right d-flex align-items-center">
+                    <div class="input-group input-group-sm me-2">
+                        <span class="input-group-text"><i class="fa-solid fa-magnifying-glass text-muted"></i></span>
+                        <input id="txtQuickSearch" class="form-control quicksearchcomplaintmanagement" placeholder="Quick Search (Name or contact number or email id or Complaint Number)">
+                    </div>
+                    <a href="/ComplaintList/AddComplaint" class="btn btn-sm btn-primary me-2 text-nowrap"><i class="fa-solid fa-plus me-1"></i> Add Complaint</a>
+                    <a class="btn btn-sm btn-outline-primary text-nowrap" id="addfilter"><i class="fa-solid fa-filter me-1"></i> Filter</a>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="card main_filter_div">
+        <div class="card-body">
+            <form action="#">
+                <div class="row">
+
+                </div>
+                <div class="row ">
+                    <div class="form-group col-md-6 col-sm-6 col-12 col-lg-3 mt-3">
+                        <label>Status</label>
+                        <select id="drpStatus" class="form-control select2">
+                            <option value="">Select Status</option>
+                            <option value="Pending">Pending</option>
+                            <option value="Accepted">Accepted</option>
+                            <option value="Rejected">Rejected</option>
+                        </select>
+                    </div>
+                    <div class="form-group col-md-6 col-sm-6 col-12 col-lg-3 mt-3">
+                        <label>Payment Status</label>
+                        <select id="drpPaymentStatus" class="form-control select2">
+                            <option value="">Select Payment Status</option>
+                            <option value="Pending">Pending</option>
+                            <option value="Parcel Due">Parcel Due</option>
+                            <option value="Completed">Completed</option>
+                        </select>
+                    </div>
+                    <div class="form-group col-md-6 col-sm-6 col-12 col-lg-3 mt-3">
+                        <label> From Date:</label>
+                        <input name="txtFromDate" id="txtFromDate" type="date" placeholder="DD/MM/YYYY" class="form-control" max="2999-12-31">
+                    </div>
+                    <div class="form-group col-md-6 col-sm-6 col-12 col-lg-2 mt-3">
+                        <label> To Date:</label>
+                        <input name="txtToDate" id="txtToDate" type="date" placeholder="DD/MM/YYYY" class="form-control" max="2999-12-31">
+                    </div>
+                    <div class="form-group col-md-4 col-sm-4 col-12 col-lg-2 mt-3">
+                        <label> Year:</label>
+                        <input name="txtYear" id="txtYear" type="number" placeholder="YYYY" class="form-control">
+                    </div>
+                    <div class="form-group col-md-4 col-sm-4 col-12 col-lg-2 mt-3">
+                        <label> From No.:</label>
+                        <input name="txtFromNo" id="txtFromNo" type="number" placeholder="From No." class="form-control">
+                    </div>
+                    <div class="form-group col-md-4 col-sm-4 col-12 col-lg-2 mt-3">
+                        <label> To No.:</label>
+                        <input name="txtToNo" id="txtToNo" type="number" placeholder="To No." class="form-control">
+                    </div>
+                    <div class="form-group col-md-12 mt-3">
+                        <div>
+                            <a id="lnkFilter" class="close_filterdiv btn-sm btn btn-outline-primary waves-effect waves-light btn-sm"><i class="fa-solid fa-magnifying-glass me-1"></i> Search</a>
+                            <a id="btnCancel" class="btn btn-outline-danger waves-effect m-l-5 btn-sm close_filterdiv btn-sm"><i class="fa-solid fa-xmark me-1"></i> Cancel</a>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <div id="tblComplaintList">
+    </div>
+
+    <div id="paginationDiv" class="mt-3 d-flex justify-content-between align-items-center">
+        <div id="entriesInfo" class="fw-bold text-dark mb-0"></div>
+        <ul class="pagination pagination-rounded mb-0" id="paginationList"></ul>
+    </div>
+
+    <div class="modal fade" id="pdfModal" tabindex="-1" role="dialog" aria-hidden="true" style="z-index: 1060;">
+        <div class="modal-dialog modal-dialog-centered modal-xl" style="max-width: 90vw;">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title">File Preview</h4>
+                    <a class="btn-close btn-sm" data-dismiss="modal" data-bs-dismiss="modal" aria-hidden="true"></a>
+                </div>
+                <div class="modal-body p-0">
+                    <iframe src="" id="displayPdf" style="width: 100%; height: 80vh; border: none;"></iframe>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="document" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">Document Preview</h4>
+                <a class="btn-close btn-sm" data-dismiss="modal" aria-hidden="true"></a>
+            </div>
+            <div class="modal-body">
+                <div id="tblComplaintDoc" style="display:none;">
+
+                </div>
+                <div id="tblComplaintDocEmpty" style="display:none;">
+                    <div class="main_card_list mb-2">
+                        <div class="main_card_list_body text-center p-4">
+                            <h6 class="text-danger mb-0">No Upload Complaint Document Files<br />(ફરિયાદ સોગંદનામાની નકલ)</h6>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="Adjunt" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">Details of Advocate - Complained Against<br>(&#x0A9C;&#x0AC7; &#x0AB5;&#x0A95;&#x0AC0;&#x0AB2; &#x0AB5;&#x0ABF;&#x0AB0;&#x0AC1;&#x0AA6;&#x0ACD;&#x0AA7; &#x0AAB;&#x0AB0;&#x0ABF;&#x0AAF;&#x0ABE;&#x0AA6; &#x0A95;&#x0AB0;&#x0AB5;&#x0ABE;&#x0AAE;&#x0ABE;&#x0A82; &#x0A86;&#x0AB5;&#x0AC0; &#x0A9B;&#x0AC7; &#x0AA4;&#x0AC7;&#x0AA8;&#x0AC0; &#x0AB5;&#x0ABF;&#x0A97;&#x0AA4;&#x0ACB;)</h4>
+                <a class="btn-close btn-sm" data-dismiss="modal" aria-hidden="true"></a>
+            </div>
+            <div class="modal-body">
+                <div id="tblComplaintAgaints">
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+<script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
+<script src="~/assets/js/select2.min.js"></script>
+
+<script>
+    var baseFilter = {
+        pageNo: 1,
+        pageSize: 10,
+        sortColumn: 1,
+        sortOrder: 'desc',
+        searchValue: ''
+    };
+
+    function initSelect2() {
+        if ($.fn.select2) {
+            $('#drpStatus, #drpPaymentStatus, select.select2').select2({
+                allowClear: true,
+                width: '100%'
+            });
+        }
+    }
+
+    $(document).ready(function () {
+        initSelect2();
+        GetOnlineComplaintList();
+    });
+
+    function GetOnlineComplaintList() {
+        var Data = JSON.stringify({
+            baseFilter,
+            Status: $("#drpStatus option:selected").text() == 'Select Status' ? "" : $("#drpStatus option:selected").text().trim(),
+            PaymentStatus: $("#drpPaymentStatus option:selected").text() == 'Select Payment Status' ? "" : $("#drpPaymentStatus option:selected").text().trim(),
+            FromDate: $("#txtFromDate").val(),
+            ToDate: $("#txtToDate").val(),
+            Year: $("#txtYear").val(),
+            FromNo: $("#txtFromNo").val(),
+            ToNo: $("#txtToNo").val()
+        });
+
+
+        $.ajax({
+            type: 'POST',
+            url: "/ComplaintList/GetOnlineComplaintList",
+            data: Data,
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            success: function (response) {
+                $("#tblComplaintList").empty();
+                var complaintList = $("#tblComplaintList");
+
+                if (response.IsSuccess) {
+                    var totalRecords = response.Data.length > 0 ? response.Data[0].TotalRecord : 0;
+                    $.each(response.Data, function (i, value) {
+
+                        var paymentStatusClass = "";
+                        if (value.PaymentStatus === "Due") {
+                            paymentStatusClass = "paymentstatusdue";
+                        } else if (value.PaymentStatus === "Paid") {
+                            paymentStatusClass = "paymentstatuspaid";
+                        }
+
+                        var FinalRowItem = '<div class="main_card_list mb-2 ribbon-wrapper">'
+                                            + '<div class="main_header_card main_header_card__w_responsive">'
+                                                + '<div class="_left_side">'
+                                                    + '<div id="HdfId">' + value.Id + '</div>'
+                                                    + '<div class="number">' + value.SrNo + '</div>'
+                                                        + '<div class="d-flex mainnewresponsiveleftweb">'
+                                                            + '<div class="complaint_number">'
+                                                                + '<div class="title">Complaint Number</div>'
+                                                                + '<a class="description" href="/ComplaintDetails/DetailsNew/' + value.Id + '">' + value.ComplaintNumber + '</a>'
+                                                            + '</div>'
+                                                            + '<div class="complaint_number">'
+                                                                + '<div class="title">Date & Time</div>'
+                                                                + '<a class="description">' + value.ComplaintsCreateDate + '</a>'
+                                                            + '</div>'
+                                                            + '<div class="complaint_number">'
+                                                                + '<div class="title">Complaint Status</div>'
+                                                                + '<a class="description">' + value.Status + '</a>'
+                                                            + '</div>'
+                                                        + '</div>'
+                                                + '</div>'
+
+                                            + '</div>'
+                                            + '<div class="main_header_card">'
+                                                + '<div class="main_card_list_body">'
+                                                    + '<div class="row">'
+                                                        + '<div class="col-md-3 col-sm-6 col-12 mt-2">'
+                                                            + '<div class="title">Full Name</div>'
+                                                            + '<div class="description">' + value.FullName + '</div>'
+                                                        + '</div>'
+                                                        + '<div class="col-md-2 col-sm-6 col-12 mt-2">'
+                                                            + '<div class="title">Contact Number</div>'
+                                                            + '<div class="description">' + value.ContactNumber + '</div>'
+                                                        + '</div>'
+                                                        + '<div class="col-md-2 col-sm-6 col-12 mt-2">'
+                                                            + '<div class="title">Email</div>'
+                                                            + '<div class="description">' + value.EmailAddress + '</div>'
+                                                        + '</div>'
+                                                        + '<div class="col-md-1 col-sm-6 col-12 mt-2">'
+                                                            + '<div class="title">Total Amt</div>'
+                                                            + '<div class="description">' + value.TotalAmount + '</div>'
+                                                        + '</div>'
+                                                        + '<div class="col-md-1 col-sm-6 col-12 mt-2">'
+                                                            + '<div class="title">Paid Amt</div>'
+                                                            + '<div class="description">' + (value.PaidAmount != null ? value.PaidAmount : 0) + '</div>'
+                                                        + '</div>'
+                                                        + '<div class="col-md-1 col-sm-6 col-12 mt-2">'
+                                                            + '<div class="title">Due Amt</div>'
+                                                            + '<div class="description">' + (value.DueAmount != null ? (value.DueAmount > 0 ? '<span class="text-danger fw-bold">' + value.DueAmount + '</span>' : '0') : 0) + '</div>'
+                                                        + '</div>'
+                                                        + '<div class="col-md-2 col-sm-6 col-12 mt-2">'
+                                                            + '<div class="title">Payment Status</div>'
+                                                            + '<div class="description">' + value.PaymentStatus + '</div>'
+                                                        + '</div>'
+                                                    + '</div>'
+                                                + '</div>'
+                                            + '</div>'
+                                            + '<div class="main_header_card">'
+                                                + '<div class="main_card_list_body">'
+                                                    + '<div class="row mt-2">'
+                                                        + '<div class="rigth_side">'
+                                                            + ((value.Status && value.Status.trim().toLowerCase() === 'pending') ? '<a class="me-2 btn btn-sm btn-outline-success waves-effect waves-light btn-sm" id="lnkAcceptComplaint" role="button"><i class="fa-solid fa-check me-1"></i> Accepted</a>' : '')
+                                                            + ((value.Status && value.Status.trim().toLowerCase() === 'pending') ? '<a class="me-2 btn btn-sm btn-outline-danger waves-effect waves-light btn-sm" id="lnkRejectComplaint" role="button"><i class="fa-solid fa-xmark me-1"></i> Rejected</a>' : '')
+                                                            + '<a class="me-2 btn btn-sm btn-outline-primary waves-effect waves-light btn-sm" id="lnkViewDocument" data-toggle="modal" data-target="#document" role="button"><i class="fa-solid fa-file-lines me-1"></i> View Document</a>'
+                                                            + '<a class="btn btn-outline-primary btn-sm waves-effect waves-light btn-sm" id="lnkViewAdjunt" data-toggle="modal" data-target="#Adjunt" role="button"><i class="fa-solid fa-file-lines me-1"></i> &nbsp;View Adjunt</a>'
+                                                            + '<a class="ms-2 btn btn-sm btn-outline-danger waves-effect waves-light btn-sm" id="lnkDeleteComplaint" role="button"><i class="fa-solid fa-trash me-1"></i> Delete</a>'
+                                                        + '</div>'
+                                                    + '</div>'
+                                                + '</div>'
+                                            + '</div>';
+                        complaintList.append(FinalRowItem);
+                    });
+                    RenderPagination(totalRecords);
+
+                }
+                else {
+                    complaintList.append('No Data Found');
+                    $("#paginationList").empty();
+                    $("#entriesInfo").empty();
+                }
+
+            }, failure: function (result) {
+                swal('Something went wrong!', '', 'error');
+            },
+            error: function (result) {
+                swal('Something went wrong!', '', 'error');
+            }
+        });
+    }
+
+    $('body').on('click', '#lnkViewDocument', function () {
+
+        var currow = $(this).closest('.main_card_list');
+        var CId = currow.find('#HdfId').text();
+        return $.ajax({
+            type: 'POST',
+            url: "/ComplaintList/GetOnlineDocument",
+            data: { ComplaintId: CId },
+            success: function (response) {
+                $("#tblComplaintDoc").empty();
+                var complaintDocList = $("#tblComplaintDoc");
+                var complaintDocEmpty = $("#tblComplaintDocEmpty");
+
+                if (response.IsSuccess) {
+                    complaintDocEmpty.hide();
+                    complaintDocList.show();
+                    $.each(response.Data, function (i, value) {
+                        var NhdfFilePathId = 'hdfFilePath' + i;
+                        var FileTitle = value.FileTitle == null ? '' : value.FileTitle;
+                        var FileBlock = '';
+                        if (value.FilePath == null || value.FilePath === '') {
+                            FileBlock = '<div class="text-danger mt-1">No Upload Complaint Document Files (ફરિયાદ સોગંદનામાની નકલ)</div>';
+                        } else {
+                            FileBlock = '<div class="file_name_btn" onclick="getFile(' + i + ')">'
+                                      + '<div class="name">' + value.FileName + '</div>'
+                                      + '<input name=' + NhdfFilePathId + ' id=' + NhdfFilePathId + ' type="hidden" value=' + value.FilePath + '>'
+                                      + '<div class="view_file"><i class="las la-eye"></i></div>'
+                                      + '</div>';
+                        }
+                        var NoteBlock = '';
+                        if (value.Description != null && value.Description.trim() !== '') {
+                            NoteBlock = '<div class="col-md-12 mt-3">'
+                                      + '<div class="title">Note (નોંધ)</div>'
+                                      + '<div class="description">' + value.Description + '</div>'
+                                      + '</div>';
+                        }
+                        var FinalRowItem = '<div class="main_card_list mb-2">'
+                                             + '<div class="main_card_list_body">'
+                                                 + '<div class="row">'
+                                                     + '<div class="col-md-12">'
+                                                         + '<div class="title">File Name</div>'
+                                                         + FileBlock
+                                                     + '</div>'
+                                                     + NoteBlock
+                                                 + '</div>'
+                                             + '</div>'
+                                         + '</div>'
+                        complaintDocList.append(FinalRowItem)
+                    });
+                }
+                else {
+                    complaintDocList.hide();
+                    complaintDocEmpty.show();
+                }
+            }, failure: function (result) {
+                swal('Something went wrong!', '', 'error');
+            },
+            error: function (result) {
+                swal('Something went wrong!', '', 'error');
+            }
+        });
+    });
+
+    function getFile(RowId) {
+        var VFilePathId = '#hdfFilePath' + RowId;
+        var VFilePath = $(VFilePathId).val();
+
+        if (VFilePath != "") {
+            $('#displayPdf').attr('src', VFilePath);
+            $('#pdfModal').modal('show');
+        }
+    }
+
+    $('#pdfModal').on('hidden.bs.modal', function () {
+        if ($('#document').is(':visible')) {
+            $('body').addClass('modal-open');
+        }
+    });
+
+    $('body').on('click', '#lnkViewAdjunt', function () {
+
+        var currow = $(this).closest('.main_card_list');
+        var CId = currow.find('#HdfId').text();
+        return $.ajax({
+            type: 'POST',
+            url: "/ComplaintList/GetOnlineAdjuntDetails",
+            data: { ComplaintId: CId },
+            success: function (response) {
+                $("#tblComplaintAgaints").empty();
+                var complaintAgaintsList = $("#tblComplaintAgaints");
+
+                if (response.IsSuccess) {
+                    $.each(response.Data, function (data, value) {
+                        var SrNo = data + 1;
+                        var enrNo = value.EnrollmentNo || value.EnrollmentNumber;
+                        var enrHtml = (enrNo != null && enrNo !== '')
+                            ? '<div class="complaint_number"><div class="title">Enrollment Number</div><a class="description">' + enrNo + '</a></div>'
+                            : '';
+                        complaintAgaintsList.append(
+                            '<div class="main_card_list mb-3"><div class="main_header_card"><div class="_left_side"><div class="number">' + SrNo + '</div>' + enrHtml + '<div class="complaint_number total"><div class="title">Amount</div><a class="description">' + (value.Amount || 0) + '</a></div></div><div class="rigth_side"></div></div><div class="main_card_list_body"><div class="row"><div class="col-md-12 mt-1"><div class="title">Full Name</div><div class="description">' + (value.Name || '') + '</div></div></div></div></div>');
+                        //'<tr>'
+                        //   + '<td>' + value.SrNo + '</td>'
+                        //   + '<td style="text-align:center;display:none;">' + value.Id + '</td>'
+                        //   + '<td>' + value.Name + '</td>'
+                        //   + '<td>' + value.EnrollmentNumber + '</td>'
+                        //   + '<td>' + value.Amount + '</td>'
+                        //   + '</tr>
+                    });
+                }
+                else {
+                    complaintAgaintsList.append('No Data Found');
+                }
+            }, failure: function (result) {
+                swal('Something went wrong!', '', 'error');
+            },
+            error: function (result) {
+                swal('Something went wrong!', '', 'error');
+            }
+        });
+    });
+
+    $('body').on('click', '#lnkDeleteComplaint', function () {
+        var currow = $(this).closest('.main_card_list');
+        var CId = currow.find('#HdfId').text();
+
+        swal({
+            title: "Are you sure?",
+            text: "You want to delete this complaint?",
+            icon: "warning",
+            showCancelButton: true,
+            confirmButtonColor: "#DD6B55",
+            confirmButtonText: "Yes",
+            cancelButtonText: "Cancel"
+        }).then((result) => {
+            if (result.isConfirmed) {
+                $.ajax({
+                    type: 'POST',
+                    url: "/ComplaintList/DeleteOnlineComplaint",
+                    data: { ComplaintId: CId },
+                    success: function (response) {
+                        if (response.IsSuccess && response.Data === "DE") {
+                            swal("Complaint deleted successfully!", "", "success");
+                            GetOnlineComplaintList();
+                        } else {
+                            swal("Failed to delete complaint.", "", "error");
+                        }
+                    },
+                    error: function () {
+                        swal("Error deleting complaint.", "", "error");
+                    }
+                });
+            }
+        });
+    });
+
+    $('body').on('click', '#lnkAcceptComplaint', function () {
+        var currow = $(this).closest('.main_card_list');
+        var CId = currow.find('#HdfId').text();
+
+        Swal.fire({
+            title: "Accept Complaint",
+            html: '<p class="text-start">Please enter reason/remark:</p>',
+            icon: "question",
+            input: 'textarea',
+            inputPlaceholder: "Enter reason here (Optional)...",
+            showCancelButton: true,
+            confirmButtonColor: "#28a745",
+            confirmButtonText: "Accept",
+            cancelButtonText: "Cancel",
+            customClass: {
+                popup: 'swal2-reason-modal'
+            }
+        }).then(function (result) {
+            if (result.isConfirmed) {
+                var reason = result.value || '';
+                $.ajax({
+                    type: 'POST',
+                    url: "/ComplaintList/OnlineComplaintStatusUpdate",
+                    data: {
+                        ComplaintId: CId,
+                        Remark: reason,
+                        Mode: "Accepted"
+                    },
+                    success: function (response) {
+                        if (response.IsSuccess) {
+                            Swal.fire("Success!", "Complaint accepted successfully!", "success");
+                            GetOnlineComplaintList();
+                        } else {
+                            Swal.fire("Error!", response.Message || "Failed to accept complaint.", "error");
+                        }
+                    },
+                    error: function () {
+                        Swal.fire("Error!", "Error updating status.", "error");
+                    }
+                });
+            }
+        });
+    });
+
+    $('body').on('click', '#lnkRejectComplaint', function () {
+        var currow = $(this).closest('.main_card_list');
+        var CId = currow.find('#HdfId').text();
+
+        Swal.fire({
+            title: "Reject Complaint",
+            html: '<p class="text-start">Please enter reason for rejection: <span class="text-danger fw-bold">*</span></p>',
+            icon: "warning",
+            input: 'textarea',
+            inputPlaceholder: "Enter rejection reason here...",
+            showCancelButton: true,
+            confirmButtonColor: "#DD6B55",
+            confirmButtonText: "Reject",
+            cancelButtonText: "Cancel",
+            customClass: {
+                popup: 'swal2-reason-modal'
+            },
+            inputValidator: function (value) {
+                if (!value || !value.trim()) {
+                    return 'Please enter reason for rejection is required';
+                }
+            }
+        }).then(function (result) {
+            if (result.isConfirmed) {
+                var reason = result.value;
+                $.ajax({
+                    type: 'POST',
+                    url: "/ComplaintList/OnlineComplaintStatusUpdate",
+                    data: {
+                        ComplaintId: CId,
+                        Remark: reason,
+                        Mode: "Rejected"
+                    },
+                    success: function (response) {
+                        if (response.IsSuccess) {
+                            Swal.fire("Success!", "Complaint rejected successfully!", "success");
+                            GetOnlineComplaintList();
+                        } else {
+                            Swal.fire("Error!", response.Message || "Failed to reject complaint.", "error");
+                        }
+                    },
+                    error: function () {
+                        Swal.fire("Error!", "Error updating status.", "error");
+                    }
+                });
+            }
+        });
+    });
+
+    $('#lnkFilter').click(function () {
+        baseFilter.pageNo = 1;
+        baseFilter.searchValue = $("#txtQuickSearch").val();
+        GetOnlineComplaintList();
+    });
+
+    $('#txtQuickSearch').on('input', function () {
+        baseFilter.pageNo = 1;
+        baseFilter.searchValue = $(this).val();
+        GetOnlineComplaintList();
+    });
+
+    $('#btnCancel').click(function () {
+        baseFilter.pageNo = 1;
+        baseFilter.searchValue = '';
+        $('#drpStatus').val('').trigger('change');
+        $('#drpPaymentStatus').val('').trigger('change');
+        $('#txtFromDate').val('');
+        $('#txtToDate').val('');
+        $('#txtYear').val('');
+        $('#txtFromNo').val('');
+        $('#txtToNo').val('');
+        GetOnlineComplaintList();
+    });
+
+    $(".main_filter_div").hide();
+
+    $('#addfilter').click(function () {
+        $(".main_filter_div").slideToggle(200, function () {
+            initSelect2();
+        });
+    });
+
+    $('.close_filterdiv').click(function () {
+        $(".main_filter_div").slideUp();
+    });
+
+    function RenderPagination(totalRecords) {
+        var totalPages = Math.ceil(totalRecords / baseFilter.pageSize);
+        var paginationHtml = '';
+        $("#paginationList").empty();
+
+        var startEntry = totalRecords > 0 ? ((baseFilter.pageNo - 1) * baseFilter.pageSize + 1) : 0;
+        var endEntry = Math.min(baseFilter.pageNo * baseFilter.pageSize, totalRecords);
+        $("#entriesInfo").html('Showing ' + startEntry + ' to ' + endEntry + ' of ' + totalRecords + ' entries');
+
+        if (totalPages > 1) {
+            var prevDisabled = baseFilter.pageNo <= 1 ? 'disabled' : '';
+            var prevPage = baseFilter.pageNo > 1 ? baseFilter.pageNo - 1 : 1;
+            paginationHtml += '<li class="page-item ' + prevDisabled + '"><a class="page-link" href="javascript:void(0);" onclick="ChangePage(' + prevPage + ')"><i class="fa-solid fa-chevron-left"></i></a></li>';
+
+            var startPage = Math.max(1, baseFilter.pageNo - 2);
+            var endPage = Math.min(totalPages, baseFilter.pageNo + 2);
+
+            for (var i = startPage; i <= endPage; i++) {
+                var activeClass = i === baseFilter.pageNo ? 'active' : '';
+                paginationHtml += '<li class="page-item ' + activeClass + '"><a class="page-link" href="javascript:void(0);" onclick="ChangePage(' + i + ')">' + i + '</a></li>';
+            }
+
+            var nextDisabled = baseFilter.pageNo >= totalPages ? 'disabled' : '';
+            var nextPage = baseFilter.pageNo < totalPages ? baseFilter.pageNo + 1 : totalPages;
+            paginationHtml += '<li class="page-item ' + nextDisabled + '"><a class="page-link" href="javascript:void(0);" onclick="ChangePage(' + nextPage + ')"><i class="fa-solid fa-chevron-right"></i></a></li>';
+        }
+
+        $("#paginationList").html(paginationHtml);
+    }
+
+    function ChangePage(page) {
+        baseFilter.pageNo = page;
+        GetOnlineComplaintList();
+    }
+
+
+
+</script>
+

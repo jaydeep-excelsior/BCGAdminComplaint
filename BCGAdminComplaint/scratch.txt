@@ -1,0 +1,177 @@
+﻿
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="">
+    <div class="row">
+        <div class="col-md-12">
+            <section class="mt-3">
+                <div class="row">
+                    <div class="col-12">
+                        <div class="list-heading d-flex align-items-center justify-content-between">
+                            <div class="">
+                                <div class="page-title-box ">
+                                    <h4 class="mb-0 font-size-18">
+                                        DC Committee Member List
+                                    </h4>
+                                    <div class="page-title-right">
+                                        <ol class="breadcrumb m-0">
+                                            <li class="breadcrumb-item active">
+                                                <a href="@Url.Action("Index", "Home")">
+                                                    Dashboard
+                                                </a>
+                                            </li>
+                                            <li class="breadcrumb-item">
+                                                DC Committee Member List
+                                            </li>
+                                        </ol>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="campaign-add d-flex align-items-center">
+                                <div class="add d-flex align-items-center ms-0">
+                                    @if (ViewBag.IsAdd == "A")
+                                    {
+                                        <a class="btn btn-outline-primary addbutton waves-effect waves-light btn-sm" id="lnkDCCommitteeMemberDataSearch" href="@Url.Action("Add", "DCCommitteeMember")"><i class="mdi mdi-library-plus custom-icon">&nbsp; Add New</i></a>
+                                        @*  <a href="@Url.Action("Add", "UserType")" class="btn btn-outline-primary waves-effect waves-light btn-sm">
+                                                <i class="mdi mdi-plus-box-outline custom-icon">&nbsp; Add User Type</i>
+                                            </a> *@
+                                    }
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-12">
+            <div class="card border-0">
+                <div class="card-body card-body-padding">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="top-page-bar d-flex align-items-center justify-content-between">
+                                <div>
+                                    <h5>DC Committee Member List</h5>
+                                </div>
+                                <div class="right-btn">
+                                    <div class="search">
+                                        <input class="input-simple" type="text" placeholder="Search" id="txtRecordSearch">
+                                    </div>
+                                    <div class="filter filtershow">
+                                        <a>
+                                            <img src="~/assets/images/filter.svg" alt=""> <span class="d-md-block d-none">Filter</span>
+                                        </a>
+                                    </div>
+                                    <div class="filter dropdown">
+                                        <a class="dropdown-toggle" href="#" id="dropdownMenuButton1" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                            <img src="/assets/images/sort-by.svg" alt=""><span class="d-md-block d-none"> Sort by</span>
+                                        </a>
+                                        <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
+                                            <li><a class="dropdown-item" id="lnkByTitle">By Title</a></li>
+                                            <li><a class="dropdown-item" id="lnkByCreateDate">By Create Date</a></li>
+                                            <li><a class="dropdown-item" id="lnkByNewest">By Newest</a></li>
+                                        </ul>
+                                    </div>
+
+
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-md-12">
+                            <div class="main_filter_box">
+                                <div class="filter_top">
+                                    Filter
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-3">
+                                        <div class="mb-3">
+                                            <label for="txtDCCommitteeMemberDataFromDate" class="form-label">From Date</label>
+                                            <input type="date" class="form-control" id="txtDCCommitteeMemberDataFromDate" placeholder="Select From Date">
+                                        </div>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <div class="mb-3">
+                                            <label for="txtDCCommitteeMemberDataToDate" class="form-label">To Date</label>
+                                            <input type="date" class="form-control" id="txtDCCommitteeMemberDataToDate" placeholder="Select To Date">
+                                        </div>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <div class="mb-3">
+                                            <label for="ddlDCCommitteeMemberDataRecordStatus" class="form-label">
+                                                Record Status
+                                            </label>
+                                            <select id="ddlDCCommitteeMemberDataRecordStatus" class="form-control" aria-label="Default select example">
+                                                <option selected value="">Select Status</option>
+                                                <option value="A">Active</option>
+                                                <option value="D">Inactive</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-12 mt-3 text-right">
+                                        <a class="btn btn-outline-info waves-effect waves-light btn-sm" id="lnkDCCommitteeMemberDataSearch"><i class="fas fa-search"></i> Search</a>
+                                        <a class="btn btn-outline-danger waves-effect waves-light btn-sm" id="lnkDCCommitteeMemberDataSearchCancel"><i class="fas fa-times-circle"></i> Cancel</a>
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-12">
+            <div class="card border-0">
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-12">
+                            <table id="tblDCCommitteeMemberDataList" class="table table-bordered dt-responsive nowrap w-100">
+                                <thead>
+                                    <tr>
+                                        <th class="text-center">#</th>
+                                        <th>CommitteeTitle</th>
+                                        <th>DcCommitteeNo</th>
+                                        <th>Note</th>
+                                        <th class="text-center">Status</th>
+                                        @* <th class="text-center">Create By</th>
+                                            <th class="text-center">Create<br /> Date & Time</th>
+                                            <th class="text-center">Last Modify By</th>
+                                            <th class="text-center">Last Modify <br />Date & Time</th> *@
+                                        <th class="text-center">Action</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                </tbody>
+                            </table>
+                        </div> <!-- end col -->
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6 justify-content-md-start justify-content-center d-flex mb-md-0 mb-4">
+                            <select class="form-select totalpageshowselect" aria-label="Default select example" id="ddlDCCommitteeMemberDatarecordsize">
+                                <option selected value="25">25</option>
+                                <option value="50">50</option>
+                                <option value="100">100</option>
+                                <option value="250">250</option>
+                                <option value="500">500</option>
+                            </select>
+                        </div>
+                        <div class="col-md-12">
+                            <nav aria-label="...">
+                                <ul class="pagination justify-content-md-end justify-content-center" id="MyPager"></ul>
+                            </nav>
+                            <input id="hdfPageNumber" type="hidden" value="1" />
+                            <input id="hdfLatPageNumber" type="hidden" value="0" />
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+

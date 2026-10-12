@@ -1,0 +1,358 @@
+
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+
+
+<div>
+    <div class="row mb-2">
+        <div class="col-12">
+            <div class="page-title-box d-sm-flex align-items-center justify-content-between">
+                <div>
+                    <h4 class="mb-sm-0 font-size-18">DC Referred List</h4>
+                    <div class="page-title-left mt-1">
+                        <ol class="breadcrumb m-0 font-size-13">
+                            <li class="breadcrumb-item"><a href="/Home/Index" class="text-muted">Dashboard</a></li>
+                            <li class="breadcrumb-item active">Disciplinary Committee Referred List</li>
+                        </ol>
+                    </div>
+                </div>
+                <div class="page-title-right">
+                    <a id="lnkDownloadExcel" class="btn btn-outline-primary waves-effect waves-light btn-sm"><i class="fa-solid fa-file-excel me-1"></i> Download Excel</a>
+                    <a id="lnkDownloadPDF" class="btn btn-outline-primary waves-effect waves-light btn-sm"><i class="fa-solid fa-file-pdf me-1"></i> Download PDF</a>
+                    <a class="btn btn-sm btn-outline-primary btn-sm" id="addfilter"><i class="fa-solid fa-filter me-1"></i> Search Filters</a>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="card main_filter_div">
+        <div class="card-body">
+            <br />
+            <div class="row ">
+                <div class="form-group col-lg-3 col-md-6 col-12 mt-3">
+                    <label>Quick Search</label>
+                    <input id="txtQuickSearch" class="form-control" placeholder="Quick Search (Name or contact number or email id or Complaint Number)">
+                </div>
+                <div class="form-group col-lg-3 col-md-6 col-12 mt-3">
+                    <label>Assign DC Committee:</label>
+                    <select id="drpDCCommittee" class="form-control select2">
+                        <option value="">Select Assign DC Committee</option>
+                    </select>
+                </div>
+                <div class="form-group col-lg-3 col-md-6 col-12 mt-3">
+                    <label> From Date:</label>
+                    <input name="txtFromDate" id="txtFromDate" type="date" placeholder="DD/MM/YYYY" class="form-control" max="2999-12-31">
+                </div>
+                <div class="form-group col-lg-3 col-md-6 col-12 mt-3">
+                    <label> To Date:</label>
+                    <input name="txtToDate" id="txtToDate" type="date" placeholder="DD/MM/YYYY" class="form-control" max="2999-12-31">
+                </div>
+                <div class="form-group col-md-12 mt-3">
+                    <div>
+                        <a id="lnkFilter" class="close_filterdiv btn-sm btn btn-outline-primary waves-effect waves-light btn-sm"><i class="fa-solid fa-magnifying-glass me-1"></i> Search</a>
+
+                        <a id="btnCancel" class="btn btn-outline-danger waves-effect m-l-5 btn-sm close_filterdiv btn-sm"><i class="fa-solid fa-xmark me-1"></i> Cancel</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <div class="card">
+        <div class="card-body">
+            <div class="row">
+                <div class="table-responsive">
+                    <table id="tblDCReferredList" class="table table-bordered dt-responsive" style="border-collapse: collapse; border-spacing: 0; width: 100%;">
+                        <thead>
+                            <tr>
+                                <th style="text-align:center;display:none;" class="srnow">ClientId</th>
+                                <th style="text-align:center;">#</th>
+                                <th style="text-align:center;">
+                                    <div class="custom-control custom-checkbox custom-checkboxn2 custom-checkboxn1 checksign1">
+                                        <input type="checkbox" class="custom-control-input" id="chkSelectAll">
+                                        <label class="form-check-label" for="chkSelectAll"></label>
+                                    </div>
+                                </th>
+                                <th style="text-align:center;">Complaint Number</th>
+                                <th style="text-align:center;">DC Case No.</th>
+                                <th style="text-align:center;">Assign DC Committee</th>
+                                <th style="text-align:center;">Assign DC Committee Date</th>
+                                <th>Full Name</th>
+                                <th>Email</th>
+                                <th style="text-align:center;">Mobile No.</th>
+                                <th>Complained Against (Advocate)</th>
+                                <th style="text-align:center;">Complaint Status</th>
+                            </tr>
+                        </thead>
+                        <tbody class="tbody"></tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
+<script src="~/assets/js/select2.min.js"></script>
+
+<script>
+    var baseFilter = {
+        pageNo: 1,
+        pageSize: 10,
+        sortColumn: 1,
+        sortOrder: 'desc',
+        searchValue: ''
+    };
+
+    function initSelect2() {
+        if ($.fn.select2) {
+            $('#drpDCCommittee, select.select2').select2({
+                placeholder: 'Select Assign DC Committee',
+                allowClear: true,
+                width: '100%'
+            });
+        }
+    }
+
+    $(document).ready(function () {
+        initSelect2();
+        GetDcCommitteeList();
+        GetComplaintDCReferredList();
+    });
+
+    function GetDcCommitteeList() {
+        $.ajax({
+            type: 'GET',
+            url: "/ComplaintDetails/GetDcNoList",
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            success: function (response) {
+                if (response.IsSuccess) {
+                    $('#drpDCCommittee').empty();
+                    $('#drpDCCommittee').append('<option value="">Select Assign DC Committee</option>');
+                    $.each(response.Data, function (data, value) {
+                        $("#drpDCCommittee").append('<option value="' + value.Id + '">' + value.DcTitle + '</option>');
+                    });
+                    initSelect2();
+                }
+            }
+        });
+    }
+
+    function GetComplaintDCReferredList() {
+        var Data = JSON.stringify({
+            baseFilter,
+            Status: "",
+            FromDate: $("#txtFromDate").val(),
+            ToDate: $("#txtToDate").val(),
+            DCCommittee: $("#drpDCCommittee").val() || ""
+        });
+
+
+        $.ajax({
+            type: 'POST',
+            url: "/DCReferredList/GetComplaintDCReferredList",
+            data: Data,
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            success: function (response) {
+                var detailsTableBody = $("#tblDCReferredList tbody");
+                detailsTableBody.empty();
+                $('#chkSelectAll').prop('checked', false);
+
+                if (response.IsSuccess) {
+                    $.each(response.Data, function (i, row) {
+                        var RowItem = '';
+                        var chkId = 'chkselect' + row.Id;
+                        RowItem = '<tr>'
+                            + '<td style="text-align:center;display:none;">' + row.Id + '</td>'
+                            + '<td style="text-align:center;">' + row.SrNo + '</td>'
+                            + '<td style="text-align:center;">'
+                                + '<div class="custom-control custom-checkbox custom-checkboxn2 custom-checkboxn1 checksign1">'
+                                    + '<input type="checkbox" class="custom-control-input bgrowChk" name="chkselect" id=' + chkId + '>'
+                                    + '<label class="form-check-label" for=' + chkId + '></label>'
+                                + '</div>'
+                            + '</td>'
+                            + '<td style="text-align:center;">' + row.ComplaintNumber + '</td>'
+                            + '<td style="text-align:center;">' + row.DCComplaintNumber + '</td>'
+                            + '<td style="text-align:center;">' + (row.CommitteTitle || '') + '</td>'
+                            + '<td style="text-align:center;">' + (row.AssignCommitteeDate || '') + '</td>'
+                            + '<td>' + row.FullName + '</td>'
+                            + '<td>' + row.EmailAddress + '</td>'
+                            + '<td style="text-align:center;">' + row.ContactNumber + '</td>'
+                            + '<td>' + (row.RespondentDetails ? row.RespondentDetails.split(', ').join('<br/>') : '') + '</td>'
+                            + '<td style="text-align:center;">' + row.Status + '</td>'
+                            + '</tr>';
+
+                        detailsTableBody.append(RowItem);
+                    });
+
+                }
+                else {
+                    detailsTableBody.empty();
+                }
+
+            }, failure: function (result) {
+                var detailsTableBody = $("#tblDCReferredList tbody")
+                $("#tblDCReferredList").find("tr:not(:first)").remove();
+            },
+            error: function (result) {
+                var detailsTableBody = $("#tblDCReferredList tbody")
+                $("#tblDCReferredList").find("tr:not(:first)").remove();
+            }
+        });
+    }
+
+    $('#lnkFilter').click(function () {
+
+        baseFilter.searchValue = $("#txtQuickSearch").val();
+
+        if ($("#txtFromDate").val() != "" && $("#txtToDate").val() == "") {
+            swal("Please select ToDate", "", "error");
+            return;
+        }
+        if ($("#txtToDate").val() != "" && $("#txtFromDate").val() == "") {
+            swal("Please select FromDate", "", "error");
+            return;
+        }
+
+        GetComplaintDCReferredList();
+    });
+
+
+    $('#btnCancel').click(function () {
+        $("#txtQuickSearch").val('');
+        $("#drpDCCommittee").val('').trigger('change');
+        $("#txtToDate").val('');
+        $("#txtFromDate").val('');
+        baseFilter.searchValue = '';
+        GetComplaintDCReferredList();
+    });
+
+    $(".main_filter_div").hide();
+
+    $('#addfilter').click(function () {
+        $(".main_filter_div").slideToggle(200, function () {
+            initSelect2();
+        });
+    });
+
+    $('.close_filterdiv').click(function () {
+        $(".main_filter_div").slideUp();
+    });
+
+    // Select All Checkbox Handler
+    $(document).on('change', '#chkSelectAll', function () {
+        var isChecked = $(this).is(':checked');
+        $("#tblDCReferredList tbody input[name='chkselect']").prop('checked', isChecked);
+    });
+
+    $(document).on('change', "#tblDCReferredList tbody input[name='chkselect']", function () {
+        var total = $("#tblDCReferredList tbody input[name='chkselect']").length;
+        var checked = $("#tblDCReferredList tbody input[name='chkselect']:checked").length;
+        $('#chkSelectAll').prop('checked', total > 0 && total === checked);
+    });
+
+    $('#lnkDownloadExcel').click(function () {
+        var DCReferredListArr = [];
+        $.each($("#tblDCReferredList tbody tr"), function () {
+            if ($(this).find('td:eq(2)').find("input[name='chkselect']").is(":checked") == true) {
+                DCReferredListArr.push($(this).find('td:eq(0)').html());
+            }
+        });
+
+        var VDCReferredList = DCReferredListArr.join(",");
+
+        var data = JSON.stringify({
+            SearchValue: $('#txtQuickSearch').val() || '',
+            FromDate: $('#txtFromDate').val() || '',
+            ToDate: $('#txtToDate').val() || '',
+            SelectComplaintIds: VDCReferredList
+        });
+
+        $("#overlay").show();
+        $.when(DCReferredListExcelFilterDataSave(data)).then(function (response) {
+            console.log(response);
+        }).fail(function (err) {
+            $("#overlay").hide();
+            console.log(err);
+        });
+    });
+
+    function DCReferredListExcelFilterDataSave(data) {
+        return $.ajax({
+            contentType: 'application/json; charset=utf-8',
+            dataType: 'json',
+            type: 'POST',
+            url: "/DCReferredList/GetDCReferredListFilterSet",
+            data: data,
+            success: function (result) {
+                $("#overlay").hide();
+                if (result.data == "Success") {
+                    var url = '@Url.Action("GetDCReferredListExcelReport")';
+                    location.href = url;
+                } else {
+                    swal("Something went wrong!", "", "error");
+                }
+            },
+            error: function () {
+                $("#overlay").hide();
+                swal("Something went wrong!", "", "error");
+            }
+        });
+    }
+
+    $('#lnkDownloadPDF').click(function () {
+        var DCReferredListArr = [];
+        $.each($("#tblDCReferredList tbody tr"), function () {
+            if ($(this).find('td:eq(2)').find("input[name='chkselect']").is(":checked") == true) {
+                DCReferredListArr.push($(this).find('td:eq(0)').html());
+            }
+        });
+
+        var VDCReferredList = DCReferredListArr.join(",");
+
+        var data = JSON.stringify({
+            SearchValue: $('#txtQuickSearch').val() || '',
+            FromDate: $('#txtFromDate').val() || '',
+            ToDate: $('#txtToDate').val() || '',
+            SelectComplaintIds: VDCReferredList
+        });
+
+        $("#overlay").show();
+        $.when(DCReferredListPDFFilterDataSave(data)).then(function (response) {
+            console.log(response);
+        }).fail(function (err) {
+            $("#overlay").hide();
+            console.log(err);
+        });
+    });
+
+    function DCReferredListPDFFilterDataSave(data) {
+        return $.ajax({
+            contentType: 'application/json; charset=utf-8',
+            dataType: 'json',
+            type: 'POST',
+            url: "/DCReferredList/GetDCReferredListFilterSet",
+            data: data,
+            success: function (result) {
+                $("#overlay").hide();
+                if (result.data == "Success") {
+                    var url = '@Url.Action("GetDCReferredListPDFReport")';
+                    location.href = url;
+                } else {
+                    swal("Something went wrong!", "", "error");
+                }
+            },
+            error: function () {
+                $("#overlay").hide();
+                swal("Something went wrong!", "", "error");
+            }
+        });
+    }
+
+</script>

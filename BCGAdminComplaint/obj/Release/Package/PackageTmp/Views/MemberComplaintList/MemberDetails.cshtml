@@ -1,0 +1,643 @@
+@model Tuple<IEnumerable<BCGAdminComplaint.Models.ComplaintListModel>, IEnumerable<BCGAdminComplaint.Models.ComplaintDocumentList>, IEnumerable<BCGAdminComplaint.Models.ComplaintMemberLog>>
+
+@{
+    ViewBag.Title = "MemberDetails";
+}
+
+
+<div class="row">
+    <div class="col-12">
+        <div class="page-title-box d-sm-flex align-items-center justify-content-between">
+            <div>
+                <h4 class="mb-sm-0 font-size-18">Member Complaint Details</h4>
+                <div class="page-title-left mt-1">
+                    <ol class="breadcrumb m-0 font-size-13">
+                        <li class="breadcrumb-item"><a href="/Home/Index" class="text-muted">Dashboard</a></li>
+                        <li class="breadcrumb-item"><a href="/MemberComplaintList/Index" class="text-muted">Member Complaint Management</a></li>
+                        <li class="breadcrumb-item active">Member Complaint Details</li>
+                    </ol>
+                </div>
+            </div>
+            <div class="page-title-right">
+                <a href="/MemberComplaintList/Index" class="btn btn-outline-primary waves-effect waves-light white-space-nowrap btn-sm"><i class="fa-solid fa-arrow-left me-1"></i> Back</a>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="main_card_list">
+    <label id="ComplaintId" hidden>@ViewBag.ComplaintId</label>
+    <label id="hdfStatus" hidden>@ViewBag.Status</label>
+    <div class="main_header_card">
+        <h5 class="mb-0">Personal Details</h5>
+    </div>
+    <div class="main_card_list_body">
+        <label id="ComplaintId" hidden>@ViewBag.ComplaintId</label>
+        <label id="hdfStatus" hidden>@ViewBag.Status</label>
+        <div class="row">
+            <div class="col-md-4 col-sm-6 col-12 mt-3">
+                <div class="title">Full Name</div>
+                <div class="description">@ViewBag.FullName</div>
+            </div>
+            <div class="col-md-4 col-sm-6 col-12 mt-3">
+                <div class="title">Email</div>
+                <div class="description">@ViewBag.EmailAddress</div>
+            </div>
+            <div class="col-md-4 col-sm-6 col-12 mt-3">
+                <div class="title">Mobile No.</div>
+                <div class="description">@ViewBag.ContactNumber</div>
+            </div>
+            <div class="col-md-8 col-sm-6 col-12 mt-3">
+                <div class="title">Address</div>
+                <div class="description">@ViewBag.Address</div>
+            </div>
+            <div class="col-md-4 col-sm-6 col-12 mt-3">
+                <div class="title">Status</div>
+                <div class="description">@ViewBag.Status</div>
+            </div>
+
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="col-md-6 col-lg-5 col-xl-4">
+        <div class="card mb-0">
+            <div class="card-body">
+                <div class="top_belt_new">
+                    <h5 class="mb-0">Files</h5>
+
+                </div>
+                <div class="main_scroll_complaint_against">
+                  
+                    @if (ViewBag.DocumentList != null)
+                    {
+                        foreach (System.Data.DataRow dr in ViewBag.DocumentList.Rows)
+                        {
+
+
+                            <div class="main_card_list main_card_list_border p-12-custome">
+                                <div class="main_header_card">
+                                    <div class="_left_side">
+                                        <div class="number">@dr["SrNo"].ToString()</div>
+                                        <div class="complaint_number">
+                                            <div class="title">File Name</div><a class="description" onclick="getFile('@dr["FilePath"].ToString()')">@dr["FileName"].ToString()</a>
+                                        </div>
+                                    </div>
+                                    <div class="rigth_side"></div>
+                                </div>
+                                <div class="main_card_list_body">
+                                    <div class="row">
+                                        <div class="col-md-6 mt-3">
+                                            <div class="title">File Title</div>
+                                            <div class="description">@dr["FileTitle"].ToString()</div>
+                                        </div>
+                                        <div class="col-md-6 mt-3">
+                                            <div class="title">Description</div>
+                                            <div class="description">@dr["Description"].ToString()</div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        }
+                    }
+                </div>
+            </div>
+
+        </div>
+    </div>
+    <div class="col-md-6 col-lg-7 col-xl-8 mt-3 mt-md-0">
+        <div class="card mb-0 h-100">
+            <div class="card-body">
+                <div class="top_belt_new top_belt_new_border">
+                    <h5 class="mb-0">Complaint Details</h5>
+                </div>
+                <div class="mt-3">
+                    <div class="common_title">Summary | Short Information ( સારાંશ | ટૂંકી માહિતી )</div>
+                    <div class="common_description">@ViewBag.Summary</div>
+                </div>
+                <div class="mt-3">
+                    <div class="common_title">Detail Complaint</div>
+                    <div class="common_description">@ViewBag.DetailComplaint</div>
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+<div class="row mt-4">
+    <div class="col-md-6 col-lg-6 col-xl-4">
+        <div class="card mb-0 h-100">
+            <div class="card-body" id="ActionBar">
+                <div class="top_belt_new top_belt_new_border">
+                    <h5 class="mb-0">Action bar</h5>
+
+                </div>
+                <div class="main_scroll_complaint_against">
+
+                    <div id="adjuntDetails" style="display:none;">
+                        <h6 class="border-bottom pb-2 mb-3">Adjunt Details ( મુલતવી વિગતો )</h6>
+                        <div class="main_card_list main_card_list_border main_card_list_border_log p-12-custome">
+                            <div class="main_card_list_body">
+                                <div class="row">
+                                    <div class="col-md-12 mt-2">
+                                        <div class="title">Next Date</div>
+                                        <div class="file_name_btn next_date_btn">
+                                            <div class="name">@ViewBag.NextDate</div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-12 mt-3">
+                                        <div class="title">Summary</div>
+                                        <div class="description">@ViewBag.Summary</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                     
+
+                    </div>
+                    <div id="OrderPassed" style="display:none;">
+                        <div class="main_card_list main_card_list_border main_card_list_border_log p-12-custome">
+                            <div class="main_card_list_body">
+                                <div class="row">
+                                    <div class="col-md-12 mt-2">
+                                        <div class="title">Last UploadFile</div>
+                                        <div class="file_name_btn next_date_btn">
+                                            <div class="name" id="@ViewBag.LastUploadFile">@ViewBag.NextDate</div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-12 mt-3">
+                                        <div class="title">Summary</div>
+                                        <div class="description">@ViewBag.Summary</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        @*<div class="row">
+                            <div class="c-heading">
+                                <h4 class="border-bottom pb-2 mb-3">Order Passed Details</h4>
+                            </div>
+                            <div class="col-md-12">
+                                <label>Last UploadFile : <label id="@ViewBag.LastUploadFile"></label></label>
+                            </div>
+                            <div class="col-md-12">
+                                <label>Summary</label>
+                                <label>Summary | Short Information ( સારાંશ | ટૂંકી માહિતી )</label>
+                                <div class="enrollmentlable">
+                                    @ViewBag.Summary
+                                </div>
+                            </div>
+                        </div>*@
+
+                    </div>
+                    <div id="boardAccept" style="display:none;">
+                        <h6>Under the Commitee</h6>
+                        <input type="hidden" id="hdfCommitteeId" value="@ViewBag.DcNumber" />
+                        <div id="tbldcDetails">
+                            @if (ViewBag.MemberList != null)
+                            {
+                                foreach (System.Data.DataRow dr in ViewBag.MemberList.Rows)
+                                {
+                                    <div class="main_card_list main_card_list_border p-12-custome">
+                                        <div class="main_header_card">
+                                            <div class="_left_side">
+                                                <div class="number">@dr["SrNo"].ToString()</div>
+                                                <div class="complaint_number">
+                                                    <div class="title">Enrollment Number</div><a class="description">@dr["EnroNumber"].ToString()</a>
+                                                </div>
+                                            </div>
+                                            <div class="rigth_side_check">
+                                                <input type="checkbox" class="main_check_style" name="dcCheck" value="' @dr["MemberId"].ToString()'" checked />
+                                                <i class="las la-check"></i>
+                                            </div>
+                                        </div>
+                                        <div class="main_card_list_body">
+                                            <div class="row">
+                                                <div class="col-md-6 mt-3">
+                                                    <div class="title">Name</div>
+                                                    <div class="description">@dr["FullName"].ToString()</div>
+                                                </div>
+                                                <div class="col-md-6 mt-3">
+                                                    <div class="title">Contact Number</div>
+                                                    <div class="description">@dr["ContactNumber"].ToString()</div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                }
+                            }
+                        </div>
+
+                        <div class="row d-none">
+                      
+                            @*<table id="tbldcDetails" class="table table-striped">
+                    <thead class="table-header-fixed">
+                        <tr>
+                            <th>#</th>
+                            <th style="text-align: center;">Sr.</th>
+                            <th style="text-align: center;">Enrollment Number</th>
+                            <th style="text-align: center;">Name</th>
+                            <th style="text-align: center;">Contact Number</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+
+                        @if (ViewBag.MemberList != null)
+                        {
+                            foreach (System.Data.DataRow dr in ViewBag.MemberList.Rows)
+                            {
+                                <tr>
+                                    <td><input type="checkbox" name="dcCheck" value="' @dr["MemberId"].ToString()'" checked /></td>
+                                    <td style="text-align: center;">@dr["SrNo"].ToString()</td>
+                                    <td style="text-align: center;">
+                                        @dr["EnroNumber"].ToString()
+                                    </td>
+                                    <td style="text-align: center;">
+                                        @dr["FullName"].ToString()
+                                    </td>
+                                    <td style="text-align: center;">
+                                        @dr["ContactNumber"].ToString()
+                                    </td>
+                                </tr>
+                            }
+                        }
+                    </tbody>
+                </table>*@
+                        </div>
+                    </div>
+                </div>
+                
+
+
+
+
+
+            </div>
+
+        </div>
+    </div>
+    <div class="col-md-6 col-lg-6 col-xl-4 mt-3 mt-md-0 mt-lg-0 mt-xl-0">
+        <div class="card mb-0 h-100">
+            <div class="card-body">
+                <div class="top_belt_new top_belt_new_border">
+                    <h5 class="mb-0">
+                        Action Log
+                    </h5>
+                </div>
+                <div class="main_scroll_complaint_against">
+
+                    <div id="logDetails" class="main_log_details_new"></div>
+                </div>
+
+
+            </div>
+
+        </div>
+
+    </div>
+    <div class="col-md-6 col-lg-6 col-xl-4 mt-3 mt-md-3 mt-lg-3 mt-xl-0">
+        <div class="card mb-3 h-100">
+            <div class="card-body">
+                <div class="top_belt_new top_belt_new_border">
+                    <h5 class="mb-0">
+                       Notes
+                    </h5>
+                    <a class="btn btn-sm btn-outline-primary waves-effect waves-light btn-sm" id="addnotes">Add Notes</a>
+
+                </div>
+                <div id="mainaddnotsform" class="mb-3">
+                    <div class="mb-0">
+                        <label for="" class="form-label">Select Note Type</label>
+
+                    </div>
+                    <div class="form-check form-check-inline">
+                        <input class="form-check-input" type="radio" name="Note" id="pNote" value="P">
+                        <label class="form-check-label" for="pNote">Private Note</label>
+                    </div>
+                    <div class="form-check form-check-inline">
+                        <input class="form-check-input" type="radio" name="Note" id="gNote" value="G">
+                        <label class="form-check-label" for="gNote">General Note</label>
+                    </div>
+                    <div class="mb-2 mt-2">
+                        <label for="exampleFormControlTextarea1" class="form-label">Note</label>
+                        <textarea class="form-control" id="txtNote" rows="2"></textarea>
+                    </div>
+                    <div class="form-group col-md-12">
+                        <div>
+                            <a id="lnkAdd" class="btn btn-sm btn-outline-primary waves-effect waves-light btn-sm">Add</a>
+                            <a id="btnCancel" class="btn btn-secondary btn-sm waves-effect m-l-5 btn-sm"><i class="fa-solid fa-xmark me-1"></i> Cancel</a>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="main_scroll_complaint_against">
+                    <div id="NoteList" class="main_log_details_new"></div>
+                </div>
+                
+
+
+            </div>
+
+        </div>
+
+    </div>
+</div>
+<div class="enrollment-main d-none">
+    <div class="container">
+        <div class="row">
+            <div class="form-group col-md-12">
+                <a href="/MemberComplaintList/Index" class="btn btn-outline-primary waves-effect waves-light btn-sm"><i class="fa-solid fa-arrow-left me-1"></i> Back</a>
+            </div>
+            <div class="col-md-12" id="mainTab">
+                <div class="profile-tab">
+                   
+                    <div class="C-main informationbox" id="allNoteList">
+                        <div class="c-heading">
+                            <h4>Notes</h4>
+                        </div>
+                        <div class="row">
+                            @*<div class="form-group col-md-6">
+                                <div class="col-md-6">
+                                    <h5>Select Note Type : </h5>
+                                    <input type="radio" id="pNote" name="Note" value="P">
+                                    <label for="html">Private Note</label>
+                                    <input type="radio" id="gNote" name="Note" value="G">
+                                    <label for="css">General Note</label>
+                                </div>
+                                <div class="col-md-6">
+                                    <h5> Note:</h5>
+                                    <textarea name="txtNote" id="txtNote" rows="2"></textarea>
+                                </div>
+                                <div class="form-group col-md-12">
+                                    <div>
+                                        <a id="lnkAdd" class="btn btn-outline-primary waves-effect waves-light btn-sm">Add</a>
+                                        <a id="btnCancel" class="btn btn-secondary waves-effect m-l-5 btn-sm"><i class="fa-solid fa-xmark me-1"></i> Cancel</a>
+                                    </div>
+                                </div>
+                            </div>*@
+                            <div class="form-group col-md-6" style="height:250px;overflow-y:scroll;">
+                                <h5>Note Log</h5><hr />
+                                @*<div id="NoteList"></div>*@
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div id="documentTab" class="" style="display:none;">
+            <div class="tab-content">
+                <div class="C-main informationbox">
+                    <div class="c-heading">
+                        <div class="row">
+                            <div class="col-md-9">
+                                <h4>Document</h4>
+                            </div>
+                            <div class="col-md-3"><a  class="close" id="btnClose" data-dismiss="modal" aria-hidden="true">�</a></div>
+                        </div>
+                        <div class="row">
+                            <iframe src="" id="displayPdf" style="width:100%;height:700px;"></iframe>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
+
+<script>
+
+    $(document).ready(function () {
+        GetLogList();
+        GetMemberNoteList();
+        GetStatusLogDetails();
+    });
+
+    function GetLogList() {
+        $.ajax({
+            type: 'POST',
+            url: "/MemberComplaintList/GetLogList",
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            success: function (response) {
+
+                if (response.IsSuccess) {
+                    $('#logDetails').empty();
+                    $.each(response.Data, function (data, value) {
+
+                        var FilePath = "'" + value.OrderFilePath + "'";
+
+                        if (value.Status == "Adjunt") {
+                            $('#logDetails').append(
+                            '<div class="main_card_list main_card_list_border main_card_list_border_log"><div class="main_header_card"><div class="rigth_side"><div class="user_name_new">' + value.Name + '</div><div class="date_update">08 NOV, 2023 | 8:00 PM</div></div><div class="_left_side"><div class="complaint_number paymentstatuspaid"><div class="title">Current Status</div><a class="description">New</a></div><div class="complaint_number old_status me-0"><div class="title">Old Status</div><a class="description">Accepted</a></div></div></div><div class="main_card_list_body"><div class="row"><div class="col-md-12 mt-2"><div class="title">Next Date</div><div class="file_name_btn next_date_btn"><div class="name">' + value.SNextDate + '</div></div></div><div class="col-md-12 mt-3"><div class="title">Summary</div><div class="description">' + value.Summary + '</div></div></div></div></div>'
+                            );
+                        }
+
+                        if (value.Status == "Order Passed") {
+                            $('#logDetails').append(
+                            '<div class="main_card_list main_card_list_border main_card_list_border_log"><div class="main_header_card"><div class="rigth_side"><div class="user_name_new">' + value.Name + '</div><div class="date_update">' + value.SNextDate + '</div></div><div class="_left_side"><div class="complaint_number paymentstatuspaid"><div class="title">Current Status</div><a class="description">New</a></div><div class="complaint_number old_status me-0"><div class="title">Old Status</div><a class="description">Accepted</a></div></div></div><div class="main_card_list_body"><div class="row"><div class="col-md-12 mt-2"><div class="title">File Name</div><div class="file_name_btn" onclick="getFile(' + FilePath + ')"><div class="name">' + value.OrderFileName + '</div><div class="view_file"><i class="las la-eye"></i></div></div></div><div class="col-md-12 mt-3"><div class="title">Summary</div><div class="description">' + value.Summary + '</div></div></div></div></div>'
+                            );
+                        }
+                        if (value.Status == "Board Has Approved") {
+
+                            $('#logDetails').append(
+                            '<div class="main_card_list main_card_list_border main_card_list_border_log"><div class="main_header_card"><div class="rigth_side"><div class="user_name_new">' + value.Name + '</div><div class="date_update">' + value.SNextDate + '</div></div><div class="_left_side"><div class="complaint_number paymentstatuspaid"><div class="title">Current Status</div><a class="description">New</a></div><div class="complaint_number old_status me-0"><div class="title">Old Status</div><a class="description">Accepted</a></div></div></div><div class="main_card_list_body"><div class="row"><div class="col-md-12 mt-3"><div class="title">Dc Title</div><div class="description">' + 'Assign Committee - ' + value.CommitteTitle + '</div></div></div></div></div>'
+                            );
+                        }
+                    })
+                }
+                else {
+
+                }
+            }, failure: function (result) {
+                swal('Something went wrong!', '', 'error');
+            },
+            error: function (result) {
+                swal('Something went wrong!', '', 'error');
+            }
+        });
+    }
+
+    $('#lnkAdd').on('click', function () {
+
+        if ($('#txtNote').val() == "") {
+            swal("Please enter note", "", "error");
+            return;
+        }
+
+        var noteTypeChecked = $('input[name=Note]:checked').val();
+
+        if (noteTypeChecked == undefined) {
+            swal("Please Select Note Type", "", "error");
+            return;
+        }
+
+        var Data = JSON.stringify({
+            NoteType: $('input[name=Note]:checked').val(),
+            Note: $('#txtNote').val(),
+            ComplaintId: $('#ComplaintId').text()
+        });
+
+        $.ajax({
+            type: 'POST',
+            url: "/MemberComplaintList/SaveMemberNote",
+            data: Data,
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            success: function (response) {
+                if (response.IsSuccess) {
+                    $("#txtNote").val('');
+                    $('input[name="Note"]').prop('checked', false);
+                    swal("Note save successfully", "", "success");
+                    GetMemberNoteList();
+                }
+                else {
+                    // swal("Data already exists", "", "error");
+                }
+            }
+        });
+    });
+
+    function GetMemberNoteList() {
+        $.ajax({
+            type: 'POST',
+            url: "/MemberComplaintList/GetMemberNoteList",
+            data: JSON.stringify({ ComplaintId: $('#ComplaintId').text() }),
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            success: function (response) {
+                $("#NoteList").empty();
+                if (response.IsSuccess) {
+                    $.each(response.Data, function (data, value) {
+
+                        if (value.NoteType == "P") {
+                            var noteType = "Private";
+                        }
+                        else {
+                            var noteType = "General";
+                        }
+
+                        $("#NoteList").append(
+                            '<div class="main_card_list main_card_list_border main_card_list_border_log"><div class="main_header_card"><div class="rigth_side"><div class="user_name_new">' + value.MemberName + '</div><div class="date_update">' + value.SCreateDate + '</div></div><div class="_left_side"><div class="complaint_number old_status note_type me-0"><div class="title">Note Type</div><a class="description">' + noteType + '</a></div></div></div><div class="main_card_list_body"><div class="row"><div class="col-md-12 mt-3"><div class="title">Note</div><div class="description">' + value.Note + '</div></div></div></div></div>'
+                            // '<label>' + value.SrNo + '</label><br/>'
+                            //+ '<label style="text-align:center;display:none;">' + value.Id + '</label>'
+                            //+ '<label style="text-align:center;display:none;">' + value.MemberId + '</label>'
+                            //+ '<label><b> Name : </b>' + value.MemberName + '</label><br/>'
+                            //+ '<label><b> NoteType : </b>' + noteType + '</label><br/>'
+                            //+ '<label><b> Note : </b>' + value.Note + '</label><br/>'
+                            //+ '<label><b> CreateDate : </b>' + value.SCreateDate + '</label><br/>'
+                            )
+                    });
+                }
+                else {
+                    //complaintList.append('No Data Found');
+                }
+
+            }, failure: function (result) {
+                swal('Something went wrong!', '', 'error');
+            },
+            error: function (result) {
+                swal('Something went wrong!', '', 'error');
+            }
+        });
+    }
+
+    function GetStatusLogDetails() {
+
+        var status = $("#hdfStatus").text();
+
+        var Data = JSON.stringify({
+            ComplaintId: $("#ComplaintId").text(),
+            Status: status,
+            CommitteeId: $('#hdfCommitteeId').val()
+        });
+        if (status == "Adjunt") {
+            $('#adjuntDetails').css('display', 'block');
+        }
+        else if (status == "Order Passed") {
+            $('#OrderPassed').css('display', 'block');
+        }
+        else if (status == "Board Has Approved") {
+            $('#boardAccept').css('display', 'block');
+        }
+
+        $.ajax({
+            type: 'POST',
+            url: "/ComplaintDetails/GetLogDetails",
+            data: Data,
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            success: function (response) {
+                if (response.IsSuccess) {
+                    if (status == "Adjunt") {
+                        $.each(response.Data, function (data, value) {
+                            $("#txtNextDate").val(value.SNextDate);
+                            $("#txtSummary").val(value.Summary);
+                        });
+                    }
+                    else if (status == "Order Passed") {
+                        $.each(response.Data, function (data, value) {
+                            $("#lblLastUploadFile").text(value.OrderFileName);
+                            $("#txtOrderSummary").val(value.Summary);
+                        });
+                    }
+                    else if (status == "Board Has Approved") {
+                        $('#tbldcDetails tbody').empty();
+                        var dcDetails = $('#tbldcDetails tbody');
+
+                        $.each(response.Data, function (data, value) {
+                            $('#drpDcNo option[value="' + hdfCommitteeId.value + '"]').attr("selected", "selected");
+                            dcDetails.append(
+                                 '<tr>'
+                                 + '<td><input type="checkbox" name="dcCheck" value="' + value.MemberId + '" checked/></td>'
+                                 + '<td>' + value.SrNo + '</td>'
+                                 + '<td style="text-align:center;display:none;">' + value.MemberId + '</td>'
+                                 + '<td>' + value.EnroNumber + '</td>'
+                                 + '<td>' + value.FullName + '</td>'
+                                 + '<td>' + value.ContactNumber + '</td>'
+                                 + '</tr>')
+                        });
+                    }
+                }
+                else {
+
+                }
+            }, failure: function (result) {
+                swal('Something went wrong!', '', 'error');
+            },
+            error: function (result) {
+                swal('Something went wrong!', '', 'error');
+            }
+        });
+    }
+
+    function getFile(filepath) {
+        $("#mainTab").removeClass();
+        $("#mainTab").addClass("col-md-6");
+        $("#documentTab").addClass("col-md-6");
+        $("#documentTab").css("display", "block");
+        if (filepath != "") {
+            $('#displayPdf').attr('src', filepath);
+        }
+    }
+
+    $('#btnClose').on('click', function () {
+        $("#documentTab").removeClass();
+        $("#mainTab").addClass("col-md-12");
+        $("#documentTab").css("display", "none");
+    });
+
+    $("#mainaddnotsform").hide();
+
+    $('#addnotes').click(function () {
+
+      
+        $("#mainaddnotsform").slideToggle();
+       
+    });
+
+    
+</script>

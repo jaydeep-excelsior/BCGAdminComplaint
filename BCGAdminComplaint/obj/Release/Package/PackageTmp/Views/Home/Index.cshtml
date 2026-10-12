@@ -1,0 +1,316 @@
+@model Tuple<IEnumerable<BCGAdminComplaint.Models.ComplaintCount>>
+
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<div class="modal fade" id="customefiltermodal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Custom Filter</h5>
+                <a class="btn-close btn-sm" data-bs-dismiss="modal" aria-label="Close"></a>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="mb-3">
+                            <label for="exampleFormControlInput1" class="form-label">Start Date</label>
+                            <input type="date" class="form-control" id="startdate">
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="mb-3">
+                            <label for="exampleFormControlInput1" class="form-label">End Date</label>
+                            <input type="date" class="form-control" id="endtdate">
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+            <div class="modal-footer">
+                <a class="btn btn-outline-danger btn-sm" data-bs-dismiss="modal"><i class="fa-solid fa-xmark me-1"></i> Cancel</a>
+                <a class="btn btn-outline-primary btn-sm" id="btnFilter"><i class="fa-solid fa-filter me-1"></i> Filter</a>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="col-12">
+        <div class="page-title-box d-sm-flex align-items-center justify-content-between">
+            <div>
+                <h4 class="mb-sm-0 font-size-18">Dashboard</h4>
+                <div class="page-title-left mt-1">
+                    <ol class="breadcrumb m-0 font-size-13">
+                        <li class="breadcrumb-item active">Dashboard</li>
+                    </ol>
+                </div>
+            </div>
+            <div class="page-title-right">
+                <select class="form-select" aria-label="Default select example" id="mainfilterdashboard" onchange="mainfilterdashboard()">
+                    <option value="Today">Today</option>
+                    <option value="This Week">This Week</option>
+                    <option value="This Month">This Month</option>
+                    <option value="This Year">This Year</option>
+                    <option value="Custom">Custom</option>
+                </select>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="row" id="divCount">
+
+
+</div>
+
+<div>
+    <div class="top_belt_new mt-4 mb-2">
+        <h5 class="mb-0">Recent Complaints</h5>
+    </div>
+
+    <div id="tblComplaintAllList">
+
+    </div>
+</div>
+
+<script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
+
+<script>
+    var baseFilter = {
+        pageNo: 1,
+        pageSize: 10,
+        sortColumn: 1,
+        sortOrder: 'desc',
+        searchValue: ''
+    };
+
+    $(document).ready(function () {
+        var VFilter = $("#mainfilterdashboard option:selected").val();
+        GetDashBordCount(VFilter, '', '');
+        GetDashBordList(VFilter, '', '');
+    });
+
+    function mainfilterdashboard() {
+        var VFilter = $("#mainfilterdashboard option:selected").val();
+
+        if (VFilter == "Custom") {
+            $('#customefiltermodal').modal('show');
+        }
+        else {
+            $('#customefiltermodal').modal('hide');
+            GetDashBordCount(VFilter, '', '');
+            GetDashBordList(VFilter, '', '');
+        }
+
+    }
+
+    $("#btnFilter").click(function (e) {
+        e.preventDefault();
+        var VFilter = $("#mainfilterdashboard option:selected").val();
+        var VSDate = $("#startdate").val();
+        var VEDate = $("#endtdate").val();
+
+        if (VSDate != "") {
+            if (VEDate != "") {
+                $("#divStartDate").css("display", "block");
+                $("#divEndDate").css("display", "block");
+                GetDashBordCount(VFilter, VSDate, VEDate);
+                GetDashBordList(VFilter, VSDate, VEDate);
+                $('#customefiltermodal').modal('hide');
+            }
+            else {
+                swal('Please Select End Date', "", "error");
+            }
+        }
+        else {
+            swal('Please Select Start Date', "", "error");
+        }
+    });
+
+    function GetDashBordCount(VFilter, VStartDate, VEndDate) {
+        $("#overlay").show();
+        $.ajax({
+            type: "POST",
+            url: "/Home/GetDashBoardCount",
+            data: '{FilterValue:"' + VFilter + '",FromDate:"' + VStartDate + '",ToDate:"' + VEndDate + '"}',
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            success: OnSuccessCount,
+            failure: function (response) {
+                $("#overlay").hide();
+                swal(response.d, "", "error");
+            },
+            error: function (response) {
+                $("#overlay").hide();
+            }
+        });
+    };
+
+    function OnSuccessCount(response) {
+        var row = response.data;
+        $("#divCount").empty();
+        var RC = 0;
+        if (response.data != null) {
+            if (response.data != '') {
+                $.each(response.data, function (i, row) {
+
+                    $("#divCount").append('<div class="col-md-6 col-lg-4 col-xl-3"><div class="dashboard_box border-db-box-1"><div class="icondb1 commonicon_db"><img src="/assets/img/total.svg" /></div><p class="title_db">Total</p><p class="description_db">' + row.TotalCount + '</p></div></div>'
+                        + '<div class="col-md-6 col-lg-4 col-xl-3"><div class="dashboard_box border-db-box-2"><div class="icondb2 commonicon_db"><img src="/assets/img/new.svg" /></div><p class="title_db">New</p><p class="description_db">' + row.NewStatusCount + '</p></div></div>'
+                        + '<div class="col-md-6 col-lg-4 col-xl-3"><div class="dashboard_box border-db-box-3"><div class="icondb3 commonicon_db"><img src="/assets/img/hearing.svg" /></div><p class="title_db">Hearing</p><p class="description_db">' + row.HearingStatusCount + '</p></div></div>'
+                        + '<div class="col-md-6 col-lg-4 col-xl-3"><div class="dashboard_box border-db-box-4"><div class="icondb4 commonicon_db"><img src="/assets/img/assistant.svg" /></div><p class="title_db">Adjunt</p><p class="description_db">' + row.AdjuntStatusCount + '</p></div></div>'
+                        + '<div class="col-md-6 col-lg-4 col-xl-3"><div class="dashboard_box border-db-box-5"><div class="icondb5 commonicon_db"><img src="/assets/img/approved.svg" /></div><p class="title_db">Board Has Approved</p><p class="description_db">' + row.ApprovedStatusCount + '</p></div></div>'
+                        + '<div class="col-md-6 col-lg-4 col-xl-3"><div class="dashboard_box border-db-box-6"><div class="icondb6 commonicon_db"><img src="/assets/img/rejected.svg" /></div><p class="title_db">Board Has Rejected</p><p class="description_db">' + row.RejectedStatusCount + '</p></div></div>'
+                        + '<div class="col-md-6 col-lg-4 col-xl-3"><div class="dashboard_box border-db-box-7"><div class="icondb7 commonicon_db"><img src="/assets/img/accepted.svg" /></div><p class="title_db">Accepted</p><p class="description_db">' + row.AcceptedStatusCount + '</p></div></div>'
+                        + '<div class="col-md-6 col-lg-4 col-xl-3"><div class="dashboard_box border-db-box-8"><div class="icondb8 commonicon_db"><img src="/assets/img/thumb.svg" /></div><p class="title_db">Order Passed</p><p class="description_db">' + row.OrderPassedStatusCount + '</p></div></div>');
+                    RC++;
+                });
+            }
+            else {
+
+                RC = 1;
+            }
+        }
+        else {
+            RC = 1;
+        }
+        if (RC > 0) {
+            $("#overlay").hide();
+        }
+    }
+
+    function GetDashBordList(VFilter, VStartDate, VEndDate) {
+        $("#overlay").show();
+        $.ajax({
+            type: "POST",
+            url: "/Home/GetDashBoardList",
+            data: '{FilterValue:"' + VFilter + '",FromDate:"' + VStartDate + '",ToDate:"' + VEndDate + '"}',
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            success: function (response) {
+                $("#tblComplaintAllList").empty();
+                var complaintList = $("#tblComplaintAllList");
+
+                if (response.data != null) {
+                    if (response.data != '') {
+                        $.each(response.data, function (data, value) {
+                            var ComplaintItem = '<div class="main_card_list mb-2">'
+                                                + '<div class="main_header_card">'
+                                                    + '<div class="_left_side">'
+                                                        + '<div class="number">' + value.SrNo + '</div>'
+                                                        + '<div class="d-flex">'
+                                                            + '<div class="complaint_number">'
+                                                                + '<div class="title">Complaint Number</div>'
+                                                                + '<a class="description" href="/ComplaintDetails/DetailsNew/' + value.Id + '">' + value.ComplaintNumber + '</a>'
+                                                            + '</div>'
+                                                        + '</div>'
+                                                        + '<div class="d-flex">'
+                                                            + '<div class="complaint_number">'
+                                                                + '<div class="title">Date & Time</div>'
+                                                                + '<a class="description">' + value.ComplaintsCreateDate + '</a>'
+                                                            + '</div>'
+                                                        + '</div>'
+                                                        + '<div class="d-flex">'
+                                                            + '<div class="complaint_number">'
+                                                                + '<div class="title">Payment Status</div>'
+                                                                + '<a class="description">' + value.PaymentStatus + '</a>'
+                                                            + '</div>'
+                                                        + '</div>'
+                                                        + '<div class="d-flex">'
+                                                            + '<div class="complaint_number">'
+                                                                + '<div class="title">Complaint Status</div>'
+                                                                + '<a class="description">' + value.Status + '</a>'
+                                                            + '</div>'
+                                                        + '</div>'
+                                                    + '</div>'
+                                                    + '<div class="rigth_side"></div>'
+                                                + '</div>'
+                                                + '<div class="main_card_list_body">'
+                                                    + '<div class="row">'
+                                                        + '<div class="col-md-4 col-sm-6 col-12 mt-1">'
+                                                            + '<div class="title">Full Name</div>'
+                                                            + '<div class="description">' + value.FullName + '</div>'
+                                                        + '</div>'
+                                                        + '<div class="col-md-3 col-sm-6 col-12 mt-1">'
+                                                            + '<div class="title">Contact Number</div>'
+                                                            + '<div class="description">' + value.ContactNumber + '</div>'
+                                                        + '</div>'
+                                                         + '<div class="col-md-3 col-sm-6 col-12 mt-1">'
+                                                            + '<div class="title">Email</div>'
+                                                            + '<div class="description">' + value.EmailAddress + '</div>'
+                                                        + '</div>'
+                                                        + '<div class="col-md-2 col-sm-6 col-12 mt-1">'
+                                                            + '<div class="title">Total Amount</div>'
+                                                            + '<div class="description">' + value.TotalAmount + '</div>'
+                                                        + '</div>'
+                                                    + '</div>'
+                                                + '</div>'
+                                            + '</div>';
+                            complaintList.append(ComplaintItem)
+                        });
+                    }
+                    else {
+                        complaintList.append('No Data Found');
+                    }
+                }
+                else {
+                    complaintList.append('No Data Found');
+                }
+            },
+            failure: function (response) {
+                $("#overlay").hide();
+                swal(response.d, "", "error");
+            },
+            error: function (response) {
+                $("#overlay").hide();
+                ///swal(response.d, "", "error");
+            }
+        });
+    };
+
+    //function GetComplaintList() {
+
+    //    var Data = JSON.stringify({
+    //        baseFilter,
+    //        Status: "",
+    //        PaymentStatus: "",
+    //        FromDate: "",
+    //        ToDate: "",
+    //    });
+
+
+    //    $.ajax({
+    //        type: 'POST',
+    //        url: "/ComplaintList/GetComplaintList",
+    //        data: Data,
+    //        contentType: "application/json; charset=utf-8",
+    //        dataType: "json",
+    //        success: function (response) {
+    //            $("#tblComplaintAllList").empty();
+    //            var complaintList = $("#tblComplaintAllList");
+
+    //            if (response.IsSuccess) {
+    //                $.each(response.Data, function (data, value) {
+
+    //                    var paymentStatusClass = "";
+    //                    if (value.PaymentStatus === "Due") {
+    //                        paymentStatusClass = "paymentstatusdue";
+    //                    } else if (value.PaymentStatus === "Paid") {
+    //                        paymentStatusClass = "paymentstatuspaid";
+    //                    }
+
+    //                    complaintList.append(
+    //                        '<div class="main_card_list"><div class="main_header_card"><div class="_left_side"><div class="number">' + value.SrNo + '</div><div class="d-flex"><div class="complaint_number"><div class="title">Complaint Number</div><a class="description" href="/ComplaintDetails/Details/' + value.Id + '">' + value.ComplaintNumber + '</a></div></div></div></div><div class="main_card_list_body"><div class="row"><div class="col-md-3 col-sm-6 col-12 mt-3"><div class="title">Full Name</div><div class="description">' + value.FullName + '</div></div><div class="col-md-3 col-sm-6 col-12 mt-3"><div class="title">Email</div><div class="description">' + value.EmailAddress + '</div></div><div class="col-md-3 col-sm-6 col-12 mt-3"><div class="title">Contact Number</div><div class="description">' + value.ContactNumber + '</div></div><div class="col-md-3 col-sm-6 col-12 mt-3"><div class="title">Status</div><div class="description">' + value.Status + '</div></div></div></div></div>')
+    //                });
+
+    //            }
+    //            else {
+    //                complaintList.append('No Data Found');
+    //            }
+
+    //        }, failure: function (result) {
+    //        },
+    //        error: function (result) {
+    //        }
+    //    });
+    //}
+</script>

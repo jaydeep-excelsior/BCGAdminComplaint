@@ -1,0 +1,199 @@
+
+@{
+    ViewBag.Title = "Edit";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="customer-list admin-users">
+    <div>
+        <div class="row mb-2">
+            <div class="col-12">
+                <div class="page-title-box d-sm-flex align-items-center justify-content-between">
+                    <div>
+                        <h4 class="mb-sm-0 font-size-18">Edit DC Member</h4>
+                        <div class="page-title-left mt-1">
+                            <ol class="breadcrumb m-0 font-size-13">
+                                <li class="breadcrumb-item"><a href="/Home/Index" class="text-muted">Dashboard</a></li>
+                                <li class="breadcrumb-item"><a href="/DCMember/Index" class="text-muted">D.C. Member</a></li>
+                                <li class="breadcrumb-item active">Edit DC Member</li>
+                            </ol>
+                        </div>
+                    </div>
+                    <div class="page-title-right d-flex align-items-center">
+                        <a class="btn btn-sm btn-outline-primary text-nowrap" href="@Url.Action("Index", "DCMember")"><i class="fa-solid fa-arrow-left me-1"></i> Back</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="add-customer">
+            <div class="row">
+                <div class="col-xxl-12 col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
+                    <div class="card border-0 redius-top mb-3">
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-xl-4 col-lg-4 col-md-6 col-sm-6 col-12">
+                                    <div class="main-details">
+                                        <div class="form-group">
+                                            <label for="txtEnrollment">Enrollment No.<span class="text-danger">*</span></label>
+                                            <input type="text" class="form-control" id="txtEnrollment" placeholder="Enter Enrollment No." />
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-xl-4 col-lg-4 col-md-6 col-sm-6 col-12">
+                                    <div class="main-details">
+                                        <div class="form-group">
+                                            <label for="txtName">Full Name</label>
+                                            <input type="text" class="form-control" id="txtName" placeholder="Enter Full Name" readonly>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-xl-4 col-lg-4 col-md-6 col-sm-6 col-12">
+                                    <div class="main-details">
+                                        <div class="form-group">
+                                            <label for="txtContactNo">Contact Number</label>
+                                            <input type="text" class="form-control" id="txtContactNo" placeholder="Enter Contact Number" readonly>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-xl-4 col-lg-4 col-md-6 col-sm-6 col-12 mt-3">
+                                    <div class="main-details">
+                                        <div class="form-group">
+                                            <label for="txtEmailAddress">Email Address</label>
+                                            <input type="email" class="form-control" id="txtEmailAddress" placeholder="Enter Email Address" readonly>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-xl-4 col-lg-4 col-md-6 col-sm-6 col-12 mt-3">
+                                    <div class="main-details">
+                                        <div class="form-group">
+                                            <label for="txtBarAssociation">Bar Association</label>
+                                            <input type="text" class="form-control" id="txtBarAssociation" placeholder="Enter Bar Association" readonly>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="col-12 mt-3">
+                                    <input type="hidden" id="hdfEditDCMemberId" value="0" />
+                                    <a class="btn btn-outline-success waves-effect waves-light btn-sm" id="lnkDCMemberDataSaveRecord"><i class="fas fa-save"></i> Save</a>
+                                    <a class="btn btn-outline-danger waves-effect waves-light btn-sm" id="lnkDCMemberDataSaveRecordCancel"><i class="fas fa-times-circle"></i> Cancel</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<input type="hidden" id="hdfEnrollmentId" value="0" />
+<script>
+    $(document).ready(function () {
+        GetRecordDetail();
+    });
+
+    function GetRecordDetail() {
+        var VEditDCMemberDataId = localStorage.getItem("EditDCMemberId") == null ? '0' : localStorage.getItem("EditDCMemberId") == '' ? '0' : localStorage.getItem("EditDCMemberId");
+        $.ajax({
+            type: "POST",
+            url: "/DCMember/DCMemberDataEdit",
+            data: { id: VEditDCMemberDataId },
+            success: DCMemberDataEditOnSuccess,
+            error: function (response) { }
+        });
+    }
+
+    function DCMemberDataEditOnSuccess(response) {
+        var row = response.data;
+        if (row != null && row != '') {
+            $("#hdfEditDCMemberId").val(row[0].Id);
+            $("#hdfEnrollmentId").val(row[0].EnrollmentId);
+            $("#txtEnrollment").val(row[0].EnroNumber);
+            $("#txtEmailAddress").val(row[0].EmailAddress);
+            $("#txtName").val(row[0].Name);
+            $("#txtContactNo").val(row[0].ContactNo);
+            $("#txtBarAssociation").val(row[0].BarAssociation);
+        } else {
+            $("#hdfEditDCMemberId").val('0');
+            $("#hdfEnrollmentId").val('0');
+            $("#txtEnrollment").val('');
+            $("#txtEmailAddress").val('');
+            $("#txtName").val('');
+            $("#txtContactNo").val('');
+            $("#txtBarAssociation").val('');
+        }
+    }
+
+    $('#lnkDCMemberDataSaveRecordCancel').click(function () { GetRecordDetail(); });
+
+    $('#lnkDCMemberDataSaveRecord').click(function () {
+        var VDCMemberId = $("#hdfEditDCMemberId").val() == null ? '0' : $("#hdfEditDCMemberId").val() == '' ? '0' : $("#hdfEditDCMemberId").val();
+        if (parseInt(VDCMemberId) == 0) { swal("", "Please select DCMember Id...", "warning"); return; }
+        if ($("#txtEnrollment").val() == "") { swal("", "Please enter Enrollment No...", "warning"); return; }
+        if ($("#hdfEnrollmentId").val() == "0" || $("#hdfEnrollmentId").val() == "") { swal("", "Invalid Enrollment No. Please verify.", "warning"); return; }
+        if ($("#txtEmailAddress").val() == "") { swal("", "Please enter Email Address...", "warning"); return; }
+
+        var data = {
+            Id: VDCMemberId,
+            EnrollmentId: $("#hdfEnrollmentId").val(),
+            EmailAddress: $("#txtEmailAddress").val(),
+            Password: "",
+            Name: $("#txtName").val(),
+            ContactNo: $("#txtContactNo").val(),
+            BarAssociation: $("#txtBarAssociation").val()
+        };
+
+        $.when(DCMemberDataSubmitRecord(data)).then(function (r) { console.log(r); }).fail(function (e) { console.log(e); });
+    });
+
+    $("#txtEnrollment").on("blur", function () {
+        var enroNumber = $(this).val();
+        if (enroNumber != "") {
+            $.ajax({
+                type: 'POST',
+                url: "/DCMember/GetEnrollmentDetails",
+                data: { enroNumber: enroNumber },
+                success: function (result) {
+                    if (result != null && result.data != null) {
+                        var details = result.data;
+                        $("#hdfEnrollmentId").val(details.EnrollmentId);
+                        $("#txtName").val(details.FullName);
+                        $("#txtContactNo").val(details.ContactNumber);
+                        $("#txtEmailAddress").val(details.EmailAddress);
+                        $("#txtBarAssociation").val(details.BarAssociation);
+                    } else {
+                        $("#hdfEnrollmentId").val('0');
+                        $("#txtName").val('');
+                        $("#txtContactNo").val('');
+                        $("#txtEmailAddress").val('');
+                        $("#txtBarAssociation").val('');
+                    }
+                },
+                error: function () {
+                    console.log("Error fetching enrollment details");
+                }
+            });
+        }
+    });
+
+    function DCMemberDataSubmitRecord(data) {
+        return $.ajax({
+            type: 'POST',
+            url: "/DCMember/DCMembersInsert",
+            data: data,
+            success: function (result) {
+                if (result != null) {
+                    var VRecordStatus = result.data;
+                    $('#loader_bcg').css('display', 'none');
+                    if (VRecordStatus == "UD") {
+                        swal({ title: "Good Job!", text: "Record update successfully..", type: "success", showCancelButton: false, confirmButtonColor: '#DD6B55', confirmButtonText: 'Ok' },
+                        function () { localStorage.removeItem("EditDCMemberId"); location.href = '/DCMember/Index'; });
+                    } else if (VRecordStatus == "EX") { swal("", "Record Exist..", "warning"); }
+                    else { swal("", "Opps! Something Went Wrong.", "warning"); }
+                } else { swal("", "Opps! Something Went Wrong.", "warning"); }
+            },
+            error: function () { swal("", "Opps! Something Went Wrong.", "warning"); }
+        });
+    }
+</script>

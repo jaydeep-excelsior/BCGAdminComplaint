@@ -1,0 +1,12 @@
+<job>
+<script language="JScript">
+try {
+  var fso = new ActiveXObject("Scripting.FileSystemObject");
+  var src = fso.OpenTextFile("test2.js", 1).ReadAll();
+  new Function(src);
+  WScript.Echo("Success");
+} catch(e) {
+  WScript.Echo(e.description || e.message);
+}
+</script>
+</job>

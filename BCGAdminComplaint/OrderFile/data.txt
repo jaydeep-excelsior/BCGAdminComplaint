@@ -1,0 +1,58 @@
+-----------------------
+UD DB
+Password - ExT@SA@Admin@2707
+Live - Mehta6963@Admin123#
+-----------------------
+UD - Mehta@63691
+-----------------------
+CRM - AEPL#2022
+Avi_vt#2023
+-----------------------
+BarCouncil
+-----
+Id - superadmin
+Password - Secbcg@1961
+-----
+DB 
+--
+tcp:148.72.22.216,1433
+User ID=sa;
+Password=Adminbcg@272707071;
+-----------------------
+-----------------------
+Today Update (28-11)  
+
+BCG Complaint Admin - Action Log Report - Done
+
+Out Time - 06:22
+-----------------------
+http://localhost:5252/enrollment-recipt-mst-new.aspx
+
+CRM - Role Rights for all client - In Progress
+-----------------------
+CRM
+
+to update table binary field
+update tbl_Client_Closed_Log set RegId = Convert(VARCHAR(1000),RegisterId,2)
+-----------------
+-----------------
+To Update id 
+
+UPDATE
+    T1
+SET
+    T1.LId = LD.ID
+FROM 
+    tbl_lead_followup_mst T1 
+	INNER JOIN tbl_Lead_Detail_mst AS LD ON LD.OId = T1.LId
+
+-----------------
+-----------------
+select Email,UserPassword,hashtoken FROM tbl_Registration where Id =(select top 1 RegistrationId FROM tbl_Student  as se where  se.StudentID=175266)
+---------------------------------------------
+---------------------------------------------
+AND (ISNULL(@ProgramId,0) = 0 OR isnull(sct.ProgramId,0) = @ProgramId)
+---------------------------------------------
+---------------------------------------------
+
+UD virtual student login - Id - testonline@yopmail.com  , password- J@ydeep.6608

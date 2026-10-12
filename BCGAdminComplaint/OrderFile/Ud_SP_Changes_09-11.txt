@@ -1,0 +1,10 @@
+Ud SP Chnages 
+-----------------
+- sp_Instructor_Classroom_Coruse_API (09-11)
+- sp_Classroom_Coruse_Attendance_Detail_API (09-11)
+
+
+
+
+-----------------
+- issue in - http://localhost:56082/Client/ExerciseDetail/849

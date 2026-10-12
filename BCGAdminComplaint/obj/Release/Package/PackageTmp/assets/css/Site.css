@@ -1,0 +1,728 @@
+/* ==========================================
+   Modern Design System Overrides
+   ========================================== */
+:root {
+    --primary-color: #4f46e5;      /* Modern Indigo */
+    --primary-hover: #4338ca;
+    --secondary-color: #f1f5f9;    /* Slate 100 */
+    --text-main: #1e293b;          /* Slate 800 */
+    --text-muted: #64748b;         /* Slate 500 */
+    --bg-main: #f8fafc;            /* Slate 50 */
+    --card-bg: #ffffff;
+    --border-soft: #e2e8f0;        /* Slate 200 */
+    --shadow-soft: 0 4px 6px -1px rgb(0 0 0 / 0.05), 0 2px 4px -2px rgb(0 0 0 / 0.05);
+    --shadow-hover: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.05);
+    --border-radius-md: 12px;
+    --border-radius-lg: 16px;
+    --transition-speed: 0.2s;
+}
+
+body {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif !important;
+    background-color: var(--bg-main) !important;
+    color: var(--text-main) !important;
+}
+
+h1, h2, h3, h4, h5, h6, .page-title {
+    font-family: 'Inter', sans-serif !important;
+    font-weight: 600 !important;
+    color: var(--text-main) !important;
+    letter-spacing: -0.02em;
+}
+
+#page-topbar {
+    box-shadow: 0 1px 3px 0 rgb(0 0 0 / 0.1), 0 1px 2px -1px rgb(0 0 0 / 0.1) !important;
+    background-color: rgba(255, 255, 255, 0.9) !important;
+    backdrop-filter: blur(8px);
+}
+
+
+
+/* From _Layout.cshtml */
+@media (min-width: 768px) {
+    .topnav .dropdown:hover > .dropdown-menu {
+        display: none;
+    }
+
+    .topnav .dropdown > .dropdown-menu.show {
+        display: block !important;
+    }
+
+    /* Restore proper floating styling for dropdown menus on tablet sizes (768px to 991px)
+       since app.min.css forces them to be transparent/borderless/inlined */
+    .topnav .dropdown .dropdown-menu {
+        background-color: #ffffff !important;
+        border: 1px solid rgba(0, 0, 0, 0.15) !important;
+        border-radius: 0.25rem !important;
+        box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.175) !important;
+        padding-left: 0 !important;
+        position: absolute !important;
+        float: left !important;
+        margin-top: 0 !important;
+    }
+
+    /* Prevent clipping of dropdown menus by overflow rules on tablet sizes (768px to 991px) */
+    .topnav,
+    .topnav-menu,
+    .navbar-collapse {
+        overflow: visible !important;
+        max-height: none !important;
+    }
+}
+
+/* From ComplaintList/Index.cshtml */
+.main_card_list_body .description {
+    color: black;
+    display: -webkit-box;
+    -webkit-line-clamp: 2 !important;
+    line-clamp: 2 !important;
+    -webkit-box-orient: vertical;
+    overflow: hidden !important;
+}
+
+#entriesInfo {
+    font-size: 15px;
+}
+
+a {
+    cursor: pointer;
+}
+
+#documentTab {
+    display: none;
+}
+
+#displayPdf {
+    width: 100%;
+    height: 100%;
+}
+
+[id="HdfId"] {
+    display: none;
+}
+
+/* Modern Button Styling (HD Vision & Size Improvements) */
+.btn {
+    font-weight: 600 !important;
+    letter-spacing: 0.3px;
+    border-radius: 8px !important;
+    transition: all var(--transition-speed) ease-in-out !important;
+}
+
+    .btn:hover {
+        transform: translateY(-1px);
+        box-shadow: var(--shadow-soft);
+    }
+
+    .btn:not(#password-addon) i {
+        font-size: .9em !important;
+        vertical-align: middle;
+    }
+
+
+
+    .btn:focus {
+        outline: none !important;
+        box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.3) !important;
+    }
+
+.replaycomplaintmain_card {
+    max-height: 500px;
+    overflow-y: auto !important;
+    overflow-x: hidden !important;
+    border: 1px solid #ccc;
+}
+
+.btn-sm {
+    font-size: 14px !important;
+    padding: 0.2rem 0.6rem !important;
+}
+
+.btn-outline-primary {
+    border-width: 1.5px !important;
+}
+
+/* Close button improvement */
+.btn-close {
+    opacity: 0.7;
+}
+
+/* Custom classes replacing inline styles in DetailsNew.cshtml */
+.hide-element {
+    display: none;
+}
+
+.no-pointer-events {
+    pointer-events: none;
+}
+
+.center-flex-btn {
+    height: 38px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.v-align-middle-muted {
+    vertical-align: middle;
+    color: #6c757d;
+}
+
+/* Remove gray hover background on header items like the Admin profile dropdown */
+.header-item:hover {
+    background-color: transparent !important;
+}
+
+.v-align-middle {
+    vertical-align: middle;
+}
+
+.bottom-border-header {
+    border-bottom: 1px solid #dee2e6;
+    padding-bottom: 5px;
+}
+
+.full-size-iframe {
+    width: 100%;
+    height: 100%;
+}
+
+.Complaint_manage_data {
+    padding: 20px 0;
+}
+
+.complain-background-color {
+    background-color: var(--card-bg);
+    padding: 24px;
+    border-radius: var(--border-radius-lg);
+    box-shadow: var(--shadow-soft);
+    margin-bottom: 24px;
+    border: 1px solid var(--border-soft);
+    transition: box-shadow var(--transition-speed) ease-in-out;
+}
+
+.complain-background-color:hover {
+    box-shadow: var(--shadow-hover);
+}
+
+.complain-background-color-header h4 {
+    font-weight: 600;
+    color: var(--text-main);
+}
+
+.complain-background-color-header .details-of-advocate {
+    border-bottom: 1px solid var(--border-soft);
+    margin-bottom: 16px;
+    padding-bottom: 8px;
+}
+
+.save-details {
+    background-color: var(--primary-color);
+    color: #fff;
+    padding: 10px 28px;
+    border: none;
+    border-radius: 8px;
+    font-weight: 600;
+    transition: all var(--transition-speed) ease-in-out;
+    box-shadow: 0 4px 6px -1px rgba(79, 70, 229, 0.2);
+}
+
+    .save-details:hover {
+        background-color: var(--primary-hover);
+        color: #fff;
+        transform: translateY(-1px);
+        box-shadow: 0 6px 8px -1px rgba(79, 70, 229, 0.3);
+    }
+
+.btn-span {
+    background-color: #0d6efd;
+    color: #fff;
+    width: 30px;
+    height: 30px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    font-size: 14px;
+}
+
+.Details {
+    border: 1px solid #eee;
+    padding: 10px;
+    border-radius: 5px;
+    margin-bottom: 10px;
+    background-color: #fafafa;
+}
+
+.form-group label {
+    font-weight: 500;
+    margin-bottom: 5px;
+    color: #555;
+}
+
+#btnSearchComplaint {
+    margin-bottom: 4px;
+}
+
+#btnClearSearch {
+    margin-bottom: 4px;
+}
+
+/* ==========================================
+   Responsive Overrides for Mobile & Tablets
+   ========================================== */
+
+@media (max-width: 1330px) {
+    /* 1. Quick Search Input Responsive Width (override fixed 450px) */
+    .quicksearchcomplaintmanagement {
+        width: 1% !important;
+        flex: 1 1 auto !important;
+        max-width: 100% !important;
+    }
+
+    /* 2. Page Title Header & Buttons Wrapping */
+    .page-title-box {
+        flex-direction: column !important;
+        align-items: flex-start !important;
+        gap: 12px;
+    }
+
+    .page-title-right {
+        width: 100% !important;
+        display: flex !important;
+        flex-direction: row !important;
+        flex-wrap: wrap !important;
+        align-items: center !important;
+        gap: 8px !important;
+    }
+
+        .page-title-right .input-group {
+            width: 100% !important;
+            margin-right: 0 !important;
+            margin-bottom: 4px !important;
+        }
+
+        .page-title-right .btn,
+        .page-title-right a {
+            flex: 1 1 0% !important;
+            width: auto !important;
+            margin-right: 0 !important;
+            margin-left: 0 !important;
+            text-align: center;
+            display: inline-flex !important;
+            align-items: center;
+            justify-content: center;
+            white-space: nowrap;
+        }
+
+    /* 3. Card Header Layout Wrapping on Mobile */
+    .main_card_list .main_header_card {
+        display: flex !important;
+        flex-direction: row !important;
+        flex-wrap: wrap !important;
+        align-items: center !important;
+        justify-content: space-between !important;
+        gap: 10px !important;
+        padding-bottom: 12px !important;
+    }
+
+        .main_card_list .main_header_card ._left_side {
+            display: initial !important;
+            align-items: center !important;
+            flex-wrap: wrap !important;
+            gap: 6px !important;
+            width: 100% !important;
+        }
+
+            .main_card_list .main_header_card ._left_side .number {
+                align-self: center !important;
+                margin-bottom: 9px;
+                height: 35px;
+            }
+
+        .main_card_list .main_header_card .rigth_side {
+            display: flex !important;
+            flex-wrap: wrap !important;
+            gap: 6px !important;
+            margin-top: 5px;
+        }
+
+            .main_card_list .main_header_card .rigth_side .btn {
+                flex-grow: 1 !important;
+                margin-right: 0 !important;
+                margin-left: 0 !important;
+                text-align: center;
+                font-size: 12px !important;
+                padding: 6px 10px !important;
+                display: inline-flex !important;
+                align-items: center;
+                justify-content: center;
+            }
+
+    /* 4. Payment Details Form Group Adjustments */
+    #divPayPayment .row .col-md-6,
+    #divPayPayment .row .col-md-12 {
+        margin-top: 8px !important;
+    }
+
+    /* 5. Advocate Reply Chat Layout Tweaks */
+    .replaycomplaintmain_card {
+        max-height: 350px !important;
+    }
+}
+
+@media (max-width: 576px) {
+    /* Stack form checks vertically on extra small screens */
+    .d-flex.flex-column.flex-md-row {
+        gap: 8px;
+    }
+
+    .form-check.ms-md-3 {
+        margin-left: 0 !important;
+    }
+
+    .main_card_list .main_header_card .rigth_side {
+        width: 100% !important;
+    }
+}
+
+@media (max-width: 991px) {
+    /* 6. Top Belt Layout Wrapping on Mobile (Details views) */
+    .top_belt_new {
+        flex-direction: column !important;
+        align-items: flex-start !important;
+        gap: 10px !important;
+        margin-bottom: 12px !important;
+    }
+
+        .top_belt_new .d-flex {
+            flex-wrap: wrap !important;
+            gap: 6px !important;
+            width: 100% !important;
+        }
+
+            .top_belt_new .d-flex > div,
+            .top_belt_new .d-flex > span,
+            .top_belt_new .d-flex > a {
+                margin-right: 0 !important;
+                flex-grow: 1 !important;
+            }
+
+            .top_belt_new .d-flex .btn,
+            .top_belt_new .d-flex a {
+                width: 100% !important;
+                text-align: center;
+            }
+
+    /* 7. Hide the duplicate mobile-specific card header section entirely */
+    .main_header_card__m_responsive {
+        display: none !important;
+    }
+}
+
+/* 8. Desktop/Tablet Card Header Details Row - Full Width & Equal Box Columns */
+@media (min-width: 576px) {
+    .main_card_list .main_header_card ._left_side .mainnewresponsiveleftweb {
+        width: 100% !important;
+        display: flex !important;
+        flex-direction: row !important;
+        flex-wrap: nowrap !important;
+        gap: 10px !important;
+    }
+
+        .main_card_list .main_header_card ._left_side .mainnewresponsiveleftweb .complaint_number {
+            flex: 1 1 0% !important;
+            margin-right: 0 !important;
+            height: 50px !important;
+            min-width: 0 !important;
+            padding: 6px 10px !important;
+        }
+}
+
+@media (min-width: 1331px) {
+    #lnkDeleteComplaint {
+        margin-left: 4px !important;
+    }
+
+    .main_card_list .main_header_card ._left_side {
+        display: flex;
+        align-items: center;
+    }
+}
+
+/* 9. Mobile-specific overrides for unified card details section (2 columns layout) */
+@media (max-width: 575px) {
+    .main_card_list .main_header_card ._left_side .mainnewresponsiveleftweb {
+        display: flex !important;
+        flex-direction: row !important;
+        flex-wrap: wrap !important;
+        gap: 10px !important;
+        width: 100% !important;
+    }
+
+        .main_card_list .main_header_card ._left_side .mainnewresponsiveleftweb .complaint_number {
+            flex: 1 1 calc(50% - 5px) !important;
+            margin-right: 0 !important;
+            height: auto !important;
+            min-width: 0 !important;
+            padding: 8px 10px !important;
+            display: block !important;
+        }
+
+            /* Make the 3rd box (Complaint Status) take full width on the second row */
+            .main_card_list .main_header_card ._left_side .mainnewresponsiveleftweb .complaint_number:nth-child(3) {
+                flex: 1 1 100% !important;
+            }
+}
+
+@media (max-width: 375px) {
+    .main_card_list .main_header_card ._left_side .mainnewresponsiveleftweb {
+        display: flex !important;
+        flex-direction: row !important;
+        flex-wrap: wrap !important;
+        gap: 10px !important;
+        width: 100% !important;
+    }
+
+        .main_card_list .main_header_card ._left_side .mainnewresponsiveleftweb .complaint_number {
+            flex: 1 1 calc(100% - 5px) !important;
+            margin-right: 0 !important;
+            height: auto !important;
+            min-width: 0 !important;
+            padding: 8px 10px !important;
+            display: block !important;
+        }
+
+            /* Make the 3rd box (Complaint Status) take full width on the second row */
+            .main_card_list .main_header_card ._left_side .mainnewresponsiveleftweb .complaint_number:nth-child(3) {
+                flex: 1 1 100% !important;
+            }
+}
+
+.main_card_list_body {
+    width: 100%;
+}
+
+/* 10. Mobile Side Navigation Panel Submenu Adjustments */
+.sidepanel .sidemenu-submenu {
+    display: none;
+    padding-left: 8px;
+    background-color: #f1effd;
+    border-radius: 4px;
+    margin-top: 4px;
+    margin-bottom: 4px;
+    border-left: 3px solid #546fe3;
+}
+
+    .sidepanel .sidemenu-submenu .sidemenulink {
+        padding: 8px 0 8px 12px !important;
+        font-size: 13px !important;
+        color: #495057 !important;
+    }
+
+        .sidepanel .sidemenu-submenu .sidemenulink:hover {
+            color: #546fe3 !important;
+        }
+
+/* Fix hover/active link visibility inside mobile sidepanel */
+.sidepanel .sidemenulink:hover,
+.sidepanel .sidemenulink:focus,
+.sidepanel .sidemenulink:active,
+.sidepanel .sidemenulink.active {
+    color: #546fe3 !important;
+}
+
+/* 11. Header Mobile Hamburger Menu Icon Size Adjustment */
+.navbar-header .openmenuicon {
+    font-size: 30px !important;
+}
+
+/* 12. Header Buttons Height and Centering Alignment */
+.navbar-header .btn {
+    height: 60px !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    padding-top: 0 !important;
+    padding-bottom: 0 !important;
+}
+
+/* 13. Mobile Menu Toggle Button and Horizontal Nav Breakpoints (800px) */
+@media (max-width: 799px) {
+    .navbar-header .mobilemenu {
+        display: inline-flex !important;
+    }
+
+    .navbar-header .main_topbar_link {
+        display: none !important;
+    }
+}
+
+@media (min-width: 800px) {
+    .navbar-header .mobilemenu {
+        display: none !important;
+    }
+
+    .navbar-header .main_topbar_link {
+        display: flex !important;
+    }
+}
+
+/* 14. Corner Ribbon Styles */
+.corner-ribbon {
+    width: 120px;
+    position: absolute;
+    top: 15px;
+    left: -30px;
+    text-align: center;
+    line-height: 25px;
+    letter-spacing: 1px;
+    transform: rotate(-45deg);
+    -webkit-transform: rotate(-45deg);
+    box-shadow: 0 0 3px rgba(0,0,0,.3);
+    font-weight: bold;
+    font-size: 12px;
+    z-index: 10;
+}
+
+/* 15. Ribbon Wrapper */
+.ribbon-wrapper {
+    position: relative;
+    overflow: hidden;
+}
+
+.comnumcolr {
+    color: #34c38f !important;
+}
+
+/* 16. Select2 Searchable Dropdown Styling */
+.select2-container {
+    width: 100% !important;
+}
+
+.select2-container .select2-selection--single {
+    background-color: #fff !important;
+    border: 1px solid #ced4da !important;
+    border-radius: 4px !important;
+    height: 38px !important;
+    padding: 2px 4px !important;
+    display: flex !important;
+    align-items: center !important;
+    outline: none !important;
+}
+
+.select2-container--default .select2-selection--single:focus,
+.select2-container--open .select2-selection--single {
+    border-color: #556ee6 !important;
+    box-shadow: 0 0 0 0.15rem rgba(85, 110, 230, 0.25) !important;
+}
+
+.select2-container .select2-selection--single .select2-selection__rendered {
+    color: #495057 !important;
+    line-height: 32px !important;
+    padding-left: 8px !important;
+    padding-right: 24px !important;
+    font-size: 13.5px !important;
+    width: 100% !important;
+}
+
+.select2-container--default .select2-selection--single .select2-selection__placeholder {
+    color: #74788d !important;
+}
+
+.select2-container .select2-selection--single .select2-selection__arrow {
+    height: 36px !important;
+    width: 28px !important;
+    right: 4px !important;
+    top: 1px !important;
+}
+
+.select2-container--default .select2-selection--single .select2-selection__arrow b {
+    border-color: #74788d transparent transparent transparent !important;
+    border-width: 5px 5px 0 5px !important;
+    top: 50% !important;
+    left: 50% !important;
+    margin-left: -5px !important;
+    margin-top: -2px !important;
+}
+
+.select2-container--open .select2-selection--single .select2-selection__arrow b {
+    border-color: transparent transparent #74788d transparent !important;
+    border-width: 0 5px 5px 5px !important;
+    margin-top: -3px !important;
+}
+
+.select2-container--default .select2-selection--single .select2-selection__clear {
+    margin-right: 18px !important;
+    font-size: 16px !important;
+    color: #999 !important;
+    font-weight: bold !important;
+    cursor: pointer !important;
+}
+
+.select2-container--default .select2-selection--single .select2-selection__clear:hover {
+    color: #f46a6a !important;
+}
+
+.select2-dropdown {
+    border: 1px solid #ced4da !important;
+    border-radius: 4px !important;
+    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.12) !important;
+    z-index: 9999 !important;
+    font-size: 13.5px !important;
+}
+
+.select2-container--default .select2-search--dropdown {
+    padding: 8px !important;
+    background-color: #fff !important;
+}
+
+.select2-container--default .select2-search--dropdown .select2-search__field {
+    border: 1px solid #ced4da !important;
+    border-radius: 4px !important;
+    padding: 6px 10px !important;
+    font-size: 13px !important;
+    outline: none !important;
+    width: 100% !important;
+}
+
+.select2-container--default .select2-search--dropdown .select2-search__field:focus {
+    border-color: #556ee6 !important;
+}
+
+.select2-results__option {
+    padding: 7px 12px !important;
+    font-size: 13.5px !important;
+    color: #495057 !important;
+}
+
+.select2-container--default .select2-results__option--highlighted[aria-selected] {
+    background-color: #556ee6 !important;
+    color: #fff !important;
+}
+
+.select2-container--default .select2-results__option[aria-selected=true] {
+    background-color: #f1f3f9 !important;
+    color: #495057 !important;
+}
+
+/* SweetAlert Reason / Remark modal alignment & spacing */
+.swal2-reason-modal .swal2-html-container {
+    margin: 0.8em 2em 0 2em !important;
+    padding: 0 !important;
+    text-align: left !important;
+}
+
+.swal2-reason-modal .swal2-html-container p {
+    margin: 0 0 4px 0 !important;
+    padding: 0 !important;
+    font-size: 14.5px;
+    color: #495057;
+}
+
+.swal2-reason-modal .swal2-textarea {
+    margin: 0 2em 0.5em 2em !important;
+    width: calc(100% - 4em) !important;
+    box-sizing: border-box !important;
+    font-size: 14px;
+}

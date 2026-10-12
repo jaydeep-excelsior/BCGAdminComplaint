@@ -1,0 +1,119 @@
+
+@{
+    ViewBag.Title = "ComplaintActionLogReport";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div>
+    <div class="row">
+        <div class="col-12">
+            <div class="page-title-box d-sm-flex align-items-center justify-content-between">
+                <div>
+                    <h4 class="mb-sm-0 font-size-18">Complaint Action Log Report</h4>
+                    <div class="page-title-left mt-1">
+                        <ol class="breadcrumb m-0 font-size-13">
+                            <li class="breadcrumb-item"><a href="/Home/Index" class="text-muted">Dashboard</a></li>
+                            <li class="breadcrumb-item active">Complaint Action Log Report</li>
+                        </ol>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="card main_filter_div">
+        <div class="card-body">
+            <form action="#">
+                <div class="row">
+                    <div class="form-group col-lg-6 col-md-12 col-12">
+                        <label>Quick Search</label>
+                        <input id="txtQuickSearch" class="form-control" placeholder="Quick Search (Name or contact number or email id or Complaint Number)">
+                    </div>
+                </div>
+                <div class="row ">
+                    <div class="form-group col-md-6 col-sm-6 col-12 col-lg-3 mt-3">
+                        <label>Status</label>
+                        <select id="drpStatus" class="form-control">
+                            <option value="0">Select Status</option>
+                            <option value="New">New</option>
+                            <option value="Accepted">Accepted</option>
+                            <option value="Board Has Approved">Board Has Approved</option>
+                            <option value="Board Has Rejected">Board Has Rejected</option>
+                            <option value="Hearing">Hearing</option>
+                            <option value="Adjunt">Adjunt</option>
+                            <option value="Order Passed">Order Passed</option>
+                        </select>
+                    </div>
+                    <div class="form-group col-md-6 col-sm-6 col-12 col-lg-3 mt-3">
+                        <label>Old Status</label>
+                        <select id="drpOldStatus" class="form-control">
+                            <option value="0">Select Status</option>
+                            <option value="New">New</option>
+                            <option value="Accepted">Accepted</option>
+                            <option value="Board Has Approved">Board Has Approved</option>
+                            <option value="Board Has Rejected">Board Has Rejected</option>
+                            <option value="Hearing">Hearing</option>
+                            <option value="Adjunt">Adjunt</option>
+                            <option value="Order Passed">Order Passed</option>
+                        </select>
+                    </div>
+                    <div class="form-group col-md-6 col-sm-6 col-12 col-lg-3 mt-3">
+                        <label>Committee</label>
+                        <select id="drpDcNo" class="form-control">
+                            <option value="">Select Committee</option>
+                        </select>
+                    </div>
+                    <div class="form-group col-md-6 col-sm-6 col-12 col-lg-3 mt-3">
+                        <label> From Date:</label>
+                        <input name="txtFromDate" id="txtFromDate" type="date" placeholder="DD/MM/YYYY" class="form-control" max="2999-12-31">
+                    </div>
+                    <div class="form-group col-md-6 col-sm-6 col-12 col-lg-3 mt-3">
+                        <label> To Date:</label>
+                        <input name="txtToDate" id="txtToDate" type="date" placeholder="DD/MM/YYYY" class="form-control" max="2999-12-31">
+                    </div>
+                    <div class="form-group col-md-12 mt-3">
+                        <div>
+                            <a id="lnkFilter" class="close_filterdiv btn-sm btn btn-outline-primary waves-effect waves-light btn-sm"><i class="fa-solid fa-magnifying-glass me-1"></i> Search</a>
+                            <a id="lnkPrintPDF" class="close_filterdiv btn-sm btn btn-outline-primary waves-effect waves-light btn-sm"><i class="fa-solid fa-print me-1"></i> Print to PDF</a>
+                            <a id="lnkDownloadExcel" class="close_filterdiv btn-sm btn btn-outline-primary waves-effect waves-light btn-sm">Download in Excel</a>
+                            <a id="btnCancel" class="btn btn-outline-danger waves-effect m-l-5 btn-sm close_filterdiv btn-sm"><i class="fa-solid fa-xmark me-1"></i> Cancel</a>
+                        </div>
+                    </div>
+                </div>
+            </form>
+
+            <div class="row" id="tblActionLogList">
+
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
+<script>
+    $(document).ready(function () {
+        GetDcNumberList();
+    });
+
+    function GetDcNumberList() {
+        $.ajax({
+            type: 'Get',
+            url: "/ComplaintDetails/GetDcNoList",
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            success: function (response) {
+                if (response.IsSuccess) {
+                    $.each(response.Data, function (data, value) {
+                        $("#drpDcNo").append('<option value=' + value.Id + '>' + value.DcTitle + '</option>');
+                    });
+                }
+                else {
+                }
+            }, failure: function (result) {
+                swal('Something went wrong!', '', 'error');
+            },
+            error: function (result) {
+                swal('Something went wrong!', '', 'error');
+            }
+        });
+    }
+</script>
