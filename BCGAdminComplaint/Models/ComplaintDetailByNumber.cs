@@ -52,6 +52,7 @@ namespace BCGAdminComplaint.Models
         public String FullName { get; set; }
         public String ContactNumber { get; set; }
         public String ComplaintDetailEncryptCode { get; set; }
+        public String EmailAddress { get; set; }
     }
 
     public class ComplaintMemberEncryptCodeList

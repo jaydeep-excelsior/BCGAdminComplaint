@@ -1233,6 +1233,7 @@ namespace BCGAdminComplaint.Repository
                     list.FullName = DatabaseAccessEngine.GetString(reader, "FullName");
                     list.ContactNumber = DatabaseAccessEngine.GetString(reader, "ContactNumber");
                     list.ComplaintDetailEncryptCode = DatabaseAccessEngine.GetString(reader, "ComplaintDetailEncryptCode");
+                    list.EmailAddress = DatabaseAccessEngine.GetString(reader, "EmailAddress");
                     List.Add(list);
                 }
                 return List;

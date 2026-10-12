@@ -276,6 +276,13 @@
     .status-summary-callout.summary-primary .status-summary-label {
         color: #2563eb;
     }
+    .status-summary-callout.summary-info {
+        background-color: #f0f9ff;
+        border-left-color: #0284c7;
+    }
+    .status-summary-callout.summary-info .status-summary-label {
+        color: #0284c7;
+    }
     .status-summary-label {
         font-size: 11px;
         font-weight: 700;
@@ -333,6 +340,264 @@
         background: #f8fafc;
         border: 1px solid #e2e8f0;
         border-radius: 8px;
+    }
+    .dc-approved-section {
+        margin-top: 12px;
+    }
+    .dc-committee-card {
+        background: #ffffff;
+        border: 1px solid #e2e8f0;
+        border-radius: 12px;
+        box-shadow: 0 2px 8px rgba(15, 23, 42, 0.04);
+        overflow: hidden;
+        transition: all 0.25s ease;
+    }
+    .dc-committee-card:hover {
+        border-color: #cbd5e1;
+        box-shadow: 0 4px 14px rgba(15, 23, 42, 0.07);
+    }
+    .dc-committee-card-header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        flex-wrap: wrap;
+        gap: 12px;
+        padding: 14px 18px;
+        background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
+        border-bottom: 1px solid #f1f5f9;
+    }
+    .dc-committee-info-group {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+    }
+    .dc-committee-badge-icon {
+        width: 42px;
+        height: 42px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 10px;
+        background: linear-gradient(135deg, #eff6ff 0%, #dbeafe 100%);
+        color: #2563eb;
+        font-size: 18px;
+        box-shadow: 0 2px 6px rgba(37, 99, 235, 0.12);
+        flex-shrink: 0;
+    }
+    .dc-committee-subtitle {
+        font-size: 11px;
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        color: #64748b;
+        margin-bottom: 2px;
+    }
+    .dc-committee-main-title {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        flex-wrap: wrap;
+    }
+    .dc-title-text {
+        font-size: 15px;
+        font-weight: 700;
+        color: #0f172a;
+    }
+    .dc-status-chip {
+        display: inline-flex;
+        align-items: center;
+        background: #ecfdf5;
+        color: #059669;
+        border: 1px solid #a7f3d0;
+        font-size: 11px;
+        font-weight: 600;
+        padding: 2px 8px;
+        border-radius: 12px;
+    }
+    .dc-view-members-btn {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        background: #ffffff;
+        color: #2563eb;
+        border: 1px solid #bfdbfe;
+        border-radius: 20px;
+        padding: 6px 14px;
+        font-size: 12.5px;
+        font-weight: 600;
+        transition: all 0.2s ease;
+        box-shadow: 0 1px 3px rgba(37, 99, 235, 0.08);
+    }
+    .dc-view-members-btn:hover {
+        background: #eff6ff;
+        color: #1d4ed8;
+        border-color: #93c5fd;
+        box-shadow: 0 2px 6px rgba(37, 99, 235, 0.16);
+        transform: translateY(-1px);
+    }
+    .dc-view-members-btn .rotate-180 {
+        transform: rotate(180deg);
+    }
+    .transition-transform {
+        transition: transform 0.25s ease;
+    }
+    .dc-members-container {
+        padding: 14px 16px;
+        background: #fafbfc;
+        border-top: 1px solid #e2e8f0;
+    }
+    .dc-members-grid {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+    }
+    .dc-member-item-card {
+        background: #ffffff;
+        border: 1px solid #e2e8f0;
+        border-radius: 10px;
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
+        padding: 12px 16px;
+        transition: all 0.2s ease;
+    }
+    .dc-member-item-card:hover {
+        border-color: #93c5fd;
+        box-shadow: 0 4px 12px rgba(37, 99, 235, 0.08);
+        transform: translateY(-1px);
+    }
+    .dc-member-card-inner {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+    }
+    .dc-member-header-row {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        flex-wrap: wrap;
+        gap: 10px;
+    }
+    .dc-member-profile {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        flex: 1;
+        min-width: 200px;
+    }
+    .dc-member-avatar {
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        background: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%);
+        color: #ffffff;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: 700;
+        font-size: 13px;
+        letter-spacing: 0.5px;
+        position: relative;
+        flex-shrink: 0;
+        box-shadow: 0 2px 6px rgba(37, 99, 235, 0.25);
+    }
+    .dc-member-seq {
+        position: absolute;
+        bottom: -2px;
+        right: -4px;
+        background: #0f172a;
+        color: #ffffff;
+        font-size: 9px;
+        font-weight: 700;
+        padding: 1px 4px;
+        border-radius: 6px;
+        line-height: 1;
+        border: 1px solid #ffffff;
+    }
+    .dc-member-meta {
+        flex: 1;
+    }
+    .dc-member-fullname {
+        font-size: 14px;
+        font-weight: 700;
+        color: #0f172a;
+        margin: 0 0 4px 0;
+        line-height: 1.25;
+    }
+    .dc-member-tags {
+        display: flex;
+        align-items: center;
+        flex-wrap: wrap;
+        gap: 6px;
+    }
+    .dc-enro-badge {
+        display: inline-flex;
+        align-items: center;
+        background: #f1f5f9;
+        color: #334155;
+        border: 1px solid #e2e8f0;
+        border-radius: 6px;
+        padding: 2px 8px;
+        font-size: 11.5px;
+        font-weight: 600;
+    }
+    .dc-phone-badge {
+        display: inline-flex;
+        align-items: center;
+        background: #ecfdf5;
+        color: #047857;
+        border: 1px solid #a7f3d0;
+        border-radius: 6px;
+        padding: 2px 8px;
+        font-size: 11.5px;
+        font-weight: 600;
+        text-decoration: none;
+        transition: all 0.2s ease;
+    }
+    .dc-phone-badge:hover {
+        background: #d1fae5;
+        color: #065f46;
+    }
+    .dc-member-footer-row {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        flex-wrap: wrap;
+        gap: 10px;
+        padding-top: 10px;
+        border-top: 1px dashed #e2e8f0;
+    }
+    .dc-portal-actions {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        flex-wrap: wrap;
+    }
+    .dc-portal-label {
+        font-size: 11.5px;
+        font-weight: 600;
+        color: #64748b;
+    }
+    .dc-copy-link-btn {
+        font-size: 11.5px;
+        padding: 4px 10px;
+        border-radius: 6px;
+        font-weight: 500;
+    }
+    .dc-send-sms-btn {
+        background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%);
+        border: none;
+        color: #ffffff;
+        font-size: 12px;
+        font-weight: 600;
+        padding: 5px 14px;
+        border-radius: 6px;
+        box-shadow: 0 2px 4px rgba(37, 99, 235, 0.2);
+        transition: all 0.2s ease;
+    }
+    .dc-send-sms-btn:hover {
+        background: linear-gradient(135deg, #1d4ed8 0%, #1e40af 100%);
+        box-shadow: 0 3px 8px rgba(37, 99, 235, 0.3);
+        transform: translateY(-1px);
+        color: #ffffff;
     }
 </style>
 
@@ -1527,29 +1792,74 @@
         });
     }
 
+    function copyMemberLink(url, btn) {
+        if (!url) return;
+        var originalHtml = $(btn).html();
+        if (navigator.clipboard && navigator.clipboard.writeText) {
+            navigator.clipboard.writeText(url).then(function () {
+                $(btn).html('<i class="fa-solid fa-check text-success me-1"></i>Copied!');
+                setTimeout(function () { $(btn).html(originalHtml); }, 2000);
+            }).catch(function () {
+                fallbackCopyText(url, btn, originalHtml);
+            });
+        } else {
+            fallbackCopyText(url, btn, originalHtml);
+        }
+    }
+
+    function fallbackCopyText(text, btn, originalHtml) {
+        var textArea = document.createElement("textarea");
+        textArea.value = text;
+        textArea.style.position = "fixed";
+        textArea.style.left = "-9999px";
+        document.body.appendChild(textArea);
+        textArea.focus();
+        textArea.select();
+        try {
+            document.execCommand('copy');
+            $(btn).html('<i class="fa-solid fa-check text-success me-1"></i>Copied!');
+            setTimeout(function () { $(btn).html(originalHtml); }, 2000);
+        } catch (err) {
+            prompt("Copy this URL:", text);
+        }
+        document.body.removeChild(textArea);
+    }
+
     function openDcMemberListView(dcId) {
         if (!dcId) return;
         var hdfComplaintIds = '#hdfComplaintid' + dcId;
-        var tblDCMemberDetailsid = '#tblDCMemberDetails' + dcId;
-        var iconId = '#icon_dcMember_' + dcId;
-        var detailsTableHead = $(tblDCMemberDetailsid + " thead");
-        var detailsTableBody = $(tblDCMemberDetailsid + " tbody");
+        var memberContainer = $('#dcMemberList_' + dcId);
+        var chevronId = '#chevron_dcMember_' + dcId;
+        var btnTextId = '#btnText_dcMember_' + dcId;
 
-        // Toggle feature: if data is already filled, clicking again will hide it
-        if ($(detailsTableBody).find("tr").length > 0) {
-            $(detailsTableHead).empty();
-            $(detailsTableBody).empty();
-            $(iconId).removeClass('la-eye-slash').addClass('la-eye');
+        // Toggle: if already visible, slide up
+        if (memberContainer.is(':visible')) {
+            memberContainer.slideUp(200);
+            $(chevronId).removeClass('rotate-180');
+            $(btnTextId).text('View Members');
             return;
         }
 
-        $(detailsTableHead).empty();
-        $(detailsTableBody).empty();
+        // If already rendered, slide down
+        if (memberContainer.find('.dc-member-item-card').length > 0) {
+            memberContainer.slideDown(200);
+            $(chevronId).addClass('rotate-180');
+            $(btnTextId).text('Hide Members');
+            return;
+        }
+
+        memberContainer.html(
+            '<div class="text-center py-3 text-muted">' +
+            '  <div class="spinner-border spinner-border-sm text-primary me-2" role="status"></div>' +
+            '  <span>Loading committee members...</span>' +
+            '</div>'
+        ).show();
 
         var VComplaintId = $(hdfComplaintIds).val();
         var Data = JSON.stringify({
             ComplaintId: VComplaintId
         });
+
         $.ajax({
             type: 'POST',
             url: "/ComplaintList/GetComplaintMemberLogList",
@@ -1558,23 +1868,89 @@
             dataType: "json",
             success: function (response) {
                 if (response != null && response.Data != null && response.Data.length > 0) {
-                    console.log(response.Data);
-                    $(iconId).removeClass('la-eye').addClass('la-eye-slash');
-                    var RowItem = '<tr><th style="text-align: center;">#</th><th>Enrollment Number</th><th>Name</th><th>Contact Number</th><th>Action</th></tr>';
-                    detailsTableHead.append(RowItem);
+                    $(chevronId).addClass('rotate-180');
+                    $(btnTextId).text('Hide Members (' + response.Data.length + ')');
+
+                    var cardsHtml = '<div class="dc-members-grid">';
 
                     $.each(response.Data, function (index, mvalue) {
-                        var RId = index + 1;
-                        var RowItem1 = '<tr><td style="text-align: center;">' + RId + '</td><td>' + mvalue.EnroNumber + '</td><td>' + mvalue.FullName + '</td><td>' + mvalue.ContactNumber + '</td><td>https://dcpanel.barcouncilofgujarat.org/BoardComplaint/Detail/' + mvalue.ComplaintDetailEncryptCode + '<br/><button class="btn btn-primary btn-sm" onclick="sendComplaintLink(' + mvalue.Id + ', \'' + mvalue.ContactNumber + '\')">Send Complaint Link</button></td></tr>';
-                        detailsTableBody.append(RowItem1);
+                        var rIdx = index + 1;
+                        var portalUrl = 'https://dcpanel.barcouncilofgujarat.org/BoardComplaint/Detail/' + (mvalue.ComplaintDetailEncryptCode || '');
+                        var contactNo = (mvalue.ContactNumber || '').toString().trim();
+                        var enroNo = (mvalue.EnroNumber || 'N/A').toString().trim();
+                        var fullName = (mvalue.FullName || 'Member').toString().trim();
+
+                        var initials = '';
+                        var nameParts = fullName.split(' ');
+                        if (nameParts.length >= 2 && nameParts[0] && nameParts[1]) {
+                            initials = nameParts[0].charAt(0) + nameParts[1].charAt(0);
+                        } else if (nameParts.length === 1 && nameParts[0]) {
+                            initials = nameParts[0].substring(0, 2);
+                        } else {
+                            initials = '#' + rIdx;
+                        }
+                        initials = initials.toUpperCase();
+
+                        cardsHtml +=
+                            '<div class="dc-member-item-card">' +
+                            '  <div class="dc-member-card-inner">' +
+                            '    <div class="dc-member-header-row">' +
+                            '      <div class="dc-member-profile">' +
+                            '        <div class="dc-member-avatar" title="' + escapeHtml(fullName) + '">' +
+                            '          <span>' + escapeHtml(initials) + '</span>' +
+                            '          <span class="dc-member-seq">#' + rIdx + '</span>' +
+                            '        </div>' +
+                            '        <div class="dc-member-meta">' +
+                            '          <h6 class="dc-member-fullname">' + escapeHtml(fullName) + '</h6>' +
+                            '          <div class="dc-member-tags">' +
+                            '            <span class="dc-enro-badge" title="Enrollment Number">' +
+                            '              <i class="fa-solid fa-id-card me-1 text-primary"></i>' + escapeHtml(enroNo) +
+                            '            </span>' +
+                            '            ' + (contactNo ?
+                                            '<a href="tel:' + escapeHtml(contactNo) + '" class="dc-phone-badge" title="Call Member">' +
+                                            '  <i class="fa-solid fa-phone me-1 text-success"></i>' + escapeHtml(contactNo) +
+                                            '</a>' :
+                                            '<span class="dc-phone-badge text-muted"><i class="fa-solid fa-phone-slash me-1"></i>No Contact</span>') +
+                            '          </div>' +
+                            '        </div>' +
+                            '      </div>' +
+                            '    </div>' +
+                            '    <div class="dc-member-footer-row">' +
+                            '      <div class="dc-portal-actions">' +
+                            '        <span class="dc-portal-label"><i class="fa-solid fa-shield-halved me-1 text-primary"></i>Hearing Portal:</span>' +
+                            '        <div class="btn-group btn-group-sm">' +
+                            '          <button type="button" class="btn btn-outline-secondary btn-sm dc-copy-link-btn" onclick="copyMemberLink(\'' + portalUrl.replace(/'/g, "\\'") + '\', this)" title="Copy Portal Link">' +
+                            '            <i class="fa-regular fa-copy me-1"></i>Copy Link' +
+                            '          </button>' +
+                            '          <a href="' + portalUrl + '" target="_blank" class="btn btn-outline-secondary btn-sm" title="Open Portal Link in New Tab">' +
+                            '            <i class="fa-solid fa-arrow-up-right-from-square"></i>' +
+                            '          </a>' +
+                            '        </div>' +
+                            '      </div>' +
+                            '      <button type="button" class="btn btn-primary btn-sm dc-send-sms-btn" onclick="sendComplaintLink(' + (mvalue.Id || 0) + ', \'' + contactNo.replace(/'/g, "\\'") + '\')">' +
+                            '        <i class="fa-solid fa-paper-plane me-1"></i>Send Complaint Link' +
+                            '      </button>' +
+                            '    </div>' +
+                            '  </div>' +
+                            '</div>';
                     });
-                    
+
+                    cardsHtml += '</div>';
+                    memberContainer.html(cardsHtml).slideDown(200);
+                } else {
+                    $(chevronId).removeClass('rotate-180');
+                    $(btnTextId).text('View Members');
+                    memberContainer.html(
+                        '<div class="p-3 text-center text-muted bg-white rounded-3 border mt-2">' +
+                        '  <i class="fa-solid fa-users-slash me-1"></i> No committee members assigned.' +
+                        '</div>'
+                    ).slideDown(200);
                 }
             },
             error: function (result) {
-                $(detailsTableHead).empty(); 
-                $(detailsTableBody).empty();
-                $(iconId).removeClass('la-eye-slash').addClass('la-eye');
+                $(chevronId).removeClass('rotate-180');
+                $(btnTextId).text('View Members');
+                memberContainer.hide().empty();
                 swal('Something went wrong!', '', 'error');
             }
         });
@@ -1646,6 +2022,22 @@
                 icon: 'fa-solid fa-file-circle-plus',
                 title: status || 'New'
             };
+        } else if (s === 'refer to board' || s.indexOf('refer') !== -1 || s.indexOf('general board') !== -1) {
+            return {
+                markerClass: 'marker-info',
+                pillClass: 'pill-info',
+                summaryClass: 'summary-info',
+                icon: 'fa-solid fa-gavel',
+                title: status || 'Refer to Board'
+            };
+        } else if (s === 'board accept') {
+            return {
+                markerClass: 'marker-success',
+                pillClass: 'pill-success',
+                summaryClass: 'summary-success',
+                icon: 'fa-solid fa-check',
+                title: status || 'Board Accept'
+            };
         } else {
             return {
                 markerClass: 'marker-info',
@@ -1708,39 +2100,56 @@
                                 '</a>' +
                                 '</div>';
                         } else if (value.Status == "Board Has Approved") {
-                            var tblDCMemberDetailsid = 'tblDCMemberDetails' + value.Id;
+                            var dcMemberListId = 'dcMemberList_' + value.Id;
                             var hdfCommitteeIds = 'hdfCommitteeId' + value.Id;
                             var hdfComplaintIds = 'hdfComplaintid' + value.Id;
-                            extraContent = '<div class="status-committee-box mt-3">' +
-                                '  <div class="d-flex align-items-center justify-content-between flex-wrap gap-2">' +
-                                '    <div class="d-flex align-items-center gap-2">' +
-                                '      <i class="fa-solid fa-users text-primary fs-5"></i>' +
-                                '      <div>' +
-                                '        <div class="text-muted small fw-semibold">Assigned DC Committee</div>' +
-                                '        <div class="fw-bold text-dark">' + escapeHtml(value.CommitteTitle || 'N/A') + '</div>' +
+                            extraContent =
+                                '<div class="dc-approved-section">' +
+                                '  <div class="dc-committee-card">' +
+                                '    <div class="dc-committee-card-header">' +
+                                '      <div class="dc-committee-info-group">' +
+                                '        <div class="dc-committee-badge-icon">' +
+                                '          <i class="fa-solid fa-users-line"></i>' +
+                                '        </div>' +
+                                '        <div>' +
+                                '          <div class="dc-committee-subtitle">Assigned Disciplinary Committee</div>' +
+                                '          <div class="dc-committee-main-title">' +
+                                '            <span class="dc-title-text">' + escapeHtml(value.CommitteTitle || 'Disciplinary Committee') + '</span>' +
+                                '            <span class="dc-status-chip"><i class="fa-solid fa-circle-check me-1"></i>Allocated</span>' +
+                                '          </div>' +
+                                '        </div>' +
                                 '      </div>' +
+                                '      <button type="button" class="btn dc-view-members-btn" onclick="openDcMemberListView(' + value.Id + ')">' +
+                                '        <i id="icon_dcMember_' + value.Id + '" class="fa-solid fa-users-viewfinder"></i>' +
+                                '        <span id="btnText_dcMember_' + value.Id + '">View Members</span>' +
+                                '        <i id="chevron_dcMember_' + value.Id + '" class="fa-solid fa-chevron-down transition-transform"></i>' +
+                                '      </button>' +
                                 '    </div>' +
-                                '    <button type="button" class="btn btn-sm btn-outline-primary rounded-pill px-3 py-1" onclick="openDcMemberListView(' + value.Id + ')">' +
-                                '      <i id="icon_dcMember_' + value.Id + '" class="las la-eye me-1"></i> View Members' +
-                                '    </button>' +
-                                '  </div>' +
-                                '  <input type="hidden" id="' + hdfCommitteeIds + '" value="' + (value.CommitteeId || '') + '">' +
-                                '  <input type="hidden" id="' + hdfComplaintIds + '" value="' + (value.ComplaintId || '') + '">' +
-                                '  <div class="table-responsive mt-2">' +
-                                '    <table class="table table-bordered table-sm table-hover mb-0" id="' + tblDCMemberDetailsid + '"><thead></thead><tbody></tbody></table>' +
+                                '    <input type="hidden" id="' + hdfCommitteeIds + '" value="' + (value.CommitteeId || '') + '">' +
+                                '    <input type="hidden" id="' + hdfComplaintIds + '" value="' + (value.ComplaintId || '') + '">' +
+                                '    <div id="' + dcMemberListId + '" class="dc-members-container" style="display:none;"></div>' +
                                 '  </div>' +
                                 '</div>';
                         }
 
                         var summaryText = (value.Summary || '').toString().trim();
-                        if (!summaryText && (value.Status || '').toString().trim().toLowerCase() === 'new') {
-                            summaryText = 'Complaint has been successfully registered in the system. It is currently under initial administrative verification and scrutiny.';
+                        var st = (value.Status || '').toString().trim().toLowerCase();
+                        if (!summaryText) {
+                            if (st === 'new') {
+                                summaryText = 'Complaint has been successfully registered in the system. It is currently under initial administrative verification and scrutiny.';
+                            } else if (st === 'accepted') {
+                                summaryText = 'Complaint has been scrutinized and accepted for further proceedings. The matter will be placed before the General Board for consideration.';
+                            } else if (st === 'refer to board' || st === 'next general board') {
+                                summaryText = "Complaint has been referred to the General Board for consideration. Awaiting the Board's review and decision in the upcoming meeting.";
+                            } else if (st === 'board accept') {
+                                summaryText = "The General Board has accepted the complaint. Pending formal board approval and committee allocation.";
+                            }
                         }
 
                         var summaryHtml = '';
                         if (summaryText !== '') {
-                            var isNewStatus = (value.Status || '').toString().trim().toLowerCase() === 'new';
-                            var summaryLabel = isNewStatus ? 'Status Remarks' : 'Reason / Remarks';
+                            var isStatusNote = (st === 'new' || st === 'accepted' || st === 'refer to board' || st === 'next general board' || st === 'board accept');
+                            var summaryLabel = isStatusNote ? 'Status Remarks' : 'Reason / Remarks';
                             summaryHtml = '<div class="status-summary-callout ' + theme.summaryClass + '">' +
                                 '  <div class="status-summary-label">' +
                                 '    <i class="fa-solid fa-quote-left opacity-75"></i> ' + summaryLabel +
@@ -2907,14 +3316,18 @@
 
     function updateActionButtonsUI(status) {
         var html = '';
-        if (status == 'New' || status == 'Old' ||  status == 'More Detail' || status == 'Payment Done') {
+        var s = (status || '').toString().trim().toLowerCase();
+        if (s === 'new' || s === 'old' || s === 'more detail' || s === 'payment done') {
             html = '<a href="javascript:void(0);" class="btn btn-success waves-effect waves-light white-space-nowrap btn-sm me-2" onclick="updateStatusDirectly(\'Accepted\')"><i class="fa-solid fa-check me-1"></i> Accept</a>' +
                    '<a href="javascript:void(0);" class="btn btn-warning waves-effect waves-light white-space-nowrap btn-sm me-2" onclick="updateStatusWithReason(\'More Detail\')"><i class="fa-solid fa-info-circle me-1"></i> More Detail</a>' +
                    '<a href="javascript:void(0);" class="btn btn-danger waves-effect waves-light white-space-nowrap btn-sm me-2" onclick="updateStatusWithReason(\'Rejected\')"><i class="fa-solid fa-times me-1"></i> Reject</a>' +
                    '<a href="javascript:void(0);" class="btn btn-secondary waves-effect waves-light white-space-nowrap btn-sm" onclick="updateStatusWithReason(\'Withdrawal Granted\')"><i class="fa-solid fa-arrow-right-from-bracket me-1"></i> Withdrawal Granted</a>';
-        } else if (status == 'Accepted') {
-            html = '<a href="javascript:void(0);" class="btn btn-info waves-effect waves-light white-space-nowrap btn-sm" onclick="updateStatusDirectly(\'Next General Board\')"><i class="fa-solid fa-gavel me-1"></i> Next General Board</a>';
-        } else if (status == 'Next General Board') {
+        } else if (s === 'accepted') {
+            html = '<a href="javascript:void(0);" class="btn btn-info waves-effect waves-light white-space-nowrap btn-sm" onclick="updateStatusDirectly(\'Refer to Board\')"><i class="fa-solid fa-gavel me-1"></i> Refer to Board</a>';
+        } else if (s === 'next general board' || s === 'refer to board') {
+            html = '<a href="javascript:void(0);" class="btn btn-success waves-effect waves-light white-space-nowrap btn-sm me-2" onclick="updateStatusDirectly(\'Board Accept\')"><i class="fa-solid fa-check-double me-1"></i> Board Accept</a>' +
+                   '<a href="javascript:void(0);" class="btn btn-danger waves-effect waves-light white-space-nowrap btn-sm" onclick="updateStatusWithReason(\'Board Has Rejected\')"><i class="fa-solid fa-ban me-1"></i> Board Reject</a>';
+        } else if (s === 'board accept') {
             html = '<a href="javascript:void(0);" class="btn btn-success waves-effect waves-light white-space-nowrap btn-sm me-2" onclick="triggerBoardHasApproved()"><i class="fa-solid fa-check-double me-1"></i> Board Has Approved</a>' +
                    '<a href="javascript:void(0);" class="btn btn-danger waves-effect waves-light white-space-nowrap btn-sm" onclick="updateStatusWithReason(\'Board Has Rejected\')"><i class="fa-solid fa-ban me-1"></i> Board Has Rejected</a>';
         }
@@ -2946,10 +3359,11 @@
         var confirmBtnText = "Submit";
         var iconType = "warning";
 
-        if (status === 'Rejected' || status === 'Board Has Rejected') {
-            title = status === 'Board Has Rejected' ? "Board Has Rejected" : "Reject Complaint";
-            labelText = "Please enter reason for rejection:";
-            placeholderText = "Enter rejection reason here...";
+        if (status === 'Rejected' || status === 'Board Has Rejected' || status === 'Board Reject') {
+            var isBoardReject = (status === 'Board Has Rejected' || status === 'Board Reject');
+            title = isBoardReject ? "Board Reject" : "Reject Complaint";
+            labelText = isBoardReject ? "Please enter reason for board rejection:" : "Please enter reason for rejection:";
+            placeholderText = isBoardReject ? "Enter board rejection reason here..." : "Enter rejection reason here...";
             confirmBtnText = "Reject";
         } else if (status === 'More Detail') {
             title = "More Detail";
@@ -2982,7 +3396,9 @@
             },
             inputValidator: function (value) {
                 if (!value || !value.trim()) {
-                    return 'Please enter reason/detail is required';
+                    return (status === 'Board Has Rejected' || status === 'Board Reject')
+                        ? 'Please enter reason for board rejection is required'
+                        : 'Please enter reason is required';
                 }
             }
         }).then(function (result) {

@@ -10,6 +10,8 @@ using System.Data;
 using System.IO;
 using System.Linq;
 using System.Net;
+using System.Net.Mail;
+using System.Data.SqlClient;
 using System.Threading;
 using System.Web;
 using System.Web.Mvc;
@@ -402,40 +404,217 @@ namespace BarCouncilComplaint.Controllers
         }
 
         [HttpPost]
-        public ActionResult SendComplaintLinkSMS(int dcId, string mobileNumber)
+        public ActionResult SendComplaintLinkSMS(int dcId, string mobileNumber, string emailAddress = "")
         {
             ResultResponse response = new ResultResponse();
             try
             {
                 Int64 IId = Convert.ToInt64(dcId == null ? "0" : dcId.ToString() == "" ? "0" : dcId.ToString());
-                List<ComplaintMemberEncryptCodeList> GetComplaintMemberEncryptCode= _ComplaintRepository.GetComplaintMemberEncryptCode(IId, "ComplaintMemberLogDetail");
-                String ComplaintDetailEncryptCode = GetComplaintMemberEncryptCode == null ? "" : GetComplaintMemberEncryptCode.ToList().Count == 0 ? "" : GetComplaintMemberEncryptCode[0].ComplaintDetailEncryptCode == null ? "" : GetComplaintMemberEncryptCode[0].ComplaintDetailEncryptCode;
-                if (ComplaintDetailEncryptCode != "")
-                {
-                    //string SContactNumber = mobileNumber;
-                    string SContactNumber = "9879775509";
-                    string ComplaintLinkBaseUrl = ConfigurationManager.AppSettings["ComplaintLinkBaseUrl"].ToString();
-                    string link = ComplaintLinkBaseUrl + ComplaintDetailEncryptCode;
-                    string message = "Complaint Assigned to You – The Bar Council of Gujarat. Please click the link below to view the complaint details and take the necessary action: " + link;
 
-                    string url = "http://sms.hspsms.com/sendSMS?username=BCGSMS&message=" + HttpUtility.UrlEncode(message) + "&sendername=BCGMSG&smstype=TRANS&numbers=" + SContactNumber + "&apikey=8f381652-f622-4473-b934-212a9ff295f0&pe_id=1201160742985056427&template_id=1707173416339106900";
-                    string wholePage = null;
-                    using (WebClient webClient = new WebClient())
+                string memberEmail = !string.IsNullOrEmpty(emailAddress) ? emailAddress.Trim() : "";
+                string memberName = "";
+                string memberMobile = "";
+                string complaintNumber = "";
+                string complainantName = "";
+                string complaintDetailEncryptCode = "";
+
+                string connStr = ConfigurationManager.ConnectionStrings["ConnectionString"].ConnectionString;
+
+                // 1. Fetch Member & Complaint details for this member log
+                using (SqlConnection conn = new SqlConnection(connStr))
+                {
+                    conn.Open();
+                    string query = @"
+                        SELECT 
+                            cml.Id,
+                            cml.ComplaintId,
+                            cml.ComplaintDetailEncryptCode,
+                            COALESCE(NULLIF(mem.EmailAddress, ''), NULLIF(em.EmailAddress, '')) as MemberEmail,
+                            COALESCE(NULLIF(em.FullName, ''), 'Member') as MemberName,
+                            COALESCE(NULLIF(em.ContactNumber, ''), '') as MemberMobile,
+                            ISNULL(cm.ComplaintNumber, '') as ComplaintNumber,
+                            ISNULL(cm.FullName, '') as ComplainantName
+                        FROM tbl_Complaint_Member_Log cml
+                        LEFT JOIN tbl_Member mem ON mem.Id = cml.MemberId
+                        LEFT JOIN tbl_Enrollment_Mst em ON em.EId = mem.EnrollmentId
+                        LEFT JOIN tbl_Complaints_Manage cm ON cm.Id = cml.ComplaintId
+                        WHERE cml.Id = @Id";
+
+                    using (SqlCommand cmd = new SqlCommand(query, conn))
                     {
-                        Stream stream = webClient.OpenRead(url);
-                        StreamReader streamReader = new StreamReader(stream);
-                        wholePage = streamReader.ReadToEnd();
-                        streamReader.Close();
-                        stream.Close();
+                        cmd.Parameters.AddWithValue("@Id", IId);
+                        using (SqlDataReader r = cmd.ExecuteReader())
+                        {
+                            if (r.Read())
+                            {
+                                complaintDetailEncryptCode = (r["ComplaintDetailEncryptCode"] ?? "").ToString().Trim();
+                                if (string.IsNullOrEmpty(memberEmail))
+                                {
+                                    memberEmail = (r["MemberEmail"] ?? "").ToString().Trim();
+                                }
+                                memberName = (r["MemberName"] ?? "").ToString().Trim();
+                                memberMobile = (r["MemberMobile"] ?? "").ToString().Trim();
+                                complaintNumber = (r["ComplaintNumber"] ?? "").ToString().Trim();
+                                complainantName = (r["ComplainantName"] ?? "").ToString().Trim();
+                            }
+                        }
                     }
 
+                    // Fallback to encrypt code from repository if not found
+                    if (string.IsNullOrEmpty(complaintDetailEncryptCode))
+                    {
+                        List<ComplaintMemberEncryptCodeList> getCode = _ComplaintRepository.GetComplaintMemberEncryptCode(IId, "ComplaintMemberLogDetail");
+                        if (getCode != null && getCode.Count > 0 && !string.IsNullOrEmpty(getCode[0].ComplaintDetailEncryptCode))
+                        {
+                            complaintDetailEncryptCode = getCode[0].ComplaintDetailEncryptCode;
+                        }
+                    }
+
+                    if (string.IsNullOrEmpty(complaintDetailEncryptCode))
+                    {
+                        response.IsSuccess = false;
+                        response.Message = "Complaint detail link could not be generated for this member.";
+                        return Json(response, JsonRequestBehavior.AllowGet);
+                    }
+
+                    string complaintLinkBaseUrl = ConfigurationManager.AppSettings["ComplaintLinkBaseUrl"] != null
+                        ? ConfigurationManager.AppSettings["ComplaintLinkBaseUrl"].ToString()
+                        : "http://localhost:52274/BoardComplaint/Detail/";
+                    string link = complaintLinkBaseUrl + complaintDetailEncryptCode;
+
+                    bool emailSent = false;
+                    string emailError = "";
+
+                    // 2. Fetch Email Configuration from tbl_EmailConfiguration_Mst
+                    string host = "";
+                    int port = 25;
+                    string smtpUser = "";
+                    string smtpPass = "";
+                    bool enableSsl = false;
+
+                    string smtpQuery = @"
+                        SELECT TOP 1 Host, Port, UserName, Password, SSL 
+                        FROM tbl_EmailConfiguration_Mst 
+                        WHERE Flag = 'A' OR Flag = 'D' OR EmailType = 'NoReplay'
+                        ORDER BY CASE WHEN Flag = 'A' THEN 0 WHEN Flag = 'D' THEN 1 ELSE 2 END";
+
+                    using (SqlCommand cmd = new SqlCommand(smtpQuery, conn))
+                    using (SqlDataReader r = cmd.ExecuteReader())
+                    {
+                        if (r.Read())
+                        {
+                            host = (r["Host"] ?? "").ToString().Trim();
+                            port = Convert.ToInt32(r["Port"] != DBNull.Value ? r["Port"] : 25);
+                            smtpUser = (r["UserName"] ?? "").ToString().Trim();
+                            smtpPass = (r["Password"] ?? "").ToString().Trim();
+                            string sslStr = (r["SSL"] ?? "").ToString().Trim().ToLower();
+                            enableSsl = (sslStr == "true" || sslStr == "1");
+                        }
+                    }
+
+                    // 3. Send Email using tbl_EmailConfiguration_Mst
+                    if (!string.IsNullOrEmpty(memberEmail) && !string.IsNullOrEmpty(host) && !string.IsNullOrEmpty(smtpUser))
+                    {
+                        try
+                        {
+                            using (MailMessage mail = new MailMessage())
+                            {
+                                mail.From = new MailAddress(smtpUser, "Bar Council of Gujarat");
+                                mail.To.Add(memberEmail);
+                                mail.Subject = "Complaint Assigned to You: " + (!string.IsNullOrEmpty(complaintNumber) ? complaintNumber : "Bar Council of Gujarat");
+
+                                string emailBody = 
+                                    "<div style=\"font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; max-width: 650px; margin: 0 auto; background: #ffffff; border: 1px solid #e2e8f0; border-radius: 12px; overflow: hidden;\">" +
+                                    "  <div style=\"background: linear-gradient(135deg, #1e3a8a 0%, #3b82f6 100%); color: #ffffff; padding: 24px; text-align: center;\">" +
+                                    "    <h2 style=\"margin: 0; font-size: 20px; font-weight: 700;\">Bar Council of Gujarat</h2>" +
+                                    "    <p style=\"margin: 6px 0 0; font-size: 13px; opacity: 0.9;\">Disciplinary Committee - Complaint Portal Notification</p>" +
+                                    "  </div>" +
+                                    "  <div style=\"padding: 28px 24px;\">" +
+                                    "    <p style=\"font-size: 15px; color: #1e293b; margin-top: 0;\">Dear <strong>" + HttpUtility.HtmlEncode(memberName) + "</strong>,</p>" +
+                                    "    <p style=\"font-size: 14px; color: #475569; line-height: 1.6;\">" +
+                                    "      You have been assigned as a member of the Disciplinary Committee for the following complaint matter. Please click the button below to view the complaint details and proceed with the necessary action:" +
+                                    "    </p>" +
+                                    "    <div style=\"background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 8px; padding: 16px; margin: 20px 0;\">" +
+                                    "      <table style=\"width: 100%; border-collapse: collapse; font-size: 13px;\">" +
+                                    "        <tr>" +
+                                    "          <td style=\"padding: 6px 0; color: #64748b; font-weight: 600; width: 40%;\">Complaint Number:</td>" +
+                                    "          <td style=\"padding: 6px 0; color: #0f172a; font-weight: 700;\">" + HttpUtility.HtmlEncode(complaintNumber) + "</td>" +
+                                    "        </tr>" +
+                                    "        <tr>" +
+                                    "          <td style=\"padding: 6px 0; color: #64748b; font-weight: 600;\">Complainant Name:</td>" +
+                                    "          <td style=\"padding: 6px 0; color: #0f172a;\">" + HttpUtility.HtmlEncode(complainantName) + "</td>" +
+                                    "        </tr>" +
+                                    "      </table>" +
+                                    "    </div>" +
+                                    "    <div style=\"text-align: center; margin: 30px 0;\">" +
+                                    "      <a href=\"" + link + "\" target=\"_blank\" style=\"display: inline-block; background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%); color: #ffffff; text-decoration: none; font-size: 14px; font-weight: 600; padding: 12px 28px; border-radius: 8px;\">" +
+                                    "        View Complaint Details" +
+                                    "      </a>" +
+                                    "    </div>" +
+                                    "    <p style=\"font-size: 12px; color: #64748b; line-height: 1.5; margin-bottom: 0;\">" +
+                                    "      If the button above does not work, copy and paste this link into your browser:<br/>" +
+                                    "      <a href=\"" + link + "\" target=\"_blank\" style=\"color: #2563eb; word-break: break-all;\">" + link + "</a>" +
+                                    "    </p>" +
+                                    "  </div>" +
+                                    "  <div style=\"background: #f1f5f9; padding: 16px 24px; text-align: center; font-size: 12px; color: #64748b; border-top: 1px solid #e2e8f0;\">" +
+                                    "    This is an automated notification from Bar Council of Gujarat. Please do not reply directly to this email." +
+                                    "  </div>" +
+                                    "</div>";
+
+                                mail.Body = emailBody;
+                                mail.IsBodyHtml = true;
+
+                                using (SmtpClient smtp = new SmtpClient(host, port))
+                                {
+                                    smtp.Credentials = new NetworkCredential(smtpUser, smtpPass);
+                                    smtp.EnableSsl = enableSsl;
+                                    smtp.Timeout = 10000;
+                                    smtp.Send(mail);
+                                    emailSent = true;
+                                }
+                            }
+                        }
+                        catch (Exception mailEx)
+                        {
+                            emailError = mailEx.Message;
+                        }
+                    }
+
+                    // 4. Send SMS
+                    bool smsSent = false;
+                    try
+                    {
+                        string sContactNumber = !string.IsNullOrEmpty(mobileNumber) ? mobileNumber : memberMobile;
+                        if (!string.IsNullOrEmpty(sContactNumber))
+                        {
+                            string message = "Complaint Assigned to You – The Bar Council of Gujarat. Please click the link below to view the complaint details and take the necessary action: " + link;
+                            string url = "http://sms.hspsms.com/sendSMS?username=BCGSMS&message=" + HttpUtility.UrlEncode(message) + "&sendername=BCGMSG&smstype=TRANS&numbers=" + sContactNumber + "&apikey=8f381652-f622-4473-b934-212a9ff295f0&pe_id=1201160742985056427&template_id=1707173416339106900";
+                            using (WebClient webClient = new WebClient())
+                            {
+                                webClient.DownloadString(url);
+                                smsSent = true;
+                            }
+                        }
+                    }
+                    catch { }
+
                     response.IsSuccess = true;
-                    response.Message = "SMS sent successfully";
-                }
-                else
-                {
-                    response.IsSuccess = false;
-                    response.Message = "";
+                    if (emailSent && smsSent)
+                    {
+                        response.Message = "Complaint link sent successfully via Email (" + memberEmail + ") and SMS.";
+                    }
+                    else if (emailSent)
+                    {
+                        response.Message = "Complaint link sent successfully via Email (" + memberEmail + ").";
+                    }
+                    else if (smsSent)
+                    {
+                        response.Message = "Complaint link sent via SMS." + (!string.IsNullOrEmpty(emailError) ? " (Email status: " + emailError + ")" : "");
+                    }
+                    else
+                    {
+                        response.Message = "Complaint link generated: " + link + (!string.IsNullOrEmpty(emailError) ? " (Email: " + emailError + ")" : "");
+                    }
                 }
             }
             catch (Exception ex)
@@ -444,6 +623,12 @@ namespace BarCouncilComplaint.Controllers
                 response.Message = ex.Message;
             }
             return Json(response, JsonRequestBehavior.AllowGet);
+        }
+
+        [HttpPost]
+        public ActionResult SendComplaintLink(int dcId, string mobileNumber, string emailAddress = "")
+        {
+            return SendComplaintLinkSMS(dcId, mobileNumber, emailAddress);
         }
 
         [HttpPost]
@@ -990,6 +1175,18 @@ namespace BarCouncilComplaint.Controllers
                         if (string.Equals(result[i].Status, "New", StringComparison.OrdinalIgnoreCase) && string.IsNullOrWhiteSpace(result[i].Summary))
                         {
                             result[i].Summary = "Complaint has been successfully registered in the system. It is currently under initial administrative verification and scrutiny.";
+                        }
+                        else if (string.Equals(result[i].Status, "Accepted", StringComparison.OrdinalIgnoreCase) && string.IsNullOrWhiteSpace(result[i].Summary))
+                        {
+                            result[i].Summary = "Complaint has been scrutinized and accepted for further proceedings. The matter will be placed before the General Board for consideration.";
+                        }
+                        else if ((string.Equals(result[i].Status, "Refer to Board", StringComparison.OrdinalIgnoreCase) || string.Equals(result[i].Status, "Next General Board", StringComparison.OrdinalIgnoreCase)) && string.IsNullOrWhiteSpace(result[i].Summary))
+                        {
+                            result[i].Summary = "Complaint has been referred to the General Board for consideration. Awaiting the Board's review and decision in the upcoming meeting.";
+                        }
+                        else if (string.Equals(result[i].Status, "Board Accept", StringComparison.OrdinalIgnoreCase) && string.IsNullOrWhiteSpace(result[i].Summary))
+                        {
+                            result[i].Summary = "The General Board has accepted the complaint. Pending formal board approval and committee allocation.";
                         }
                         result[i].OldStatus = result[i].OldStatus == null ? "" : result[i].OldStatus == "" ? "" : result[i].OldStatus;
                     }

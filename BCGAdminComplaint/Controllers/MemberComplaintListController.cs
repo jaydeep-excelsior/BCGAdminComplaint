@@ -248,6 +248,18 @@ namespace BarCouncilComplaint.Controllers
                             {
                                 result[i].Summary = "Complaint has been successfully registered in the system. It is currently under initial administrative verification and scrutiny.";
                             }
+                            else if (string.Equals(result[i].Status, "Accepted", StringComparison.OrdinalIgnoreCase) && string.IsNullOrWhiteSpace(result[i].Summary))
+                            {
+                                result[i].Summary = "Complaint has been scrutinized and accepted for further proceedings. The matter will be placed before the General Board for consideration.";
+                            }
+                            else if ((string.Equals(result[i].Status, "Refer to Board", StringComparison.OrdinalIgnoreCase) || string.Equals(result[i].Status, "Next General Board", StringComparison.OrdinalIgnoreCase)) && string.IsNullOrWhiteSpace(result[i].Summary))
+                            {
+                                result[i].Summary = "Complaint has been referred to the General Board for consideration. Awaiting the Board's review and decision in the upcoming meeting.";
+                            }
+                            else if (string.Equals(result[i].Status, "Board Accept", StringComparison.OrdinalIgnoreCase) && string.IsNullOrWhiteSpace(result[i].Summary))
+                            {
+                                result[i].Summary = "The General Board has accepted the complaint. Pending formal board approval and committee allocation.";
+                            }
                         }
 
                         response.IsSuccess = true;
