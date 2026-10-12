@@ -987,6 +987,10 @@ namespace BarCouncilComplaint.Controllers
                         result[i].OrderFileName = result[i].OrderFileName == null ? "" : result[i].OrderFileName == "" ? "" : result[i].OrderFileName;
                         result[i].OrderFilePath = result[i].OrderFilePath == null ? "" : result[i].OrderFilePath == "" ? "" : result[i].OrderFilePath;
                         result[i].Summary = result[i].Summary == null ? "" : result[i].Summary == "" ? "" : result[i].Summary;
+                        if (string.Equals(result[i].Status, "New", StringComparison.OrdinalIgnoreCase) && string.IsNullOrWhiteSpace(result[i].Summary))
+                        {
+                            result[i].Summary = "Complaint has been successfully registered in the system. It is currently under initial administrative verification and scrutiny.";
+                        }
                         result[i].OldStatus = result[i].OldStatus == null ? "" : result[i].OldStatus == "" ? "" : result[i].OldStatus;
                     }
 

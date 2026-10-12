@@ -1732,13 +1732,20 @@
                                 '</div>';
                         }
 
+                        var summaryText = (value.Summary || '').toString().trim();
+                        if (!summaryText && (value.Status || '').toString().trim().toLowerCase() === 'new') {
+                            summaryText = 'Complaint has been successfully registered in the system. It is currently under initial administrative verification and scrutiny.';
+                        }
+
                         var summaryHtml = '';
-                        if (value.Summary && value.Summary.toString().trim() !== '') {
+                        if (summaryText !== '') {
+                            var isNewStatus = (value.Status || '').toString().trim().toLowerCase() === 'new';
+                            var summaryLabel = isNewStatus ? 'Status Remarks' : 'Reason / Remarks';
                             summaryHtml = '<div class="status-summary-callout ' + theme.summaryClass + '">' +
                                 '  <div class="status-summary-label">' +
-                                '    <i class="fa-solid fa-quote-left opacity-75"></i> Reason / Remarks' +
+                                '    <i class="fa-solid fa-quote-left opacity-75"></i> ' + summaryLabel +
                                 '  </div>' +
-                                '  <div class="status-summary-text">' + escapeHtml(value.Summary) + '</div>' +
+                                '  <div class="status-summary-text">' + escapeHtml(summaryText) + '</div>' +
                                 '</div>';
                         }
 

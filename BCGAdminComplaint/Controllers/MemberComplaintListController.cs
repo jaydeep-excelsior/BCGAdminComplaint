@@ -244,6 +244,10 @@ namespace BarCouncilComplaint.Controllers
                         for (int i = 0; i < result.Count; i++)
                         {
                             result[i].SNextDate = result[i].NextDate.ToString("dd-MM-yyyy hh:mm tt");
+                            if (string.Equals(result[i].Status, "New", StringComparison.OrdinalIgnoreCase) && string.IsNullOrWhiteSpace(result[i].Summary))
+                            {
+                                result[i].Summary = "Complaint has been successfully registered in the system. It is currently under initial administrative verification and scrutiny.";
+                            }
                         }
 
                         response.IsSuccess = true;
