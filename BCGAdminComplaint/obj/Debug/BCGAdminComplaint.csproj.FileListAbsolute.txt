@@ -339,19 +339,3 @@ D:\Project\BCG\BCGAdminComplaint\BCGAdminComplaint\bin\System.Web.Mvc.xml
 D:\Project\BCG\BCGAdminComplaint\BCGAdminComplaint\obj\Debug\BCGAdminComplaint.csprojResolveAssemblyReference.cache
 D:\Project\BCG\BCGAdminComplaint\BCGAdminComplaint\obj\Debug\BCGAdminComplaint.dll
 D:\Project\BCG\BCGAdminComplaint\BCGAdminComplaint\obj\Debug\BCGAdminComplaint.pdb
-D:\Project\ASP .Net Project\BCG\Complaint\BCGAdminComplaint\BCGAdminComplaint\bin\CrystalDecisions.CrystalReports.Engine.dll
-D:\Project\ASP .Net Project\BCG\Complaint\BCGAdminComplaint\BCGAdminComplaint\bin\CrystalDecisions.ReportSource.dll
-D:\Project\ASP .Net Project\BCG\Complaint\BCGAdminComplaint\BCGAdminComplaint\bin\CrystalDecisions.Shared.dll
-D:\Project\ASP .Net Project\BCG\Complaint\BCGAdminComplaint\BCGAdminComplaint\bin\CrystalDecisions.ReportAppServer.DataDefModel.dll
-D:\Project\ASP .Net Project\BCG\Complaint\BCGAdminComplaint\BCGAdminComplaint\bin\CrystalDecisions.ReportAppServer.ClientDoc.dll
-D:\Project\ASP .Net Project\BCG\Complaint\BCGAdminComplaint\BCGAdminComplaint\bin\CrystalDecisions.ReportAppServer.ReportDefModel.dll
-D:\Project\ASP .Net Project\BCG\Complaint\BCGAdminComplaint\BCGAdminComplaint\bin\CrystalDecisions.ReportAppServer.Controllers.dll
-D:\Project\ASP .Net Project\BCG\Complaint\BCGAdminComplaint\BCGAdminComplaint\bin\CrystalDecisions.ReportAppServer.CommLayer.dll
-D:\Project\ASP .Net Project\BCG\Complaint\BCGAdminComplaint\BCGAdminComplaint\bin\CrystalDecisions.ReportAppServer.DataSetConversion.dll
-D:\Project\ASP .Net Project\BCG\Complaint\BCGAdminComplaint\BCGAdminComplaint\bin\CrystalDecisions.ReportAppServer.Prompting.dll
-D:\Project\ASP .Net Project\BCG\Complaint\BCGAdminComplaint\BCGAdminComplaint\bin\CrystalDecisions.ReportAppServer.XmlSerialize.dll
-D:\Project\ASP .Net Project\BCG\Complaint\BCGAdminComplaint\BCGAdminComplaint\bin\CrystalDecisions.ReportAppServer.CubeDefModel.dll
-D:\Project\ASP .Net Project\BCG\Complaint\BCGAdminComplaint\BCGAdminComplaint\bin\CrystalDecisions.ReportAppServer.CommonObjectModel.dll
-D:\Project\ASP .Net Project\BCG\Complaint\BCGAdminComplaint\BCGAdminComplaint\bin\CrystalDecisions.ReportAppServer.ObjectFactory.dll
-D:\Project\ASP .Net Project\BCG\Complaint\BCGAdminComplaint\BCGAdminComplaint\bin\CrystalDecisions.ReportAppServer.CommonControls.dll
-D:\Project\ASP .Net Project\BCG\Complaint\BCGAdminComplaint\BCGAdminComplaint\bin\stdole.dll

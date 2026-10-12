@@ -851,5 +851,21 @@ namespace BCGAdminComplaint.Repository
             
             return members;
         }
+
+        public int UpdateComplaintMemberEmail(Int64 memberLogId, string emailAddress)
+        {
+            int result = 0;
+            try
+            {
+                ExecutionUnit unit = new ExecutionUnit("SP_Complaint_Member_Email_Update");
+                unit.AddParameter("MemberLogId", SqlDbType.BigInt, ParameterDirection.Input, memberLogId);
+                unit.AddParameter("EmailAddress", SqlDbType.NVarChar, ParameterDirection.Input, emailAddress);
+                result = DatabaseAccessEngine.ExecuteNonQuery(unit);
+            }
+            catch (Exception ex)
+            {
+            }
+            return result;
+        }
     }
 }

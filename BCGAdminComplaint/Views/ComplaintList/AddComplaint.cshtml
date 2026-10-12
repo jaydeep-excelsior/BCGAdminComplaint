@@ -203,7 +203,7 @@
                 </div>
             </div>
             <div class="col-md-12">
-                <input type="button" ID="btnAddFile" class="btn btn-success btn-successedit btn-sm mt-3" value="Add" />
+                <input type="button" ID="btnAddFile" class="btn btn-outline-success btn-sm mt-3" value="Add" />
             </div>
             <div class="col-md-12 mt-4 hide-element" id="dvUploadedFilesContainer">
                 <label class="mb-2 fw-bold">Uploaded Files (અપલોડ કરેલી ફાઇલો)</label>
@@ -488,7 +488,7 @@
                                     + '<div class="col-12 col-lg-3 px-2"><p class="mb-0 text-break">' + row.EnroNumber + '</p></div>'
                                     + '<div class="col-12 col-lg-3 px-2"><p class="mb-0 text-break">' + (row.ContactNumber || '') + '</p></div>'
                                     + '<div class="col-12 col-lg-2 px-2 text-lg-center">'
-                                    + '<a class="btn btn-sm btn-danger text-white" id="lnkAddToList" onclick="addToFinal(' + SrNo + ')">Select</a>'
+                                    + '<a class="btn btn-sm btn-outline-danger" id="lnkAddToList" onclick="addToFinal(' + SrNo + ')">Select</a>'
                                     + '</div></div></div></div></div>';
                             $("#dvDefendantSearchList").append(RowItem);
                         });

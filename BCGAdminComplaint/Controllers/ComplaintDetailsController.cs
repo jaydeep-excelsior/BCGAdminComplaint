@@ -632,6 +632,32 @@ namespace BarCouncilComplaint.Controllers
         }
 
         [HttpPost]
+        public ActionResult UpdateMemberEmail(int memberLogId, string emailAddress)
+        {
+            ResultResponse response = new ResultResponse();
+            try
+            {
+                int rows = _ComplaintDetailsRepository.UpdateComplaintMemberEmail(memberLogId, (emailAddress ?? "").Trim());
+                if (rows > 0 || rows == -1)
+                {
+                    response.IsSuccess = true;
+                    response.Message = "Email address updated successfully.";
+                }
+                else
+                {
+                    response.IsSuccess = false;
+                    response.Message = "Failed to update email address.";
+                }
+            }
+            catch (Exception ex)
+            {
+                response.IsSuccess = false;
+                response.Message = "Failed to update email: " + ex.Message;
+            }
+            return Json(response, JsonRequestBehavior.AllowGet);
+        }
+
+        [HttpPost]
         public ActionResult UploadAffidavitCopy(String ComplaintId, String FileName, String Base64File)
         {
             try

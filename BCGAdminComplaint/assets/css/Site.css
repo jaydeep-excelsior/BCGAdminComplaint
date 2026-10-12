@@ -1323,6 +1323,58 @@ a {
     background: #d1fae5;
     color: #065f46;
 }
+.dc-email-badge {
+    display: inline-flex;
+    align-items: center;
+    background: #eff6ff;
+    color: #1d4ed8;
+    border: 1px solid #bfdbfe;
+    border-radius: 6px;
+    padding: 2px 8px;
+    font-size: 11.5px;
+    font-weight: 600;
+    text-decoration: none;
+    transition: all 0.2s ease;
+}
+.dc-email-badge:hover {
+    background: #dbeafe;
+    color: #1e40af;
+}
+.dc-email-badge.text-muted, .dc-phone-badge.text-muted {
+    background: #f8fafc;
+    color: #94a3b8 !important;
+    border-color: #e2e8f0;
+}
+.dc-email-group {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+}
+.dc-edit-icon-btn {
+    padding: 0 4px;
+    background: transparent;
+    border: none;
+    color: #64748b;
+    font-size: 11px;
+    line-height: 1;
+    cursor: pointer;
+    transition: color 0.15s ease;
+}
+.dc-edit-icon-btn:hover {
+    color: #2563eb;
+}
+.dc-email-badge-empty {
+    cursor: pointer;
+    background: #f8fafc;
+    color: #64748b;
+    border: 1px dashed #cbd5e1;
+    transition: all 0.2s ease;
+}
+.dc-email-badge-empty:hover {
+    background: #eff6ff;
+    color: #1d4ed8;
+    border-color: #93c5fd;
+}
 .dc-member-footer-row {
     display: flex;
     align-items: center;
@@ -1350,21 +1402,11 @@ a {
     font-weight: 500;
 }
 .dc-send-sms-btn {
-    background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%);
-    border: none;
-    color: #ffffff;
     font-size: 12px;
     font-weight: 600;
     padding: 5px 14px;
     border-radius: 6px;
-    box-shadow: 0 2px 4px rgba(37, 99, 235, 0.2);
     transition: all 0.2s ease;
-}
-.dc-send-sms-btn:hover {
-    background: linear-gradient(135deg, #1d4ed8 0%, #1e40af 100%);
-    box-shadow: 0 3px 8px rgba(37, 99, 235, 0.3);
-    transform: translateY(-1px);
-    color: #ffffff;
 }
 
 
