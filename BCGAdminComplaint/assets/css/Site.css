@@ -1345,36 +1345,6 @@ a {
     color: #94a3b8 !important;
     border-color: #e2e8f0;
 }
-.dc-email-group {
-    display: inline-flex;
-    align-items: center;
-    gap: 4px;
-}
-.dc-edit-icon-btn {
-    padding: 0 4px;
-    background: transparent;
-    border: none;
-    color: #64748b;
-    font-size: 11px;
-    line-height: 1;
-    cursor: pointer;
-    transition: color 0.15s ease;
-}
-.dc-edit-icon-btn:hover {
-    color: #2563eb;
-}
-.dc-email-badge-empty {
-    cursor: pointer;
-    background: #f8fafc;
-    color: #64748b;
-    border: 1px dashed #cbd5e1;
-    transition: all 0.2s ease;
-}
-.dc-email-badge-empty:hover {
-    background: #eff6ff;
-    color: #1d4ed8;
-    border-color: #93c5fd;
-}
 .dc-member-footer-row {
     display: flex;
     align-items: center;

@@ -1317,19 +1317,10 @@
                                             '</a>' :
                                             '<span class="dc-phone-badge text-muted"><i class="fa-solid fa-phone-slash me-1"></i>No Contact</span>') +
                             '            ' + (emailAddr ?
-                                            '<span class="dc-email-group" id="dc_email_grp_' + (mvalue.Id || 0) + '">' +
-                                            '  <a href="mailto:' + escapeHtml(emailAddr) + '" class="dc-email-badge" title="Email Member">' +
-                                            '    <i class="fa-solid fa-envelope me-1 text-primary"></i>' + escapeHtml(emailAddr) +
-                                            '  </a>' +
-                                            '  <button type="button" class="btn btn-sm dc-edit-icon-btn" onclick="editMemberEmail(' + (mvalue.Id || 0) + ', \'' + emailAddr.replace(/'/g, "\\'") + '\', \'' + fullName.replace(/'/g, "\\'") + '\')" title="Edit Email Address">' +
-                                            '    <i class="fa-solid fa-pen-to-square"></i>' +
-                                            '  </button>' +
-                                            '</span>' :
-                                            '<span class="dc-email-group" id="dc_email_grp_' + (mvalue.Id || 0) + '">' +
-                                            '  <span class="dc-email-badge dc-email-badge-empty" onclick="editMemberEmail(' + (mvalue.Id || 0) + ', \'\', \'' + fullName.replace(/'/g, "\\'") + '\')" title="Click to add email address">' +
-                                            '    <i class="fa-solid fa-envelope-open me-1"></i>Add Email <i class="fa-solid fa-plus ms-1 small"></i>' +
-                                            '  </span>' +
-                                            '</span>') +
+                                            '<a href="mailto:' + escapeHtml(emailAddr) + '" class="dc-email-badge" title="Email Member">' +
+                                            '  <i class="fa-solid fa-envelope me-1 text-primary"></i>' + escapeHtml(emailAddr) +
+                                            '</a>' :
+                                            '<span class="dc-email-badge text-muted" title="No Email Address"><i class="fa-solid fa-envelope-open me-1"></i>No Email</span>') +
                             '          </div>' +
                             '        </div>' +
                             '      </div>' +
@@ -1341,7 +1332,7 @@
                             '          <i class="fa-regular fa-copy me-1"></i>Copy Link' +
                             '        </button>' +
                             '      </div>' +
-                            '      <button type="button" id="dc_send_btn_' + (mvalue.Id || 0) + '" class="btn btn-outline-primary btn-sm dc-send-sms-btn" data-email="' + escapeHtml(emailAddr) + '" onclick="sendComplaintLink(' + (mvalue.Id || 0) + ', \'' + contactNo.replace(/'/g, "\\'") + '\', $(this).attr(\'data-email\'))">' +
+                            '      <button type="button" class="btn btn-outline-primary btn-sm dc-send-sms-btn" onclick="sendComplaintLink(' + (mvalue.Id || 0) + ', \'' + contactNo.replace(/'/g, "\\'") + '\', \'' + emailAddr.replace(/'/g, "\\'") + '\')">' +
                             '        <i class="fa-solid fa-paper-plane me-1"></i>Send Complaint Link' +
                             '      </button>' +
                             '    </div>' +
@@ -2921,81 +2912,6 @@
             },
             error: function (result) {
                 Swal.fire('Something went wrong!', '', 'error');
-            }
-        });
-    }
-
-    function editMemberEmail(memberLogId, currentEmail, memberName) {
-        Swal.fire({
-            title: 'Member Email Address',
-            text: 'Enter or update email address for ' + (memberName || 'Member') + ':',
-            input: 'email',
-            inputValue: currentEmail || '',
-            inputPlaceholder: 'name@example.com',
-            showCancelButton: true,
-            confirmButtonText: '<i class="fa-solid fa-check me-1"></i> Save Email',
-            cancelButtonText: 'Cancel',
-            buttonsStyling: false,
-            customClass: {
-                confirmButton: 'btn btn-outline-primary',
-                cancelButton: 'btn btn-outline-secondary ms-2'
-            },
-            inputValidator: function (value) {
-                if (!value || !value.trim()) {
-                    return 'Please enter a valid email address!';
-                }
-                if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value.trim())) {
-                    return 'Please enter a valid email address format!';
-                }
-                return null;
-            }
-        }).then(function (result) {
-            if (result.isConfirmed && result.value) {
-                var newEmail = result.value.trim();
-                $.ajax({
-                    type: 'POST',
-                    url: '/ComplaintDetails/UpdateMemberEmail',
-                    data: JSON.stringify({ memberLogId: memberLogId, emailAddress: newEmail }),
-                    contentType: 'application/json; charset=utf-8',
-                    dataType: 'json',
-                    success: function (res) {
-                        if (res && res.IsSuccess) {
-                            Swal.fire({
-                                icon: 'success',
-                                title: 'Updated!',
-                                text: 'Email address updated successfully.',
-                                buttonsStyling: false,
-                                customClass: { confirmButton: 'btn btn-outline-primary' }
-                            });
-                            var newHtml =
-                                '<a href="mailto:' + escapeHtml(newEmail) + '" class="dc-email-badge" title="Email Member">' +
-                                '  <i class="fa-solid fa-envelope me-1 text-primary"></i>' + escapeHtml(newEmail) +
-                                '</a>' +
-                                '<button type="button" class="btn btn-sm dc-edit-icon-btn" onclick="editMemberEmail(' + memberLogId + ', \'' + newEmail.replace(/'/g, "\\'") + '\', \'' + (memberName || '').replace(/'/g, "\\'") + '\')" title="Edit Email Address">' +
-                                '  <i class="fa-solid fa-pen-to-square"></i>' +
-                                '</button>';
-                            $('#dc_email_grp_' + memberLogId).html(newHtml);
-                            $('#dc_send_btn_' + memberLogId).attr('data-email', newEmail);
-                        } else {
-                            Swal.fire({
-                                icon: 'error',
-                                title: 'Error',
-                                text: res.Message || 'Failed to update email address.',
-                                buttonsStyling: false,
-                                customClass: { confirmButton: 'btn btn-outline-primary' }
-                            });
-                        }
-                    },
-                    error: function () {
-                        Swal.fire({
-                            icon: 'error',
-                            title: 'Error',
-                            text: 'An unexpected error occurred.',
-                            buttonsStyling: false,
-                            customClass: { confirmButton: 'btn btn-outline-primary' }
-                        });
-                    }
-                });
             }
         });
     }
