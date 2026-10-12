@@ -867,5 +867,77 @@ namespace BCGAdminComplaint.Repository
             }
             return result;
         }
+
+        public ComplaintMemberLogDetail GetComplaintMemberLogDetail(Int64 memberLogId)
+        {
+            ComplaintMemberLogDetail detail = null;
+            ExecutionUnit unit = new ExecutionUnit("SP_Complaint_Member_Log_Detail_Get");
+            unit.AddParameter("MemberLogId", SqlDbType.BigInt, ParameterDirection.Input, memberLogId);
+
+            IDataReader reader = DatabaseAccessEngine.ExecuteDataReader(unit);
+            try
+            {
+                if (reader.Read())
+                {
+                    detail = new ComplaintMemberLogDetail
+                    {
+                        Id = DatabaseAccessEngine.GetInt64(reader, "Id"),
+                        ComplaintId = DatabaseAccessEngine.GetInt64(reader, "ComplaintId"),
+                        ComplaintDetailEncryptCode = DatabaseAccessEngine.GetString(reader, "ComplaintDetailEncryptCode"),
+                        MemberEmail = DatabaseAccessEngine.GetString(reader, "MemberEmail"),
+                        MemberName = DatabaseAccessEngine.GetString(reader, "MemberName"),
+                        MemberMobile = DatabaseAccessEngine.GetString(reader, "MemberMobile"),
+                        ComplaintNumber = DatabaseAccessEngine.GetString(reader, "ComplaintNumber"),
+                        ComplainantName = DatabaseAccessEngine.GetString(reader, "ComplainantName")
+                    };
+                }
+            }
+            finally
+            {
+                if (!reader.IsClosed)
+                {
+                    reader.Close();
+                }
+            }
+            return detail;
+        }
+
+        public EmailConfigurationModel GetEmailConfiguration(string emailType = "NoReplay")
+        {
+            EmailConfigurationModel config = null;
+            ExecutionUnit unit = new ExecutionUnit("SP_Email_Configuration_Get");
+            unit.AddParameter("EmailType", SqlDbType.NVarChar, ParameterDirection.Input, string.IsNullOrEmpty(emailType) ? "NoReplay" : emailType);
+
+            IDataReader reader = DatabaseAccessEngine.ExecuteDataReader(unit);
+            try
+            {
+                if (reader.Read())
+                {
+                    object portVal = reader["Port"];
+                    int portNumber = (portVal != null && portVal != DBNull.Value) ? Convert.ToInt32(portVal) : 25;
+                    string sslStr = DatabaseAccessEngine.GetString(reader, "SSL");
+
+                    config = new EmailConfigurationModel
+                    {
+                        Id = DatabaseAccessEngine.GetInt64(reader, "Id"),
+                        Host = DatabaseAccessEngine.GetString(reader, "Host"),
+                        Port = portNumber,
+                        UserName = DatabaseAccessEngine.GetString(reader, "UserName"),
+                        Password = DatabaseAccessEngine.GetString(reader, "Password"),
+                        SSL = sslStr != null && (sslStr.Equals("true", StringComparison.OrdinalIgnoreCase) || sslStr == "1"),
+                        EmailType = DatabaseAccessEngine.GetString(reader, "EmailType"),
+                        Flag = DatabaseAccessEngine.GetString(reader, "Flag")
+                    };
+                }
+            }
+            finally
+            {
+                if (!reader.IsClosed)
+                {
+                    reader.Close();
+                }
+            }
+            return config;
+        }
     }
 }
