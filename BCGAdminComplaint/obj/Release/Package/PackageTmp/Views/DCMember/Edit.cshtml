@@ -43,12 +43,24 @@
                                 <div class="col-xl-4 col-lg-4 col-md-6 col-sm-6 col-12">
                                     <div class="main-details">
                                         <div class="form-group">
+                                            <label for="ddlMemberType">Member Type<span class="text-danger">*</span></label>
+                                            <select id="ddlMemberType" class="form-control">
+                                                <option value="">Select Member Type</option>
+                                                <option value="B">BCG MEMBER</option>
+                                                <option value="O">CO-OPT MEMBER</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-xl-4 col-lg-4 col-md-6 col-sm-6 col-12">
+                                    <div class="main-details">
+                                        <div class="form-group">
                                             <label for="txtName">Full Name</label>
                                             <input type="text" class="form-control" id="txtName" placeholder="Enter Full Name" readonly>
                                         </div>
                                     </div>
                                 </div>
-                                <div class="col-xl-4 col-lg-4 col-md-6 col-sm-6 col-12">
+                                <div class="col-xl-4 col-lg-4 col-md-6 col-sm-6 col-12 mt-3">
                                     <div class="main-details">
                                         <div class="form-group">
                                             <label for="txtContactNo">Contact Number</label>
@@ -115,6 +127,7 @@
             $("#hdfEditDCMemberId").val(row[0].Id);
             $("#hdfEnrollmentId").val(row[0].EnrollmentId);
             $("#txtEnrollment").val(row[0].EnroNumber);
+            $("#ddlMemberType").val(row[0].MemberType || '');
             $("#txtEmailAddress").val(row[0].EmailAddress);
             $("#txtName").val(row[0].Name);
             $("#txtContactNo").val(row[0].ContactNo);
@@ -123,6 +136,7 @@
             $("#hdfEditDCMemberId").val('0');
             $("#hdfEnrollmentId").val('0');
             $("#txtEnrollment").val('');
+            $("#ddlMemberType").val('');
             $("#txtEmailAddress").val('');
             $("#txtName").val('');
             $("#txtContactNo").val('');
@@ -137,11 +151,13 @@
         if (parseInt(VDCMemberId) == 0) { swal("", "Please select DCMember Id...", "warning"); return; }
         if ($("#txtEnrollment").val() == "") { swal("", "Please enter Enrollment No...", "warning"); return; }
         if ($("#hdfEnrollmentId").val() == "0" || $("#hdfEnrollmentId").val() == "") { swal("", "Invalid Enrollment No. Please verify.", "warning"); return; }
+        if ($("#ddlMemberType").val() == "") { swal("", "Please select Member Type...", "warning"); return; }
         if ($("#txtEmailAddress").val() == "") { swal("", "Please enter Email Address...", "warning"); return; }
 
         var data = {
             Id: VDCMemberId,
             EnrollmentId: $("#hdfEnrollmentId").val(),
+            MemberType: $("#ddlMemberType").val(),
             EmailAddress: $("#txtEmailAddress").val(),
             Password: "",
             Name: $("#txtName").val(),
@@ -192,8 +208,17 @@
                     var VRecordStatus = result.data;
                     $('#loader_bcg').css('display', 'none');
                     if (VRecordStatus == "UD") {
-                        swal({ title: "Good Job!", text: "Record update successfully..", type: "success", showCancelButton: false, confirmButtonColor: '#DD6B55', confirmButtonText: 'Ok' },
-                        function () { localStorage.removeItem("EditDCMemberId"); location.href = '/DCMember/Index'; });
+                        swal({
+                            title: "Good Job!",
+                            text: "Record update successfully..",
+                            icon: "success",
+                            showCancelButton: false,
+                            confirmButtonColor: '#DD6B55',
+                            confirmButtonText: 'Ok'
+                        }).then(function () {
+                            localStorage.removeItem("EditDCMemberId");
+                            location.href = '/DCMember/Index';
+                        });
                     } else if (VRecordStatus == "EX") { swal("", "Record Exist..", "warning"); }
                     else { swal("", "Opps! Something Went Wrong.", "warning"); }
                 } else { swal("", "Opps! Something Went Wrong.", "warning"); }

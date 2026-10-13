@@ -15,11 +15,11 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     
     <link href="~/assets/css/bootstrap.min.css" rel="stylesheet" />
-    <link href="~/assets/css/select2.min.css" rel="stylesheet" />
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
     <link href="~/assets/css/app.min.css" rel="stylesheet" />
     <link href="~/assets/css/Site.css?v=19" rel="stylesheet" />
     <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
-    <script src="~/assets/js/select2.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
 </head>
 <body data-layout="horizontal">
     <div id="sidemenuoverlay" onclick="closesidemenu()">
@@ -187,6 +187,7 @@
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script>
         window.swal = function (a, b, c) {
+            var callback = (typeof b === 'function') ? b : (typeof c === 'function') ? c : null;
             var config = {
                 buttonsStyling: false,
                 customClass: {
@@ -197,12 +198,15 @@
 
             if (typeof a === 'object') {
                 config = $.extend(true, config, a);
+                if (config.type && !config.icon) {
+                    config.icon = config.type;
+                }
             } else {
                 config.title = a;
-                if (c !== undefined) {
+                if (c !== undefined && typeof c !== 'function') {
                     config.text = b || '';
                     config.icon = c || undefined;
-                } else if (b !== undefined) {
+                } else if (b !== undefined && typeof b !== 'function') {
                     var icons = ['success', 'error', 'warning', 'info', 'question'];
                     if (icons.indexOf(b) !== -1) {
                         config.icon = b;
@@ -211,7 +215,16 @@
                     }
                 }
             }
-            return Swal.fire(config);
+
+            var promise = Swal.fire(config);
+            if (callback) {
+                promise.then(function (result) {
+                    if (result.isConfirmed || result.value) {
+                        callback(true);
+                    }
+                });
+            }
+            return promise;
         };
     </script>
 

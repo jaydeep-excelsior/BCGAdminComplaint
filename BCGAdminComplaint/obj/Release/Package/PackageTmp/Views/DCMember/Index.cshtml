@@ -31,6 +31,14 @@
         <div class="card-body">
             <div class="row ">
                 <div class="form-group col-md-6 col-sm-6 col-12 col-lg-3">
+                    <label>Member Type</label>
+                    <select id="ddlDCMemberDataMemberType" class="form-control" aria-label="Default select example">
+                        <option selected value="">Select Member Type</option>
+                        <option value="B">BCG MEMBER</option>
+                        <option value="O">CO-OPT MEMBER</option>
+                    </select>
+                </div>
+                <div class="form-group col-md-6 col-sm-6 col-12 col-lg-3">
                     <label>Record Status</label>
                     <select id="ddlDCMemberDataRecordStatus" class="form-control" aria-label="Default select example">
                         <option selected value="">Select Status</option>
@@ -67,6 +75,7 @@
                                         <th class="text-center">#</th>
                                         <th class="text-center">Member No.</th>
                                         <th>Member Name</th>
+                                        <th class="text-center">Member Type</th>
                                         <th class="text-center">Contact Number</th>
                                         <th>Email Address</th>
                                         <th class="text-center">Status</th>
@@ -148,6 +157,7 @@
     });
 
     $('#lnkDCMemberDataSearchCancel').click(function () {
+        $('#ddlDCMemberDataMemberType').val('');
         $('#ddlDCMemberDataRecordStatus').val('');
         $('#txtDCMemberDataFromDate').val('');
         $('#txtDCMemberDataToDate').val('');
@@ -156,7 +166,7 @@
         GetRecordList();
     });
 
-    $("#ddlDCMemberDataRecordStatus").change(function () {
+    $("#ddlDCMemberDataRecordStatus, #ddlDCMemberDataMemberType").change(function () {
         $("#hdfPageNumber").val(1);
         GetRecordList();
     });
@@ -172,6 +182,7 @@
         var data = {
             Id: '0',
             SearchValue: searchValue,
+            MemberType: $("#ddlDCMemberDataMemberType option:selected").val(),
             FromDate: $("#txtDCMemberDataFromDate").val(),
             ToDate: $("#txtDCMemberDataToDate").val(),
             RecordStatus: $("#ddlDCMemberDataRecordStatus option:selected").val(),
@@ -197,7 +208,7 @@
 
         if (!data || data.length === 0) {
             $("#MyPager").empty();
-            $('#tblDCMemberDataList tbody').html('<tr><td colspan="9" class="text-center text-muted py-4"><i class="fa-solid fa-circle-exclamation me-1"></i> No records found</td></tr>');
+            $('#tblDCMemberDataList tbody').html('<tr><td colspan="10" class="text-center text-muted py-4"><i class="fa-solid fa-circle-exclamation me-1"></i> No records found</td></tr>');
             return;
         }
 
@@ -209,6 +220,16 @@
             var VStatusButton = (VActive === 'A')
                 ? '<span class="badge bg-success">Active</span>'
                 : '<span class="badge bg-danger">Inactive</span>';
+
+            var VMemberType = row.MemberType || '';
+            var VMemberTypeBadge = '-';
+            if (VMemberType === 'B') {
+                VMemberTypeBadge = '<span class="badge bg-primary">BCG MEMBER</span>';
+            } else if (VMemberType === 'O') {
+                VMemberTypeBadge = '<span class="badge bg-info text-dark">CO-OPT MEMBER</span>';
+            } else if (VMemberType) {
+                VMemberTypeBadge = '<span class="badge bg-secondary">' + VMemberType + '</span>';
+            }
 
             var VDeleteButton = "";
             if (row.DeleteRights === 'A' || !row.DeleteRights) {
@@ -228,6 +249,7 @@
                 '<td class="text-center">' + row.SrNo + '</td>' +
                 '<td class="text-center">' + row.EnroNumber + '</td>' +
                 '<td>' + row.FullName + '</td>' +
+                '<td class="text-center">' + VMemberTypeBadge + '</td>' +
                 '<td class="text-center">' + row.ContactNumber + '</td>' +
                 '<td>' + row.EmailAddress + '</td>' +
                 '<td class="text-center">' + VStatusButton + '</td>' +

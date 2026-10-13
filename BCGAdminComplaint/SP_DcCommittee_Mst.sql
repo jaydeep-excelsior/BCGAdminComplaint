@@ -204,7 +204,7 @@ BEGIN
 
 	If @Mode = 'GetDetails'
 	Begin
-		Select cd.memberid, em.Fullname, em.EnroNumber, em.ContactNumber, em.EmailAddress from tbl_DC_Commitee_Details as cd
+		Select cd.memberid, em.Fullname, em.EnroNumber, ISNULL(mem.MemberType, '') as MemberType, em.ContactNumber, em.EmailAddress from tbl_DC_Commitee_Details as cd
 		left join tbl_Member as mem on mem.Id = cd.MemberId
 		left join tbl_Enrollment_Mst as em on em.EId = mem.EnrollmentId
 		where cd.DcCommitteeId = @Id
@@ -221,7 +221,7 @@ BEGIN
 
 	If @Mode = 'SelectById'
 	Begin
-		Select cd.MemberId as MemberId,em.FullName as FullName,em.EId as EId
+		Select cd.MemberId as MemberId,em.FullName as FullName,em.EId as EId, ISNULL(mem.MemberType, '') as MemberType
 		from tbl_DC_Commitee_Details as cd 
 		inner join tbl_Member as mem on mem.Id = cd.MemberId
 		left join tbl_Enrollment_Mst as em on em.EId = mem.EnrollmentId

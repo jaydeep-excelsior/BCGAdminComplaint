@@ -17,7 +17,7 @@ namespace BCGAdminComplaint.Repository
             _connectionString = ConfigurationManager.ConnectionStrings["ConnectionString"].ConnectionString;
         }
 
-        public List<DCMemberSave> DCMemberInsert(Int64 Id, Int64 EnrollmentId, String EmailAddress, String Password, String Flag, Int64 CreateUser, String ActionMode, String Name, String ContactNo, String BarAssociation)
+        public List<DCMemberSave> DCMemberInsert(Int64 Id, Int64 EnrollmentId, String EmailAddress, String Password, String Flag, Int64 CreateUser, String ActionMode, String Name, String ContactNo, String BarAssociation, String MemberType = "")
         {
             List<DCMemberSave> ulr = new List<DCMemberSave>();
             using (SqlConnection conn = new SqlConnection(_connectionString))
@@ -35,6 +35,7 @@ namespace BCGAdminComplaint.Repository
                     cmd.Parameters.AddWithValue("@Name", Name);
                     cmd.Parameters.AddWithValue("@ContactNo", ContactNo);
                     cmd.Parameters.AddWithValue("@BarAssociation", BarAssociation);
+                    cmd.Parameters.AddWithValue("@MemberType", (object)MemberType ?? DBNull.Value);
                     conn.Open();
                     using (SqlDataReader reader = cmd.ExecuteReader())
                     {
@@ -70,6 +71,7 @@ namespace BCGAdminComplaint.Repository
                     cmd.Parameters.AddWithValue("@Name", "");
                     cmd.Parameters.AddWithValue("@ContactNo", "");
                     cmd.Parameters.AddWithValue("@BarAssociation", "");
+                    cmd.Parameters.AddWithValue("@MemberType", "");
                     conn.Open();
                     using (SqlDataReader reader = cmd.ExecuteReader())
                     {
@@ -87,7 +89,7 @@ namespace BCGAdminComplaint.Repository
             return ulr;
         }
 
-        public List<DCMemberList> DCMembersList(Int64 Id, String SearchValue, String FromDate, String ToDate, String RecordStatus, int PageNo, int PageSize, Int64 LoginUserId, Int64 SubMenuId, String SortBy, String ActionMode)
+        public List<DCMemberList> DCMembersList(Int64 Id, String SearchValue, String FromDate, String ToDate, String RecordStatus, int PageNo, int PageSize, Int64 LoginUserId, Int64 SubMenuId, String SortBy, String ActionMode, String MemberType = "")
         {
             List<DCMemberList> ulr = new List<DCMemberList>();
             using (SqlConnection conn = new SqlConnection(_connectionString))
@@ -106,6 +108,7 @@ namespace BCGAdminComplaint.Repository
                     cmd.Parameters.AddWithValue("@SubMenuId", SubMenuId);
                     cmd.Parameters.AddWithValue("@SortBy", SortBy);
                     cmd.Parameters.AddWithValue("@ActionMode", ActionMode);
+                    cmd.Parameters.AddWithValue("@MemberType", MemberType ?? "");
                     conn.Open();
                     using (SqlDataReader reader = cmd.ExecuteReader())
                     {
@@ -120,6 +123,7 @@ namespace BCGAdminComplaint.Repository
                                 EnrollmentId = Convert.ToInt64(reader["EnrollmentId"] == null ? "0" : reader["EnrollmentId"].ToString() == "" ? "0" : reader["EnrollmentId"].ToString()),
                                 EnroNumber = reader["EnroNumber"] == null ? "" : reader["EnroNumber"].ToString(),
                                 FullName = reader["FullName"] == null ? "" : reader["FullName"].ToString(),
+                                MemberType = columns.Contains("MemberType") ? (reader["MemberType"] == null ? "" : reader["MemberType"].ToString()) : "",
                                 ContactNumber = reader["ContactNumber"] == null ? "" : reader["ContactNumber"].ToString(),
                                 EmailAddress = reader["EmailAddress"] == null ? "" : reader["EmailAddress"].ToString(),
                                 Password = reader["Password"] == null ? "" : reader["Password"].ToString(),
@@ -159,9 +163,11 @@ namespace BCGAdminComplaint.Repository
                     cmd.Parameters.AddWithValue("@SubMenuId", 0);
                     cmd.Parameters.AddWithValue("@SortBy", "");
                     cmd.Parameters.AddWithValue("@ActionMode", ActionMode);
+                    cmd.Parameters.AddWithValue("@MemberType", "");
                     conn.Open();
                     using (SqlDataReader reader = cmd.ExecuteReader())
                     {
+                        var columns = Enumerable.Range(0, reader.FieldCount).Select(reader.GetName).ToList();
                         while (reader.Read())
                         {
                             ulr.Add(new DCMemberEdit
@@ -174,6 +180,7 @@ namespace BCGAdminComplaint.Repository
                                 ContactNo = reader["ContactNo"] == null ? "" : reader["ContactNo"].ToString(),
                                 BarAssociation = reader["BarAssociation"] == null ? "" : reader["BarAssociation"].ToString(),
                                 EnroNumber = reader["EnroNumber"] == null ? "" : reader["EnroNumber"].ToString(),
+                                MemberType = columns.Contains("MemberType") ? (reader["MemberType"] == null ? "" : reader["MemberType"].ToString()) : "",
                             });
                         }
                     }

@@ -1,4 +1,4 @@
-﻿ALTER PROCEDURE [dbo].[SP_DCMember_Save]
+ALTER PROCEDURE [dbo].[SP_DCMember_Save]
     @Id BIGINT,
     @EnrollmentId BIGINT,
     @EmailAddress NVARCHAR(MAX),
@@ -8,7 +8,8 @@
     @ActionMode NVARCHAR(50),
     @Name NVARCHAR(250) = NULL,
     @ContactNo NVARCHAR(50) = NULL,
-    @BarAssociation NVARCHAR(500) = NULL
+    @BarAssociation NVARCHAR(500) = NULL,
+    @MemberType NVARCHAR(50) = NULL
 AS
 BEGIN
     SET NOCOUNT ON;
@@ -22,8 +23,8 @@ BEGIN
             RETURN
         END
 
-        INSERT INTO tbl_Member (EnrollmentId, EmailAddress, [Password], Flag, CreateUser, CreateDate, Name, ContactNo, BarAssociation)
-        VALUES (@EnrollmentId, @EmailAddress, @Password, @Flag, @CreateUser, GETDATE(), @Name, @ContactNo, @BarAssociation)
+        INSERT INTO tbl_Member (EnrollmentId, EmailAddress, [Password], Flag, CreateUser, CreateDate, MemberType)
+        VALUES (@EnrollmentId, @EmailAddress, @Password, @Flag, @CreateUser, GETDATE(), @MemberType)
 
         SELECT 'IN' AS ReturnStatus, CAST(SCOPE_IDENTITY() AS NVARCHAR(50)) AS Id
     END
@@ -40,12 +41,9 @@ BEGIN
         UPDATE tbl_Member
         SET EnrollmentId = @EnrollmentId,
             EmailAddress = @EmailAddress,
-            [Password] = @Password,
             UpdateUser = @CreateUser,
             UpdateDate = GETDATE(),
-            Name = @Name,
-            ContactNo = @ContactNo,
-            BarAssociation = @BarAssociation
+            MemberType = @MemberType
         WHERE Id = @Id
 
         SELECT 'UD' AS ReturnStatus, CAST(@Id AS NVARCHAR(50)) AS Id

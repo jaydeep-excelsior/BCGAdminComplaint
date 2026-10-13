@@ -12,5 +12,6 @@ namespace BCGAdminComplaint.Models.DCMember
         public String ContactNo { get; set; }
         public String BarAssociation { get; set; }
         public String EnroNumber { get; set; }
+        public String MemberType { get; set; }
     }
 }

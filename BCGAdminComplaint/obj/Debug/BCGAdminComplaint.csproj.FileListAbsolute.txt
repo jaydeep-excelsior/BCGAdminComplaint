@@ -269,7 +269,6 @@ D:\Jaydeep\BCGAdminComplaint\BCGAdminComplaint\bin\System.Web.Mvc.xml
 D:\Jaydeep\BCGAdminComplaint\BCGAdminComplaint\obj\Debug\BCGAdminComplaint.dll
 D:\Jaydeep\BCGAdminComplaint\BCGAdminComplaint\obj\Debug\BCGAdminComplaint.pdb
 D:\Jaydeep\BCGAdminComplaint\BCGAdminComplaint\obj\Debug\BCGAdminComplaint.csprojResolveAssemblyReference.cache
-D:\Project\ASP .Net Project\BCG\Complaint\BCGAdminComplaint\BCGAdminComplaint\obj\Debug\BCGAdminComplaint.csprojResolveAssemblyReference.cache
 D:\Project\BCG\BCGAdminComplaint\BCGAdminComplaint\bin\ApplicationInsights.config
 D:\Project\BCG\BCGAdminComplaint\BCGAdminComplaint\bin\roslyn\csc.exe
 D:\Project\BCG\BCGAdminComplaint\BCGAdminComplaint\bin\roslyn\Microsoft.Build.Tasks.CodeAnalysis.dll

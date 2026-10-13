@@ -10,6 +10,7 @@ namespace BCGAdminComplaint.Models.DCMember
         public Int64 EnrollmentId { get; set; }
         public String EnroNumber { get; set; }
         public String FullName { get; set; }
+        public String MemberType { get; set; }
         public String ContactNumber { get; set; }
         public String EmailAddress { get; set; }
         public String Password { get; set; }

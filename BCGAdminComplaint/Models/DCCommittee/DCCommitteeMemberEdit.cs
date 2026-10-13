@@ -8,5 +8,6 @@ namespace BCGAdminComplaint.Models.DCCommittee
         public Int64 DC_ComplaintId { get; set; }
         public Int64 MemberId { get; set; }
         public String MemberName { get; set; }
+        public String MemberType { get; set; }
     }
 }

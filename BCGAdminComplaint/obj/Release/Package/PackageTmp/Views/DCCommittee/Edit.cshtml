@@ -58,13 +58,15 @@
 
                             <div class="col-xl-6 col-lg-6 col-md-8 col-sm-12 col-12">
                                 <div class="main-details">
-                                    <div class="form-group d-flex align-items-end">
-                                        <div class="flex-grow-1 me-3">
-                                            <label for="exampleFormControlInput1">Member</label>
-                                            @Html.DropDownList("ddlDCMember", ViewBag.DCMemberList as SelectList, "Select DCMember", htmlAttributes: new { @class = "form-control", id = "ddlDCMember" })
-                                        </div>
-                                        <div>
-                                            <a class="btn btn-outline-success waves-effect waves-light btn-sm text-nowrap" id="btnAddDCCommittee" style="margin-top: -17px;"><i class="fas fa-plus"></i> Add</a>
+                                    <div class="form-group">
+                                        <label for="ddlDCMember">Member</label>
+                                        <div class="d-flex align-items-center">
+                                            <div class="flex-grow-1 me-2">
+                                                @Html.DropDownList("ddlDCMember", ViewBag.DCMemberList as SelectList, "Select D.C. Member", htmlAttributes: new { @class = "form-control select2", id = "ddlDCMember" })
+                                            </div>
+                                            <div>
+                                                <a class="btn btn-outline-success waves-effect waves-light btn-sm text-nowrap" id="btnAddDCCommittee" style="height: 38px; display: inline-flex; align-items: center;"><i class="fas fa-plus me-1"></i> Add</a>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
@@ -77,7 +79,7 @@
                                     <thead>
                                         <tr>
                                             <th>#</th>
-                                            <th>Mebmer Name</th>
+                                            <th>Member Name</th>
                                             <th>Action</th>
                                         </tr>
                                     </thead>
@@ -103,8 +105,23 @@
 </div>
 
 @section Scripts {
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
     <script>
+        function initializeSelect2() {
+            if (typeof $.fn.select2 !== 'undefined') {
+                $('#ddlDCMember').select2({
+                    placeholder: "Select D.C. Member",
+                    allowClear: true,
+                    width: '100%'
+                });
+            }
+        }
+
         $(document).ready(function () {
+            // Initialize Select2 Searchable Dropdown
+            initializeSelect2();
+
             // Load data for editing
             GetRecordDetail();
 
@@ -113,8 +130,8 @@
                 var memberId = $("#ddlDCMember").val();
                 var memberName = $('#ddlDCMember option:selected').text();
 
-                if (memberId === "" || memberId === "0") {
-                    swal("", "Please select a DC Member.", "warning");
+                if (!memberId || memberId === "" || memberId === "0" || memberId === "Select DCMember" || memberId === "Select D.C. Member") {
+                    swal("", "Please select a D.C. Member.", "warning");
                     return;
                 }
 
@@ -142,6 +159,7 @@
                 `;
 
                 $("#DCCommitteeTable tbody").append(newRow);
+                $('#ddlDCMember').val("").trigger('change');
             });
 
             // Remove member (delegated)
@@ -229,16 +247,11 @@
 
                     var selectedMemberName = row.MemberName || "";
 
-                    // Ensure dropdown has the option before selecting it
-                    if ($("#ddlDCMember option[value='" + row.Id + "']").length === 0) {
-                        $("#ddlDCMember").append(
-                            $("<option>", {
-                                value: row.Id,
-                                text: selectedMemberName || "Unknown"
-                            })
-                        );
+                    if (row.MemberId) {
+                        $("#ddlDCMember").val(row.MemberId).trigger('change');
+                    } else {
+                        $("#ddlDCMember").val("").trigger('change');
                     }
-                    $("#ddlDCMember").val(row.MemberId);
 
                     // Fill table with members from attachmentData
                     if (attachmentData && attachmentData.length > 0) {
@@ -272,7 +285,7 @@
             $("#txtCommitteeTitle").val("");
             $("#txtDcCommitteeNo").val("");
             $("#txtNote").val("");
-            $("#ddlDCMember").val('0');
+            $("#ddlDCMember").val("").trigger('change');
             $("#DCCommitteeTable tbody").empty();
         }
 

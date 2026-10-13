@@ -445,13 +445,24 @@
             success: function (result) {
                 if (result.success && result.data && result.data.length > 0) {
                     var html = '<div class="table-responsive"><table class="table table-bordered table-sm mb-0 text-nowrap">';
-                    html += '<thead class="table-light"><tr><th class="text-center" style="width:50px">#</th><th>EnroNumber</th><th>Member Name</th><th>ContactNumber</th><th>EmailAddress</th></tr></thead>';
+                    html += '<thead class="table-light"><tr><th class="text-center" style="width:50px">#</th><th>Member No.</th><th>Member Name</th><th>Member Type</th><th>Contact Number</th><th>Email Address</th></tr></thead>';
                     html += '<tbody>';
                     $.each(result.data, function (i, member) {
+                        var mType = member.MemberType || '';
+                        var mTypeText = '-';
+                        if (mType === 'B') {
+                            mTypeText = 'BCG MEMBER';
+                        } else if (mType === 'O') {
+                            mTypeText = 'CO-OPT MEMBER';
+                        } else if (mType) {
+                            mTypeText = mType;
+                        }
+
                         html += '<tr>' +
                             '<td class="text-center">' + (i + 1) + '</td>' +
                             '<td>' + (member.EnroNumber || '') + '</td>' +
                             '<td>' + (member.FullName || '') + '</td>' +
+                            '<td>' + mTypeText + '</td>' +
                             '<td>' + (member.ContactNumber || '') + '</td>' +
                             '<td>' + (member.EmailAddress || '') + '</td>' +
                             '</tr>';

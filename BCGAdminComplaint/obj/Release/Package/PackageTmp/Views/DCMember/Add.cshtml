@@ -42,12 +42,24 @@
                                 <div class="col-xl-4 col-lg-4 col-md-6 col-sm-6 col-12">
                                     <div class="main-details">
                                         <div class="form-group">
+                                            <label for="ddlMemberType">Member Type<span class="text-danger">*</span></label>
+                                            <select id="ddlMemberType" class="form-control">
+                                                <option value="">Select Member Type</option>
+                                                <option value="B">BCG MEMBER</option>
+                                                <option value="O">CO-OPT MEMBER</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-xl-4 col-lg-4 col-md-6 col-sm-6 col-12">
+                                    <div class="main-details">
+                                        <div class="form-group">
                                             <label for="txtName">Full Name</label>
                                             <input type="text" class="form-control" id="txtName" placeholder="Enter Full Name" readonly>
                                         </div>
                                     </div>
                                 </div>
-                                <div class="col-xl-4 col-lg-4 col-md-6 col-sm-6 col-12">
+                                <div class="col-xl-4 col-lg-4 col-md-6 col-sm-6 col-12 mt-3">
                                     <div class="main-details">
                                         <div class="form-group">
                                             <label for="txtContactNo">Contact Number</label>
@@ -90,11 +102,13 @@
     $('#lnkDCMemberDataSaveRecord').click(function () {
         if ($("#txtEnrollment").val() == "") { swal("", "Please enter Enrollment No...", "warning"); return; }
         if ($("#hdfEnrollmentId").val() == "0") { swal("", "Invalid Enrollment No. Please verify.", "warning"); return; }
+        if ($("#ddlMemberType").val() == "") { swal("", "Please select Member Type...", "warning"); return; }
         if ($("#txtContactNo").val() == "") { swal("", "Please enter Contact Number...", "warning"); return; }
 
         var data = {
             Id: '0',
             EnrollmentId: $("#hdfEnrollmentId").val(),
+            MemberType: $("#ddlMemberType").val(),
             EmailAddress: $("#txtEmailAddress").val(),
             Password: "",
             Name: $("#txtName").val(),
@@ -103,6 +117,16 @@
         };
 
         $.when(DCMemberDataSubmitRecord(data)).then(function (r) { console.log(r); }).fail(function (e) { console.log(e); });
+    });
+
+    $('#lnkDCMemberDataSaveRecordCancel').click(function () {
+        $("#txtEnrollment").val('');
+        $("#ddlMemberType").val('');
+        $("#hdfEnrollmentId").val('0');
+        $("#txtName").val('');
+        $("#txtContactNo").val('');
+        $("#txtEmailAddress").val('');
+        $("#txtBarAssociation").val('');
     });
 
     $("#txtEnrollment").on("blur", function () {

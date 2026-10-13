@@ -31,7 +31,7 @@ namespace BCGAdminComplaint.Controllers
         }
 
         [HttpPost]
-        public ActionResult DCMemberLists(string Id, string SearchValue, string FromDate, string ToDate, string RecordStatus, string PageNo, string PageSize, string SortBy)
+        public ActionResult DCMemberLists(string Id, string SearchValue, string FromDate, string ToDate, string RecordStatus, string PageNo, string PageSize, string SortBy, string MemberType = "")
         {
             try
             {
@@ -51,9 +51,10 @@ namespace BCGAdminComplaint.Controllers
                     int IPageSize = Convert.ToInt32(PageSize == null ? "0" : PageSize.ToString() == "" ? "0" : PageSize);
                     Int64 ISubMenuId = 114;
                     String SSortBy = SortBy == null ? "ByNewest" : SortBy.ToString() == "" ? "ByNewest" : SortBy;
+                    String SMemberType = MemberType == null ? "" : MemberType.ToString();
                     Int64 LoginUserId = 0;
 
-                    UTL = _dCMemberRepository.DCMembersList(IId, SSearchValue, SFromDate, SToDate, SRecordStatus, IPageNo, IPageSize, LoginUserId, ISubMenuId, SSortBy, "SelectList");
+                    UTL = _dCMemberRepository.DCMembersList(IId, SSearchValue, SFromDate, SToDate, SRecordStatus, IPageNo, IPageSize, LoginUserId, ISubMenuId, SSortBy, "SelectList", SMemberType);
 
                     return Json(new { data = UTL }, JsonRequestBehavior.AllowGet);
                 }
@@ -91,7 +92,7 @@ namespace BCGAdminComplaint.Controllers
         }
 
         [HttpPost]
-        public ActionResult DCMembersInsert(string Id, string EnrollmentId, string EmailAddress, string Password, string Name, string ContactNo, string BarAssociation)
+        public ActionResult DCMembersInsert(string Id, string EnrollmentId, string EmailAddress, string Password, string Name, string ContactNo, string BarAssociation, string MemberType = "")
         {
             try
             {
@@ -109,15 +110,16 @@ namespace BCGAdminComplaint.Controllers
                     String SName = Name == null ? "" : Name.ToString();
                     String SContactNo = ContactNo == null ? "" : ContactNo.ToString();
                     String SBarAssociation = BarAssociation == null ? "" : BarAssociation.ToString();
+                    String SMemberType = MemberType == null ? "" : MemberType.ToString();
                     Int64 LoginUserId = 0;
 
                     if (IId > 0)
                     {
-                        UTSR = _dCMemberRepository.DCMemberInsert(IId, SEnrollmentId, SEmailAddress, SPassword, "A", LoginUserId, "UpdateRecord", SName, SContactNo, SBarAssociation);
+                        UTSR = _dCMemberRepository.DCMemberInsert(IId, SEnrollmentId, SEmailAddress, SPassword, "A", LoginUserId, "UpdateRecord", SName, SContactNo, SBarAssociation, SMemberType);
                     }
                     else
                     {
-                        UTSR = _dCMemberRepository.DCMemberInsert(IId, SEnrollmentId, SEmailAddress, SPassword, "A", LoginUserId, "InsertRecord", SName, SContactNo, SBarAssociation);
+                        UTSR = _dCMemberRepository.DCMemberInsert(IId, SEnrollmentId, SEmailAddress, SPassword, "A", LoginUserId, "InsertRecord", SName, SContactNo, SBarAssociation, SMemberType);
                     }
                     String SRecordStatus = UTSR == null ? "" : UTSR[0].ReturnStatus == null ? "" : UTSR[0].ReturnStatus;
                     return Json(new { data = SRecordStatus }, JsonRequestBehavior.AllowGet);

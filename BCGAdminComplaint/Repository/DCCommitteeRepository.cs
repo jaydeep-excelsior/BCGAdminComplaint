@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Configuration;
 using System.Data;
 using System.Data.SqlClient;
+using System.Linq;
 
 namespace BCGAdminComplaint.Repository
 {
@@ -231,17 +232,27 @@ namespace BCGAdminComplaint.Repository
         public List<DCCommitteeEdit> DCCommitteesEdit(Int64 Id)
         {
             List<DCCommitteeEdit> ulr = new List<DCCommitteeEdit>();
-            var all = DCCommitteesList(0, "", 1, 9999, 0, 0,"", "");
-            var item = all.Find(x => x.Id == Id);
-            if (item != null)
+            using (SqlConnection conn = new SqlConnection(_connectionString))
             {
-                ulr.Add(new DCCommitteeEdit
+                using (SqlCommand cmd = new SqlCommand("SELECT Id, DcCommitteeTitle, DcCommitteeNo, Note FROM tbl_DC_Committee_Mst WHERE Id = @Id", conn))
                 {
-                    Id = item.Id,
-                    CommitteeTitle = item.CommitteeTitle,
-                    DcCommitteeNo = item.DcCommitteeNo,
-                    Note = item.Note
-                });
+                    cmd.CommandType = CommandType.Text;
+                    cmd.Parameters.AddWithValue("@Id", Id);
+                    conn.Open();
+                    using (SqlDataReader reader = cmd.ExecuteReader())
+                    {
+                        if (reader.Read())
+                        {
+                            ulr.Add(new DCCommitteeEdit
+                            {
+                                Id = Convert.ToInt64(reader["Id"]),
+                                CommitteeTitle = reader["DcCommitteeTitle"]?.ToString() ?? "",
+                                DcCommitteeNo = Convert.ToInt64(reader["DcCommitteeNo"] == DBNull.Value ? 0 : reader["DcCommitteeNo"]),
+                                Note = reader["Note"]?.ToString() ?? ""
+                            });
+                        }
+                    }
+                }
             }
             return ulr;
         }
@@ -277,6 +288,7 @@ namespace BCGAdminComplaint.Repository
                     conn.Open();
                     using (SqlDataReader reader = cmd.ExecuteReader())
                     {
+                        var columns = Enumerable.Range(0, reader.FieldCount).Select(reader.GetName).ToList();
                         while (reader.Read())
                         {
                             ulr.Add(new DCCommitteeMemberEdit
@@ -284,7 +296,8 @@ namespace BCGAdminComplaint.Repository
                                 Id = Id,
                                 DC_ComplaintId = 0,
                                 MemberId = Convert.ToInt64(reader["MemberId"] == null ? "0" : reader["MemberId"].ToString()),
-                                MemberName = reader["FullName"] == null ? "" : reader["FullName"].ToString()
+                                MemberName = reader["FullName"] == null ? "" : reader["FullName"].ToString(),
+                                MemberType = columns.Contains("MemberType") ? (reader["MemberType"] == null ? "" : reader["MemberType"].ToString()) : ""
                             });
                         }
                     }
@@ -323,12 +336,14 @@ namespace BCGAdminComplaint.Repository
                     conn.Open();
                     using (SqlDataReader reader = cmd.ExecuteReader())
                     {
+                        var columns = Enumerable.Range(0, reader.FieldCount).Select(reader.GetName).ToList();
                         while (reader.Read())
                         {
                             var member = new Dictionary<string, string>();
                             member["MemberId"] = reader["memberid"]?.ToString() ?? "0";
                             member["FullName"] = reader["Fullname"]?.ToString() ?? "";
                             member["EnroNumber"] = reader["EnroNumber"]?.ToString() ?? "-";
+                            member["MemberType"] = columns.Contains("MemberType") ? (reader["MemberType"]?.ToString() ?? "") : "";
                             member["ContactNumber"] = reader["ContactNumber"]?.ToString() ?? "-";
                             member["EmailAddress"] = reader["EmailAddress"]?.ToString() ?? "-";
                             members.Add(member);
