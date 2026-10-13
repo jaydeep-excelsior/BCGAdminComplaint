@@ -224,11 +224,11 @@
             var VMemberType = row.MemberType || '';
             var VMemberTypeBadge = '-';
             if (VMemberType === 'B') {
-                VMemberTypeBadge = '<span class="badge bg-primary">BCG MEMBER</span>';
+                VMemberTypeBadge = 'BCG MEMBER';
             } else if (VMemberType === 'O') {
-                VMemberTypeBadge = '<span class="badge bg-info text-dark">CO-OPT MEMBER</span>';
+                VMemberTypeBadge = 'CO-OPT MEMBER';
             } else if (VMemberType) {
-                VMemberTypeBadge = '<span class="badge bg-secondary">' + VMemberType + '</span>';
+                VMemberTypeBadge = '';
             }
 
             var VDeleteButton = "";

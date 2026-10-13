@@ -2097,70 +2097,6 @@
         });
     }
 
-    function ddlStatusChange() {
-        if ($('#drpStatus option:selected').text() != "Select Status") {
-            var status = $('#drpStatus option:selected').val();
-            var complaintid = $("#hdfComplaintId").val();
-            if (status == "Adjunt") {
-                $('#adjuntDetails').css('display', 'block');
-                $('#OrderPassed').css('display', 'none');
-                $('#boardAccept').css('display', 'none');
-                $('#dvOrderPassed').css('display', 'none');
-            }
-            else if (status == "Order Passed") {
-                $('#adjuntDetails').css('display', 'none');
-                $('#OrderPassed').css('display', 'block');
-                $('#boardAccept').css('display', 'none');
-                $('#dvOrderPassed').css('display', 'block');
-            }
-            else if (status == "Board Has Approved") {
-                GetDcNumberList();
-                $('#adjuntDetails').css('display', 'none');
-                $('#OrderPassed').css('display', 'none');
-                $('#boardAccept').css('display', 'block');
-                $('#dvOrderPassed').css('display', 'none');
-            }
-            else {
-                $('#adjuntDetails').css('display', 'none');
-                $('#OrderPassed').css('display', 'none');
-                $('#boardAccept').css('display', 'none');
-                $('#dvOrderPassed').css('display', 'none');
-                $('#drpStatus').val('');
-            }
-
-            var Data = JSON.stringify({
-                ComplaintId: $("#hdfComplaintId").val(),
-                Status: status
-            });
-
-            if (status == 'New' || status == 'Accepted' || status == 'Rejected' || status == 'More Detail' || status == 'Payment Done' || status == 'Next General Board' || status == 'Refer to Board' || status == 'Board Accept' || status == 'Board Has Rejected' || status == 'Hearing') {
-                $.ajax({
-                    type: 'POST',
-                    url: "/ComplaintDetails/StatusUpdate",
-                    contentType: "application/json; charset=utf-8",
-                    data: Data,
-                    dataType: "json",
-                    success: function (response) {
-                        GetComplaintCurrentStatus();
-                        GetLogList();
-                        if (status != "Adjunt") {
-                            if (status != "Order Passed") {
-                                if (status != "Board Has Approved") {
-                                    $('#drpStatus').val('');
-                                }
-                            }
-                        }
-                    }, failure: function (result) {
-                        swal('Something went wrong!', '', 'error');
-                    },
-                    error: function (result) {
-                        swal('Something went wrong!', '', 'error');
-                    }
-                });
-            }
-        }
-    }
-
     function ddlDcNumber() {
         if ($('#drpDcNo option:selected').text() != "Select DC Commitee") {
             var dcno = $('#drpDcNo option:selected').val();
@@ -3355,7 +3291,7 @@
             html = '<a href="javascript:void(0);" class="btn btn-outline-info waves-effect waves-light white-space-nowrap btn-sm" onclick="updateStatusDirectly(\'Refer to Board\')"><i class="fa-solid fa-gavel me-1"></i> Refer to Board</a>';
         } else if (s === 'next general board' || s === 'refer to board') {
             html = '<a href="javascript:void(0);" class="btn btn-outline-success waves-effect waves-light white-space-nowrap btn-sm me-2" onclick="updateStatusDirectly(\'Board Accept\')"><i class="fa-solid fa-check-double me-1"></i> Board Accept</a>' +
-                   '<a href="javascript:void(0);" class="btn btn-outline-danger waves-effect waves-light white-space-nowrap btn-sm" onclick="updateStatusWithReason(\'Board Has Rejected\')"><i class="fa-solid fa-ban me-1"></i> Board Reject</a>';
+                   '<a href="javascript:void(0);" class="btn btn-outline-danger waves-effect waves-light white-space-nowrap btn-sm" onclick="updateStatusWithReason(\'Board Reject\')"><i class="fa-solid fa-ban me-1"></i> Board Reject</a>';
         } else if (s === 'board accept') {
             html = '<a href="javascript:void(0);" class="btn btn-outline-success waves-effect waves-light white-space-nowrap btn-sm me-2" onclick="triggerBoardHasApproved()"><i class="fa-solid fa-check-double me-1"></i> Board Has Approved</a>' +
                    '<a href="javascript:void(0);" class="btn btn-outline-danger waves-effect waves-light white-space-nowrap btn-sm" onclick="updateStatusWithReason(\'Board Has Rejected\')"><i class="fa-solid fa-ban me-1"></i> Board Has Rejected</a>';
@@ -3475,7 +3411,7 @@
     }
 
     function updateStatusDirectly(status) {
-        if (status === 'Rejected' || status === 'Board Has Rejected' || status === 'More Detail' || status === 'Withdrawal Granted') {
+        if (status === 'Rejected' || status === 'Board Reject' || status === 'Board Has Rejected' || status === 'More Detail' || status === 'Withdrawal Granted') {
             updateStatusWithReason(status);
             return;
         }
