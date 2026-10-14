@@ -20,6 +20,8 @@ namespace BCGAdminComplaint.Models
         public String ComplaintPaymentList { get; set; }
         public String ComplainedAgainstReplyToList { get; set; }
         public String SCreateDate { get; set; }
+        public Int64 DcNumber { get; set; }
+        public String DcCommitteeTitle { get; set; }
     }
 
     public class ComplaintAffidavitCopyByNumber

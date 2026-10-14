@@ -155,6 +155,36 @@ namespace BCGAdminComplaint.Repository
             }
         }
 
+        public List<DcMemberList> GetCOOPTMemberList(Int64 DcNo)
+        {
+            ExecutionUnit unit = new ExecutionUnit("SP_Get_DcList");
+
+            unit.AddParameter("DcNo", SqlDbType.BigInt, ParameterDirection.Input, DcNo);
+            unit.AddParameter("Mode", SqlDbType.VarChar, ParameterDirection.Input, "GetCOOPTMemberList");
+
+            IDataReader reader = DatabaseAccessEngine.ExecuteDataReader(unit);
+
+            try
+            {
+                List<DcMemberList> List = new List<DcMemberList>();
+                while (reader.Read())
+                {
+                    DcMemberList list = new DcMemberList();
+                    list.SrNo = DatabaseAccessEngine.GetNullableInt64(reader, "SrNo");
+                    list.MemberId = DatabaseAccessEngine.GetInt64(reader, "MemberId");
+                    list.EnroNumber = DatabaseAccessEngine.GetString(reader, "EnroNumber");
+                    list.FullName = DatabaseAccessEngine.GetString(reader, "FullName");
+                    list.ContactNumber = DatabaseAccessEngine.GetString(reader, "ContactNumber");
+                    List.Add(list);
+                }
+                return List;
+            }
+            finally
+            {
+                reader.Close();
+            }
+        }
+
         public List<ComplaintMemberLogSaveReturn> InsertComplaintMemberLog(ComplaintMemberLog log,String DCReferenceNumber)
         {
             try
@@ -344,7 +374,7 @@ namespace BCGAdminComplaint.Repository
             }
         }
 
-        public int UpdateStatus(Int64 ComplaintId, String Status)
+        public int UpdateStatus(Int64 ComplaintId, String Status, String Summary = null)
         {
             int result = 0;
             try
@@ -354,6 +384,24 @@ namespace BCGAdminComplaint.Repository
                 unit.AddParameter("Mode", SqlDbType.VarChar, ParameterDirection.Input, "UpdateStatus");
                 unit.AddParameter("ComplaintId", SqlDbType.BigInt, ParameterDirection.Input, ComplaintId);
                 unit.AddParameter("Status", SqlDbType.NVarChar, ParameterDirection.Input, Status);
+
+                if (string.Equals(Status, "Accepted", StringComparison.OrdinalIgnoreCase))
+                {
+                    Summary = "Complaint has been scrutinized and accepted for further proceedings. The matter will be placed before the General Board for consideration.";
+                }
+                else if (string.Equals(Status, "Refer to Board", StringComparison.OrdinalIgnoreCase) || string.Equals(Status, "Next General Board", StringComparison.OrdinalIgnoreCase))
+                {
+                    Summary = "Complaint has been referred to the General Board for consideration. Awaiting the Board's review and decision in the upcoming meeting.";
+                }
+                else if (string.Equals(Status, "Board Accept", StringComparison.OrdinalIgnoreCase))
+                {
+                    Summary = "The General Board has accepted the complaint. Pending formal board approval and committee allocation.";
+                }
+                else if (string.Equals(Status, "Board Has Approved", StringComparison.OrdinalIgnoreCase))
+                {
+                    Summary = "The General Board has formally approved the complaint. The matter has been referred to the Disciplinary Committee for conducting inquiry and hearing proceedings.";
+                }
+                unit.AddParameter("Summary", SqlDbType.NVarChar, ParameterDirection.Input, Summary ?? "");
 
                 result = DatabaseAccessEngine.ExecuteNonQuery(unit);
             }
@@ -493,6 +541,30 @@ namespace BCGAdminComplaint.Repository
                     list.CommitteTitle = DatabaseAccessEngine.GetString(reader, "CommitteTitle");
                     list.SNextDate = DatabaseAccessEngine.GetString(reader, "SNextDate");
                     list.OldStatus = DatabaseAccessEngine.GetString(reader, "OldStatus");
+                    if (string.IsNullOrWhiteSpace(list.Summary))
+                    {
+                        if (string.Equals(list.Status, "Accepted", StringComparison.OrdinalIgnoreCase))
+                        {
+                            list.Summary = "Complaint has been scrutinized and accepted for further proceedings. The matter will be placed before the General Board for consideration.";
+                        }
+                        else if (string.Equals(list.Status, "Refer to Board", StringComparison.OrdinalIgnoreCase) || string.Equals(list.Status, "Next General Board", StringComparison.OrdinalIgnoreCase))
+                        {
+                            list.Summary = "Complaint has been referred to the General Board for consideration. Awaiting the Board's review and decision in the upcoming meeting.";
+                        }
+                        else if (string.Equals(list.Status, "Board Accept", StringComparison.OrdinalIgnoreCase))
+                        {
+                            list.Summary = "The General Board has accepted the complaint. Pending formal board approval and committee allocation.";
+                        }
+                        else if (string.Equals(list.Status, "Board Has Approved", StringComparison.OrdinalIgnoreCase))
+                        {
+                            list.Summary = "The General Board has formally approved the complaint. The matter has been referred to the Disciplinary Committee for conducting inquiry and hearing proceedings.";
+                        }
+                    }
+                    list.CreateDate = DatabaseAccessEngine.GetDateTime(reader, "CreateDate");
+                    if (list.CreateDate != DateTime.MinValue)
+                    {
+                        list.SCreateDate = list.CreateDate.ToString("dd-MM-yyyy hh:mm tt");
+                    }
                     List.Add(list);
                 }
                 return List;
@@ -813,7 +885,7 @@ namespace BCGAdminComplaint.Repository
 
         public List<DcMemberList> GetComplaintShareMembers(Int64 complaintId)
         {
-            List<DcMemberList> members = GetDcMemberListNotExist(0);
+            List<DcMemberList> members = GetCOOPTMemberList(0);
             Dictionary<Int64, string> memberFlags = new Dictionary<Int64, string>();
 
             ExecutionUnit unit = new ExecutionUnit("SP_Get_Complaint_Share_Member_Log");

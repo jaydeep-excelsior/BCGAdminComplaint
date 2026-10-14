@@ -264,8 +264,8 @@
             <div class="col-md-6 mt-2 hide-element" id="divBank">
                 <div class="form-group">
                     <label for="ddlBank">Bank (બેંક)</label>
-                    <select id="ddlBank" class="form-control">
-                        <option value="0">Select</option>
+                    <select id="ddlBank" class="form-control select2">
+                        <option value="0">Select Bank</option>
                     </select>
                 </div>
             </div>
@@ -516,11 +516,25 @@
         }
     });
 
+    function initBankSelect2() {
+        if ($.fn.select2) {
+            if ($('#ddlBank').hasClass("select2-hidden-accessible")) {
+                $('#ddlBank').select2('destroy');
+            }
+            $('#ddlBank').select2({
+                placeholder: 'Select Bank',
+                allowClear: false,
+                width: '100%'
+            });
+        }
+    }
+
     function ddlPaymentModeChange() {
         var val = $('#ddlPaymentMode').val();
         if (val == "D.D." || val == "OUTSTANDING" || val == "RTGS" || val == "JOURNAL") {
             $('#divTransactionNumber').removeClass('hide-element');
             $('#divBank').removeClass('hide-element');
+            setTimeout(function () { initBankSelect2(); }, 50);
         } else {
             $('#divTransactionNumber').addClass('hide-element');
             $('#divBank').addClass('hide-element');
@@ -535,7 +549,7 @@
             dataType: "json",
             success: function (response) {
                 $("#ddlBank").empty();
-                $("#ddlBank").append('<option value="0">Select</option>');
+                $("#ddlBank").append('<option value="0">Select Bank</option>');
                 if (response.IsSuccess) {
                     if (response.Data != null) {
                         if (response.Data != '') {
@@ -544,27 +558,18 @@
                                 $("#ddlBank").append('<option value="' + item.Id + '">' + item.BankName + '</option>');
                             });
                         }
-                        else {
-                            $("#ddlBank").empty();
-                            $("#ddlBank").append('<option value="0">Select</option>');
-                        }
-                    }
-                    else {
-                        $("#ddlBank").empty();
-                        $("#ddlBank").append('<option value="0">Select</option>');
                     }
                 }
-                else {
-                    $("#ddlBank").empty();
-                    $("#ddlBank").append('<option value="0">Select</option>');
-                }
+                initBankSelect2();
             }, failure: function (result) {
                 $("#ddlBank").empty();
-                $("#ddlBank").append('<option value="0">Select</option>');
+                $("#ddlBank").append('<option value="0">Select Bank</option>');
+                initBankSelect2();
             },
             error: function (result) {
                 $("#ddlBank").empty();
-                $("#ddlBank").append('<option value="0">Select</option>');
+                $("#ddlBank").append('<option value="0">Select Bank</option>');
+                initBankSelect2();
             }
         });
     }

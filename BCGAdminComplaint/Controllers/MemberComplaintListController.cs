@@ -244,21 +244,29 @@ namespace BarCouncilComplaint.Controllers
                         for (int i = 0; i < result.Count; i++)
                         {
                             result[i].SNextDate = result[i].NextDate.ToString("dd-MM-yyyy hh:mm tt");
-                            if (string.Equals(result[i].Status, "New", StringComparison.OrdinalIgnoreCase) && string.IsNullOrWhiteSpace(result[i].Summary))
+                            result[i].Summary = result[i].Summary == null ? "" : result[i].Summary.Trim();
+                            if (string.IsNullOrWhiteSpace(result[i].Summary))
                             {
-                                result[i].Summary = "Complaint has been successfully registered in the system. It is currently under initial administrative verification and scrutiny.";
-                            }
-                            else if (string.Equals(result[i].Status, "Accepted", StringComparison.OrdinalIgnoreCase) && string.IsNullOrWhiteSpace(result[i].Summary))
-                            {
-                                result[i].Summary = "Complaint has been scrutinized and accepted for further proceedings. The matter will be placed before the General Board for consideration.";
-                            }
-                            else if ((string.Equals(result[i].Status, "Refer to Board", StringComparison.OrdinalIgnoreCase) || string.Equals(result[i].Status, "Next General Board", StringComparison.OrdinalIgnoreCase)) && string.IsNullOrWhiteSpace(result[i].Summary))
-                            {
-                                result[i].Summary = "Complaint has been referred to the General Board for consideration. Awaiting the Board's review and decision in the upcoming meeting.";
-                            }
-                            else if (string.Equals(result[i].Status, "Board Accept", StringComparison.OrdinalIgnoreCase) && string.IsNullOrWhiteSpace(result[i].Summary))
-                            {
-                                result[i].Summary = "The General Board has accepted the complaint. Pending formal board approval and committee allocation.";
+                                if (string.Equals(result[i].Status, "New", StringComparison.OrdinalIgnoreCase))
+                                {
+                                    result[i].Summary = "Complaint has been successfully registered in the system. It is currently under initial administrative verification and scrutiny.";
+                                }
+                                else if (string.Equals(result[i].Status, "Accepted", StringComparison.OrdinalIgnoreCase))
+                                {
+                                    result[i].Summary = "Complaint has been scrutinized and accepted for further proceedings. The matter will be placed before the General Board for consideration.";
+                                }
+                                else if (string.Equals(result[i].Status, "Refer to Board", StringComparison.OrdinalIgnoreCase) || string.Equals(result[i].Status, "Next General Board", StringComparison.OrdinalIgnoreCase))
+                                {
+                                    result[i].Summary = "Complaint has been referred to the General Board for consideration. Awaiting the Board's review and decision in the upcoming meeting.";
+                                }
+                                else if (string.Equals(result[i].Status, "Board Accept", StringComparison.OrdinalIgnoreCase))
+                                {
+                                    result[i].Summary = "The General Board has accepted the complaint. Pending formal board approval and committee allocation.";
+                                }
+                                else if (string.Equals(result[i].Status, "Board Has Approved", StringComparison.OrdinalIgnoreCase))
+                                {
+                                    result[i].Summary = "The General Board has formally approved the complaint. The matter has been referred to the Disciplinary Committee for conducting inquiry and hearing proceedings.";
+                                }
                             }
                         }
 

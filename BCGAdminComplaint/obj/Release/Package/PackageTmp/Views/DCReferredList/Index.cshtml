@@ -90,6 +90,19 @@
                         </thead>
                         <tbody class="tbody"></tbody>
                     </table>
+                    <div id="tblDCReferredEmpty" style="display: none;">
+                        <div class="empty-state-card">
+                            <div class="empty-state-icon-box">
+                                <i class="fa-solid fa-gavel"></i>
+                            </div>
+                            <h5 class="empty-state-title">No DC Referred Complaints Found</h5>
+                            <p class="empty-state-desc">There are no complaints referred to the Disciplinary Committee matching your search criteria. Try adjusting your committee or date filters.</p>
+                            <div class="empty-state-badge">
+                                <i class="fa-solid fa-scale-balanced text-primary"></i>
+                                <span>No referred records</span>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -164,7 +177,9 @@
                 detailsTableBody.empty();
                 $('#chkSelectAll').prop('checked', false);
 
-                if (response.IsSuccess) {
+                if (response.IsSuccess && response.Data && response.Data.length > 0) {
+                    $('#tblDCReferredEmpty').hide();
+                    $('#tblDCReferredList').show();
                     $.each(response.Data, function (i, row) {
                         var RowItem = '';
                         var chkId = 'chkselect' + row.Id;
@@ -190,19 +205,24 @@
 
                         detailsTableBody.append(RowItem);
                     });
-
                 }
                 else {
                     detailsTableBody.empty();
+                    $('#tblDCReferredList').hide();
+                    $('#tblDCReferredEmpty').show();
                 }
 
             }, failure: function (result) {
-                var detailsTableBody = $("#tblDCReferredList tbody")
-                $("#tblDCReferredList").find("tr:not(:first)").remove();
+                var detailsTableBody = $("#tblDCReferredList tbody");
+                detailsTableBody.empty();
+                $('#tblDCReferredList').hide();
+                $('#tblDCReferredEmpty').show();
             },
             error: function (result) {
-                var detailsTableBody = $("#tblDCReferredList tbody")
-                $("#tblDCReferredList").find("tr:not(:first)").remove();
+                var detailsTableBody = $("#tblDCReferredList tbody");
+                detailsTableBody.empty();
+                $('#tblDCReferredList').hide();
+                $('#tblDCReferredEmpty').show();
             }
         });
     }

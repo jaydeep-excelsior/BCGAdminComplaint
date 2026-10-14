@@ -90,9 +90,6 @@ D:\Project\ASP .Net Project\BCG\Complaint\BCGAdminComplaint\BCGAdminComplaint\bi
 D:\Project\ASP .Net Project\BCG\Complaint\BCGAdminComplaint\BCGAdminComplaint\bin\BCGAdminComplaint.dll
 D:\Project\ASP .Net Project\BCG\Complaint\BCGAdminComplaint\BCGAdminComplaint\bin\BCGAdminComplaint.pdb
 D:\Project\ASP .Net Project\BCG\Complaint\BCGAdminComplaint\BCGAdminComplaint\bin\ClosedXML.dll
-D:\Project\ASP .Net Project\BCG\Complaint\BCGAdminComplaint\BCGAdminComplaint\bin\CrystalDecisions.CrystalReports.Engine.dll
-D:\Project\ASP .Net Project\BCG\Complaint\BCGAdminComplaint\BCGAdminComplaint\bin\CrystalDecisions.ReportSource.dll
-D:\Project\ASP .Net Project\BCG\Complaint\BCGAdminComplaint\BCGAdminComplaint\bin\CrystalDecisions.Shared.dll
 D:\Project\ASP .Net Project\BCG\Complaint\BCGAdminComplaint\BCGAdminComplaint\bin\DocumentFormat.OpenXml.dll
 D:\Project\ASP .Net Project\BCG\Complaint\BCGAdminComplaint\BCGAdminComplaint\bin\ExcelNumberFormat.dll
 D:\Project\ASP .Net Project\BCG\Complaint\BCGAdminComplaint\BCGAdminComplaint\bin\Microsoft.AI.Agent.Intercept.dll
@@ -110,19 +107,6 @@ D:\Project\ASP .Net Project\BCG\Complaint\BCGAdminComplaint\BCGAdminComplaint\bi
 D:\Project\ASP .Net Project\BCG\Complaint\BCGAdminComplaint\BCGAdminComplaint\bin\System.Web.Webpages.Deployment.dll
 D:\Project\ASP .Net Project\BCG\Complaint\BCGAdminComplaint\BCGAdminComplaint\bin\System.Web.Webpages.dll
 D:\Project\ASP .Net Project\BCG\Complaint\BCGAdminComplaint\BCGAdminComplaint\bin\System.Web.Webpages.Razor.dll
-D:\Project\ASP .Net Project\BCG\Complaint\BCGAdminComplaint\BCGAdminComplaint\bin\CrystalDecisions.ReportAppServer.DataDefModel.dll
-D:\Project\ASP .Net Project\BCG\Complaint\BCGAdminComplaint\BCGAdminComplaint\bin\CrystalDecisions.ReportAppServer.ClientDoc.dll
-D:\Project\ASP .Net Project\BCG\Complaint\BCGAdminComplaint\BCGAdminComplaint\bin\CrystalDecisions.ReportAppServer.ReportDefModel.dll
-D:\Project\ASP .Net Project\BCG\Complaint\BCGAdminComplaint\BCGAdminComplaint\bin\CrystalDecisions.ReportAppServer.Controllers.dll
-D:\Project\ASP .Net Project\BCG\Complaint\BCGAdminComplaint\BCGAdminComplaint\bin\CrystalDecisions.ReportAppServer.CommLayer.dll
-D:\Project\ASP .Net Project\BCG\Complaint\BCGAdminComplaint\BCGAdminComplaint\bin\CrystalDecisions.ReportAppServer.DataSetConversion.dll
-D:\Project\ASP .Net Project\BCG\Complaint\BCGAdminComplaint\BCGAdminComplaint\bin\CrystalDecisions.ReportAppServer.Prompting.dll
-D:\Project\ASP .Net Project\BCG\Complaint\BCGAdminComplaint\BCGAdminComplaint\bin\CrystalDecisions.ReportAppServer.XmlSerialize.dll
-D:\Project\ASP .Net Project\BCG\Complaint\BCGAdminComplaint\BCGAdminComplaint\bin\CrystalDecisions.ReportAppServer.CubeDefModel.dll
-D:\Project\ASP .Net Project\BCG\Complaint\BCGAdminComplaint\BCGAdminComplaint\bin\CrystalDecisions.ReportAppServer.CommonObjectModel.dll
-D:\Project\ASP .Net Project\BCG\Complaint\BCGAdminComplaint\BCGAdminComplaint\bin\CrystalDecisions.ReportAppServer.ObjectFactory.dll
-D:\Project\ASP .Net Project\BCG\Complaint\BCGAdminComplaint\BCGAdminComplaint\bin\CrystalDecisions.ReportAppServer.CommonControls.dll
-D:\Project\ASP .Net Project\BCG\Complaint\BCGAdminComplaint\BCGAdminComplaint\bin\stdole.dll
 D:\Project\ASP .Net Project\BCG\Complaint\BCGAdminComplaint\BCGAdminComplaint\bin\ClosedXML.pdb
 D:\Project\ASP .Net Project\BCG\Complaint\BCGAdminComplaint\BCGAdminComplaint\bin\ClosedXML.xml
 D:\Project\ASP .Net Project\BCG\Complaint\BCGAdminComplaint\BCGAdminComplaint\bin\DocumentFormat.OpenXml.xml
@@ -211,3 +195,9 @@ D:\Jaydeep\BCGAdminComplaint\BCGAdminComplaint\obj\Release\BCGAdminComplaint.dll
 D:\Jaydeep\BCGAdminComplaint\BCGAdminComplaint\obj\Release\BCGAdminComplaint.pdb
 D:\Jaydeep\BCGAdminComplaint\BCGAdminComplaint\obj\Release\BCGAdminComplaint.csprojResolveAssemblyReference.cache
 D:\Project\ASP .Net Project\BCG\Complaint\BCGAdminComplaint\BCGAdminComplaint\obj\Release\BCGAdminComplaint.csprojResolveAssemblyReference.cache
+D:\Project\ASP .Net Project\BCG\Complaint\BCGAdminComplaint\BCGAdminComplaint\bin\PdfSharp.Charting.dll
+D:\Project\ASP .Net Project\BCG\Complaint\BCGAdminComplaint\BCGAdminComplaint\bin\PdfSharp.dll
+D:\Project\ASP .Net Project\BCG\Complaint\BCGAdminComplaint\BCGAdminComplaint\bin\PdfSharp.xml
+D:\Project\ASP .Net Project\BCG\Complaint\BCGAdminComplaint\BCGAdminComplaint\bin\PdfSharp.Charting.xml
+D:\Project\ASP .Net Project\BCG\Complaint\BCGAdminComplaint\BCGAdminComplaint\bin\de\PdfSharp.resources.dll
+D:\Project\ASP .Net Project\BCG\Complaint\BCGAdminComplaint\BCGAdminComplaint\bin\de\PdfSharp.Charting.resources.dll

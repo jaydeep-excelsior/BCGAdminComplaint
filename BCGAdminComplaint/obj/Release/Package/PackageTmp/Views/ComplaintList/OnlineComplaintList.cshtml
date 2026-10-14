@@ -197,8 +197,8 @@
                 $("#tblComplaintList").empty();
                 var complaintList = $("#tblComplaintList");
 
-                if (response.IsSuccess) {
-                    var totalRecords = response.Data.length > 0 ? response.Data[0].TotalRecord : 0;
+                if (response.IsSuccess && response.Data && response.Data.length > 0) {
+                    var totalRecords = response.Data[0].TotalRecord;
                     $.each(response.Data, function (i, value) {
 
                         var paymentStatusClass = "";
@@ -216,7 +216,7 @@
                                                         + '<div class="d-flex mainnewresponsiveleftweb">'
                                                             + '<div class="complaint_number">'
                                                                 + '<div class="title">Complaint Number</div>'
-                                                                + '<a class="description" href="/ComplaintDetails/DetailsNew/' + value.Id + '">' + value.ComplaintNumber + '</a>'
+                                                                + '<a class="description" href="/ComplaintDetails/DetailsNew/' + value.Id + '" onclick="document.cookie=\'ComplaintId=' + value.Id + '; path=/\';">' + value.ComplaintNumber + '</a>'
                                                             + '</div>'
                                                             + '<div class="complaint_number">'
                                                                 + '<div class="title">Date & Time</div>'
@@ -280,10 +280,20 @@
                         complaintList.append(FinalRowItem);
                     });
                     RenderPagination(totalRecords);
-
                 }
                 else {
-                    complaintList.append('No Data Found');
+                    var emptyHtml = '<div class="empty-state-card">'
+                                  + '<div class="empty-state-icon-box">'
+                                      + '<i class="fa-solid fa-inbox"></i>'
+                                  + '</div>'
+                                  + '<h5 class="empty-state-title">No Online Complaints Found</h5>'
+                                  + '<p class="empty-state-desc">We couldn\'t find any online complaints matching your current criteria. Try adjusting your search keywords or filter settings.</p>'
+                                  + '<div class="empty-state-badge">'
+                                      + '<i class="fa-solid fa-circle-check text-success"></i>'
+                                      + '<span>All online submissions reviewed</span>'
+                                  + '</div>'
+                              + '</div>';
+                    complaintList.append(emptyHtml);
                     $("#paginationList").empty();
                     $("#entriesInfo").empty();
                 }
@@ -407,7 +417,14 @@
                     });
                 }
                 else {
-                    complaintAgaintsList.append('No Data Found');
+                    var emptyAdjunt = '<div class="empty-state-card py-4 my-2">'
+                                    + '<div class="empty-state-icon-box" style="width: 56px; height: 56px; margin-bottom: 12px;">'
+                                        + '<i class="fa-solid fa-file-circle-xmark" style="font-size: 24px;"></i>'
+                                    + '</div>'
+                                    + '<h6 class="empty-state-title" style="font-size: 15px;">No Adjunt Records Found</h6>'
+                                    + '<p class="empty-state-desc mb-0" style="font-size: 12.5px;">No adjunt details are available for this complaint.</p>'
+                                + '</div>';
+                    complaintAgaintsList.append(emptyAdjunt);
                 }
             }, failure: function (result) {
                 swal('Something went wrong!', '', 'error');
@@ -477,7 +494,7 @@
                     url: "/ComplaintList/OnlineComplaintStatusUpdate",
                     data: {
                         ComplaintId: CId,
-                        Remark: reason,
+                        Remark: 'Complaint has been successfully registered in the system. It is currently under initial administrative verification and scrutiny.',
                         Mode: "Accepted"
                     },
                     success: function (response) {

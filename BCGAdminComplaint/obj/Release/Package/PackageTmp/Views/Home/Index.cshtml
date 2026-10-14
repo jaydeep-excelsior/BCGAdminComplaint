@@ -187,73 +187,80 @@
             contentType: "application/json; charset=utf-8",
             dataType: "json",
             success: function (response) {
+                $("#overlay").hide();
                 $("#tblComplaintAllList").empty();
                 var complaintList = $("#tblComplaintAllList");
 
-                if (response.data != null) {
-                    if (response.data != '') {
-                        $.each(response.data, function (data, value) {
-                            var ComplaintItem = '<div class="main_card_list mb-2">'
-                                                + '<div class="main_header_card">'
-                                                    + '<div class="_left_side">'
-                                                        + '<div class="number">' + value.SrNo + '</div>'
-                                                        + '<div class="d-flex">'
-                                                            + '<div class="complaint_number">'
-                                                                + '<div class="title">Complaint Number</div>'
-                                                                + '<a class="description" href="/ComplaintDetails/DetailsNew/' + value.Id + '">' + value.ComplaintNumber + '</a>'
-                                                            + '</div>'
-                                                        + '</div>'
-                                                        + '<div class="d-flex">'
-                                                            + '<div class="complaint_number">'
-                                                                + '<div class="title">Date & Time</div>'
-                                                                + '<a class="description">' + value.ComplaintsCreateDate + '</a>'
-                                                            + '</div>'
-                                                        + '</div>'
-                                                        + '<div class="d-flex">'
-                                                            + '<div class="complaint_number">'
-                                                                + '<div class="title">Payment Status</div>'
-                                                                + '<a class="description">' + value.PaymentStatus + '</a>'
-                                                            + '</div>'
-                                                        + '</div>'
-                                                        + '<div class="d-flex">'
-                                                            + '<div class="complaint_number">'
-                                                                + '<div class="title">Complaint Status</div>'
-                                                                + '<a class="description">' + value.Status + '</a>'
-                                                            + '</div>'
+                if (response.data != null && response.data != '' && response.data.length > 0) {
+                    $.each(response.data, function (data, value) {
+                        var ComplaintItem = '<div class="main_card_list mb-2">'
+                                            + '<div class="main_header_card">'
+                                                + '<div class="_left_side">'
+                                                    + '<div class="number">' + value.SrNo + '</div>'
+                                                    + '<div class="d-flex">'
+                                                        + '<div class="complaint_number">'
+                                                            + '<div class="title">Complaint Number</div>'
+                                                            + '<a class="description" href="/ComplaintDetails/DetailsNew/' + value.Id + '" onclick="document.cookie=\'ComplaintId=' + value.Id + '; path=/\';">' + value.ComplaintNumber + '</a>'
                                                         + '</div>'
                                                     + '</div>'
-                                                    + '<div class="rigth_side"></div>'
-                                                + '</div>'
-                                                + '<div class="main_card_list_body">'
-                                                    + '<div class="row">'
-                                                        + '<div class="col-md-4 col-sm-6 col-12 mt-1">'
-                                                            + '<div class="title">Full Name</div>'
-                                                            + '<div class="description">' + value.FullName + '</div>'
+                                                    + '<div class="d-flex">'
+                                                        + '<div class="complaint_number">'
+                                                            + '<div class="title">Date & Time</div>'
+                                                            + '<a class="description">' + value.ComplaintsCreateDate + '</a>'
                                                         + '</div>'
-                                                        + '<div class="col-md-3 col-sm-6 col-12 mt-1">'
-                                                            + '<div class="title">Contact Number</div>'
-                                                            + '<div class="description">' + value.ContactNumber + '</div>'
+                                                    + '</div>'
+                                                    + '<div class="d-flex">'
+                                                        + '<div class="complaint_number">'
+                                                            + '<div class="title">Payment Status</div>'
+                                                            + '<a class="description">' + value.PaymentStatus + '</a>'
                                                         + '</div>'
-                                                         + '<div class="col-md-3 col-sm-6 col-12 mt-1">'
-                                                            + '<div class="title">Email</div>'
-                                                            + '<div class="description">' + value.EmailAddress + '</div>'
-                                                        + '</div>'
-                                                        + '<div class="col-md-2 col-sm-6 col-12 mt-1">'
-                                                            + '<div class="title">Total Amount</div>'
-                                                            + '<div class="description">' + value.TotalAmount + '</div>'
+                                                    + '</div>'
+                                                    + '<div class="d-flex">'
+                                                        + '<div class="complaint_number">'
+                                                            + '<div class="title">Complaint Status</div>'
+                                                            + '<a class="description">' + value.Status + '</a>'
                                                         + '</div>'
                                                     + '</div>'
                                                 + '</div>'
-                                            + '</div>';
-                            complaintList.append(ComplaintItem)
-                        });
-                    }
-                    else {
-                        complaintList.append('No Data Found');
-                    }
+                                                + '<div class="rigth_side"></div>'
+                                            + '</div>'
+                                            + '<div class="main_card_list_body">'
+                                                + '<div class="row">'
+                                                    + '<div class="col-md-4 col-sm-6 col-12 mt-1">'
+                                                        + '<div class="title">Full Name</div>'
+                                                        + '<div class="description">' + value.FullName + '</div>'
+                                                    + '</div>'
+                                                    + '<div class="col-md-3 col-sm-6 col-12 mt-1">'
+                                                        + '<div class="title">Contact Number</div>'
+                                                        + '<div class="description">' + value.ContactNumber + '</div>'
+                                                    + '</div>'
+                                                     + '<div class="col-md-3 col-sm-6 col-12 mt-1">'
+                                                        + '<div class="title">Email</div>'
+                                                        + '<div class="description">' + value.EmailAddress + '</div>'
+                                                    + '</div>'
+                                                    + '<div class="col-md-2 col-sm-6 col-12 mt-1">'
+                                                        + '<div class="title">Total Amount</div>'
+                                                        + '<div class="description">' + value.TotalAmount + '</div>'
+                                                    + '</div>'
+                                                + '</div>'
+                                            + '</div>'
+                                        + '</div>';
+                        complaintList.append(ComplaintItem);
+                    });
                 }
                 else {
-                    complaintList.append('No Data Found');
+                    var emptyHtml = '<div class="empty-state-card">'
+                                  + '<div class="empty-state-icon-box">'
+                                      + '<i class="fa-solid fa-folder-open"></i>'
+                                  + '</div>'
+                                  + '<h5 class="empty-state-title">No Recent Complaints Found</h5>'
+                                  + '<p class="empty-state-desc">There are no recent complaints available for the selected timeframe. Try selecting a different filter option from above.</p>'
+                                  + '<div class="empty-state-badge">'
+                                      + '<i class="fa-solid fa-clock-rotate-left text-primary"></i>'
+                                      + '<span>No recent activity</span>'
+                                  + '</div>'
+                              + '</div>';
+                    complaintList.append(emptyHtml);
                 }
             },
             failure: function (response) {

@@ -49,9 +49,9 @@
                             <option value="Board Reject">Board Reject</option>
                             <option value="Board Has Approved">Board Has Approved</option>
                             <option value="Board Has Rejected">Board Has Rejected</option>
-                            <option value="Hearing">Hearing</option>
+                            @*<option value="Hearing">Hearing</option>
                             <option value="Adjunt">Adjunt</option>
-                            <option value="Order Passed">Order Passed</option>
+                            <option value="Order Passed">Order Passed</option>*@
                         </select>
                     </div>
                     <div class="form-group col-md-6 col-sm-6 col-12 col-lg-3 mt-3">
@@ -202,7 +202,7 @@
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-outline-secondary btn-sm" data-bs-dismiss="modal">Close</button>
-                <button type="button" class="btn btn-outline-primary btn-sm" id="btnShareWithSelectedMembers">Share</button>
+                <button type="button" class="btn btn-outline-primary btn-sm" id="btnShareWithSelectedMembers" style="display: none;">Share</button>
             </div>
         </div>
     </div>
@@ -257,8 +257,8 @@
                 $("#tblComplaintList").empty();
                 var complaintList = $("#tblComplaintList");
 
-                if (response.IsSuccess) {
-                    var totalRecords = response.Data.length > 0 ? response.Data[0].TotalRecord : 0;
+                if (response.IsSuccess && response.Data && response.Data.length > 0) {
+                    var totalRecords = response.Data[0].TotalRecord;
                     $.each(response.Data, function (i, value) {
 
                         var paymentStatusClass = "";
@@ -278,7 +278,7 @@
                                                         + '<div class="d-flex mainnewresponsiveleftweb">'
                                                             + '<div class="complaint_number">'
                                                                 + '<div class="title">Complaint Number</div>'
-                                                                + '<a class="description" href="/ComplaintDetails/DetailsNew/' + value.Id + '">' + value.ComplaintNumber + '</a>'
+                                                                + '<a class="description" href="/ComplaintDetails/DetailsNew" onclick="document.cookie=\'ComplaintId=' + value.Id + '; path=/\';">' + value.ComplaintNumber + '</a>'
                                                             + '</div>'
                                                             + '<div class="complaint_number">'
                                                                 + '<div class="title">Date & Time</div>'
@@ -333,7 +333,7 @@
                                                             + (value.NewStatusCount > 0 ? '<a class="me-2 btn btn-sm btn-outline-warning waves-effect waves-light btn-sm" id="lnkOldComplaint" role="button"><i class="fa-solid fa-clock-rotate-left me-1"></i> Old</a>' : '')
                                                             + (value.OldStatusCount > 0 ? '<a class="me-2 btn btn-sm btn-outline-info waves-effect waves-light btn-sm" id="lnkNewComplaint" role="button"><i class="fa-solid fa-clock me-1"></i> New</a>' : '')
                                                             + '<a class="me-2 btn btn-sm btn-outline-primary waves-effect waves-light btn-sm" id="lnkUpdateComplaintNumber" role="button"><i class="fa-solid fa-pen-to-square me-1"></i> Update Complaint Number</a>'
-                                                            + ((value.Status === 'Accepted' || value.Status === 'Next General Board' || value.Status === 'Refer to Board') ? '<a class="me-2 btn btn-sm btn-outline-primary waves-effect waves-light btn-sm" id="lnkShareWithDC" role="button"><i class="fa-solid fa-share-nodes me-1"></i> Share with D.C. Committee</a>' : '')
+                                                            + (value.Status === 'Refer to Board' ? '<a class="me-2 btn btn-sm btn-outline-primary waves-effect waves-light btn-sm" id="lnkShareWithDC" role="button"><i class="fa-solid fa-share-nodes me-1"></i> Share with D.C. Committee</a>' : '')
                                                             + '<a class="me-2 btn btn-sm btn-outline-primary waves-effect waves-light btn-sm" id="lnkViewDocument" data-toggle="modal" data-target="#document" role="button"><i class="fa-solid fa-file-lines me-1"></i> View Document</a>'
                                                             + '<a class="btn btn-outline-primary btn-sm waves-effect waves-light btn-sm" id="lnkViewAdjunt" data-toggle="modal" data-target="#Adjunt" role="button"><i class="fa-solid fa-file-lines me-1"></i> &nbsp;View Adjunt</a>'
                                                             + '<a class="ms-2 btn btn-sm btn-outline-danger waves-effect waves-light btn-sm" id="lnkDeleteComplaint" role="button"><i class="fa-solid fa-trash me-1"></i> Delete</a>'
@@ -344,10 +344,20 @@
                         complaintList.append(FinalRowItem);
                     });
                     RenderPagination(totalRecords);
-
                 }
                 else {
-                    complaintList.append('No Data Found');
+                    var emptyHtml = '<div class="empty-state-card">'
+                                  + '<div class="empty-state-icon-box">'
+                                      + '<i class="fa-solid fa-clipboard-list"></i>'
+                                  + '</div>'
+                                  + '<h5 class="empty-state-title">No Complaints Found</h5>'
+                                  + '<p class="empty-state-desc">We couldn\'t find any complaints matching your criteria. Try adjusting your status, date, or number filters.</p>'
+                                  + '<div class="empty-state-badge">'
+                                      + '<i class="fa-solid fa-filter text-primary"></i>'
+                                      + '<span>No records found</span>'
+                                  + '</div>'
+                              + '</div>';
+                    complaintList.append(emptyHtml);
                     $("#paginationList").empty();
                     $("#entriesInfo").empty();
                 }
@@ -471,7 +481,14 @@
                     });
                 }
                 else {
-                    complaintAgaintsList.append('No Data Found');
+                    var emptyAdjunt = '<div class="empty-state-card py-4 my-2">'
+                                    + '<div class="empty-state-icon-box" style="width: 56px; height: 56px; margin-bottom: 12px;">'
+                                        + '<i class="fa-solid fa-file-circle-xmark" style="font-size: 24px;"></i>'
+                                    + '</div>'
+                                    + '<h6 class="empty-state-title" style="font-size: 15px;">No Adjunt Records Found</h6>'
+                                    + '<p class="empty-state-desc mb-0" style="font-size: 12.5px;">No adjunt details are available for this complaint.</p>'
+                                + '</div>';
+                    complaintAgaintsList.append(emptyAdjunt);
                 }
             }, failure: function (result) {
                 swal('Something went wrong!', '', 'error');
@@ -726,6 +743,7 @@
     $(document).on('click', '#lnkShareWithDC', function () {
         var complaintId = $(this).closest('.main_card_list').find('#HdfId').text();
         $('#shareDcCommitteeModal').data('complaintId', complaintId);
+        $('#btnShareWithSelectedMembers').hide();
         
         $.ajax({
             type: 'Get',
@@ -735,7 +753,8 @@
             dataType: "json",
             success: function (response) {
                 $('#tblShareDcMembers').empty();
-                if (response.IsSuccess) {
+                if (response.IsSuccess && response.Data && response.Data.length > 0) {
+                    $('#btnShareWithSelectedMembers').show();
                     $.each(response.Data, function (data, value) {
                         var isCheckedStr = (value.Flag === 'A' || value.Flag === null) ? 'checked=""' : '';
                         
@@ -765,11 +784,20 @@
                         $('#tblShareDcMembers').append(VShareDcMembersItem);
                     });
                 } else {
-                    $('#tblShareDcMembers').append('<p>No members found.</p>');
+                    $('#btnShareWithSelectedMembers').hide();
+                    var emptyShare = '<div class="empty-state-card py-4 my-2">'
+                                   + '<div class="empty-state-icon-box" style="width: 56px; height: 56px; margin-bottom: 12px;">'
+                                       + '<i class="fa-solid fa-users-slash" style="font-size: 24px;"></i>'
+                                   + '</div>'
+                                   + '<h6 class="empty-state-title" style="font-size: 15px;">No Committee Members Found</h6>'
+                                   + '<p class="empty-state-desc mb-0" style="font-size: 12.5px;">There are no active D.C. committee members to share with.</p>'
+                               + '</div>';
+                    $('#tblShareDcMembers').append(emptyShare);
                 }
                 $('#shareDcCommitteeModal').modal('show');
             },
             error: function () {
+                $('#btnShareWithSelectedMembers').hide();
                 swal('Something went wrong!', '', 'error');
             }
         });

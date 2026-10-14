@@ -1,8 +1,7 @@
 using BCGAdminComplaint;
 using BCGAdminComplaint.Models;
 using BCGAdminComplaint.Repository;
-using CrystalDecisions.CrystalReports.Engine;
-using CrystalDecisions.Shared;
+using System.Text;
 using System;
 using System.Collections.Generic;
 using System.Configuration;
@@ -15,6 +14,9 @@ using System.Data.SqlClient;
 using System.Threading;
 using System.Web;
 using System.Web.Mvc;
+using PdfSharp.Pdf;
+using PdfSharp.Pdf.IO;
+using PdfSharp.Drawing;
 
 namespace BarCouncilComplaint.Controllers
 {
@@ -164,11 +166,14 @@ namespace BarCouncilComplaint.Controllers
                             dcMember.Rows.Add(drMember);
                         }
                         ViewBag.DcNumber = DcMemberList[0].CommitteeId;
+                        var dcObj = result.FirstOrDefault(x => x.Id == DcMemberList[0].CommitteeId);
+                        ViewBag.DcCommitteeTitle = dcObj != null ? dcObj.DcTitle : DcMemberList[0].CommitteeId.ToString();
                         ViewBag.MemberList = dcMember;
                     }
                     else
                     {
                         ViewBag.DcNumber = "0";
+                        ViewBag.DcCommitteeTitle = "";
                         ViewBag.MemberList = "";
                     }
 
@@ -191,7 +196,8 @@ namespace BarCouncilComplaint.Controllers
             }
         }
 
-        public ActionResult DetailsNew(Int64 Id)
+        [AcceptVerbs(HttpVerbs.Get | HttpVerbs.Post)]
+        public ActionResult DetailsNew(Int64? Id = null)
         {
             HttpCookie cookie = Request.Cookies["bcg"];
             if (cookie == null)
@@ -200,8 +206,43 @@ namespace BarCouncilComplaint.Controllers
             }
             else
             {
-                if (Id != null)
+                if (Id.HasValue && Id.Value > 0)
                 {
+                    Session["ComplaintId"] = Id.Value;
+                    HttpCookie compCookie = new HttpCookie("ComplaintId", Id.Value.ToString());
+                    compCookie.Path = "/";
+                    Response.Cookies.Add(compCookie);
+
+                    if (Request.HttpMethod.Equals("GET", StringComparison.OrdinalIgnoreCase))
+                    {
+                        return RedirectToAction("DetailsNew", "ComplaintDetails");
+                    }
+                }
+
+                Int64 targetId = 0;
+                Int64 sId = 0;
+                Int64 cId = 0;
+                if (Id.HasValue && Id.Value > 0)
+                {
+                    targetId = Id.Value;
+                }
+                else if (Session["ComplaintId"] != null && Int64.TryParse(Session["ComplaintId"].ToString(), out sId) && sId > 0)
+                {
+                    targetId = sId;
+                }
+                else if (Request.Cookies["ComplaintId"] != null && Int64.TryParse(Request.Cookies["ComplaintId"].Value, out cId) && cId > 0)
+                {
+                    targetId = cId;
+                    Session["ComplaintId"] = targetId;
+                }
+
+                if (targetId > 0)
+                {
+                    Session["ComplaintId"] = targetId;
+                    HttpCookie compCookie = new HttpCookie("ComplaintId", targetId.ToString());
+                    compCookie.Path = "/";
+                    Response.Cookies.Add(compCookie);
+
                     try
                     {
 
@@ -212,11 +253,15 @@ namespace BarCouncilComplaint.Controllers
                         List<DcNumberList> result = new List<DcNumberList>();
                         List<ComplaintGBMeetingLog> ComplaintGBMeeting = new List<ComplaintGBMeetingLog>();
 
-                        ComplaintDetail = _ComplaintRepository.GetComplaintDetails(Id);
-                        // ComplainAgainstList = _ComplaintRepository.GetAdjuntList(Id);
-                        ComplaintDocument = _ComplaintRepository.GetDocumentList(Id);
-                        ComplaintGBMeeting = _ComplaintRepository.GetComplaintGBMeetingLogList(Id);
-                        DcMemberList = _ComplaintRepository.GetDcMemberList(Id);
+                        ComplaintDetail = _ComplaintRepository.GetComplaintDetails(targetId);
+                        if (ComplaintDetail == null || ComplaintDetail.Count == 0)
+                        {
+                            return RedirectToAction("Index", "ComplaintList");
+                        }
+                        // ComplainAgainstList = _ComplaintRepository.GetAdjuntList(targetId);
+                        ComplaintDocument = _ComplaintRepository.GetDocumentList(targetId);
+                        ComplaintGBMeeting = _ComplaintRepository.GetComplaintGBMeetingLogList(targetId);
+                        DcMemberList = _ComplaintRepository.GetDcMemberList(targetId);
                         result = _ComplaintDetailsRepository.GetDcNumberList();
 
 
@@ -344,11 +389,14 @@ namespace BarCouncilComplaint.Controllers
                                 dcMember.Rows.Add(drMember);
                             }
                             ViewBag.DcNumber = DcMemberList[0].CommitteeId;
+                            var dcObj = result.FirstOrDefault(x => x.Id == DcMemberList[0].CommitteeId);
+                            ViewBag.DcCommitteeTitle = dcObj != null ? dcObj.DcTitle : DcMemberList[0].CommitteeId.ToString();
                             ViewBag.MemberList = dcMember;
                         }
                         else
                         {
                             ViewBag.DcNumber = "0";
+                            ViewBag.DcCommitteeTitle = "";
                             ViewBag.MemberList = "";
                         }
 
@@ -1188,22 +1236,29 @@ namespace BarCouncilComplaint.Controllers
 
                         result[i].OrderFileName = result[i].OrderFileName == null ? "" : result[i].OrderFileName == "" ? "" : result[i].OrderFileName;
                         result[i].OrderFilePath = result[i].OrderFilePath == null ? "" : result[i].OrderFilePath == "" ? "" : result[i].OrderFilePath;
-                        result[i].Summary = result[i].Summary == null ? "" : result[i].Summary == "" ? "" : result[i].Summary;
-                        if (string.Equals(result[i].Status, "New", StringComparison.OrdinalIgnoreCase) && string.IsNullOrWhiteSpace(result[i].Summary))
+                        result[i].Summary = result[i].Summary == null ? "" : result[i].Summary.Trim();
+                        if (string.IsNullOrWhiteSpace(result[i].Summary))
                         {
-                            result[i].Summary = "Complaint has been successfully registered in the system. It is currently under initial administrative verification and scrutiny.";
-                        }
-                        else if (string.Equals(result[i].Status, "Accepted", StringComparison.OrdinalIgnoreCase) && string.IsNullOrWhiteSpace(result[i].Summary))
-                        {
-                            result[i].Summary = "Complaint has been scrutinized and accepted for further proceedings. The matter will be placed before the General Board for consideration.";
-                        }
-                        else if ((string.Equals(result[i].Status, "Refer to Board", StringComparison.OrdinalIgnoreCase) || string.Equals(result[i].Status, "Next General Board", StringComparison.OrdinalIgnoreCase)) && string.IsNullOrWhiteSpace(result[i].Summary))
-                        {
-                            result[i].Summary = "Complaint has been referred to the General Board for consideration. Awaiting the Board's review and decision in the upcoming meeting.";
-                        }
-                        else if (string.Equals(result[i].Status, "Board Accept", StringComparison.OrdinalIgnoreCase) && string.IsNullOrWhiteSpace(result[i].Summary))
-                        {
-                            result[i].Summary = "The General Board has accepted the complaint. Pending formal board approval and committee allocation.";
+                            if (string.Equals(result[i].Status, "New", StringComparison.OrdinalIgnoreCase))
+                            {
+                                result[i].Summary = "Complaint has been successfully registered in the system. It is currently under initial administrative verification and scrutiny.";
+                            }
+                            else if (string.Equals(result[i].Status, "Accepted", StringComparison.OrdinalIgnoreCase))
+                            {
+                                result[i].Summary = "Complaint has been scrutinized and accepted for further proceedings. The matter will be placed before the General Board for consideration.";
+                            }
+                            else if (string.Equals(result[i].Status, "Refer to Board", StringComparison.OrdinalIgnoreCase) || string.Equals(result[i].Status, "Next General Board", StringComparison.OrdinalIgnoreCase))
+                            {
+                                result[i].Summary = "Complaint has been referred to the General Board for consideration. Awaiting the Board's review and decision in the upcoming meeting.";
+                            }
+                            else if (string.Equals(result[i].Status, "Board Accept", StringComparison.OrdinalIgnoreCase))
+                            {
+                                result[i].Summary = "The General Board has accepted the complaint. Pending formal board approval and committee allocation.";
+                            }
+                            else if (string.Equals(result[i].Status, "Board Has Approved", StringComparison.OrdinalIgnoreCase))
+                            {
+                                result[i].Summary = "The General Board has formally approved the complaint. The matter has been referred to the Disciplinary Committee for conducting inquiry and hearing proceedings.";
+                            }
                         }
                         result[i].OldStatus = result[i].OldStatus == null ? "" : result[i].OldStatus == "" ? "" : result[i].OldStatus;
                     }
@@ -1255,7 +1310,10 @@ namespace BarCouncilComplaint.Controllers
         {
             try
             {
-                Response.Cookies["ComplaintId"].Value = ComplaintId;
+                HttpCookie c = new HttpCookie("ComplaintId", ComplaintId ?? "");
+                c.Path = "/";
+                Response.Cookies.Add(c);
+                Session["ComplaintId"] = ComplaintId;
                 return Json(new { data = "Success" }, JsonRequestBehavior.AllowGet);
             }
             catch (Exception ex)
@@ -1265,283 +1323,854 @@ namespace BarCouncilComplaint.Controllers
             }
         }
 
-        [HttpGet]
-        public ActionResult DownloadDetailReport()
+        [HttpPost]
+        public ActionResult SetComplaintId(Int64 Id)
         {
             try
             {
-
-                String ComplaintId = "";
-
-                #region ComplaintId
-                if (Request.Cookies["ComplaintId"].Value != null)
+                if (Id > 0)
                 {
-                    if (Request.Cookies["ComplaintId"].Value.ToString() != "")
-                    {
-                        ComplaintId = Request.Cookies["ComplaintId"].Value.ToString();
-                    }
-                    else
-                    {
-                        ComplaintId = "";
-                    }
+                    Session["ComplaintId"] = Id;
+                    HttpCookie compCookie = new HttpCookie("ComplaintId", Id.ToString());
+                    compCookie.Path = "/";
+                    Response.Cookies.Add(compCookie);
+                    return Json(new { success = true }, JsonRequestBehavior.AllowGet);
                 }
-                else
-                {
-                    ComplaintId = "";
-                }
-                #endregion
-
-                List<ComplaintListModel> ComplaintDetail = new List<ComplaintListModel>();
-                List<ComplaintAgainstList> ComplainAgainstList = new List<ComplaintAgainstList>();
-                List<ComplaintDocumentList> ComplaintDocument = new List<ComplaintDocumentList>();
-                List<ComplaintStatusLog> ActionLog = new List<ComplaintStatusLog>();
-
-                ComplaintDetail = _ComplaintDetailsRepository.GetComplaintReportList(Convert.ToInt64(ComplaintId));
-                ComplainAgainstList = _ComplaintDetailsRepository.GetComplaintAgaintsReportList(Convert.ToInt64(ComplaintId));
-                ComplaintDocument = _ComplaintDetailsRepository.GetDocumentReportList(Convert.ToInt64(ComplaintId));
-                ActionLog = _ComplaintDetailsRepository.GetLogListReport(Convert.ToInt64(ComplaintId));
-
-                DataTable details = new DataTable();
-                details.Columns.AddRange(new DataColumn[11] {
-                        new DataColumn("SrNo", typeof(String)),
-                        new DataColumn("FullName", typeof(String)),
-                        new DataColumn("EmailAddress", typeof(String)),
-                        new DataColumn("ContactNumber", typeof(String)),
-                        new DataColumn("Summary", typeof(String)),
-                        new DataColumn("DetailComplaint", typeof(String)),
-                        new DataColumn("PaymentStatus", typeof(String)),
-                        new DataColumn("Status", typeof(String)),
-                        new DataColumn("ComplaintNumber", typeof(String)),
-                        new DataColumn("TotalAmount", typeof(String)),
-                        new DataColumn("Address", typeof(String)),
-                    });
-
-                if (ComplaintDetail.Count > 0)
-                {
-                    details.Rows.Add(ComplaintDetail[0].SrNo, ComplaintDetail[0].FullName, ComplaintDetail[0].EmailAddress, ComplaintDetail[0].ContactNumber, ComplaintDetail[0].Summary,
-                        ComplaintDetail[0].DetailComplaint, ComplaintDetail[0].PaymentStatus, ComplaintDetail[0].Status, ComplaintDetail[0].ComplaintNumber, ComplaintDetail[0].TotalAmount,
-                        ComplaintDetail[0].Address);
-                }
-
-                DataTable complaintAgainst = new DataTable();
-                complaintAgainst.Columns.AddRange(new DataColumn[8] {
-                         new DataColumn("SrNo",typeof(String)),
-                        new DataColumn("Name",typeof(String)),
-                        new DataColumn("EnrollmentNumber",typeof(String)),
-                         new DataColumn("Amount",typeof(Decimal)),
-                    new DataColumn("EnrollmentId",typeof(Decimal)),
-                    new DataColumn("ContactNo",typeof(String)),
-                     new DataColumn("IsKnown",typeof(String)),
-                     new DataColumn("City",typeof(String)),
-                });
-                DataRow dr2 = null;
-
-                if (ComplainAgainstList.Count > 0)
-                {
-                    for (int i = 0; i < ComplainAgainstList.Count; i++)
-                    {
-                        dr2 = complaintAgainst.NewRow();
-                        dr2["SrNo"] = Convert.ToString(i + 1);
-                        dr2["Amount"] = ComplainAgainstList[i].Amount;
-                        dr2["Name"] = ComplainAgainstList[i].AdvocateName == null ? ComplainAgainstList[i].FullName : ComplainAgainstList[i].AdvocateName;
-                        dr2["EnrollmentNumber"] = ComplainAgainstList[i].EnrollmentNo;
-                        dr2["ContactNo"] = ComplainAgainstList[i].ContactNumber == null ? ComplainAgainstList[i].MobileNo : ComplainAgainstList[i].ContactNumber;
-                        dr2["City"] = ComplainAgainstList[i].City == null ? "" : ComplainAgainstList[i].City;
-                        complaintAgainst.Rows.Add(dr2);
-                    }
-
-                }
-
-                DataTable document = new DataTable();
-                document.Columns.AddRange(new DataColumn[6] {
-                             new DataColumn("SrNo",typeof(String)),
-                            new DataColumn("FileTitle",typeof(String)),
-                            new DataColumn("FileName",typeof(String)),
-                             new DataColumn("FilePath",typeof(String)),
-                              new DataColumn("Description",typeof(String)),
-                              new DataColumn("Name",typeof(String))
-                        });
-                DataRow drIND = null;
-
-
-
-
-                if (ComplaintDocument.Count > 0)
-                {
-                    for (int i = 0; i < ComplaintDocument.Count; i++)
-                    {
-
-                        var file = "<a href=" + ComplaintDocument[i].FilePath + ">" + ComplaintDocument[i].FileName + "</a>";
-
-                        drIND = document.NewRow();
-                        drIND["SrNo"] = Convert.ToString(i + 1);
-                        drIND["FileTitle"] = ComplaintDocument[i].FileTitle;
-                        drIND["FileName"] = ComplaintDocument[i].FileName;
-                        drIND["FilePath"] = file.ToString();
-                        drIND["Description"] = ComplaintDocument[i].Description;
-                        drIND["Name"] = ComplaintDocument[i].Name;
-                        document.Rows.Add(drIND);
-                    }
-                }
-
-                DataTable actionLog = new DataTable();
-                actionLog.Columns.AddRange(new DataColumn[8] {
-                    new DataColumn("SrNo",typeof(String)),
-                    new DataColumn("Status",typeof(String)),
-                    new DataColumn("NextDate",typeof(String)),
-                    new DataColumn("FilePath",typeof(String)),
-                    new DataColumn("FileName",typeof(String)),
-                    new DataColumn("Summary",typeof(String)),
-                    new DataColumn("CommitteeTitle",typeof(String)),
-                    new DataColumn("OldStatus",typeof(String)),
-                });
-
-                DataRow drActionLog = null;
-
-                if (ActionLog.Count > 0)
-                {
-                    for (int i = 0; i < ActionLog.Count; i++)
-                    {
-                        var file = "<a href=" + ActionLog[i].OrderFilePath + ">" + ActionLog[i].OrderFileName + "</a>";
-
-                        if (ActionLog[i].SNextDate == "")
-                        {
-                            ActionLog[i].SNextDate = DateTime.Now.ToString("dd-MM-yyyy");
-                        }
-                        else
-                        {
-                            ActionLog[i].SNextDate = ActionLog[i].SNextDate;
-                        }
-
-                        drActionLog = actionLog.NewRow();
-                        drActionLog["SrNo"] = Convert.ToString(i + 1);
-                        drActionLog["Status"] = ActionLog[i].Status;
-                        drActionLog["NextDate"] = ActionLog[i].SNextDate;
-                        drActionLog["FilePath"] = ActionLog[i].OrderFilePath;
-                        drActionLog["FileName"] = file;
-                        drActionLog["Summary"] = ActionLog[i].Summary;
-                        drActionLog["CommitteeTitle"] = ActionLog[i].CommitteTitle;
-                        drActionLog["OldStatus"] = ActionLog[i].OldStatus;
-                        actionLog.Rows.Add(drActionLog);
-                    }
-
-                }
-
-                Complaint cmp = new Complaint();
-
-
-                #region Company Detail
-
-                DataTable dtCom = new DataTable();
-                dtCom.Columns.Add("CompanyName", typeof(String));
-                dtCom.Columns.Add("Address", typeof(String));
-                dtCom.Columns.Add("ContactNumber", typeof(String));
-                dtCom.Columns.Add("EmailAddress", typeof(String));
-                dtCom.Columns.Add("Website", typeof(String));
-                dtCom.Columns.Add("Logo", typeof(String));
-
-                DataRow drCom = null;
-                drCom = dtCom.NewRow();
-                drCom["CompanyName"] = "The Bar Council of Gujarat";
-                drCom["Address"] = "3rd Floor, Satyamev Complex, Opp High Court Of Gujarat, S.G. Highway, Ahmedabad - 380060, India.";
-                drCom["ContactNumber"] = "079-27434073";
-                drCom["EmailAddress"] = "mail@barcouncilofgujarat.org";
-                drCom["Website"] = "https://www.barcouncilofgujarat.org/";
-                drCom["Logo"] = "~/assets/img/logo.png";
-                dtCom.Rows.Add(drCom);
-                #endregion
-
-                #region Report Header Title
-
-                DataTable dtHT = new DataTable();
-                dtHT.Columns.Add("ReportHeaderTitle", typeof(String));
-
-                DataRow drHT = null;
-                drHT = dtHT.NewRow();
-                drHT["ReportHeaderTitle"] = "Complaintant Details";
-                dtHT.Rows.Add(drHT);
-                #endregion
-
-                cmp.Tables["CompanyDetail"].Merge(dtCom);
-
-                #region QAIcon Image
-                for (int index = 0; index < cmp.Tables["CompanyDetail"].Rows.Count; index++)
-                {
-                    if (cmp.Tables["CompanyDetail"].Rows[index]["Logo"].ToString() != "")
-                    {
-                        string s = cmp.Tables["CompanyDetail"].Rows[index]["Logo"].ToString();
-                        string[] pathArr = s.Split('/');
-                        String fileNames = pathArr.Last().ToString();
-
-                        string pdfPath = "~\\" + pathArr[1].ToString() + "\\" + pathArr[2].ToString() + "\\" + pathArr[3].ToString();
-                        string p = "\\";
-                        string path = Server.MapPath(pdfPath);
-                        if (System.IO.File.Exists(path))
-                        {
-                            LoadImage(cmp.Tables["CompanyDetail"].Rows[index], "LogoStreem", path);
-                        }
-                        else
-                        {
-                            LoadImage(cmp.Tables["CompanyDetail"].Rows[index], "LogoStreem", "Logo");
-                        }
-                    }
-                }
-                #endregion
-
-                cmp.Tables["ReportHeader"].Merge(dtHT);
-                cmp.Tables["ComplaintDetail"].Merge(details);
-                cmp.Tables["ComplaintAgainst"].Merge(complaintAgainst);
-                cmp.Tables["ComplaintFiles"].Merge(document);
-                cmp.Tables["ActionLog"].Merge(actionLog);
-
-
-                ReportDocument rd = new ReportDocument();
-                rd.Load(Path.Combine(Server.MapPath("~/Report/"), "ComplaintDetailsReport.rpt"));
-                rd.SetDataSource(cmp);
-                Response.Buffer = false;
-                Response.ClearContent();
-                Response.ClearHeaders();
-
-                Stream stream = rd.ExportToStream(ExportFormatType.PortableDocFormat);
-                stream.Seek(0, SeekOrigin.Begin);
-                rd.Close();
-                rd.Dispose();
-                String fileName = "ComplaintDetailsReport" + DateTime.Now.ToString("ddMMyyyyHHmmss").ToString() + ".pdf";
-                return File(stream, "application/pdf", fileName);
+                return Json(new { success = false, message = "Invalid Id" }, JsonRequestBehavior.AllowGet);
             }
             catch (Exception ex)
             {
-                response.IsSuccess = false;
-                response.Message = ex.Message;
+                return Json(new { success = false, message = ex.Message }, JsonRequestBehavior.AllowGet);
             }
+        }
+
+        [HttpGet]
+        public ActionResult DownloadDetailReport(long? id = null, bool withAttachments = true)
+        {
+            try
+            {
+                long complaintId = 0;
+                if (id.HasValue && id.Value > 0)
+                {
+                    complaintId = id.Value;
+                }
+                else if (Request.Cookies["ComplaintId"] != null && Request.Cookies["ComplaintId"].Value != null)
+                {
+                    long.TryParse(Request.Cookies["ComplaintId"].Value.ToString(), out complaintId);
+                }
+
+                if (complaintId <= 0)
+                {
+                    return Content("Invalid Complaint ID specified.");
+                }
+
+                List<ComplaintListModel> complaintDetail = _ComplaintDetailsRepository.GetComplaintReportList(complaintId);
+                List<ComplaintAgainstList> complainAgainstList = _ComplaintDetailsRepository.GetComplaintAgaintsReportList(complaintId);
+                List<ComplaintDocumentList> complaintDocument = GetAllComplaintDocumentsWithAffidavit(complaintId, (complaintDetail != null && complaintDetail.Count > 0) ? complaintDetail[0] : null);
+                List<ComplaintStatusLog> actionLog = _ComplaintDetailsRepository.GetLogListReport(complaintId);
+                if (actionLog != null && actionLog.Count > 0)
+                {
+                    actionLog = actionLog.OrderBy(x => x.CreateDate).ThenByDescending(x => x.SrNo ?? 0).ToList();
+                }
+
+                if (complaintDetail == null || complaintDetail.Count == 0)
+                {
+                    return Content("Complaint record not found for ID: " + complaintId);
+                }
+
+                string html = GenerateComplaintDetailsPdfHtml(complaintDetail[0], complainAgainstList, complaintDocument, actionLog);
+                byte[] pdfBytes = ConvertHtmlToPdf(html);
+
+                byte[] finalPdfBytes = pdfBytes;
+                if (withAttachments)
+                {
+                    finalPdfBytes = MergeDossierWithAttachments(pdfBytes, complaintDocument, actionLog, complaintDetail[0]);
+                }
+
+                string safeCmpNumber = (!string.IsNullOrEmpty(complaintDetail[0].ComplaintNumber)
+                    ? complaintDetail[0].ComplaintNumber.Replace("/", "_").Replace("\\", "_")
+                    : complaintId.ToString());
+
+                string suffix = withAttachments ? "_WithAttached" : "_WithoutAttached";
+                string fileName = "Complaint_" + safeCmpNumber + suffix + "_" + DateTime.Now.ToString("ddMMyyyyHHmmss") + ".pdf";
+                return File(finalPdfBytes, "application/pdf", fileName);
+            }
+            catch (Exception ex)
+            {
+                return Content("Error generating Complaint PDF report: " + ex.Message);
+            }
+        }
+
+        private List<ComplaintDocumentList> GetAllComplaintDocumentsWithAffidavit(long complaintId, ComplaintListModel complaint)
+        {
+            var combinedList = new List<ComplaintDocumentList>();
+            var seenFilePaths = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
+
+            // 1. Get from _ComplaintRepository.GetDocumentList (includes both Additional and Affidavit)
+            try
+            {
+                var repoDocs = _ComplaintRepository.GetDocumentList(complaintId);
+                if (repoDocs != null && repoDocs.Count > 0)
+                {
+                    foreach (var d in repoDocs)
+                    {
+                        if (!string.IsNullOrWhiteSpace(d.FilePath) && !seenFilePaths.Contains(d.FilePath.Trim()))
+                        {
+                            seenFilePaths.Add(d.FilePath.Trim());
+                            if (string.Equals(d.DocumetType, "Affidavit", StringComparison.OrdinalIgnoreCase))
+                            {
+                                d.DocumetType = "Complaint Affidavit Copy";
+                                if (string.IsNullOrEmpty(d.FileTitle)) d.FileTitle = "Complaint Affidavit Copy";
+                            }
+                            combinedList.Add(d);
+                        }
+                    }
+                }
+            }
+            catch { }
+
+            // 2. Get from _ComplaintDetailsRepository.GetDocumentReportList (ComplaintFilesReport)
+            try
+            {
+                var reportDocs = _ComplaintDetailsRepository.GetDocumentReportList(complaintId);
+                if (reportDocs != null && reportDocs.Count > 0)
+                {
+                    foreach (var d in reportDocs)
+                    {
+                        if (!string.IsNullOrWhiteSpace(d.FilePath) && !seenFilePaths.Contains(d.FilePath.Trim()))
+                        {
+                            seenFilePaths.Add(d.FilePath.Trim());
+                            if (string.IsNullOrEmpty(d.DocumetType)) d.DocumetType = "Additional";
+                            combinedList.Add(d);
+                        }
+                    }
+                }
+            }
+            catch { }
+
+            // 3. Get affidavit from _ComplaintRepository.GetComplainAffidavitCopyByComplaintNumber
+            if (complaint != null && !string.IsNullOrEmpty(complaint.ComplaintNumber))
+            {
+                try
+                {
+                    var affCopies = _ComplaintRepository.GetComplainAffidavitCopyByComplaintNumber(complaint.ComplaintNumber);
+                    if (affCopies != null && affCopies.Count > 0)
+                    {
+                        var activeAffs = affCopies.Where(x => !string.Equals(x.IsOld, "Y", StringComparison.OrdinalIgnoreCase)).ToList();
+                        if (activeAffs.Count == 0) activeAffs = affCopies;
+
+                        foreach (var aff in activeAffs)
+                        {
+                            if (!string.IsNullOrWhiteSpace(aff.FilePath) && !seenFilePaths.Contains(aff.FilePath.Trim()))
+                            {
+                                seenFilePaths.Add(aff.FilePath.Trim());
+                                combinedList.Add(new ComplaintDocumentList
+                                {
+                                    ComplaintId = complaintId,
+                                    DocumetType = "Complaint Affidavit Copy",
+                                    FileTitle = "Complaint Affidavit Copy",
+                                    FileName = !string.IsNullOrEmpty(aff.FileName) ? aff.FileName : "Complaint_Affidavit.pdf",
+                                    FilePath = aff.FilePath,
+                                    Description = "Official sworn affidavit submitted by complainant."
+                                });
+                            }
+                            else
+                            {
+                                var existing = combinedList.FirstOrDefault(x => string.Equals(x.FilePath?.Trim(), aff.FilePath?.Trim(), StringComparison.OrdinalIgnoreCase));
+                                if (existing != null)
+                                {
+                                    existing.DocumetType = "Complaint Affidavit Copy";
+                                    existing.FileTitle = "Complaint Affidavit Copy";
+                                }
+                            }
+                        }
+                    }
+                }
+                catch { }
+            }
+
+            // 4. Online documents fallback
+            try
+            {
+                var onlineDocs = _ComplaintRepository.GetOnlineDocumentList(complaintId);
+                if (onlineDocs != null && onlineDocs.Count > 0)
+                {
+                    foreach (var d in onlineDocs)
+                    {
+                        if (!string.IsNullOrWhiteSpace(d.FilePath) && !seenFilePaths.Contains(d.FilePath.Trim()))
+                        {
+                            seenFilePaths.Add(d.FilePath.Trim());
+                            combinedList.Add(d);
+                        }
+                    }
+                }
+            }
+            catch { }
+
+            // Sort: Complaint Affidavit Copy appears first, followed by additional attachments
+            var sortedList = combinedList
+                .OrderBy(x => (string.Equals(x.DocumetType, "Complaint Affidavit Copy", StringComparison.OrdinalIgnoreCase) || string.Equals(x.DocumetType, "Affidavit", StringComparison.OrdinalIgnoreCase)) ? 0 : 1)
+                .ThenBy(x => x.SrNo ?? 0)
+                .ToList();
+
+            return sortedList;
+        }
+
+        private byte[] MergeDossierWithAttachments(byte[] dossierPdfBytes, List<ComplaintDocumentList> documents, List<ComplaintStatusLog> logs, ComplaintListModel complaint)
+        {
+            if (dossierPdfBytes == null || dossierPdfBytes.Length == 0)
+            {
+                return dossierPdfBytes;
+            }
+
+            try
+            {
+                using (MemoryStream outputMs = new MemoryStream())
+                {
+                    using (PdfDocument mergedDoc = new PdfDocument())
+                    {
+                        // 1. Add dossier summary report pages
+                        using (MemoryStream dossierMs = new MemoryStream(dossierPdfBytes))
+                        {
+                            using (PdfDocument dossierDoc = PdfReader.Open(dossierMs, PdfDocumentOpenMode.Import))
+                            {
+                                for (int p = 0; p < dossierDoc.PageCount; p++)
+                                {
+                                    PdfPage page = mergedDoc.AddPage(dossierDoc.Pages[p]);
+                                    if (p == 0)
+                                    {
+                                        string cmpNum = (complaint != null && !string.IsNullOrEmpty(complaint.ComplaintNumber)) ? complaint.ComplaintNumber : "Case Dossier";
+                                        mergedDoc.Outlines.Add("Case Dossier: " + cmpNum, page, true);
+                                    }
+                                }
+                            }
+                        }
+
+                        // 2. Add uploaded complaint documents & affidavit
+                        if (documents != null && documents.Count > 0)
+                        {
+                            int docIndex = 1;
+                            foreach (var doc in documents)
+                            {
+                                string filePath = doc.FilePath;
+                                string fileName = !string.IsNullOrEmpty(doc.FileName) ? doc.FileName : (!string.IsNullOrEmpty(doc.FileTitle) ? doc.FileTitle : ("Document_" + docIndex));
+
+                                bool isAffidavit = string.Equals(doc.DocumetType, "Affidavit", StringComparison.OrdinalIgnoreCase)
+                                                || string.Equals(doc.DocumetType, "Complaint Affidavit Copy", StringComparison.OrdinalIgnoreCase)
+                                                || string.Equals(doc.FileTitle, "Complaint Affidavit Copy", StringComparison.OrdinalIgnoreCase);
+
+                                string outlineTitle;
+                                if (isAffidavit)
+                                {
+                                    outlineTitle = "Complaint Affidavit Copy: " + fileName;
+                                }
+                                else
+                                {
+                                    string fileTitle = !string.IsNullOrEmpty(doc.FileTitle) ? doc.FileTitle : (!string.IsNullOrEmpty(doc.FileName) ? doc.FileName : (!string.IsNullOrEmpty(doc.DocumetType) ? doc.DocumetType : fileName));
+                                    outlineTitle = "Attachment " + docIndex + ": " + fileTitle;
+                                    docIndex++;
+                                }
+
+                                AppendFileToPdfDocument(mergedDoc, filePath, fileName, outlineTitle);
+                            }
+                        }
+
+                        // 3. Add order files from status logs
+                        if (logs != null && logs.Count > 0)
+                        {
+                            int logDocIndex = 1;
+                            foreach (var log in logs)
+                            {
+                                if (!string.IsNullOrEmpty(log.OrderFilePath) && !string.IsNullOrEmpty(log.OrderFileName))
+                                {
+                                    string orderTitle = "Order Document " + logDocIndex + " (" + (!string.IsNullOrEmpty(log.Status) ? log.Status : "Order") + ")";
+                                    AppendFileToPdfDocument(mergedDoc, log.OrderFilePath, log.OrderFileName, orderTitle);
+                                    logDocIndex++;
+                                }
+                            }
+                        }
+
+                        mergedDoc.Save(outputMs, false);
+                        return outputMs.ToArray();
+                    }
+                }
+            }
+            catch
+            {
+                return dossierPdfBytes;
+            }
+        }
+
+        private void AppendFileToPdfDocument(PdfDocument targetDoc, string filePath, string fileName, string outlineTitle)
+        {
+            if (string.IsNullOrWhiteSpace(filePath)) return;
+
+            byte[] fileBytes = FetchAttachmentBytes(filePath);
+            if (fileBytes == null || fileBytes.Length == 0) return;
+
+            bool isPdf = (fileBytes.Length >= 4 && fileBytes[0] == 0x25 && fileBytes[1] == 0x50 && fileBytes[2] == 0x44 && fileBytes[3] == 0x46)
+                         || (!string.IsNullOrEmpty(fileName) && fileName.EndsWith(".pdf", StringComparison.OrdinalIgnoreCase))
+                         || (!string.IsNullOrEmpty(filePath) && filePath.EndsWith(".pdf", StringComparison.OrdinalIgnoreCase));
+
+            if (isPdf)
+            {
+                try
+                {
+                    using (MemoryStream ms = new MemoryStream(fileBytes))
+                    {
+                        using (PdfDocument attachDoc = PdfReader.Open(ms, PdfDocumentOpenMode.Import))
+                        {
+                            for (int i = 0; i < attachDoc.PageCount; i++)
+                            {
+                                PdfPage newPage = targetDoc.AddPage(attachDoc.Pages[i]);
+                                if (i == 0 && !string.IsNullOrEmpty(outlineTitle))
+                                {
+                                    targetDoc.Outlines.Add(outlineTitle, newPage, true);
+                                }
+                            }
+                        }
+                    }
+                    return;
+                }
+                catch { }
+            }
+
+            bool isImage = (!string.IsNullOrEmpty(fileName) && (fileName.EndsWith(".jpg", StringComparison.OrdinalIgnoreCase) || fileName.EndsWith(".jpeg", StringComparison.OrdinalIgnoreCase) || fileName.EndsWith(".png", StringComparison.OrdinalIgnoreCase) || fileName.EndsWith(".bmp", StringComparison.OrdinalIgnoreCase) || fileName.EndsWith(".gif", StringComparison.OrdinalIgnoreCase)))
+                           || (!string.IsNullOrEmpty(filePath) && (filePath.EndsWith(".jpg", StringComparison.OrdinalIgnoreCase) || filePath.EndsWith(".jpeg", StringComparison.OrdinalIgnoreCase) || filePath.EndsWith(".png", StringComparison.OrdinalIgnoreCase) || filePath.EndsWith(".bmp", StringComparison.OrdinalIgnoreCase) || filePath.EndsWith(".gif", StringComparison.OrdinalIgnoreCase)));
+
+            if (isImage)
+            {
+                try
+                {
+                    PdfPage imgPage = targetDoc.AddPage();
+                    imgPage.Size = PdfSharp.PageSize.A4;
+                    using (MemoryStream imgMs = new MemoryStream(fileBytes))
+                    {
+                        using (XImage img = XImage.FromStream(imgMs))
+                        {
+                            using (XGraphics gfx = XGraphics.FromPdfPage(imgPage))
+                            {
+                                double margin = 36.0;
+                                double availW = imgPage.Width.Point - (2 * margin);
+                                double availH = imgPage.Height.Point - (2 * margin);
+
+                                double scale = Math.Min(availW / img.PointWidth, availH / img.PointHeight);
+                                if (scale > 1.0) scale = 1.0;
+
+                                double drawW = img.PointWidth * scale;
+                                double drawH = img.PointHeight * scale;
+                                double x = margin + ((availW - drawW) / 2.0);
+                                double y = margin + ((availH - drawH) / 2.0);
+
+                                gfx.DrawImage(img, x, y, drawW, drawH);
+                            }
+                        }
+                    }
+                    if (!string.IsNullOrEmpty(outlineTitle))
+                    {
+                        targetDoc.Outlines.Add(outlineTitle, imgPage, true);
+                    }
+                    return;
+                }
+                catch { }
+            }
+        }
+
+        private byte[] FetchAttachmentBytes(string filePath)
+        {
+            if (string.IsNullOrWhiteSpace(filePath)) return null;
+            string path = filePath.Trim();
+
+            // 1. If absolute HTTP/HTTPS URL
+            if (path.StartsWith("http://", StringComparison.OrdinalIgnoreCase) || path.StartsWith("https://", StringComparison.OrdinalIgnoreCase))
+            {
+                // If URL points to localhost, resolve directly from disk first
+                try
+                {
+                    Uri uri = new Uri(path);
+                    if (uri.IsLoopback || string.Equals(uri.Host, "localhost", StringComparison.OrdinalIgnoreCase))
+                    {
+                        string localRel = uri.AbsolutePath;
+                        if (!string.IsNullOrEmpty(localRel))
+                        {
+                            string mapped = System.Web.Hosting.HostingEnvironment.MapPath("~" + localRel);
+                            if (!string.IsNullOrEmpty(mapped) && System.IO.File.Exists(mapped))
+                            {
+                                return System.IO.File.ReadAllBytes(mapped);
+                            }
+                        }
+                    }
+                }
+                catch { }
+
+                try
+                {
+                    ServicePointManager.SecurityProtocol |= SecurityProtocolType.Tls12 | SecurityProtocolType.Tls11 | SecurityProtocolType.Tls;
+                    using (WebClient wc = new WebClient())
+                    {
+                        return wc.DownloadData(path);
+                    }
+                }
+                catch
+                {
+                    try
+                    {
+                        Uri uri = new Uri(path);
+                        string localRel = uri.AbsolutePath;
+                        if (!string.IsNullOrEmpty(localRel))
+                        {
+                            string mapped = System.Web.Hosting.HostingEnvironment.MapPath("~" + localRel);
+                            if (!string.IsNullOrEmpty(mapped) && System.IO.File.Exists(mapped))
+                            {
+                                return System.IO.File.ReadAllBytes(mapped);
+                            }
+                        }
+                    }
+                    catch { }
+                }
+                return null;
+            }
+
+            // 2. If virtual or relative path
+            try
+            {
+                string virtualPath = path;
+                if (virtualPath.StartsWith("/")) virtualPath = "~" + virtualPath;
+                else if (!virtualPath.StartsWith("~")) virtualPath = "~/" + virtualPath;
+
+                string mapped = System.Web.Hosting.HostingEnvironment.MapPath(virtualPath);
+                if (!string.IsNullOrEmpty(mapped) && System.IO.File.Exists(mapped))
+                {
+                    return System.IO.File.ReadAllBytes(mapped);
+                }
+            }
+            catch { }
+
+            // 3. If direct physical path
+            try
+            {
+                if (System.IO.File.Exists(path))
+                {
+                    return System.IO.File.ReadAllBytes(path);
+                }
+            }
+            catch { }
+
+            // 4. Fallback to portal hosts
+            string[] baseHosts = new string[] {
+                "https://www.barcouncilofgujarat.org",
+                "https://dcoffice.barcouncilofgujarat.org"
+            };
+
+            foreach (var baseHost in baseHosts)
+            {
+                try
+                {
+                    string cleanRel = path.TrimStart('~').TrimStart('/');
+                    string testUrl = baseHost + "/" + cleanRel;
+                    ServicePointManager.SecurityProtocol |= SecurityProtocolType.Tls12 | SecurityProtocolType.Tls11 | SecurityProtocolType.Tls;
+                    using (WebClient wc = new WebClient())
+                    {
+                        return wc.DownloadData(testUrl);
+                    }
+                }
+                catch { }
+            }
+
             return null;
         }
 
-        #region Report Image load
-        private void LoadImage(DataRow objDataRow, string strImageField, string FilePath)
+        private string RenderComplaintStatusPill(string status)
         {
-            try
+            if (string.IsNullOrEmpty(status)) return "-";
+            string s = status.Trim();
+            string lower = s.ToLower();
+            string badgeClass = "status-default";
+            if (lower.Contains("accept") || lower.Contains("approved")) badgeClass = "status-accepted";
+            else if (lower.Contains("reject")) badgeClass = "status-rejected";
+            else if (lower.Contains("more detail") || lower.Contains("pending") || lower.Contains("payment")) badgeClass = "status-warning";
+            else if (lower.Contains("board")) badgeClass = "status-info";
+
+            return string.Format("<span class=\"status-pill {0}\">{1}</span>", badgeClass, HttpUtility.HtmlEncode(s.ToUpper()));
+        }
+
+        private string FormatPdfFileLink(string fileName, string filePath)
+        {
+            if (string.IsNullOrEmpty(fileName) || fileName.Trim() == "-")
             {
-                if (FilePath != null)
+                return "-";
+            }
+
+            string rawPath = !string.IsNullOrEmpty(filePath) ? filePath.Trim() : "";
+            if (string.IsNullOrEmpty(rawPath))
+            {
+                return "<strong>" + HttpUtility.HtmlEncode(fileName) + "</strong>";
+            }
+
+            string targetUrl = rawPath;
+            if (!targetUrl.StartsWith("http://", StringComparison.OrdinalIgnoreCase) && !targetUrl.StartsWith("https://", StringComparison.OrdinalIgnoreCase))
+            {
+                if (targetUrl.StartsWith("~/"))
                 {
-                    if (FilePath != "")
-                    {
-                        FileStream fs = new FileStream(FilePath, System.IO.FileMode.Open, System.IO.FileAccess.Read);
-                        byte[] Image = new byte[fs.Length];
-                        fs.Read(Image, 0, Convert.ToInt32(fs.Length));
-                        fs.Close();
-                        objDataRow[strImageField] = Image;
-                    }
+                    targetUrl = targetUrl.Substring(1);
+                }
+                if (!targetUrl.StartsWith("/"))
+                {
+                    targetUrl = "/" + targetUrl;
+                }
+                string baseUrl = Request != null && Request.Url != null ? Request.Url.GetLeftPart(UriPartial.Authority) : "http://localhost:53316";
+                targetUrl = baseUrl + targetUrl;
+            }
+
+            return string.Format("<a href=\"{0}\" target=\"_blank\" class=\"pdf-doc-link\" title=\"Open file in new tab\">{1}</a>",
+                HttpUtility.HtmlAttributeEncode(targetUrl),
+                HttpUtility.HtmlEncode(fileName));
+        }
+
+        private string GenerateComplaintDetailsPdfHtml(
+            ComplaintListModel complaint,
+            List<ComplaintAgainstList> advocates,
+            List<ComplaintDocumentList> documents,
+            List<ComplaintStatusLog> logs)
+        {
+            string logoBase64 = GetLogoBase64();
+            StringBuilder sb = new StringBuilder();
+
+            sb.AppendLine("<!DOCTYPE html>");
+            sb.AppendLine("<html lang=\"en\">");
+            sb.AppendLine("<head>");
+            sb.AppendLine("<meta charset=\"utf-8\" />");
+            sb.AppendLine("<title>Complaint Dossier - " + HttpUtility.HtmlEncode(complaint.ComplaintNumber ?? "") + "</title>");
+            sb.AppendLine("<style>");
+            sb.AppendLine("@page { size: A4 portrait; margin: 10mm 12mm 10mm 12mm; }");
+            sb.AppendLine("* { box-sizing: border-box; -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; }");
+            sb.AppendLine("body { font-family: 'Segoe UI', 'Helvetica Neue', Arial, sans-serif; font-size: 10.5px; color: #1e293b; background: #fff; margin: 0; padding: 0; line-height: 1.4; }");
+
+            // Header styling
+            sb.AppendLine(".rpt-header { width: 100%; border-collapse: collapse; margin-bottom: 6px; }");
+            sb.AppendLine(".rpt-header td { vertical-align: middle; padding: 0; }");
+            sb.AppendLine(".rpt-header .logo-td { width: 56px; }");
+            sb.AppendLine(".rpt-header .logo-td img { height: 48px; width: auto; display: block; }");
+            sb.AppendLine(".rpt-header .title-td { text-align: center; padding: 0 10px; }");
+            sb.AppendLine(".rpt-header .badge-td { width: 190px; text-align: right; }");
+            sb.AppendLine(".org-name { font-size: 15px; font-weight: 800; color: #002b5c; text-transform: uppercase; letter-spacing: 0.5px; margin: 0 0 2px 0; }");
+            sb.AppendLine(".org-addr { font-size: 8px; color: #64748b; margin: 0; line-height: 1.25; }");
+            sb.AppendLine(".doc-badge { display: inline-block; background: #002b5c; color: #fff; padding: 3px 10px; border-radius: 4px; font-weight: 700; font-size: 9.5px; letter-spacing: 0.4px; text-transform: uppercase; }");
+            sb.AppendLine(".doc-badge-sub { font-size: 8px; color: #64748b; font-weight: 600; margin-top: 2px; text-transform: uppercase; letter-spacing: 0.2px; }");
+
+            // Divider
+            sb.AppendLine(".hdr-divider { border: none; border-top: 2px solid #002b5c; margin: 4px 0 10px 0; }");
+
+            // Case Hero Banner
+            sb.AppendLine(".case-banner { width: 100%; border-collapse: collapse; background: #f8fafc; border: 1.5px solid #cbd5e1; border-radius: 6px; margin-bottom: 12px; }");
+            sb.AppendLine(".case-banner td { padding: 8px 12px; vertical-align: middle; }");
+            sb.AppendLine(".case-num { font-size: 14px; font-weight: 800; color: #002b5c; letter-spacing: 0.5px; font-family: 'Consolas', monospace; }");
+            sb.AppendLine(".meta-label { font-size: 8.5px; font-weight: 600; color: #64748b; text-transform: uppercase; letter-spacing: 0.3px; display: block; margin-bottom: 2px; }");
+            sb.AppendLine(".meta-val { font-size: 10.5px; font-weight: 700; color: #0f172a; }");
+
+            // Section Header & Card
+            sb.AppendLine(".sec-header { background: #002b5c; color: #ffffff; padding: 5px 10px; font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.4px; border-radius: 4px 4px 0 0; margin-top: 10px; margin-bottom: 0; }");
+            sb.AppendLine(".sec-card { border: 1px solid #cbd5e1; border-top: none; padding: 10px; margin-bottom: 10px; background: #ffffff; border-radius: 0 0 4px 4px; }");
+
+            // Info Grid Table
+            sb.AppendLine(".info-table { width: 100%; border-collapse: collapse; }");
+            sb.AppendLine(".info-table td { padding: 5px 8px; vertical-align: top; font-size: 10px; border-bottom: 1px dashed #e2e8f0; }");
+            sb.AppendLine(".info-table tr:last-child td { border-bottom: none; }");
+            sb.AppendLine(".info-lbl { font-weight: 600; color: #475569; width: 22%; }");
+            sb.AppendLine(".info-val { font-weight: 700; color: #0f172a; }");
+
+            // Narrative Block
+            sb.AppendLine(".narrative-title { font-weight: 700; font-size: 9.5px; color: #475569; text-transform: uppercase; letter-spacing: 0.3px; margin: 8px 0 4px 0; }");
+            sb.AppendLine(".narrative-box { background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 4px; padding: 8px 10px; font-size: 9.5px; color: #1e293b; line-height: 1.45; white-space: pre-wrap; }");
+
+            // Data Tables
+            sb.AppendLine(".data-tbl { width: 100%; border-collapse: collapse; margin-top: 0; font-size: 9.5px; }");
+            sb.AppendLine(".data-tbl thead { display: table-header-group; }");
+            sb.AppendLine(".data-tbl tr { page-break-inside: avoid; }");
+            sb.AppendLine(".data-tbl th { background: #f1f5f9; color: #0f172a; font-weight: 700; font-size: 8.5px; text-transform: uppercase; letter-spacing: 0.3px; padding: 6px 8px; border: 1px solid #cbd5e1; text-align: left; }");
+            sb.AppendLine(".data-tbl th.tc { text-align: center; }");
+            sb.AppendLine(".data-tbl td { border: 1px solid #cbd5e1; padding: 5px 8px; vertical-align: middle; }");
+            sb.AppendLine(".data-tbl tbody tr:nth-child(even) { background-color: #f8fafc; }");
+
+            // Status Pill
+            sb.AppendLine(".status-pill { display: inline-block; padding: 2px 8px; border-radius: 10px; font-size: 8.5px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.3px; white-space: nowrap; }");
+            sb.AppendLine(".status-accepted { background: #dcfce7; color: #15803d; border: 1px solid #86efac; }");
+            sb.AppendLine(".status-rejected { background: #fee2e2; color: #b91c1c; border: 1px solid #fca5a5; }");
+            sb.AppendLine(".status-warning { background: #fef3c7; color: #b45309; border: 1px solid #fde68a; }");
+            sb.AppendLine(".status-info { background: #e0f2fe; color: #0369a1; border: 1px solid #bae6fd; }");
+            sb.AppendLine(".status-default { background: #e0e7ff; color: #3730a3; border: 1px solid #c7d2fe; }");
+
+            // Empty row
+            // Empty row
+            sb.AppendLine(".empty-row { text-align: center; color: #64748b; font-style: italic; padding: 14px !important; }");
+            sb.AppendLine(".pdf-doc-link { color: #0056b3; text-decoration: underline; font-weight: 700; word-break: break-all; }");
+            sb.AppendLine(".data-tbl tr.log-mainrow td { border-bottom: 1px dashed #cbd5e1; }");
+            sb.AppendLine(".data-tbl tr.log-subrow td { border-top: none; border-bottom: 1.5px solid #94a3b8; background-color: #f8fafc; padding: 5px 8px; font-size: 9.5px; color: #1e293b; line-height: 1.4; }");
+            sb.AppendLine(".log-subrow-lbl { font-weight: 700; color: #002b5c; font-size: 8.5px; text-transform: uppercase; letter-spacing: 0.3px; margin-right: 4px; }");
+
+            // Footer
+            sb.AppendLine(".rpt-footer { width: 100%; border-collapse: collapse; margin-top: 15px; border-top: 1px solid #002b5c; }");
+            sb.AppendLine(".rpt-footer td { padding: 4px 0; font-size: 8px; color: #64748b; vertical-align: middle; }");
+
+            sb.AppendLine("</style>");
+            sb.AppendLine("</head>");
+            sb.AppendLine("<body>");
+
+            // Report Header
+            sb.AppendLine("<table class=\"rpt-header\">");
+            sb.AppendLine("  <tr>");
+            sb.AppendLine("    <td class=\"logo-td\">");
+            if (!string.IsNullOrEmpty(logoBase64))
+            {
+                sb.AppendLine("      <img src=\"data:image/png;base64," + logoBase64 + "\" alt=\"BCG\" />");
+            }
+            sb.AppendLine("    </td>");
+            sb.AppendLine("    <td class=\"title-td\">");
+            sb.AppendLine("      <div class=\"org-name\">The Bar Council of Gujarat</div>");
+            sb.AppendLine("      <div class=\"org-addr\">3rd Floor, Satyamev Complex, Opp. High Court of Gujarat, S.G. Highway, Ahmedabad - 380060</div>");
+            sb.AppendLine("      <div class=\"org-addr\">Phone: (079) 27434073 &nbsp;|&nbsp; Email: mail@barcouncilofgujarat.org &nbsp;|&nbsp; Web: www.barcouncilofgujarat.org</div>");
+            sb.AppendLine("    </td>");
+            sb.AppendLine("    <td class=\"badge-td\">");
+            sb.AppendLine("      <div class=\"doc-badge\">Complaint Case Dossier</div>");
+            sb.AppendLine("      <div class=\"doc-badge-sub\">Official Proceedings Record</div>");
+            sb.AppendLine("    </td>");
+            sb.AppendLine("  </tr>");
+            sb.AppendLine("</table>");
+            sb.AppendLine("<hr class=\"hdr-divider\" />");
+
+            // Case Hero Banner
+            string cmpNo = !string.IsNullOrEmpty(complaint.ComplaintNumber) ? HttpUtility.HtmlEncode(complaint.ComplaintNumber) : "-";
+            string filedDate = !string.IsNullOrEmpty(complaint.SCreateDate) ? HttpUtility.HtmlEncode(complaint.SCreateDate) : "-";
+            string statusPill = RenderComplaintStatusPill(complaint.Status);
+            string payStatus = !string.IsNullOrEmpty(complaint.PaymentStatus) ? HttpUtility.HtmlEncode(complaint.PaymentStatus) : "Unpaid";
+            string totalAmt = complaint.TotalAmount.ToString("N2");
+
+            sb.AppendLine("<table class=\"case-banner\">");
+            sb.AppendLine("  <tr>");
+            sb.AppendLine("    <td style=\"width:32%;\"><span class=\"meta-label\">Complaint Number</span><span class=\"case-num\">" + cmpNo + "</span></td>");
+            sb.AppendLine("    <td style=\"width:22%;\"><span class=\"meta-label\">Filing Date</span><span class=\"meta-val\">" + filedDate + "</span></td>");
+            sb.AppendLine("    <td style=\"width:24%;\"><span class=\"meta-label\">Current Status</span><div>" + statusPill + "</div></td>");
+            sb.AppendLine("    <td style=\"width:22%;\"><span class=\"meta-label\">Payment Status / Fee</span><span class=\"meta-val\">₹ " + totalAmt + " (" + payStatus + ")</span></td>");
+            sb.AppendLine("  </tr>");
+            sb.AppendLine("</table>");
+
+            // Section 1: Complainant Profile
+            sb.AppendLine("<div class=\"sec-header\">1. Complainant's Information (ફરિયાદીની વિગત)</div>");
+            sb.AppendLine("<div class=\"sec-card\">");
+            sb.AppendLine("  <table class=\"info-table\">");
+            sb.AppendLine("    <tr>");
+            sb.AppendLine("      <td class=\"info-lbl\" style=\"width:16%;\">Full Name:</td>");
+            sb.AppendLine("      <td class=\"info-val\" style=\"width:34%;\">" + (!string.IsNullOrEmpty(complaint.FullName) ? HttpUtility.HtmlEncode(complaint.FullName) : "-") + "</td>");
+            sb.AppendLine("      <td class=\"info-lbl\" style=\"width:16%;\">Contact Number:</td>");
+            sb.AppendLine("      <td class=\"info-val\" style=\"width:34%;\">" + (!string.IsNullOrEmpty(complaint.ContactNumber) ? HttpUtility.HtmlEncode(complaint.ContactNumber) : "-") + "</td>");
+            sb.AppendLine("    </tr>");
+            sb.AppendLine("    <tr>");
+            sb.AppendLine("      <td class=\"info-lbl\">Email Address:</td>");
+            sb.AppendLine("      <td class=\"info-val\" colspan=\"3\">" + (!string.IsNullOrEmpty(complaint.EmailAddress) ? HttpUtility.HtmlEncode(complaint.EmailAddress) : "-") + "</td>");
+            sb.AppendLine("    </tr>");
+            sb.AppendLine("    <tr>");
+            sb.AppendLine("      <td class=\"info-lbl\">Postal Address:</td>");
+            sb.AppendLine("      <td class=\"info-val\" colspan=\"3\" style=\"line-height:1.45;\">" + (!string.IsNullOrEmpty(complaint.Address) ? HttpUtility.HtmlEncode(complaint.Address) : "-") + "</td>");
+            sb.AppendLine("    </tr>");
+            sb.AppendLine("  </table>");
+
+            if (!string.IsNullOrEmpty(complaint.Summary) && complaint.Summary.Trim() != "")
+            {
+                sb.AppendLine("  <div class=\"narrative-title\">Summary / Short Description:</div>");
+                sb.AppendLine("  <div class=\"narrative-box\">" + HttpUtility.HtmlEncode(complaint.Summary) + "</div>");
+            }
+
+            if (!string.IsNullOrEmpty(complaint.DetailComplaint) && complaint.DetailComplaint.Trim() != "")
+            {
+                sb.AppendLine("  <div class=\"narrative-title\">Detailed Complaint Narrative (વિસ્તૃત ફરિયાદ):</div>");
+                sb.AppendLine("  <div class=\"narrative-box\">" + HttpUtility.HtmlEncode(complaint.DetailComplaint) + "</div>");
+            }
+            sb.AppendLine("</div>");
+
+            // Section 2: Advocates Complained Against
+            sb.AppendLine("<div class=\"sec-header\">2. Details of Advocate - Complained Against (જે વકીલ વિરુદ્ધ ફરિયાદ છે તેની વિગતો)</div>");
+            sb.AppendLine("<div class=\"sec-card\">");
+            sb.AppendLine("  <table class=\"data-tbl\">");
+            sb.AppendLine("    <thead>");
+            sb.AppendLine("      <tr>");
+            sb.AppendLine("        <th style=\"width:30px;\" class=\"tc\">#</th>");
+            sb.AppendLine("        <th>Advocate Name</th>");
+            sb.AppendLine("        <th style=\"width:130px;\">Enrollment Number</th>");
+            sb.AppendLine("        <th style=\"width:100px;\">City</th>");
+            sb.AppendLine("        <th style=\"width:100px;\">Contact Number</th>");
+            sb.AppendLine("        <th style=\"width:85px; text-align:right;\">Fee Amount</th>");
+            sb.AppendLine("      </tr>");
+            sb.AppendLine("    </thead>");
+            sb.AppendLine("    <tbody>");
+            if (advocates != null && advocates.Count > 0)
+            {
+                for (int i = 0; i < advocates.Count; i++)
+                {
+                    var adv = advocates[i];
+                    string advName = !string.IsNullOrEmpty(adv.AdvocateName) ? adv.AdvocateName : (!string.IsNullOrEmpty(adv.FullName) ? adv.FullName : adv.Name);
+                    string advEnro = !string.IsNullOrEmpty(adv.EnrollmentNo) ? adv.EnrollmentNo : (adv.IsKnown == "N" ? "Unknown" : "-");
+                    string advCity = !string.IsNullOrEmpty(adv.City) ? adv.City : "-";
+                    string advContact = !string.IsNullOrEmpty(adv.ContactNumber) ? adv.ContactNumber : (!string.IsNullOrEmpty(adv.MobileNo) ? adv.MobileNo : "-");
+                    string advAmt = adv.Amount > 0 ? ("₹ " + adv.Amount.ToString("N2")) : "₹ 0.00";
+
+                    sb.AppendLine("      <tr>");
+                    sb.AppendLine("        <td class=\"tc\">" + (i + 1) + "</td>");
+                    sb.AppendLine("        <td><strong>" + HttpUtility.HtmlEncode(advName ?? "-") + "</strong></td>");
+                    sb.AppendLine("        <td>" + HttpUtility.HtmlEncode(advEnro) + "</td>");
+                    sb.AppendLine("        <td>" + HttpUtility.HtmlEncode(advCity) + "</td>");
+                    sb.AppendLine("        <td>" + HttpUtility.HtmlEncode(advContact) + "</td>");
+                    sb.AppendLine("        <td style=\"text-align:right;\">" + advAmt + "</td>");
+                    sb.AppendLine("      </tr>");
                 }
             }
-            catch (ThreadAbortException)
+            else
             {
+                sb.AppendLine("      <tr><td colspan=\"6\" class=\"empty-row\">No advocates listed for this complaint.</td></tr>");
             }
-            catch (Exception ex)
+            sb.AppendLine("    </tbody>");
+            sb.AppendLine("  </table>");
+            sb.AppendLine("</div>");
+
+            // Section 3: Attached Documents
+            sb.AppendLine("<div class=\"sec-header\">3. Documents & Evidence Attachments (જોડાણ દસ્તાવેજો)</div>");
+            sb.AppendLine("<div class=\"sec-card\">");
+            sb.AppendLine("  <table class=\"data-tbl\">");
+            sb.AppendLine("    <thead>");
+            sb.AppendLine("      <tr>");
+            sb.AppendLine("        <th style=\"width:25px;\" class=\"tc\">#</th>");
+            sb.AppendLine("        <th style=\"width:145px;\">Document Category</th>");
+            sb.AppendLine("        <th style=\"width:235px;\">File Name</th>");
+            sb.AppendLine("        <th>Description / Notes</th>");
+            sb.AppendLine("      </tr>");
+            sb.AppendLine("    </thead>");
+            sb.AppendLine("    <tbody>");
+            if (documents != null && documents.Count > 0)
             {
+                for (int i = 0; i < documents.Count; i++)
+                {
+                    var doc = documents[i];
+                    bool isAffidavit = string.Equals(doc.DocumetType, "Affidavit", StringComparison.OrdinalIgnoreCase)
+                                    || string.Equals(doc.DocumetType, "Complaint Affidavit Copy", StringComparison.OrdinalIgnoreCase)
+                                    || string.Equals(doc.FileTitle, "Complaint Affidavit Copy", StringComparison.OrdinalIgnoreCase);
+
+                    string docTitle = isAffidavit
+                        ? "Complaint Affidavit Copy"
+                        : (!string.IsNullOrEmpty(doc.FileTitle) ? doc.FileTitle : (!string.IsNullOrEmpty(doc.DocumetType) ? doc.DocumetType : "Document"));
+
+                    string docName = !string.IsNullOrEmpty(doc.FileName) ? doc.FileName : "-";
+                    string docDesc = !string.IsNullOrEmpty(doc.Description) ? doc.Description : (isAffidavit ? "Official complaint sworn affidavit submitted by complainant." : "-");
+                    string fileCellHtml = FormatPdfFileLink(docName, doc.FilePath);
+
+                    sb.AppendLine("      <tr>");
+                    sb.AppendLine("        <td class=\"tc\">" + (i + 1) + "</td>");
+                    sb.AppendLine("        <td><strong>" + HttpUtility.HtmlEncode(docTitle) + "</strong></td>");
+                    sb.AppendLine("        <td>" + fileCellHtml + "</td>");
+                    sb.AppendLine("        <td>" + HttpUtility.HtmlEncode(docDesc) + "</td>");
+                    sb.AppendLine("      </tr>");
+                }
             }
+            else
+            {
+                sb.AppendLine("      <tr><td colspan=\"4\" class=\"empty-row\">No attachments or affidavit records uploaded.</td></tr>");
+            }
+            sb.AppendLine("    </tbody>");
+            sb.AppendLine("  </table>");
+            sb.AppendLine("</div>");
+
+            // Section 4: Action Log & Proceedings History
+            sb.AppendLine("<div class=\"sec-header\">4. Case Proceedings & Activity History Log (કેસ કાર્યવાહી ઇતિહાસ)</div>");
+            sb.AppendLine("<div class=\"sec-card\">");
+            sb.AppendLine("  <table class=\"data-tbl\">");
+            sb.AppendLine("    <thead>");
+            sb.AppendLine("      <tr>");
+            sb.AppendLine("        <th style=\"width:30px;\" class=\"tc\">#</th>");
+            sb.AppendLine("        <th style=\"width:130px;\">Log Date &amp; Time</th>");
+            sb.AppendLine("        <th style=\"width:115px;\">Status</th>");
+            sb.AppendLine("        <th style=\"width:95px;\">Next Date</th>");
+            sb.AppendLine("        <th style=\"width:125px;\">Committee</th>");
+            sb.AppendLine("        <th>Order File</th>");
+            sb.AppendLine("      </tr>");
+            sb.AppendLine("    </thead>");
+            sb.AppendLine("    <tbody>");
+            if (logs != null && logs.Count > 0)
+            {
+                var sortedLogs = logs.OrderBy(x => x.CreateDate).ThenByDescending(x => x.SrNo ?? 0).ToList();
+                for (int i = 0; i < sortedLogs.Count; i++)
+                {
+                    var log = sortedLogs[i];
+                    string logCreated = !string.IsNullOrEmpty(log.SCreateDate)
+                        ? log.SCreateDate
+                        : (log.CreateDate != DateTime.MinValue ? log.CreateDate.ToString("dd-MM-yyyy hh:mm tt") : "-");
+                    string logStatus = RenderComplaintStatusPill(log.Status);
+                    string logDate = !string.IsNullOrEmpty(log.SNextDate) ? log.SNextDate : "-";
+                    string logComm = !string.IsNullOrEmpty(log.CommitteTitle) ? ("Committee " + log.CommitteTitle) : "-";
+                    string logSummary = !string.IsNullOrEmpty(log.Summary) ? log.Summary.Trim() : "";
+                    if (string.IsNullOrEmpty(logSummary))
+                    {
+                        if (string.Equals(log.Status, "New", StringComparison.OrdinalIgnoreCase))
+                        {
+                            logSummary = "Complaint has been successfully registered in the system. It is currently under initial administrative verification and scrutiny.";
+                        }
+                        else if (string.Equals(log.Status, "Accepted", StringComparison.OrdinalIgnoreCase))
+                        {
+                            logSummary = "Complaint has been scrutinized and accepted for further proceedings. The matter will be placed before the General Board for consideration.";
+                        }
+                        else if (string.Equals(log.Status, "Refer to Board", StringComparison.OrdinalIgnoreCase) || string.Equals(log.Status, "Next General Board", StringComparison.OrdinalIgnoreCase))
+                        {
+                            logSummary = "Complaint has been referred to the General Board for consideration. Awaiting the Board's review and decision in the upcoming meeting.";
+                        }
+                        else if (string.Equals(log.Status, "Board Accept", StringComparison.OrdinalIgnoreCase))
+                        {
+                            logSummary = "The General Board has accepted the complaint. Pending formal board approval and committee allocation.";
+                        }
+                        else if (string.Equals(log.Status, "Board Has Approved", StringComparison.OrdinalIgnoreCase))
+                        {
+                            logSummary = "The General Board has formally approved the complaint. The matter has been referred to the Disciplinary Committee for conducting inquiry and hearing proceedings.";
+                        }
+                        else
+                        {
+                            logSummary = "-";
+                        }
+                    }
+                    string logFile = !string.IsNullOrEmpty(log.OrderFileName) ? log.OrderFileName : "-";
+                    string logFileHtml = FormatPdfFileLink(logFile, log.OrderFilePath);
+
+                    sb.AppendLine("      <tr class=\"log-mainrow\">");
+                    sb.AppendLine("        <td class=\"tc\">" + (i + 1) + "</td>");
+                    sb.AppendLine("        <td style=\"white-space:nowrap; font-weight:600; color:#334155;\">" + HttpUtility.HtmlEncode(logCreated) + "</td>");
+                    sb.AppendLine("        <td>" + logStatus + "</td>");
+                    sb.AppendLine("        <td>" + HttpUtility.HtmlEncode(logDate) + "</td>");
+                    sb.AppendLine("        <td>" + HttpUtility.HtmlEncode(logComm) + "</td>");
+                    sb.AppendLine("        <td>" + logFileHtml + "</td>");
+                    sb.AppendLine("      </tr>");
+                    sb.AppendLine("      <tr class=\"log-subrow\">");
+                    sb.AppendLine("        <td colspan=\"6\">");
+                    sb.AppendLine("          <span class=\"log-subrow-lbl\">Remarks / Summary:</span> " + HttpUtility.HtmlEncode(logSummary));
+                    sb.AppendLine("        </td>");
+                    sb.AppendLine("      </tr>");
+                }
+            }
+            else
+            {
+                sb.AppendLine("      <tr><td colspan=\"6\" class=\"empty-row\">No status log records available.</td></tr>");
+            }
+            sb.AppendLine("    </tbody>");
+            sb.AppendLine("  </table>");
+            sb.AppendLine("</div>");
+
+            // Report Footer
+            sb.AppendLine("<table class=\"rpt-footer\">");
+            sb.AppendLine("  <tr>");
+            sb.AppendLine("    <td>The Bar Council of Gujarat &bull; Statutory Body Constituted under the Advocates Act, 1961 &bull; Confidential Official Case Record</td>");
+            sb.AppendLine("    <td style=\"text-align:right;\">Generated on " + DateTime.Now.ToString("dd-MM-yyyy hh:mm tt") + "</td>");
+            sb.AppendLine("  </tr>");
+            sb.AppendLine("</table>");
+
+            sb.AppendLine("</body>");
+            sb.AppendLine("</html>");
+
+            return sb.ToString();
         }
-        #endregion
 
         [HttpPost]
         public ActionResult InsertComplaintReply(String ComplaintId, String ReplyMessage, String FileName, String FilePath)

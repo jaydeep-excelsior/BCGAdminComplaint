@@ -14,10 +14,12 @@ namespace BarCouncilComplaint.Controllers
     {
         // GET: ComplaintList
         private readonly ComplaintRepository _ComplaintRepository;
+        private readonly ComplaintDetailsRepository _ComplaintDetailsRepository;
 
         public ComplaintListController()
         {
             _ComplaintRepository = new ComplaintRepository();
+            _ComplaintDetailsRepository = new ComplaintDetailsRepository();
         }
 
         public ActionResult Index()
@@ -575,8 +577,22 @@ namespace BarCouncilComplaint.Controllers
                     List<ComplaintDetailByNumber> result = _ComplaintRepository.GetComplaintDetailByComplaintNumber(ComplaintNumber);
                     if (result.Count > 0)
                     {
+                        var comp = result[0];
+                        try
+                        {
+                            var dcMemberList = _ComplaintRepository.GetDcMemberList(comp.Id);
+                            if (dcMemberList != null && dcMemberList.Count > 0 && dcMemberList[0].CommitteeId > 0)
+                            {
+                                comp.DcNumber = dcMemberList[0].CommitteeId;
+                                var dcList = _ComplaintDetailsRepository.GetDcNumberList();
+                                var dcObj = dcList.FirstOrDefault(x => x.Id == dcMemberList[0].CommitteeId);
+                                comp.DcCommitteeTitle = dcObj != null ? dcObj.DcTitle : dcMemberList[0].CommitteeId.ToString();
+                            }
+                        }
+                        catch { }
+
                         response.IsSuccess = true;
-                        response.Data = result[0];
+                        response.Data = comp;
                     }
                     else
                     {
@@ -608,8 +624,22 @@ namespace BarCouncilComplaint.Controllers
                     List<ComplaintDetailByNumber> result = _ComplaintRepository.GetComplaintComplainantsDetailsByComplaintNumber(ComplaintNumber);
                     if (result.Count > 0)
                     {
+                        var comp = result[0];
+                        try
+                        {
+                            var dcMemberList = _ComplaintRepository.GetDcMemberList(comp.Id);
+                            if (dcMemberList != null && dcMemberList.Count > 0 && dcMemberList[0].CommitteeId > 0)
+                            {
+                                comp.DcNumber = dcMemberList[0].CommitteeId;
+                                var dcList = _ComplaintDetailsRepository.GetDcNumberList();
+                                var dcObj = dcList.FirstOrDefault(x => x.Id == dcMemberList[0].CommitteeId);
+                                comp.DcCommitteeTitle = dcObj != null ? dcObj.DcTitle : dcMemberList[0].CommitteeId.ToString();
+                            }
+                        }
+                        catch { }
+
                         response.IsSuccess = true;
-                        response.Data = result[0];
+                        response.Data = comp;
                     }
                     else
                     {

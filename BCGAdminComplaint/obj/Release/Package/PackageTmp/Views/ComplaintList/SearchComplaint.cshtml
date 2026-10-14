@@ -136,7 +136,7 @@
         </div>
     </div>
 </div>
-<div class="row">
+<div class="row mb-2">
     <div class="col-12">
         <div class="page-title-box d-sm-flex align-items-center justify-content-between">
             <div>
@@ -155,338 +155,447 @@
         </div>
     </div>
 </div>
-<div class="row mt-2">
-    <div class="col-12">
-        <div class="card mb-0">
-            <div class="card-body">
-                <div class="top_belt_new top_belt_new_border d-flex justify-content-between align-items-center">
-                    <h5 class="mb-0">
-                        Search Complaint
-                    </h5>
+<!-- Search Filter Card -->
+<div class="card mt-2 mb-3 border-0 shadow-sm rounded-3">
+    <div class="card-body p-4">
+        <div class="d-flex align-items-center gap-2 mb-3 pb-2 border-bottom">
+            <div class="section-icon-badge bg-primary-subtle text-primary">
+                <i class="fa-solid fa-magnifying-glass"></i>
+            </div>
+            <div>
+                <h5 class="mb-0 fw-bold text-dark">Search Complaint</h5>
+                <span class="text-muted font-size-12">દાખલ કરેલ ફરિયાદ નંબર અને વર્ષ પસંદ કરીને શોધ કરો</span>
+            </div>
+        </div>
+        <div class="row align-items-end g-3">
+            <div class="col-md-6 col-lg-5">
+                <label class="form-label font-size-12 fw-semibold text-secondary">Complaint Number (ફરિયાદ નંબર)</label>
+                <div class="input-group">
+                    <span class="input-group-text bg-light fw-bold text-primary font-size-13">BCG/CMP/</span>
+                    <input type="text" class="form-control" id="txtSearchComplaintNumber" placeholder="e.g. 244" onkeypress="return isNumberKey(event, this)">
+                    <span class="input-group-text bg-light fw-bold text-muted">/</span>
+                    <select class="form-select" id="drpSearchComplaintYear" style="max-width: 140px;">
+                        <option value="">Select Year</option>
+                    </select>
                 </div>
-                <div class="row align-items-end mt-3">
-                    <div class="col-md-6 col-lg-4">
-                        <label class="form-label">Complaint Number</label>
-                        <div class="input-group">
-                            <span class="input-group-text fw-bold">BCG/CMP/</span>
-                            <input type="text" class="form-control" id="txtSearchComplaintNumber" placeholder="Enter Number" onkeypress="return isNumberKey(event, this)">
-                            <span class="input-group-text fw-bold">/</span>
-                            <select class="form-select" id="drpSearchComplaintYear">
-                                <option value="">Select Year</option>
-                            </select>
-                        </div>
-                    </div>
-                    <div class="col-md-12 col-lg-12 mt-3">
-                        <button class="btn btn-outline-primary waves-effect waves-light btn-sm close_filterdiv" id="btnSearchComplaint"><i class="fa-solid fa-magnifying-glass me-1"></i> Search</button>
-                        <button class="btn btn-outline-danger waves-effect waves-light btn-sm close_filterdiv" id="btnClearSearch"><i class="fa-solid fa-rotate-right me-1"></i> Clear</button>
-                    </div>
+            </div>
+            <div class="col-md-6 col-lg-7">
+                <div class="d-flex align-items-center flex-wrap gap-2">
+                    <button class="btn btn-primary btn-sm px-4 shadow-sm" id="btnSearchComplaint">
+                        <i class="fa-solid fa-magnifying-glass me-1"></i> Search Case
+                    </button>
+                    <button class="btn btn-outline-secondary btn-sm px-3" id="btnClearSearch">
+                        <i class="fa-solid fa-rotate-right me-1"></i> Clear
+                    </button>
+                    <span class="text-muted font-size-12 ms-lg-2">
+                        <i class="fa-solid fa-circle-info text-info me-1"></i> Format: <code>BCG/CMP/[Number]/[Year]</code>
+                    </span>
                 </div>
             </div>
         </div>
     </div>
 </div>
-<div class="pt-3 mb-3 pb-3 hide-element" id="dvComplaintDetailsArea">
-    <div class="row">
-        <div class="col-lg-8 col-md-12 mb-lg-0 mb-3">
-            <div class="card mb-0">
-                <div class="card-body">
-                    <input type="hidden" id="hdfComplaintId" value="@ViewBag.ComplaintId" />
-                    <input type="hidden" id="hdfStatus" value="@ViewBag.Status" />
-                    <div class="top_belt_new top_belt_new_border d-flex justify-content-between align-items-center">
-                        <h5 class="mb-0">
-                            Complainant's Details (ફરિયાદીની વિગતો)
-                        </h5>
-                        <div class="me-2 mb-0 d-flex align-items-center">
-                            <span id="txtComplaintStatus" class="btn btn-outline-primary btn-sm fw-bold no-pointer-events">@ViewBag.Status</span>
+
+<!-- Initial Prompt Empty State (Visible before search or when cleared) -->
+<div id="dvSearchEmptyPrompt" class="empty-state-card mb-3">
+    <div class="empty-state-icon">
+        <i class="fa-solid fa-folder-tree"></i>
+    </div>
+    <h5 class="empty-state-title">Search Complaint Records</h5>
+    <p class="empty-state-desc">Enter the complaint number and select the filing year above, then click <strong>Search Case</strong> to load the full case file, advocate details, meetings, attachments, and payment receipts.</p>
+    <div class="empty-state-badges">
+        <span class="badge bg-light text-secondary border"><i class="fa-solid fa-shield-halved text-primary me-1"></i> Complete Case File</span>
+        <span class="badge bg-light text-secondary border"><i class="fa-solid fa-gavel text-warning me-1"></i> DC Proceedings</span>
+        <span class="badge bg-light text-secondary border"><i class="fa-solid fa-receipt text-success me-1"></i> Payment Logs</span>
+    </div>
+</div>
+
+<!-- Dynamic Complaint Details Area (Shown on search success) -->
+<div class="mb-3 pb-3 hide-element" id="dvComplaintDetailsArea">
+    <!-- Primary Hidden Inputs for AJAX -->
+    <input type="hidden" id="hdfComplaintId" value="@ViewBag.ComplaintId" />
+    <input type="hidden" id="hdfStatus" value="@ViewBag.Status" />
+
+    <!-- 1. Executive Top Hero Card -->
+    <div class="card complaint-hero-card mb-3 shadow-sm border-0">
+        <div class="card-body p-4">
+            <div class="d-flex align-items-start gap-3">
+                <div class="complaint-hero-icon">
+                    <i class="fa-solid fa-scale-balanced"></i>
+                </div>
+                <div class="flex-grow-1">
+                    <!-- Row 1: Complaint # on Left, Status Tag in Top Right Div -->
+                    <div class="d-flex align-items-center justify-content-between flex-wrap gap-2 mb-2">
+                        <h4 class="mb-0 fw-bold text-dark hero-title-text me-2">#<span id="lblComplaintNumberHeader"></span></h4>
+                        <div class="ms-auto">
+                            <span id="txtComplaintStatus" class="complaint-status-pill">@ViewBag.Status</span>
                         </div>
                     </div>
-                    <div class="main_card_list_body">
-                        <div class="row mt-3 top_belt_new_border">
-                            <div class="col-md-4 col-sm-6 col-12">
-                                <div class="title">Full Name</div>
-                                <div class="description" id="lblComplainantFullName"></div>
+
+                    <!-- Row 2: Meta Chips -->
+                    <div class="d-flex align-items-center flex-wrap gap-2 mb-3">
+                        <span class="hero-meta-item"><i class="fa-regular fa-calendar-check text-primary"></i> Filed: <strong class="text-dark" id="lblComplaintDateTime"></strong></span>
+                        <span class="hero-meta-item"><i class="fa-regular fa-user text-primary"></i> Complainant: <strong class="text-dark" id="lblHeroComplainantName"></strong></span>
+                        <span class="hero-meta-item" id="heroDcCommitteeItem" style="display: none;"><i class="fa-solid fa-gavel text-warning"></i> DC Committee: <strong class="text-dark" id="lblHeroDcCommittee"></strong></span>
+                    </div>
+
+                    <!-- Row 3: Buttons Start on Left Side -->
+                    <div class="d-flex align-items-center flex-wrap gap-2">
+                        <div class="hero-action-toolbar">
+                            <a class="hero-action-btn" id="lnkDownload" href="javascript:void(0);" onclick="chooseDownloadPdfOption()">
+                                <span class="btn-icon-badge badge-pdf"><i class="fa-solid fa-file-pdf"></i></span>
+                                <span>Download PDF</span>
+                            </a>
+                            <a href="javascript:void(0);" class="hero-action-btn" onclick="openComplainantEditModal()">
+                                <span class="btn-icon-badge badge-edit"><i class="fa-solid fa-pen-to-square"></i></span>
+                                <span>Edit Details</span>
+                            </a>
+                            <a href="javascript:void(0);" class="hero-action-btn" id="lnkManageStatus" onclick="openManageStatusModal()">
+                                <span class="btn-icon-badge badge-history"><i class="fa-solid fa-clock-rotate-left"></i></span>
+                                <span>Status History</span>
+                            </a>
+                            <a class="hero-action-btn" id="lnkShareACopy" href="javascript:void(0);">
+                                <span class="btn-icon-badge badge-share"><i class="fa-solid fa-share-nodes"></i></span>
+                                <span>Share with Advocate</span>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Dynamic Status Action Buttons Row -->
+            <div class="hero-action-bar-row is-hidden" id="heroActionBarRow" style="display: none;">
+                <div class="d-flex align-items-center flex-wrap gap-2">
+                    <span class="hero-action-label-badge"><i class="fa-solid fa-bolt me-1 text-warning"></i> Available Actions:</span>
+                    <div class="d-flex flex-wrap gap-2" id="divActionButtons">
+                        <!-- Buttons injected dynamically -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 2-Column Case Layout -->
+    <div class="row">
+        <!-- LEFT COLUMN: Main Case Details & Files -->
+        <div class="col-lg-8 col-md-12 mb-lg-0 mb-3">
+            
+            <!-- Card 1: Complainant Details -->
+            <div class="card mb-3 border-0 shadow-sm rounded-3">
+                <div class="card-body p-4">
+                    <div class="d-flex justify-content-between align-items-center mb-3 pb-2 border-bottom">
+                        <div class="d-flex align-items-center gap-2">
+                            <div class="section-icon-badge bg-primary-subtle text-primary">
+                                <i class="fa-solid fa-user-shield"></i>
                             </div>
-                            <div class="col-md-4 col-sm-6 col-12">
-                                <div class="title">Email</div>
-                                <div class="description" id="lblComplainantEmail"></div>
-                            </div>
-                            <div class="col-md-4 col-sm-6 col-12">
-                                <div class="title">Mobile No.</div>
-                                <div class="description" id="lblComplainantContact"></div>
+                            <div>
+                                <h5 class="mb-0 fw-bold text-dark">Complainant's Details</h5>
+                                <span class="text-muted font-size-12">ફરિયાદીની વિગતો</span>
                             </div>
                         </div>
-                        <div class="row mt-3 top_belt_new_border">
-                            <div class="col-md-3 col-sm-3 col-12">
-                                <div class="title">Date & Time</div>
-                                <div class="description" id="lblComplaintDateTime"></div>
-                            </div>
-                            <div class="col-md-9 col-sm-9 col-12">
-                                <div class="title">Address</div>
-                                <div class="description" id="lblComplainantAddress"></div>
+                        <a href="javascript:void(0);" class="btn btn-outline-primary btn-sm" onclick="openComplainantEditModal()"><i class="fa-solid fa-pen-to-square me-1"></i> Edit</a>
+                    </div>
+
+                    <div class="row g-3">
+                        <div class="col-md-4 col-sm-6">
+                            <div class="complainant-field-tile">
+                                <div class="tile-icon-wrap"><i class="fa-regular fa-user"></i></div>
+                                <div class="tile-content">
+                                    <span class="tile-label">Full Name</span>
+                                    <div class="tile-value" id="lblComplainantFullName"></div>
+                                </div>
                             </div>
                         </div>
-                        <div class="row mt-3">
-                            <div class="col-md-12 col-sm-12 col-12">
-                                <div class="d-flex flex-wrap">
-                                    <div class="me-2 mb-2 mb-md-0">
-                                        <a class="btn btn-outline-primary waves-effect waves-light white-space-nowrap btn-sm" id="lnkDownload"><i class="fa-solid fa-file-pdf me-1"></i> Download PDF</a>
-                                    </div>
-                                    <div class="me-2 mb-2 mb-md-0 d-flex" id="divActionButtons">
-                                        <!-- Buttons will be injected here via Javascript based on status -->
-                                    </div>
+                        <div class="col-md-4 col-sm-6">
+                            <div class="complainant-field-tile">
+                                <div class="tile-icon-wrap"><i class="fa-regular fa-envelope"></i></div>
+                                <div class="tile-content">
+                                    <span class="tile-label">Email Address</span>
+                                    <div class="tile-value" id="lblComplainantEmail"></div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-4 col-sm-6">
+                            <div class="complainant-field-tile">
+                                <div class="tile-icon-wrap"><i class="fa-solid fa-phone"></i></div>
+                                <div class="tile-content">
+                                    <span class="tile-label">Mobile Number</span>
+                                    <div class="tile-value" id="lblComplainantContact"></div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-12">
+                            <div class="complainant-field-tile">
+                                <div class="tile-icon-wrap"><i class="fa-solid fa-location-dot"></i></div>
+                                <div class="tile-content">
+                                    <span class="tile-label">Residential / Postal Address</span>
+                                    <div class="tile-value" id="lblComplainantAddress"></div>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
-            <div class="card mb-0 mt-3">
-                <div class="card-body">
-                    <div class="top_belt_new top_belt_new_border d-flex justify-content-between align-items-center">
-                        <h5 class="mb-0">
-                            Details of Advocate - Complained Against (જે વકીલ વિરુદ્ધ ફરિયાદ કરવામાં આવી છે તેની વિગતો)
-                        </h5>
-                        <div class="me-2 mb-0 d-flex align-items-center">
-                            <a href="javascript:void(0);" class="btn btn-outline-primary btn-sm" onclick="openAddMemberModal()"><i class="fa-solid fa-plus"></i> Add New</a>
+
+            <!-- Card 2: Details of Advocate - Complained Against -->
+            <div class="card mb-3 border-0 shadow-sm rounded-3">
+                <div class="card-body p-4">
+                    <div class="d-flex justify-content-between align-items-center mb-3 pb-2 border-bottom">
+                        <div class="d-flex align-items-center gap-2">
+                            <div class="section-icon-badge bg-primary-subtle text-primary">
+                                <i class="fa-solid fa-user-tie"></i>
+                            </div>
+                            <div>
+                                <h5 class="mb-0 fw-bold text-dark">Details of Advocate - Complained Against</h5>
+                                <span class="text-muted font-size-12">જે વકીલ વિરુદ્ધ ફરિયાદ કરવામાં આવી છે તેની વિગતો</span>
+                            </div>
                         </div>
+                        <a href="javascript:void(0);" class="btn btn-outline-primary btn-sm" onclick="openAddMemberModal()"><i class="fa-solid fa-plus me-1"></i> Add Advocate</a>
                     </div>
                     <div class="main_scroll_complaint_against answer">
-                        <div class="row mt-3" id="selectDetails"> </div>
+                        <div class="row" id="selectDetails"></div>
                     </div>
                 </div>
             </div>
-            <div class="card mb-0 mt-3">
-                <div class="card-body">
-                    <div class="top_belt_new top_belt_new_border d-flex justify-content-between align-items-center">
-                        <h5 class="mb-0">
-                            Complaint Affidavit Copy (ફરિયાદ સોગંદનામાની નકલ)
-                        </h5>
-                        <div class="me-2 mb-0 d-flex align-items-center">
-                            @if (ViewBag.AffidavitDocumentList != null && ViewBag.AffidavitDocumentList.Rows.Count > 0)
-                            {
-                                <a href="javascript:void(0);" class="btn btn-outline-primary btn-sm" onclick="openAffidavitUploadModal()"><i class="fa-solid fa-pen"></i> Change File</a>
-                            }
-                            else
-                            {
-                                <a href="javascript:void(0);" class="btn btn-outline-primary btn-sm" onclick="openAffidavitUploadModal()"><i class="fa-solid fa-upload"></i> Upload File</a>
-                            }
-                        </div>
-                    </div>
-                    <div class="main_scroll_complaint_against answer" id="dvAffidavitCopy">
-                        @if (ViewBag.AffidavitDocumentList != null)
-                        {
-                            foreach (System.Data.DataRow dr in ViewBag.AffidavitDocumentList.Rows)
-                            {
-                                <div class="main_card_list main_card_list_border p-12-custome mt-3">
-                                    <div class="main_card_list_body">
-                                        <div class="row">
-                                            <div class="col-md-12">
-                                                <div class="file_name_btn" onclick="getFile('@dr["FilePath"].ToString()')"><div class="name">@dr["FileName"].ToString()</div><div class="view_file"><i class="las la-eye"></i></div></div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            }
-                        }
-                    </div>
-                </div>
-            </div>
-            <div class="card mb-0 mt-3">
-                <div class="card-body">
-                    <div class="top_belt_new top_belt_new_border d-flex justify-content-between align-items-center">
-                        <h5 class="mb-0">
-                            If Any Additional Attachments (જો કોઈ વધારાના જોડાણો હોય તો)
-                        </h5>
-                        <div class="me-2 mb-0 d-flex align-items-center">
-                            <a href="javascript:void(0);" class="btn btn-outline-primary btn-sm" onclick="openAdditionalAttachmentModal()"><i class="fa-solid fa-upload"></i> Upload File</a>
-                        </div>
-                    </div>
-                    <div class="main_scroll_complaint_against answer" id="dvOrderPassed">
-                        @if (ViewBag.AdditionalDocumentList != null)
-                        {
-                            foreach (System.Data.DataRow dr in ViewBag.AdditionalDocumentList.Rows)
-                            {
-                                <div class="main_card_list main_card_list_border p-12-custome mt-3">
-                                    <div class="main_card_list_body">
-                                        <div class="row">
-                                            <div class="col-md-12">
-                                                <div class="title">Upload File (ફાઇલ અપલોડ)</div>
-                                                <div class="d-flex align-items-center">
-                                                    <div class="file_name_btn flex-grow-1" onclick="getFile('@dr["FilePath"].ToString()')"><div class="name">@dr["FileName"].ToString()</div><div class="view_file"><i class="las la-eye"></i></div></div>
-                                                    <a href="javascript:void(0);" class="btn btn-outline-danger btn-sm ms-2" style="height: 35px; display: flex; align-items: center; justify-content: center;" onclick="deleteAdditionalAttachment(@dr["Id"].ToString())" title="Delete File"><i class="las la-trash fs-5"></i></a>
-                                                </div>
-                                            </div>
-                                            <div class="col-md-12 mt-3">
-                                                <div class="title">Note (નોંધ)</div>
-                                                <div class="description">@dr["Description"].ToString()</div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            }
-                        }
-                    </div>
-                </div>
-            </div>
-            <div class="card mb-0 mt-3">
-                <div class="card-body">
-                    <div class="top_belt_new top_belt_new_border d-flex justify-content-between align-items-center">
-                        <h5 class="mb-0">
-                            Details of G B Meeting (સામાન્ય સભાની વિગતો)
-                        </h5>
-                        <div class="me-2 mb-0 d-flex align-items-center">
-                            <a href="javascript:void(0);" class="btn btn-outline-primary btn-sm" onclick="openComplaintGBMeetingModal()"><i class="fa-solid fa-plus"></i> Add</a>
-                        </div>
-                    </div>
-                    <div class="main_scroll_complaint_against answer" id="dvGBMeetingList">
-                    </div>
-                </div>
-            </div>
-            <div class="card mb-0 mt-3">
-                <div class="card-body">
-                    <div class="top_belt_new top_belt_new_border">
-                        <h5 class="mb-0">
-                            Details of Advocate - Complained Against Reply To (જે વકીલ વિરુદ્ધ ફરિયાદ કરવામાં આવી છે તેનો જવાબ)
-                        </h5>
-                    </div>
-                    <div class="replaycomplaintmain_card mt-3" id="dvreplyData">
-                    </div>
-                    <div class="row mt-3">
-                        <div class="col-md-12">
-                            <div class="position-relative">
-                                <textarea type="text" class="form-control chat-input" id="txtReply" placeholder="Enter Message..."></textarea>
-                                <div class="chat-input-links" id="tooltip-container">
-                                    <input type="file" id="fileLoader" name="files" title="Load File" class="d-none" onchange="ShowPreview(this,'Reply')" />
-                                    <input type="hidden" id="hdfReplyB64ImagePath" />
-                                    <input type="hidden" id="hdfReplyFileName" />
-                                </div>
+
+            <!-- Card 3: Complaint Affidavit Copy -->
+            <div class="card mb-3 border-0 shadow-sm rounded-3">
+                <div class="card-body p-4">
+                    <div class="d-flex justify-content-between align-items-center mb-3 pb-2 border-bottom">
+                        <div class="d-flex align-items-center gap-2">
+                            <div class="section-icon-badge bg-primary-subtle text-primary">
+                                <i class="fa-solid fa-file-contract"></i>
                             </div>
-                            <div class="d-flex justify-content-between align-items-center mt-2">
-                                <div>
-                                    <a id="btnReplyUploadFile" class="btn btn-outline-primary waves-effect waves-light btn-sm" onclick="openFiledialog()">Attach/Upload File (ફાઇલ અપલોડ)</a>
-                                    <label id="lbldisplayName" class="mb-0 text-muted ms-2" style="font-size: 12px;"></label>
-                                </div>
-                                <a id="btnReplySave" class="btn btn-outline-primary waves-effect waves-light btn-sm">Save</a>
+                            <div>
+                                <h5 class="mb-0 fw-bold text-dark">Complaint Affidavit Copy</h5>
+                                <span class="text-muted font-size-12">ફરિયાદ સોગંદનામાની નકલ</span>
                             </div>
+                        </div>
+                        <div>
+                            <a href="javascript:void(0);" class="btn btn-outline-primary btn-sm" onclick="openAffidavitUploadModal()"><i class="fa-solid fa-upload me-1"></i> Upload File</a>
+                        </div>
+                    </div>
+                    <div class="main_scroll_complaint_against answer" id="dvAffidavitCopy"></div>
+                </div>
+            </div>
+
+            <!-- Card 4: Additional Attachments -->
+            <div class="card mb-3 border-0 shadow-sm rounded-3">
+                <div class="card-body p-4">
+                    <div class="d-flex justify-content-between align-items-center mb-3 pb-2 border-bottom">
+                        <div class="d-flex align-items-center gap-2">
+                            <div class="section-icon-badge bg-primary-subtle text-primary">
+                                <i class="fa-solid fa-paperclip"></i>
+                            </div>
+                            <div>
+                                <h5 class="mb-0 fw-bold text-dark">Additional Attachments</h5>
+                                <span class="text-muted font-size-12">જો કોઈ વધારાના જોડાણો હોય તો</span>
+                            </div>
+                        </div>
+                        <a href="javascript:void(0);" class="btn btn-outline-primary btn-sm" onclick="openAdditionalAttachmentModal()"><i class="fa-solid fa-upload me-1"></i> Upload File</a>
+                    </div>
+                    <div class="main_scroll_complaint_against answer" id="dvOrderPassed"></div>
+                </div>
+            </div>
+
+            <!-- Card 5: Details of G B Meeting -->
+            <div class="card mb-3 border-0 shadow-sm rounded-3">
+                <div class="card-body p-4">
+                    <div class="d-flex justify-content-between align-items-center mb-3 pb-2 border-bottom">
+                        <div class="d-flex align-items-center gap-2">
+                            <div class="section-icon-badge bg-primary-subtle text-primary">
+                                <i class="fa-solid fa-users-rectangle"></i>
+                            </div>
+                            <div>
+                                <h5 class="mb-0 fw-bold text-dark">Details of G B Meeting</h5>
+                                <span class="text-muted font-size-12">સામાન્ય સભાની વિગતો</span>
+                            </div>
+                        </div>
+                        <a href="javascript:void(0);" class="btn btn-outline-primary btn-sm" onclick="openComplaintGBMeetingModal()"><i class="fa-solid fa-plus me-1"></i> Add Meeting</a>
+                    </div>
+                    <div class="main_scroll_complaint_against answer" id="dvGBMeetingList"></div>
+                </div>
+            </div>
+
+            <!-- Card 6: Details of Advocate Reply To -->
+            <div class="card mb-3 border-0 shadow-sm rounded-3">
+                <div class="card-body p-4">
+                    <div class="d-flex align-items-center justify-content-between mb-3 pb-2 border-bottom">
+                        <div class="d-flex align-items-center gap-2">
+                            <div class="section-icon-badge bg-primary-subtle text-primary">
+                                <i class="fa-regular fa-comments"></i>
+                            </div>
+                            <div>
+                                <h5 class="mb-0 fw-bold text-dark">Advocate Reply & Communications</h5>
+                                <span class="text-muted font-size-12">જે વકીલ વિરુદ્ધ ફરિયાદ કરવામાં આવી છે તેનો જવાબ</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="replaycomplaintmain_card mt-2 rounded-3" id="dvreplyData"></div>
+                    <div class="mt-3 p-3 bg-light rounded-3 border">
+                        <div class="position-relative mb-2">
+                            <textarea type="text" class="form-control bg-white shadow-none" id="txtReply" rows="3" placeholder="Enter reply message or note..."></textarea>
+                            <div class="chat-input-links" id="tooltip-container">
+                                <input type="file" id="fileLoader" name="files" title="Load File" class="d-none" onchange="ShowPreview(this,'Reply')" />
+                                <input type="hidden" id="hdfReplyB64ImagePath" />
+                                <input type="hidden" id="hdfReplyFileName" />
+                            </div>
+                        </div>
+                        <div class="d-flex justify-content-between align-items-center flex-wrap gap-2">
+                            <div class="d-flex align-items-center">
+                                <a id="btnReplyUploadFile" class="btn btn-outline-primary btn-sm" onclick="openFiledialog()">
+                                    <i class="fa-solid fa-paperclip me-1"></i> Attach/Upload File
+                                </a>
+                                <label id="lbldisplayName" class="mb-0 text-muted ms-2" style="font-size: 12px;"></label>
+                            </div>
+                            <a id="btnReplySave" class="btn btn-primary btn-sm px-4 shadow-sm"><i class="fa-solid fa-paper-plane me-1"></i> Save Reply</a>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
+
+        <!-- RIGHT COLUMN: Payment Details & Quick Sidebar -->
         <div class="col-md-12 col-lg-4">
-            <div class="main_card_list mb-2">
-                <a href="javascript:void(0);" class="btn btn-outline-primary btn-sm me-2 mb-2" onclick="openComplainantEditModal()"><i class="fa-solid fa-pen"></i> Edit</a>
-                <a href="javascript:void(0);" class="btn btn-outline-primary waves-effect waves-light white-space-nowrap btn-sm mb-2" id="lnkManageStatus" onclick="openManageStatusModal()"><i class="fa-solid fa-list-check me-1"></i> Manage Status</a>
-                <a class="btn btn-outline-primary waves-effect waves-light white-space-nowrap btn-sm" id="lnkShareACopy"><i class="fa-solid fa-share me-1"></i> Share a copy with the advocate</a>
-            </div>
-            <div class="main_card_list">
-                <div class="top_belt_new top_belt_new_border">
-                    <h5 class="mb-0">
-                        Payment Details (ચૂકવણીની વિગતો)
-                    </h5>
-                </div>
-                <div class="main_card_list_body answer mt-2">
-                    <div class="row row justify-content-end">
-                        <div class="col-md-12">
-                            <table class="table table-bordered mb-0">
-                                <tbody>
-                                    <tr>
-                                        <td class="title v-align-middle-muted">Total Amount</td>
-                                        <td class="description text-end v-align-middle"><label id="lblTotalAmount" class="mb-0 text-dark font-weight-bold">0</label></td>
-                                    </tr>
-                                    <tr>
-                                        <td class="title v-align-middle-muted">Paid Amount</td>
-                                        <td class="description text-end v-align-middle"><label id="lblPaidAmount" class="mb-0 text-dark font-weight-bold">0</label></td>
-                                    </tr>
-                                    <tr>
-                                        <td class="title v-align-middle-muted">Due Amount</td>
-                                        <td class="description text-end v-align-middle"><label id="lblDueAmount" class="mb-0 text-dark font-weight-bold">0</label></td>
-                                    </tr>
-                                </tbody>
-                            </table>
-                        </div>
+            
+            <!-- Quick Actions Card -->
+            <div class="card mb-3 border-0 shadow-sm rounded-3">
+                <div class="card-body p-4">
+                    <h6 class="fw-bold text-dark mb-3 pb-2 border-bottom"><i class="fa-solid fa-sliders text-primary me-2"></i>Quick Actions</h6>
+                    <div class="d-grid gap-2">
+                        <button type="button" class="btn btn-outline-primary btn-sm d-flex align-items-center justify-content-between py-2 px-3 text-start quick-action-btn" onclick="openComplainantEditModal()">
+                            <span><i class="fa-solid fa-user-pen me-2"></i> Edit Complainant</span>
+                            <i class="fa-solid fa-chevron-right text-muted font-size-11"></i>
+                        </button>
+                        <button type="button" class="btn btn-outline-primary btn-sm d-flex align-items-center justify-content-between py-2 px-3 text-start quick-action-btn" onclick="openManageStatusModal()">
+                            <span><i class="fa-solid fa-clock-rotate-left me-2"></i> Status History & Log</span>
+                            <i class="fa-solid fa-chevron-right text-muted font-size-11"></i>
+                        </button>
+                        <button type="button" class="btn btn-outline-primary btn-sm d-flex align-items-center justify-content-between py-2 px-3 text-start quick-action-btn" onclick="$('#lnkShareACopy').click()">
+                            <span><i class="fa-solid fa-share-nodes me-2"></i> Share Copy with Advocate</span>
+                            <i class="fa-solid fa-chevron-right text-muted font-size-11"></i>
+                        </button>
+                        <button type="button" class="btn btn-outline-primary btn-sm d-flex align-items-center justify-content-between py-2 px-3 text-start quick-action-btn" onclick="chooseDownloadPdfOption()">
+                            <span><i class="fa-solid fa-file-pdf me-2"></i> Download Case PDF</span>
+                            <i class="fa-solid fa-chevron-right text-muted font-size-11"></i>
+                        </button>
                     </div>
                 </div>
             </div>
-            <div class="main_card_list mt-2 d-none" id="divPayPayment">
-                <div class="top_belt_new top_belt_new_border">
-                    <h5 class="mb-0">
-                        Pay Payment Information
-                    </h5>
-                </div>
-                <div class="main_card_list_body answer">
-                    <div class="row row justify-content-end">
-                        <div class="col-md-12">
-                            <div class="row">
-                                <div class="col-md-6 mt-1">
-                                    <div class="form-group">
-                                        <label for="txtTransactionNumber">Receipt Number</label>
-                                        <input type="text" maxlength="15" id="txtReceiptNumber" placeholder="Receipt Number" class="form-control" onkeypress="return isNumberKey(event, this)">
-                                    </div>
+
+            <!-- Payment Details KPI Card -->
+            <div class="card mb-3 border-0 shadow-sm rounded-3">
+                <div class="card-body p-4">
+                    <div class="d-flex align-items-center justify-content-between mb-3 pb-2 border-bottom">
+                        <div class="d-flex align-items-center gap-2">
+                            <div class="section-icon-badge bg-success-subtle text-success">
+                                <i class="fa-solid fa-receipt"></i>
+                            </div>
+                            <div>
+                                <h5 class="mb-0 fw-bold text-dark">Payment Details</h5>
+                                <span class="text-muted font-size-12">ચૂકવણીની વિગતો</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row g-2 mb-1">
+                        <div class="col-12">
+                            <div class="kpi-metric-tile kpi-metric-primary">
+                                <div class="d-flex align-items-center justify-content-between">
+                                    <span class="kpi-label"><i class="fa-solid fa-coins me-1"></i> Total Amount</span>
+                                    <span class="kpi-value text-primary">₹ <label id="lblTotalAmount" class="mb-0 text-primary fw-bold">0</label></span>
                                 </div>
-                                <div class="col-md-6 mt-1">
-                                    <div class="form-group">
-                                        <label for="txtTransactionDate">Receipt Date</label>
-                                        <input type="date" maxlength="15" id="txtReceiptDate" placeholder="Receipt Date" class="form-control" onkeypress="return isNumberKey(event, this)">
-                                    </div>
+                            </div>
+                        </div>
+                        <div class="col-12">
+                            <div class="kpi-metric-tile kpi-metric-success">
+                                <div class="d-flex align-items-center justify-content-between">
+                                    <span class="kpi-label"><i class="fa-solid fa-circle-check me-1"></i> Paid Amount</span>
+                                    <span class="kpi-value text-success">₹ <label id="lblPaidAmount" class="mb-0 text-success fw-bold">0</label></span>
                                 </div>
-                                <div class="col-md-12 mt-3">
-                                    <div class="form-group">
-                                        <label for="ddlPaymentMode">Receipt By</label>
-                                        <select id="ddlPaymentMode" class="form-control" onchange="ddlPaymentModeChange()">
-                                            <option selected="selected" value="0">Select</option>
-                                            <option value="CASH">CASH</option>
-                                            <option value="D.D.">D.D.</option>
-                                            <option value="OUTSTANDING">OUTSTANDING</option>
-                                            <option value="RTGS">RTGS</option>
-                                            <option value="JOURNAL">JOURNAL</option>
-                                        </select>
-                                    </div>
-                                </div>
-                                <div class="col-md-6 mt-3">
-                                    <div class="form-group">
-                                        <label for="txtTransactionDate">Transaction Date</label>
-                                        <input type="date" maxlength="15" id="txtTransactionDate" placeholder="Transaction Date" class="form-control" onkeypress="return isNumberKey(event, this)">
-                                    </div>
-                                </div>
-                                <div class="col-md-6 mt-3 hide-element" id="divTransactionNumber">
-                                    <div class="form-group">
-                                        <label for="txtTransactionNumber">Transaction Number</label>
-                                        <input type="text" maxlength="15" id="txtTransactionNumber" placeholder="Transaction Number" class="form-control" onkeypress="return isNumberKey(event, this)">
-                                    </div>
-                                </div>
-                                <div class="col-md-12 mt-3 hide-element" id="divBank">
-                                    <div class="form-group">
-                                        <label for="ddlBank">Bank</label>
-                                        <select id="ddlBank" class="form-control">
-                                            <option value="0">Select</option>
-                                        </select>
-                                    </div>
-                                </div>
-                                <div class="col-md-12 text-end mt-3">
-                                    <a class="btn btn-outline-primary waves-effect waves-light btn-sm" id="lnkSavePayment"><i class="fa-solid fa-check me-1"></i> Save</a>
+                            </div>
+                        </div>
+                        <div class="col-12">
+                            <div class="kpi-metric-tile kpi-metric-danger">
+                                <div class="d-flex align-items-center justify-content-between">
+                                    <span class="kpi-label"><i class="fa-solid fa-clock me-1"></i> Due Amount</span>
+                                    <span class="kpi-value text-danger">₹ <label id="lblDueAmount" class="mb-0 text-danger fw-bold">0</label></span>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
-            <div class="main_card_list mt-2 d-none" id="divPaymentDetail">
-                <div class="top_belt_new top_belt_new_border">
-                    <h5 class="mb-0">
-                        Payment Information
-                    </h5>
-                </div>
-                <div class="main_card_list_body answer">
-                    <div class="row row justify-content-end">
-                        <div class="col-md-12">
-                            <div id="divPaymentDetailList">
-                            </div>
+
+            <!-- Pay Payment Information (Shown dynamically when due amount > 0) -->
+            <div class="card mb-3 border-0 shadow-sm rounded-3 d-none" id="divPayPayment">
+                <div class="card-body p-4">
+                    <div class="d-flex align-items-center gap-2 mb-3 pb-2 border-bottom">
+                        <div class="section-icon-badge bg-primary-subtle text-primary">
+                            <i class="fa-solid fa-money-bill-wave"></i>
+                        </div>
+                        <div>
+                            <h5 class="mb-0 fw-bold text-dark">Pay Payment Information</h5>
+                            <span class="text-muted font-size-12">ચુકવણીની વિગત દાખલ કરો</span>
+                        </div>
+                    </div>
+                    <div class="row g-2">
+                        <div class="col-md-6">
+                            <label for="txtReceiptNumber" class="form-label font-size-12 fw-semibold">Receipt Number</label>
+                            <input type="text" maxlength="15" id="txtReceiptNumber" placeholder="Receipt Number" class="form-control form-control-sm" onkeypress="return isNumberKey(event, this)">
+                        </div>
+                        <div class="col-md-6">
+                            <label for="txtReceiptDate" class="form-label font-size-12 fw-semibold">Receipt Date</label>
+                            <input type="date" id="txtReceiptDate" class="form-control form-control-sm">
+                        </div>
+                        <div class="col-md-4 mt-2">
+                            <label for="ddlPaymentMode" class="form-label font-size-12 fw-semibold">Receipt By</label>
+                            <select id="ddlPaymentMode" class="form-select form-select-sm" onchange="ddlPaymentModeChange()">
+                                <option selected="selected" value="0">Select Payment Mode</option>
+                                <option value="CASH">CASH</option>
+                                <option value="D.D.">D.D.</option>
+                                <option value="OUTSTANDING">OUTSTANDING</option>
+                                <option value="RTGS">RTGS</option>
+                                <option value="JOURNAL">JOURNAL</option>
+                            </select>
+                        </div>
+                        <div class="col-md-4 mt-2">
+                            <label for="txtTransactionDate" class="form-label font-size-12 fw-semibold">Transaction Date</label>
+                            <input type="date" id="txtTransactionDate" class="form-control form-control-sm">
+                        </div>
+                        <div class="col-md-4 mt-2 hide-element" id="divTransactionNumber">
+                            <label for="txtTransactionNumber" class="form-label font-size-12 fw-semibold">Transaction Number</label>
+                            <input type="text" maxlength="15" id="txtTransactionNumber" placeholder="Transaction Number" class="form-control form-control-sm">
+                        </div>
+                        <div class="col-12 mt-2 hide-element" id="divBank">
+                            <label for="ddlBank" class="form-label font-size-12 fw-semibold">Bank</label>
+                            <select id="ddlBank" class="form-select form-select-sm select2">
+                                <option value="0">Select Bank</option>
+                            </select>
+                        </div>
+                        <div class="col-12 text-end mt-3">
+                            <a class="btn btn-primary btn-sm px-3" id="lnkSavePayment"><i class="fa-solid fa-check me-1"></i> Save Payment</a>
                         </div>
                     </div>
                 </div>
-                <!-- Modals moved to root level to prevent backdrop gray-out/overlay issue -->
             </div>
+
+            <!-- Payment Information Log (Shown dynamically if payment log exists) -->
+            <div class="card mb-3 border-0 shadow-sm rounded-3 d-none" id="divPaymentDetail">
+                <div class="card-body p-4">
+                    <div class="d-flex align-items-center gap-2 mb-3 pb-2 border-bottom">
+                        <div class="section-icon-badge bg-info-subtle text-info">
+                            <i class="fa-solid fa-file-invoice-dollar"></i>
+                        </div>
+                        <div>
+                            <h5 class="mb-0 fw-bold text-dark">Payment History</h5>
+                            <span class="text-muted font-size-12">ચુકવણીની પાકી રસીદો</span>
+                        </div>
+                    </div>
+                    <div id="divPaymentDetailList"></div>
+                </div>
+            </div>
+
         </div>
     </div>
 </div>
@@ -655,7 +764,20 @@
 </div>
 
 <script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
 <script>
+    function initBankSelect2() {
+        if ($.fn.select2) {
+            if ($('#ddlBank').hasClass("select2-hidden-accessible")) {
+                $('#ddlBank').select2('destroy');
+            }
+            $('#ddlBank').select2({
+                placeholder: 'Select Bank',
+                allowClear: false,
+                width: '100%'
+            });
+        }
+    }
 
     var searchTimeout;
     var detailsSearchPageNo = 1;
@@ -665,6 +787,7 @@
     var detailsCurrentSearch = "";
 
     $(document).ready(function () {
+        initBankSelect2();
         GetComplaintBankList();
         //GetComplaintCurrentStatus();
         //GetDefendantList();
@@ -718,14 +841,30 @@
 
                     var DueAmount = data.DueAmount == null ? '0' : data.DueAmount == '' ? '0' : data.DueAmount;
 
-                    // Fill Complainant Details
+                    // Fill Complainant Details & Hero Meta
+                    var cNum = (data.ComplaintNumber || fullComplaintNumber || '').toString();
+                    if (cNum.indexOf('#') === 0) {
+                        cNum = cNum.substring(1);
+                    }
+                    $('#lblComplaintNumberHeader').text(cNum);
                     $('#lblComplainantFullName').text(data.FullName || '');
+                    $('#lblHeroComplainantName').text(data.FullName || '');
                     $('#lblComplainantEmail').text(data.EmailAddress || '');
                     $('#lblComplainantContact').text(data.ContactNumber || '');
                     $('#lblComplainantAddress').text(data.Address || '');
                     $('#lblComplaintDateTime').text(data.SCreateDate || '');
                     $('#txtComplaintStatus').text(data.Status || '');
                     updateActionButtonsUI(data.Status || '');
+
+                    if (data.DcCommitteeTitle && data.DcCommitteeTitle.toString().trim() !== '') {
+                        $('#lblHeroDcCommittee').text(data.DcCommitteeTitle);
+                        $('#heroDcCommitteeItem').show();
+                    } else if (data.DcNumber && parseInt(data.DcNumber) > 0) {
+                        $('#lblHeroDcCommittee').text(data.DcNumber);
+                        $('#heroDcCommitteeItem').show();
+                    } else {
+                        refreshDcCommitteeHeroChip(data.Id);
+                    }
                     $('#lblTotalAmount').text(data.TotalAmount || '');
                     $('#lblPaidAmount').text(data.PaidAmount || '');
                     $('#lblDueAmount').text(DueAmount);
@@ -982,14 +1121,18 @@
                     }
 
                     // Show details area
+                    $('#dvSearchEmptyPrompt').hide();
                     $('#dvComplaintDetailsArea').removeClass('hide-element');
                     getGBMeetingLogs(data.Id);
                 } else {
                     $('#dvComplaintDetailsArea').addClass('hide-element');
+                    $('#dvSearchEmptyPrompt').show();
                     swal(response.Message || 'Complaint not found.', '', 'error');
                 }
             },
             error: function () {
+                $('#dvComplaintDetailsArea').addClass('hide-element');
+                $('#dvSearchEmptyPrompt').show();
                 swal('Error searching complaint.', '', 'error');
             }
         });
@@ -999,6 +1142,7 @@
         $('#txtSearchComplaintNumber').val('');
         $('#drpSearchComplaintYear').val(new Date().getFullYear());
         $('#dvComplaintDetailsArea').addClass('hide-element');
+        $('#dvSearchEmptyPrompt').show();
         $('#dvGBMeetingList').empty();
     });
 
@@ -1023,19 +1167,41 @@
                     $('#hdfComplaintId').val(data.Id);
                     $('#hdfStatus').val(data.Status || '');
                     $('#lblComplainantFullName').text(data.FullName || '');
+                    var cNum = (data.ComplaintNumber || fullComplaintNumber || '').toString();
+                    if (cNum.indexOf('#') === 0) {
+                        cNum = cNum.substring(1);
+                    }
+                    $('#lblComplaintNumberHeader').text(cNum);
+                    $('#lblComplainantFullName').text(data.FullName || '');
+                    $('#lblHeroComplainantName').text(data.FullName || '');
                     $('#lblComplainantEmail').text(data.EmailAddress || '');
                     $('#lblComplainantContact').text(data.ContactNumber || '');
                     $('#lblComplainantAddress').text(data.Address || '');
                     $('#txtComplaintStatus').text(data.Status || '');
                     updateActionButtonsUI(data.Status || '');
+
+                    if (data.DcCommitteeTitle && data.DcCommitteeTitle.toString().trim() !== '') {
+                        $('#lblHeroDcCommittee').text(data.DcCommitteeTitle);
+                        $('#heroDcCommitteeItem').show();
+                    } else if (data.DcNumber && parseInt(data.DcNumber) > 0) {
+                        $('#lblHeroDcCommittee').text(data.DcNumber);
+                        $('#heroDcCommitteeItem').show();
+                    } else {
+                        $('#lblHeroDcCommittee').text('');
+                        $('#heroDcCommitteeItem').hide();
+                    }
                 } else {
                     $('#hdfComplaintId').val('0');
                     $('#hdfStatus').val('');
                     $('#lblComplainantFullName').text('');
+                    $('#lblHeroComplainantName').text('');
+                    $('#lblComplaintNumberHeader').text('');
                     $('#lblComplainantEmail').text('');
                     $('#lblComplainantContact').text('');
                     $('#lblComplainantAddress').text('');
                     $('#txtComplaintStatus').text('');
+                    $('#lblHeroDcCommittee').text('');
+                    $('#heroDcCommitteeItem').hide();
                     updateActionButtonsUI('');
                 }
             },
@@ -1043,11 +1209,15 @@
                 $('#hdfComplaintId').val('0');
                 $('#hdfStatus').val('');
                 $('#lblComplainantFullName').text('');
+                $('#lblHeroComplainantName').text('');
+                $('#lblComplaintNumberHeader').text('');
                 $('#lblComplainantEmail').text('');
                 $('#lblComplainantContact').text('');
                 $('#lblComplainantAddress').text('');
                 $('#txtComplaintStatus').text('');
-                    updateActionButtonsUI('');
+                $('#lblHeroDcCommittee').text('');
+                $('#heroDcCommitteeItem').hide();
+                updateActionButtonsUI('');
             }
         });
     }
@@ -1075,7 +1245,7 @@
             dataType: "json",
             success: function (response) {
                 $("#ddlBank").empty();
-                $("#ddlBank").append('<option value="0">Select</option>');
+                $("#ddlBank").append('<option value="0">Select Bank</option>');
                 if (response.IsSuccess) {
                     if (response.Data != null) {
                         if (response.Data != '') {
@@ -1084,27 +1254,18 @@
                                 $("#ddlBank").append('<option value="' + item.Id + '">' + item.BankName + '</option>');
                             });
                         }
-                        else {
-                            $("#ddlBank").empty();
-                            $("#ddlBank").append('<option value="0">Select</option>');
-                        }
-                    }
-                    else {
-                        $("#ddlBank").empty();
-                        $("#ddlBank").append('<option value="0">Select</option>');
                     }
                 }
-                else {
-                    $("#ddlBank").empty();
-                    $("#ddlBank").append('<option value="0">Select</option>');
-                }
+                initBankSelect2();
             }, failure: function (result) {
                 $("#ddlBank").empty();
-                $("#ddlBank").append('<option value="0">Select</option>');
+                $("#ddlBank").append('<option value="0">Select Bank</option>');
+                initBankSelect2();
             },
             error: function (result) {
                 $("#ddlBank").empty();
-                $("#ddlBank").append('<option value="0">Select</option>');
+                $("#ddlBank").append('<option value="0">Select Bank</option>');
+                initBankSelect2();
             }
         });
     }
@@ -1229,12 +1390,54 @@
                     var VComplaintCurrentStatus = '';
                     $('#txtComplaintStatus').text(VComplaintCurrentStatus);
                     updateActionButtonsUI(VComplaintCurrentStatus);
+                    refreshDcCommitteeHeroChip($("#hdfComplaintId").val());
                 }
             }, failure: function (result) {
                 swal('Something went wrong!', '', 'error');
             },
             error: function (result) {
                 swal('Something went wrong!', '', 'error');
+            }
+        });
+    }
+
+    function refreshDcCommitteeHeroChip(complaintId) {
+        if (!complaintId || parseInt(complaintId) <= 0) {
+            $('#lblHeroDcCommittee').text('');
+            $('#heroDcCommitteeItem').hide();
+            return;
+        }
+        $.ajax({
+            type: "POST",
+            url: "/ComplaintDetails/GetLogList",
+            contentType: "application/json; charset=utf-8",
+            data: JSON.stringify({ ComplaintId: complaintId }),
+            dataType: "json",
+            success: function (response) {
+                if (response.IsSuccess && response.Data && response.Data.length > 0) {
+                    var dcTitle = '';
+                    for (var i = 0; i < response.Data.length; i++) {
+                        var log = response.Data[i];
+                        if (log.CommitteTitle && log.CommitteTitle.toString().trim() !== '') {
+                            dcTitle = log.CommitteTitle.toString().trim();
+                            break;
+                        } else if (log.CommitteeId && parseInt(log.CommitteeId) > 0) {
+                            dcTitle = log.CommitteeId.toString();
+                            break;
+                        }
+                    }
+                    if (dcTitle !== '') {
+                        $('#lblHeroDcCommittee').text(dcTitle);
+                        $('#heroDcCommitteeItem').show();
+                        return;
+                    }
+                }
+                $('#lblHeroDcCommittee').text('');
+                $('#heroDcCommitteeItem').hide();
+            },
+            error: function () {
+                $('#lblHeroDcCommittee').text('');
+                $('#heroDcCommitteeItem').hide();
             }
         });
     }
@@ -1302,6 +1505,7 @@
         if (val == "D.D." || val == "OUTSTANDING" || val == "RTGS" || val == "JOURNAL") {
             $('#divTransactionNumber').css('display', 'block');
             $('#divBank').css('display', 'block');
+            setTimeout(function () { initBankSelect2(); }, 50);
         } else {
             $('#divTransactionNumber').css('display', 'none');
             $('#divBank').css('display', 'none');
@@ -1903,8 +2107,16 @@
                 markerClass: 'marker-success',
                 pillClass: 'pill-success',
                 summaryClass: 'summary-success',
-                icon: 'fa-solid fa-check-double',
+                icon: 'fa-solid fa-check',
                 title: status || 'Board Accept'
+            };
+        } else if (s === 'board has approved') {
+            return {
+                markerClass: 'marker-success',
+                pillClass: 'pill-success',
+                summaryClass: 'summary-success',
+                icon: 'fa-solid fa-check-double',
+                title: status || 'Board Has Approved'
             };
         } else {
             return {
@@ -2000,8 +2212,8 @@
                                 '</div>';
                         }
 
-                        var summaryText = (value.Summary || '').toString().trim();
                         var st = (value.Status || '').toString().trim().toLowerCase();
+                        var summaryText = (value.Summary || '').toString().trim();
                         if (!summaryText) {
                             if (st === 'new') {
                                 summaryText = 'Complaint has been successfully registered in the system. It is currently under initial administrative verification and scrutiny.';
@@ -2011,12 +2223,14 @@
                                 summaryText = "Complaint has been referred to the General Board for consideration. Awaiting the Board's review and decision in the upcoming meeting.";
                             } else if (st === 'board accept') {
                                 summaryText = "The General Board has accepted the complaint. Pending formal board approval and committee allocation.";
+                            } else if (st === 'board has approved') {
+                                summaryText = "The General Board has formally approved the complaint. The matter has been referred to the Disciplinary Committee for conducting inquiry and hearing proceedings.";
                             }
                         }
 
                         var summaryHtml = '';
                         if (summaryText !== '') {
-                            var isStatusNote = (st === 'new' || st === 'accepted' || st === 'refer to board' || st === 'next general board' || st === 'board accept');
+                            var isStatusNote = (st === 'new' || st === 'accepted' || st === 'refer to board' || st === 'next general board' || st === 'board accept' || st === 'board has approved');
                             var summaryLabel = isStatusNote ? 'Status Remarks' : 'Reason / Remarks';
                             summaryHtml = '<div class="status-summary-callout ' + theme.summaryClass + '">' +
                                 '  <div class="status-summary-label">' +
@@ -2420,9 +2634,79 @@
         $('#displayPdf').attr('src', '');
     });
 
-    $('#lnkDownload').on('click', function () {
+    function chooseDownloadPdfOption() {
+        if (typeof Swal !== 'undefined') {
+            Swal.fire({
+                title: '<div style="display:flex; align-items:center; justify-content:space-between; width:100%; text-align:left;">' +
+                       '  <span style="font-size:18px; font-weight:700; color:#1e293b; display:flex; align-items:center; gap:8px;">' +
+                       '    <i class="fa-solid fa-file-pdf text-danger"></i> Download Case PDF' +
+                       '  </span>' +
+                       '  <button type="button" class="btn-close btn-sm" onclick="Swal.close()" aria-label="Close" style="font-size:12px; cursor:pointer;"></button>' +
+                       '</div>',
+                html: '<div style="text-align:left; width:100%;">' +
+                      '  <div style="font-size:13px; color:#64748b; margin-bottom:16px; text-align:left;">Please select which PDF version you want to download:</div>' +
+                      '  <div style="display:flex; flex-direction:column; gap:11px; text-align:left; width:100%;">' +
+                      '    <button type="button" id="swalBtnDlWith" class="swal-dl-btn" style="display:flex; align-items:center; justify-content:space-between; padding:13px 15px; border:1.5px solid #0d6efd; background:#f0f7ff; border-radius:10px; cursor:pointer; width:100%; text-align:left;">' +
+                      '      <div style="display:flex; align-items:center; gap:12px; text-align:left;">' +
+                      '        <div style="width:36px; height:36px; border-radius:8px; background:#dbeafe; display:flex; align-items:center; justify-content:center; flex-shrink:0;">' +
+                      '          <i class="fa-solid fa-paperclip" style="font-size:17px; color:#0d6efd;"></i>' +
+                      '        </div>' +
+                      '        <div style="text-align:left;">' +
+                      '          <div style="font-weight:700; font-size:13.5px; color:#0f172a; text-align:left; line-height:1.3;">With Attached Documents</div>' +
+                      '          <div style="font-size:11.5px; color:#64748b; text-align:left; margin-top:2px;">Complete Case Dossier + All Uploaded Files</div>' +
+                      '        </div>' +
+                      '      </div>' +
+                      '      <i class="fa-solid fa-chevron-right" style="color:#0d6efd; font-size:12px;"></i>' +
+                      '    </button>' +
+                      '    <button type="button" id="swalBtnDlWithout" class="swal-dl-btn" style="display:flex; align-items:center; justify-content:space-between; padding:13px 15px; border:1.5px solid #cbd5e1; background:#ffffff; border-radius:10px; cursor:pointer; width:100%; text-align:left;">' +
+                      '      <div style="display:flex; align-items:center; gap:12px; text-align:left;">' +
+                      '        <div style="width:36px; height:36px; border-radius:8px; background:#fee2e2; display:flex; align-items:center; justify-content:center; flex-shrink:0;">' +
+                      '          <i class="fa-solid fa-file-pdf" style="font-size:17px; color:#dc3545;"></i>' +
+                      '        </div>' +
+                      '        <div style="text-align:left;">' +
+                      '          <div style="font-weight:700; font-size:13.5px; color:#0f172a; text-align:left; line-height:1.3;">Without Attached Documents</div>' +
+                      '          <div style="font-size:11.5px; color:#64748b; text-align:left; margin-top:2px;">Official Proceedings Summary Only</div>' +
+                      '        </div>' +
+                      '      </div>' +
+                      '      <i class="fa-solid fa-chevron-right" style="color:#94a3b8; font-size:12px;"></i>' +
+                      '    </button>' +
+                      '  </div>' +
+                      '</div>',
+                showConfirmButton: false,
+                showCancelButton: false,
+                buttonsStyling: false,
+                customClass: {
+                    popup: 'swal-pdf-modal p-4 shadow-lg text-start',
+                    title: 'text-start w-100 p-0 m-0',
+                    htmlContainer: 'text-start w-100 p-0 m-0'
+                },
+                didOpen: function () {
+                    $('#swalBtnDlWith').on('click', function () {
+                        Swal.close();
+                        downloadComplaintPdf(true);
+                    });
+                    $('#swalBtnDlWithout').on('click', function () {
+                        Swal.close();
+                        downloadComplaintPdf(false);
+                    });
+                }
+            });
+        } else {
+            downloadComplaintPdf(true);
+        }
+    }
+
+    function downloadComplaintPdf(withAttachments) {
+        var complaintId = $("#hdfComplaintId").val();
+        if (!complaintId) {
+            var pathParts = window.location.pathname.split('/');
+            var lastPart = pathParts[pathParts.length - 1];
+            if (!isNaN(lastPart) && parseInt(lastPart) > 0) {
+                complaintId = lastPart;
+            }
+        }
         var Data = JSON.stringify({
-            ComplaintId: $("#hdfComplaintId").val()
+            ComplaintId: complaintId
         });
 
         $.ajax({
@@ -2433,13 +2717,23 @@
             dataType: "json",
             success: function (result) {
                 if (result.data == "Success") {
-                    var url = '@Url.Action("DownloadDetailReport")';
+                    var url = '@Url.Action("DownloadDetailReport", "ComplaintDetails")' + 
+                        (complaintId ? ('?id=' + encodeURIComponent(complaintId) + '&withAttachments=' + (withAttachments ? 'true' : 'false')) : ('?withAttachments=' + (withAttachments ? 'true' : 'false')));
                     location.href = url;
                 } else {
                     swal('Something went wrong!', '', 'error');
                 }
+            },
+            error: function () {
+                var url = '@Url.Action("DownloadDetailReport", "ComplaintDetails")' + 
+                    (complaintId ? ('?id=' + encodeURIComponent(complaintId) + '&withAttachments=' + (withAttachments ? 'true' : 'false')) : ('?withAttachments=' + (withAttachments ? 'true' : 'false')));
+                location.href = url;
             }
         });
+    }
+
+    $('#lnkDownload').on('click', function () {
+        chooseDownloadPdfOption();
     });
 
     function GetReplyList(id) {
@@ -3119,10 +3413,12 @@
                         + '</div>';
                         $container.append(html);
                     });
+                } else {
+                    $container.html('<div class="empty-doc-placeholder text-center"><i class="fa-regular fa-calendar-xmark text-muted fs-3 mb-2 d-block opacity-50"></i><div class="text-muted font-size-13">No General Board meeting records added yet.</div></div>');
                 }
             },
             error: function () {
-                $('#dvGBMeetingList').empty();
+                $('#dvGBMeetingList').html('<div class="empty-doc-placeholder text-center"><i class="fa-regular fa-calendar-xmark text-muted fs-3 mb-2 d-block opacity-50"></i><div class="text-muted font-size-13">No General Board meeting records added yet.</div></div>');
             }
         });
     }
@@ -3279,9 +3575,29 @@
         });
     }
 
+    function applyStatusBadgeStyle(status) {
+        var $badge = $('#txtComplaintStatus');
+        $badge.removeClass('badge-status-new badge-status-accepted badge-status-rejected badge-status-warning badge-status-info badge-status-purple');
+        var s = (status || '').toString().trim().toLowerCase();
+        if (s.indexOf('accept') !== -1 || s.indexOf('approved') !== -1) {
+            $badge.addClass('badge-status-accepted');
+        } else if (s.indexOf('reject') !== -1) {
+            $badge.addClass('badge-status-rejected');
+        } else if (s.indexOf('more detail') !== -1 || s.indexOf('pending') !== -1 || s.indexOf('payment') !== -1) {
+            $badge.addClass('badge-status-warning');
+        } else if (s.indexOf('board') !== -1) {
+            $badge.addClass('badge-status-info');
+        } else if (s.indexOf('order') !== -1) {
+            $badge.addClass('badge-status-purple');
+        } else {
+            $badge.addClass('badge-status-new');
+        }
+    }
+
     function updateActionButtonsUI(status) {
         var html = '';
         var s = (status || '').toString().trim().toLowerCase();
+        applyStatusBadgeStyle(status);
         if (s === 'new' || s === 'old' || s === 'more detail' || s === 'payment done') {
             html = '<a href="javascript:void(0);" class="btn btn-outline-success waves-effect waves-light white-space-nowrap btn-sm me-2" onclick="updateStatusDirectly(\'Accepted\')"><i class="fa-solid fa-check me-1"></i> Accept</a>' +
                    '<a href="javascript:void(0);" class="btn btn-outline-warning waves-effect waves-light white-space-nowrap btn-sm me-2" onclick="updateStatusWithReason(\'More Detail\')"><i class="fa-solid fa-info-circle me-1"></i> More Detail</a>' +
@@ -3298,10 +3614,12 @@
         }
 
         $('#divActionButtons').html(html);
-        if (html == '') {
-            $('#divActionButtons').hide();
+        if (!html || html.trim() === '') {
+            $('#divActionButtons').empty().hide();
+            $('#heroActionBarRow').addClass('is-hidden').hide();
         } else {
             $('#divActionButtons').show();
+            $('#heroActionBarRow').removeClass('is-hidden').show();
         }
     }
 

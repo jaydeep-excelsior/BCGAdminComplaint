@@ -88,6 +88,8 @@ namespace BCGAdminComplaint.Models
         public String ComplaintNumber { get; set; }
         public Nullable<long> SrNo { get; set; }
         public Int64 CreateUser { get; set; }
+        public DateTime CreateDate { get; set; }
+        public String SCreateDate { get; set; }
     }
 
     public class ComplaintMemberLog

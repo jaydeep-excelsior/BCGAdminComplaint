@@ -463,7 +463,7 @@
                             <label class="form-label small mb-1">Receipt Date <span class="text-danger">*</span></label>
                             <input type="date" id="modalTxtReceiptDate" class="form-control form-control-sm">
                         </div>
-                        <div class="col-md-6">
+                        <div class="col-md-4">
                             <label class="form-label small mb-1">Receipt By <span class="text-danger">*</span></label>
                             <select id="modalDdlPaymentMode" class="form-select form-select-sm" onchange="modalPaymentModeChange()">
                                 <option value="0">Select</option>
@@ -474,18 +474,18 @@
                                 <option value="JOURNAL">JOURNAL</option>
                             </select>
                         </div>
-                        <div class="col-md-6">
+                        <div class="col-md-4">
                             <label class="form-label small mb-1">Transaction Date <span class="text-danger">*</span></label>
                             <input type="date" id="modalTxtTransactionDate" class="form-control form-control-sm">
                         </div>
-                        <div class="col-md-6" id="modalDivTransactionNumber" style="display:none;">
+                        <div class="col-md-4" id="modalDivTransactionNumber" style="display:none;">
                             <label class="form-label small mb-1">Transaction Number <span class="text-danger">*</span></label>
                             <input type="text" maxlength="15" id="modalTxtTransactionNumber" placeholder="Transaction Number" class="form-control form-control-sm" onkeypress="return isNumberKey(event, this)">
                         </div>
-                        <div class="col-md-6" id="modalDivBank" style="display:none;">
+                        <div class="col-12" id="modalDivBank" style="display:none;">
                             <label class="form-label small mb-1">Bank <span class="text-danger">*</span></label>
-                            <select id="modalDdlBank" class="form-select form-select-sm">
-                                <option value="0">Select</option>
+                            <select id="modalDdlBank" class="form-select form-select-sm select2">
+                                <option value="0">Select Bank</option>
                             </select>
                         </div>
                         <div class="col-12 text-end mt-2">
@@ -907,6 +907,20 @@
         $('#paymentModal').modal('show');
     }
 
+    function initModalBankSelect2() {
+        if ($.fn.select2) {
+            if ($('#modalDdlBank').hasClass("select2-hidden-accessible")) {
+                $('#modalDdlBank').select2('destroy');
+            }
+            $('#modalDdlBank').select2({
+                placeholder: 'Select Bank',
+                allowClear: false,
+                width: '100%',
+                dropdownParent: $('#paymentLogModal')
+            });
+        }
+    }
+
     function loadBanksIfNeeded() {
         if (!bankListLoaded) {
             $.ajax({
@@ -917,12 +931,13 @@
                 success: function (response) {
                     if (response.IsSuccess && response.Data) {
                         $('#modalDdlBank').empty();
-                        $('#modalDdlBank').append('<option value="0">Select</option>');
+                        $('#modalDdlBank').append('<option value="0">Select Bank</option>');
                         $.each(response.Data, function (i, item) {
                             $('#modalDdlBank').append('<option value="' + item.Id + '">' + item.BankName + '</option>');
                         });
                         bankListLoaded = true;
                     }
+                    initModalBankSelect2();
                 }
             });
         }
@@ -973,6 +988,7 @@
         } else if (mode === 'D.D.' || mode === 'OUTSTANDING' || mode === 'RTGS' || mode === 'JOURNAL') {
             $('#modalDivTransactionNumber').show();
             $('#modalDivBank').show();
+            setTimeout(function () { initModalBankSelect2(); }, 50);
         } else {
             $('#modalDivTransactionNumber').hide();
             $('#modalDivBank').hide();

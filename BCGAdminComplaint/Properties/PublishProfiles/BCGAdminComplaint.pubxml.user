@@ -22,7 +22,7 @@ by editing this MSBuild file. In order to learn more about this please visit htt
       <publishTime>09/14/2026 10:54:58</publishTime>
     </File>
     <File Include="assets/css/Site.css">
-      <publishTime>10/12/2026 17:31:08</publishTime>
+      <publishTime>10/13/2026 19:06:11</publishTime>
     </File>
     <File Include="assets/img/accepted.svg">
       <publishTime>11/22/2023 12:50:06</publishTime>
@@ -91,7 +91,7 @@ by editing this MSBuild file. In order to learn more about this please visit htt
       <publishTime>11/24/2023 10:35:44</publishTime>
     </File>
     <File Include="bin/BCGAdminComplaint.dll">
-      <publishTime>10/13/2026 11:38:45</publishTime>
+      <publishTime>10/13/2026 19:08:15</publishTime>
     </File>
     <File Include="bin/BCG_MasterRepository.dll">
       <publishTime>09/01/2026 16:18:40</publishTime>
@@ -105,50 +105,11 @@ by editing this MSBuild file. In order to learn more about this please visit htt
     <File Include="bin/CommonRepository.dll">
       <publishTime>09/01/2026 15:45:39</publishTime>
     </File>
-    <File Include="bin/CrystalDecisions.CrystalReports.Engine.dll">
-      <publishTime>06/15/2016 04:39:48</publishTime>
+    <File Include="bin/de/PdfSharp.Charting.resources.dll">
+      <publishTime>02/04/2019 13:21:54</publishTime>
     </File>
-    <File Include="bin/CrystalDecisions.ReportAppServer.ClientDoc.dll">
-      <publishTime>06/15/2016 04:39:48</publishTime>
-    </File>
-    <File Include="bin/CrystalDecisions.ReportAppServer.CommLayer.dll">
-      <publishTime>06/15/2016 04:39:48</publishTime>
-    </File>
-    <File Include="bin/CrystalDecisions.ReportAppServer.CommonControls.dll">
-      <publishTime>06/15/2016 04:39:48</publishTime>
-    </File>
-    <File Include="bin/CrystalDecisions.ReportAppServer.CommonObjectModel.dll">
-      <publishTime>06/15/2016 04:39:48</publishTime>
-    </File>
-    <File Include="bin/CrystalDecisions.ReportAppServer.Controllers.dll">
-      <publishTime>06/15/2016 04:39:48</publishTime>
-    </File>
-    <File Include="bin/CrystalDecisions.ReportAppServer.CubeDefModel.dll">
-      <publishTime>06/15/2016 04:39:48</publishTime>
-    </File>
-    <File Include="bin/CrystalDecisions.ReportAppServer.DataDefModel.dll">
-      <publishTime>06/15/2016 04:39:48</publishTime>
-    </File>
-    <File Include="bin/CrystalDecisions.ReportAppServer.DataSetConversion.dll">
-      <publishTime>06/15/2016 04:39:48</publishTime>
-    </File>
-    <File Include="bin/CrystalDecisions.ReportAppServer.ObjectFactory.dll">
-      <publishTime>06/15/2016 04:39:48</publishTime>
-    </File>
-    <File Include="bin/CrystalDecisions.ReportAppServer.Prompting.dll">
-      <publishTime>06/15/2016 04:39:48</publishTime>
-    </File>
-    <File Include="bin/CrystalDecisions.ReportAppServer.ReportDefModel.dll">
-      <publishTime>06/15/2016 04:39:48</publishTime>
-    </File>
-    <File Include="bin/CrystalDecisions.ReportAppServer.XmlSerialize.dll">
-      <publishTime>06/15/2016 04:39:48</publishTime>
-    </File>
-    <File Include="bin/CrystalDecisions.ReportSource.dll">
-      <publishTime>06/15/2016 04:39:48</publishTime>
-    </File>
-    <File Include="bin/CrystalDecisions.Shared.dll">
-      <publishTime>06/15/2016 04:39:50</publishTime>
+    <File Include="bin/de/PdfSharp.resources.dll">
+      <publishTime>02/04/2019 13:21:52</publishTime>
     </File>
     <File Include="bin/DocumentFormat.OpenXml.dll">
       <publishTime>06/06/2017 22:59:20</publishTime>
@@ -182,6 +143,12 @@ by editing this MSBuild file. In order to learn more about this please visit htt
     </File>
     <File Include="bin/Microsoft.Web.Infrastructure.dll">
       <publishTime>04/23/2012 15:23:58</publishTime>
+    </File>
+    <File Include="bin/PdfSharp.Charting.dll">
+      <publishTime>02/04/2019 13:21:52</publishTime>
+    </File>
+    <File Include="bin/PdfSharp.dll">
+      <publishTime>02/04/2019 13:21:52</publishTime>
     </File>
     <File Include="bin/roslyn/csc.exe">
       <publishTime>06/18/2015 20:19:46</publishTime>
@@ -256,7 +223,7 @@ by editing this MSBuild file. In order to learn more about this please visit htt
       <publishTime>11/24/2023 10:35:36</publishTime>
     </File>
     <File Include="packages.config">
-      <publishTime>11/24/2023 12:43:38</publishTime>
+      <publishTime>10/13/2026 15:52:06</publishTime>
     </File>
     <File Include="scripts/ai.0.22.9-build00167.js">
       <publishTime>11/01/2023 10:20:20</publishTime>
@@ -283,25 +250,25 @@ by editing this MSBuild file. In order to learn more about this please visit htt
       <publishTime>11/01/2023 10:24:34</publishTime>
     </File>
     <File Include="Views/ComplaintDetails/Details.cshtml">
-      <publishTime>10/12/2026 17:19:56</publishTime>
+      <publishTime>10/13/2026 13:37:28</publishTime>
     </File>
     <File Include="Views/ComplaintDetails/DetailsNew.cshtml">
-      <publishTime>10/13/2026 12:00:42</publishTime>
+      <publishTime>10/13/2026 18:46:30</publishTime>
     </File>
     <File Include="Views/ComplaintDetails/SearchDetail.cshtml">
       <publishTime>06/22/2026 12:16:45</publishTime>
     </File>
     <File Include="Views/ComplaintList/AddComplaint.cshtml">
-      <publishTime>10/12/2026 17:18:28</publishTime>
+      <publishTime>10/13/2026 18:43:20</publishTime>
     </File>
     <File Include="Views/ComplaintList/Index.cshtml">
-      <publishTime>10/13/2026 11:59:24</publishTime>
+      <publishTime>10/13/2026 15:25:44</publishTime>
     </File>
     <File Include="Views/ComplaintList/OnlineComplaintList.cshtml">
-      <publishTime>10/13/2026 11:21:52</publishTime>
+      <publishTime>10/13/2026 15:09:46</publishTime>
     </File>
     <File Include="Views/ComplaintList/SearchComplaint.cshtml">
-      <publishTime>10/13/2026 12:02:16</publishTime>
+      <publishTime>10/13/2026 18:46:47</publishTime>
     </File>
     <File Include="Views/DCCommittee/Add.cshtml">
       <publishTime>10/13/2026 11:21:23</publishTime>
@@ -325,10 +292,10 @@ by editing this MSBuild file. In order to learn more about this please visit htt
       <publishTime>08/27/2026 13:19:42</publishTime>
     </File>
     <File Include="Views/DCReferredList/Index.cshtml">
-      <publishTime>10/13/2026 11:21:59</publishTime>
+      <publishTime>10/13/2026 13:00:28</publishTime>
     </File>
     <File Include="Views/Home/Index.cshtml">
-      <publishTime>09/02/2026 14:45:22</publishTime>
+      <publishTime>10/13/2026 15:09:17</publishTime>
     </File>
     <File Include="Views/Home/Login.cshtml">
       <publishTime>10/12/2026 17:17:26</publishTime>
@@ -343,13 +310,13 @@ by editing this MSBuild file. In order to learn more about this please visit htt
       <publishTime>06/29/2026 19:32:27</publishTime>
     </File>
     <File Include="Views/Reports/ComplaintListReport.cshtml">
-      <publishTime>10/13/2026 11:22:07</publishTime>
+      <publishTime>10/13/2026 18:49:15</publishTime>
     </File>
     <File Include="Views/Shared/_DCMemberLayout.cshtml">
       <publishTime>10/12/2026 17:16:51</publishTime>
     </File>
     <File Include="Views/Shared/_Layout.cshtml">
-      <publishTime>10/13/2026 11:37:58</publishTime>
+      <publishTime>10/13/2026 19:06:26</publishTime>
     </File>
     <File Include="Views/web.config">
       <publishTime>11/24/2023 10:35:36</publishTime>
@@ -358,7 +325,7 @@ by editing this MSBuild file. In order to learn more about this please visit htt
       <publishTime>06/22/2026 12:16:44</publishTime>
     </File>
     <File Include="Web.config">
-      <publishTime>10/13/2026 11:16:26</publishTime>
+      <publishTime>10/13/2026 19:08:16</publishTime>
     </File>
   </ItemGroup>
 </Project>

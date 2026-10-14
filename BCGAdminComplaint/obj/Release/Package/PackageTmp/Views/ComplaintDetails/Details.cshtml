@@ -1313,8 +1313,9 @@
     });
 
     $('#lnkDownload').on('click', function () {
+        var complaintId = $("#hdfComplaintId").val();
         var Data = JSON.stringify({
-            ComplaintId: $("#hdfComplaintId").val()
+            ComplaintId: complaintId
         });
 
         $.ajax({
@@ -1325,7 +1326,7 @@
             dataType: "json",
             success: function (result) {
                 if (result.data == "Success") {
-                    var url = '@Url.Action("DownloadDetailReport")';
+                    var url = '@Url.Action("DownloadDetailReport", "ComplaintDetails")' + (complaintId ? ('?id=' + encodeURIComponent(complaintId)) : '');
                     location.href = url;
                 } else {
                     swal('Something went wrong!', "", "error");
