@@ -23,7 +23,7 @@
                         <span class="input-group-text"><i class="fa-solid fa-magnifying-glass text-muted"></i></span>
                         <input id="txtQuickSearch" class="form-control quicksearchcomplaintmanagement" placeholder="Quick Search (Name or contact number or email id or Complaint Number)">
                     </div>
-                    <a href="/ComplaintList/AddComplaint" class="btn btn-sm btn-outline-primary me-2 text-nowrap"><i class="fa-solid fa-plus me-1"></i> Add Complaint</a>
+                    <a href="/Complaint/AddComplaint" class="btn btn-sm btn-outline-primary me-2 text-nowrap"><i class="fa-solid fa-plus me-1"></i> Add Complaint</a>
                     <a class="btn btn-sm btn-outline-primary text-nowrap" id="addfilter"><i class="fa-solid fa-filter me-1"></i> Filter</a>
                 </div>
             </div>
@@ -189,7 +189,7 @@
 
         $.ajax({
             type: 'POST',
-            url: "/ComplaintList/GetOnlineComplaintList",
+            url: "/Complaint/GetOnlineComplaintList",
             data: Data,
             contentType: "application/json; charset=utf-8",
             dataType: "json",
@@ -216,7 +216,7 @@
                                                         + '<div class="d-flex mainnewresponsiveleftweb">'
                                                             + '<div class="complaint_number">'
                                                                 + '<div class="title">Complaint Number</div>'
-                                                                + '<a class="description" href="/ComplaintDetails/DetailsNew/' + value.Id + '" onclick="document.cookie=\'ComplaintId=' + value.Id + '; path=/\';">' + value.ComplaintNumber + '</a>'
+                                                                + '<a class="description" href="/Complaint/Detail/' + value.Id + '" onclick="document.cookie=\'ComplaintId=' + value.Id + '; path=/\';">' + value.ComplaintNumber + '</a>'
                                                             + '</div>'
                                                             + '<div class="complaint_number">'
                                                                 + '<div class="title">Date & Time</div>'
@@ -313,7 +313,7 @@
         var CId = currow.find('#HdfId').text();
         return $.ajax({
             type: 'POST',
-            url: "/ComplaintList/GetOnlineDocument",
+            url: "/Complaint/GetOnlineDocument",
             data: { ComplaintId: CId },
             success: function (response) {
                 $("#tblComplaintDoc").empty();
@@ -392,7 +392,7 @@
         var CId = currow.find('#HdfId').text();
         return $.ajax({
             type: 'POST',
-            url: "/ComplaintList/GetOnlineAdjuntDetails",
+            url: "/Complaint/GetOnlineAdjuntDetails",
             data: { ComplaintId: CId },
             success: function (response) {
                 $("#tblComplaintAgaints").empty();
@@ -451,7 +451,7 @@
             if (result.isConfirmed) {
                 $.ajax({
                     type: 'POST',
-                    url: "/ComplaintList/DeleteOnlineComplaint",
+                    url: "/Complaint/DeleteOnlineComplaint",
                     data: { ComplaintId: CId },
                     success: function (response) {
                         if (response.IsSuccess && response.Data === "DE") {
@@ -491,7 +491,7 @@
                 var reason = result.value || '';
                 $.ajax({
                     type: 'POST',
-                    url: "/ComplaintList/OnlineComplaintStatusUpdate",
+                    url: "/Complaint/OnlineComplaintStatusUpdate",
                     data: {
                         ComplaintId: CId,
                         Remark: 'Complaint has been successfully registered in the system. It is currently under initial administrative verification and scrutiny.',
@@ -540,7 +540,7 @@
                 var reason = result.value;
                 $.ajax({
                     type: 'POST',
-                    url: "/ComplaintList/OnlineComplaintStatusUpdate",
+                    url: "/Complaint/OnlineComplaintStatusUpdate",
                     data: {
                         ComplaintId: CId,
                         Remark: reason,

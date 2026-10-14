@@ -925,7 +925,7 @@
         if (!bankListLoaded) {
             $.ajax({
                 type: "POST",
-                url: "/ComplaintDetails/GetComplaintBankList",
+                url: "/Complaint/GetComplaintBankList",
                 contentType: "application/json; charset=utf-8",
                 dataType: "json",
                 success: function (response) {
@@ -949,7 +949,7 @@
 
         $.ajax({
             type: "POST",
-            url: "/ComplaintDetails/GetComplaintPaymentReceivedLog",
+            url: "/Complaint/GetComplaintPaymentReceivedLog",
             data: { ComplaintId: complaintId },
             success: function (response) {
                 $('#modalTblPaymentList tbody').empty();
@@ -1052,7 +1052,7 @@
             contentType: 'application/json; charset=utf-8',
             dataType: 'json',
             type: 'POST',
-            url: "/ComplaintDetails/GetComplaintPaymentReceived",
+            url: "/Complaint/GetComplaintPaymentReceived",
             data: postData,
             success: function (response) {
                 if (response.IsSuccess) {

@@ -1,4 +1,4 @@
-
+﻿
 @{
     ViewBag.Title = "SearchComplaint";
     Layout = "~/Views/Shared/_Layout.cshtml";
@@ -76,7 +76,7 @@
                         <input type="file" id="fileAdditionalAttachment" class="form-control" />
                     </div>
                     <div class="col-md-12 mb-3">
-                        <label>Note (નોંધ)</label>
+                        <label>Note (àª¨à«‹àª‚àª§)</label>
                         <textarea id="txtAdditionalFileDescription" class="form-control" rows="2"></textarea>
                     </div>
                 </div>
@@ -93,7 +93,7 @@
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title">Details of G B Meeting (સામાન્ય સભાની વિગતો)</h5>
+                <h5 class="modal-title">Details of G B Meeting (àª¸àª¾àª®àª¾àª¨à«àª¯ àª¸àª­àª¾àª¨à«€ àªµàª¿àª—àª¤à«‹)</h5>
                 <a class="btn-close btn-sm" data-bs-dismiss="modal" aria-hidden="true"></a>
             </div>
             <div class="modal-body">
@@ -124,7 +124,7 @@
     <div class="modal-dialog modal-dialog-centered modal-lg">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title">Meeting Note (બેઠકની નોંધ)</h5>
+                <h5 class="modal-title">Meeting Note (àª¬à«‡àª àª•àª¨à«€ àª¨à«‹àª‚àª§)</h5>
                 <a class="btn-close btn-sm" data-bs-dismiss="modal" aria-hidden="true"></a>
             </div>
             <div class="modal-body">
@@ -144,13 +144,13 @@
                 <div class="page-title-left mt-1">
                     <ol class="breadcrumb m-0 font-size-13">
                         <li class="breadcrumb-item"><a href="/Home/Index" class="text-muted">Dashboard</a></li>
-                        <li class="breadcrumb-item"><a href="/ComplaintList/Index" class="text-muted">Complaint Management</a></li>
+                        <li class="breadcrumb-item"><a href="/Complaint/Index" class="text-muted">Complaint Management</a></li>
                         <li class="breadcrumb-item active">Search Complaint</li>
                     </ol>
                 </div>
             </div>
             <div class="page-title-right">
-                <a href="/ComplaintList/Index" class="btn btn-outline-primary waves-effect waves-light white-space-nowrap mb-2 mb-md-0 btn-sm"><i class="fa-solid fa-arrow-left me-1"></i> Back</a>
+                <a href="/Complaint/Index" class="btn btn-outline-primary waves-effect waves-light white-space-nowrap mb-2 mb-md-0 btn-sm"><i class="fa-solid fa-arrow-left me-1"></i> Back</a>
             </div>
         </div>
     </div>
@@ -164,12 +164,12 @@
             </div>
             <div>
                 <h5 class="mb-0 fw-bold text-dark">Search Complaint</h5>
-                <span class="text-muted font-size-12">દાખલ કરેલ ફરિયાદ નંબર અને વર્ષ પસંદ કરીને શોધ કરો</span>
+                <span class="text-muted font-size-12">àª¦àª¾àª–àª² àª•àª°à«‡àª² àª«àª°àª¿àª¯àª¾àª¦ àª¨àª‚àª¬àª° àª…àª¨à«‡ àªµàª°à«àª· àªªàª¸àª‚àª¦ àª•àª°à«€àª¨à«‡ àª¶à«‹àª§ àª•àª°à«‹</span>
             </div>
         </div>
         <div class="row align-items-end g-3">
             <div class="col-md-6 col-lg-5">
-                <label class="form-label font-size-12 fw-semibold text-secondary">Complaint Number (ફરિયાદ નંબર)</label>
+                <label class="form-label font-size-12 fw-semibold text-secondary">Complaint Number (àª«àª°àª¿àª¯àª¾àª¦ àª¨àª‚àª¬àª°)</label>
                 <div class="input-group">
                     <span class="input-group-text bg-light fw-bold text-primary font-size-13">BCG/CMP/</span>
                     <input type="text" class="form-control" id="txtSearchComplaintNumber" placeholder="e.g. 244" onkeypress="return isNumberKey(event, this)">
@@ -290,7 +290,7 @@
                             </div>
                             <div>
                                 <h5 class="mb-0 fw-bold text-dark">Complainant's Details</h5>
-                                <span class="text-muted font-size-12">ફરિયાદીની વિગતો</span>
+                                <span class="text-muted font-size-12">àª«àª°àª¿àª¯àª¾àª¦à«€àª¨à«€ àªµàª¿àª—àª¤à«‹</span>
                             </div>
                         </div>
                         <a href="javascript:void(0);" class="btn btn-outline-primary btn-sm" onclick="openComplainantEditModal()"><i class="fa-solid fa-pen-to-square me-1"></i> Edit</a>
@@ -347,7 +347,7 @@
                             </div>
                             <div>
                                 <h5 class="mb-0 fw-bold text-dark">Details of Advocate - Complained Against</h5>
-                                <span class="text-muted font-size-12">જે વકીલ વિરુદ્ધ ફરિયાદ કરવામાં આવી છે તેની વિગતો</span>
+                                <span class="text-muted font-size-12">àªœà«‡ àªµàª•à«€àª² àªµàª¿àª°à«àª¦à«àª§ àª«àª°àª¿àª¯àª¾àª¦ àª•àª°àªµàª¾àª®àª¾àª‚ àª†àªµà«€ àª›à«‡ àª¤à«‡àª¨à«€ àªµàª¿àª—àª¤à«‹</span>
                             </div>
                         </div>
                         <a href="javascript:void(0);" class="btn btn-outline-primary btn-sm" onclick="openAddMemberModal()"><i class="fa-solid fa-plus me-1"></i> Add Advocate</a>
@@ -368,7 +368,7 @@
                             </div>
                             <div>
                                 <h5 class="mb-0 fw-bold text-dark">Complaint Affidavit Copy</h5>
-                                <span class="text-muted font-size-12">ફરિયાદ સોગંદનામાની નકલ</span>
+                                <span class="text-muted font-size-12">àª«àª°àª¿àª¯àª¾àª¦ àª¸à«‹àª—àª‚àª¦àª¨àª¾àª®àª¾àª¨à«€ àª¨àª•àª²</span>
                             </div>
                         </div>
                         <div>
@@ -389,7 +389,7 @@
                             </div>
                             <div>
                                 <h5 class="mb-0 fw-bold text-dark">Additional Attachments</h5>
-                                <span class="text-muted font-size-12">જો કોઈ વધારાના જોડાણો હોય તો</span>
+                                <span class="text-muted font-size-12">àªœà«‹ àª•à«‹àªˆ àªµàª§àª¾àª°àª¾àª¨àª¾ àªœà«‹àª¡àª¾àª£à«‹ àª¹à«‹àª¯ àª¤à«‹</span>
                             </div>
                         </div>
                         <a href="javascript:void(0);" class="btn btn-outline-primary btn-sm" onclick="openAdditionalAttachmentModal()"><i class="fa-solid fa-upload me-1"></i> Upload File</a>
@@ -408,7 +408,7 @@
                             </div>
                             <div>
                                 <h5 class="mb-0 fw-bold text-dark">Details of G B Meeting</h5>
-                                <span class="text-muted font-size-12">સામાન્ય સભાની વિગતો</span>
+                                <span class="text-muted font-size-12">àª¸àª¾àª®àª¾àª¨à«àª¯ àª¸àª­àª¾àª¨à«€ àªµàª¿àª—àª¤à«‹</span>
                             </div>
                         </div>
                         <a href="javascript:void(0);" class="btn btn-outline-primary btn-sm" onclick="openComplaintGBMeetingModal()"><i class="fa-solid fa-plus me-1"></i> Add Meeting</a>
@@ -427,7 +427,7 @@
                             </div>
                             <div>
                                 <h5 class="mb-0 fw-bold text-dark">Advocate Reply & Communications</h5>
-                                <span class="text-muted font-size-12">જે વકીલ વિરુદ્ધ ફરિયાદ કરવામાં આવી છે તેનો જવાબ</span>
+                                <span class="text-muted font-size-12">àªœà«‡ àªµàª•à«€àª² àªµàª¿àª°à«àª¦à«àª§ àª«àª°àª¿àª¯àª¾àª¦ àª•àª°àªµàª¾àª®àª¾àª‚ àª†àªµà«€ àª›à«‡ àª¤à«‡àª¨à«‹ àªœàªµàª¾àª¬</span>
                             </div>
                         </div>
                     </div>
@@ -493,7 +493,7 @@
                             </div>
                             <div>
                                 <h5 class="mb-0 fw-bold text-dark">Payment Details</h5>
-                                <span class="text-muted font-size-12">ચૂકવણીની વિગતો</span>
+                                <span class="text-muted font-size-12">àªšà«‚àª•àªµàª£à«€àª¨à«€ àªµàª¿àª—àª¤à«‹</span>
                             </div>
                         </div>
                     </div>
@@ -503,7 +503,7 @@
                             <div class="kpi-metric-tile kpi-metric-primary">
                                 <div class="d-flex align-items-center justify-content-between">
                                     <span class="kpi-label"><i class="fa-solid fa-coins me-1"></i> Total Amount</span>
-                                    <span class="kpi-value text-primary">₹ <label id="lblTotalAmount" class="mb-0 text-primary fw-bold">0</label></span>
+                                    <span class="kpi-value text-primary">â‚¹ <label id="lblTotalAmount" class="mb-0 text-primary fw-bold">0</label></span>
                                 </div>
                             </div>
                         </div>
@@ -511,7 +511,7 @@
                             <div class="kpi-metric-tile kpi-metric-success">
                                 <div class="d-flex align-items-center justify-content-between">
                                     <span class="kpi-label"><i class="fa-solid fa-circle-check me-1"></i> Paid Amount</span>
-                                    <span class="kpi-value text-success">₹ <label id="lblPaidAmount" class="mb-0 text-success fw-bold">0</label></span>
+                                    <span class="kpi-value text-success">â‚¹ <label id="lblPaidAmount" class="mb-0 text-success fw-bold">0</label></span>
                                 </div>
                             </div>
                         </div>
@@ -519,7 +519,7 @@
                             <div class="kpi-metric-tile kpi-metric-danger">
                                 <div class="d-flex align-items-center justify-content-between">
                                     <span class="kpi-label"><i class="fa-solid fa-clock me-1"></i> Due Amount</span>
-                                    <span class="kpi-value text-danger">₹ <label id="lblDueAmount" class="mb-0 text-danger fw-bold">0</label></span>
+                                    <span class="kpi-value text-danger">â‚¹ <label id="lblDueAmount" class="mb-0 text-danger fw-bold">0</label></span>
                                 </div>
                             </div>
                         </div>
@@ -536,7 +536,7 @@
                         </div>
                         <div>
                             <h5 class="mb-0 fw-bold text-dark">Pay Payment Information</h5>
-                            <span class="text-muted font-size-12">ચુકવણીની વિગત દાખલ કરો</span>
+                            <span class="text-muted font-size-12">àªšà«àª•àªµàª£à«€àª¨à«€ àªµàª¿àª—àª¤ àª¦àª¾àª–àª² àª•àª°à«‹</span>
                         </div>
                     </div>
                     <div class="row g-2">
@@ -589,7 +589,7 @@
                         </div>
                         <div>
                             <h5 class="mb-0 fw-bold text-dark">Payment History</h5>
-                            <span class="text-muted font-size-12">ચુકવણીની પાકી રસીદો</span>
+                            <span class="text-muted font-size-12">àªšà«àª•àªµàª£à«€àª¨à«€ àªªàª¾àª•à«€ àª°àª¸à«€àª¦à«‹</span>
                         </div>
                     </div>
                     <div id="divPaymentDetailList"></div>
@@ -826,7 +826,7 @@
 
         $.ajax({
             type: 'POST',
-            url: '/ComplaintList/SearchComplaintByNumber',
+            url: '/Complaint/SearchComplaintByNumber',
             data: { ComplaintNumber: fullComplaintNumber },
             success: function (response) {
                 if (response.IsSuccess && response.Data != null) {
@@ -965,11 +965,11 @@
                                 }
                                 var noteBlock = '';
                                 if (item.Description != null && item.Description.trim() !== '') {
-                                    noteBlock = '<div class="col-md-12 mt-3"><div class="title">Note (નોંધ)</div><div class="description">' + item.Description + '</div></div>';
+                                    noteBlock = '<div class="col-md-12 mt-3"><div class="title">Note (àª¨à«‹àª‚àª§)</div><div class="description">' + item.Description + '</div></div>';
                                 }
                                 var addHtml = '<div class="main_card_list main_card_list_border p-12-custome mt-3">'
                                     + '<div class="main_card_list_body"><div class="row">'
-                                    + '<div class="col-md-12"><div class="title">Upload File (ફાઇલ અપલોડ)</div>' + fileBlock + '</div>'
+                                    + '<div class="col-md-12"><div class="title">Upload File (àª«àª¾àª‡àª² àª…àªªàª²à«‹àª¡)</div>' + fileBlock + '</div>'
                                     + noteBlock
                                     + '</div></div></div>';
                                 $('#dvOrderPassed').append(addHtml);
@@ -1159,7 +1159,7 @@
 
         $.ajax({
             type: 'POST',
-            url: '/ComplaintList/SearchComplaintComplainantsDetailsByComplaintNumber',
+            url: '/Complaint/SearchComplaintComplainantsDetailsByComplaintNumber',
             data: { ComplaintNumber: fullComplaintNumber },
             success: function (response) {
                 if (response.IsSuccess && response.Data != null) {
@@ -1240,7 +1240,7 @@
     function GetComplaintBankList() {
         $.ajax({
             type: "POST",
-            url: "/ComplaintDetails/GetComplaintBankList",
+            url: "/Complaint/GetComplaintBankList",
             contentType: "application/json; charset=utf-8",
             dataType: "json",
             success: function (response) {
@@ -1274,7 +1274,7 @@
         $('#divPaymentDetailList').empty();
         $.ajax({
             type: "POST",
-            url: "/ComplaintDetails/GetComplaintPaymentReceivedLog",
+            url: "/Complaint/GetComplaintPaymentReceivedLog",
             data: JSON.stringify({ ComplaintId: $("#hdfComplaintId").val() }),
             contentType: "application/json; charset=utf-8",
             dataType: "json",
@@ -1362,7 +1362,7 @@
     function GetComplaintCurrentStatus() {
         $.ajax({
             type: "POST",
-            url: "/ComplaintDetails/GetComplaintCurrentStatus",
+            url: "/Complaint/GetComplaintCurrentStatus",
             contentType: "application/json; charset=utf-8",
             data: JSON.stringify({ ComplaintId: $("#hdfComplaintId").val() }),
             dataType: "json",
@@ -1409,7 +1409,7 @@
         }
         $.ajax({
             type: "POST",
-            url: "/ComplaintDetails/GetLogList",
+            url: "/Complaint/GetLogList",
             contentType: "application/json; charset=utf-8",
             data: JSON.stringify({ ComplaintId: complaintId }),
             dataType: "json",
@@ -1445,7 +1445,7 @@
     function GetComplaintPaymentDetail() {
         $.ajax({
             type: "POST",
-            url: "/ComplaintDetails/GetComplaintPaymentDetail",
+            url: "/Complaint/GetComplaintPaymentDetail",
             contentType: "application/json; charset=utf-8",
             data: JSON.stringify({ ComplaintId: $("#hdfComplaintId").val() }),
             dataType: "json",
@@ -1594,7 +1594,7 @@
             contentType: 'application/json; charset=utf-8',
             dataType: 'json',
             type: 'POST',
-            url: "/ComplaintDetails/GetComplaintPaymentReceived",
+            url: "/Complaint/GetComplaintPaymentReceived",
             data: data,
             success: function (response) {
                 if (response.IsSuccess) {
@@ -1637,7 +1637,7 @@
     function GetDefendantList() {
         $.ajax({
             type: "POST",
-            url: "/ComplaintDetails/GetOtherList",
+            url: "/Complaint/GetOtherList",
             contentType: "application/json; charset=utf-8",
             data: JSON.stringify({ ComplaintId: $("#hdfComplaintId").val() }),
             dataType: "json",
@@ -1740,7 +1740,7 @@
             contentType: 'application/json; charset=utf-8',
             dataType: 'json',
             type: 'POST',
-            url: "/ComplaintDetails/ComplaintAgainstUpdate",
+            url: "/Complaint/ComplaintAgainstUpdate",
             data: data,
             success: function (response) {
                 if (response.IsSuccess) {
@@ -1773,7 +1773,7 @@
     function GetComplaintReplyToList() {
         $.ajax({
             type: "POST",
-            url: "/ComplaintDetails/GetOtherList",
+            url: "/Complaint/GetOtherList",
             contentType: "application/json; charset=utf-8",
             data: JSON.stringify({ ComplaintId: $("#hdfComplaintId").val() }),
             dataType: "json",
@@ -1867,7 +1867,7 @@
 
         $.ajax({
             type: "POST",
-            url: "/ComplaintDetails/SendComplaintLinkSMS",
+            url: "/Complaint/SendComplaintLinkSMS",
             data: JSON.stringify({ dcId: dcId, mobileNumber: mobileNumber, emailAddress: emailAddress || "" }),
             contentType: "application/json; charset=utf-8",
             dataType: "json",
@@ -1933,7 +1933,7 @@
 
         $.ajax({
             type: 'POST',
-            url: "/ComplaintList/GetComplaintMemberLogList",
+            url: "/Complaint/GetComplaintMemberLogList",
             data: Data,
             contentType: "application/json; charset=utf-8",
             dataType: "json",
@@ -2140,7 +2140,7 @@
         });
         $.ajax({
             type: 'POST',
-            url: "/ComplaintDetails/GetLogList",
+            url: "/Complaint/GetLogList",
             data: Data,
             contentType: "application/json; charset=utf-8",
             dataType: "json",
@@ -2285,7 +2285,7 @@
         $('#drpDcNo').append('<option value="">Select DC Commitee</option>');
         $.ajax({
             type: 'Get',
-            url: "/ComplaintDetails/GetDcNoList",
+            url: "/Complaint/GetDcNoList",
             contentType: "application/json; charset=utf-8",
             dataType: "json",
             success: function (response) {
@@ -2320,7 +2320,7 @@
             });
             $.ajax({
                 type: 'POST',
-                url: "/ComplaintDetails/GetDcMemberLists",
+                url: "/Complaint/GetDcMemberLists",
                 contentType: "application/json; charset=utf-8",
                 data: Data,
                 dataType: "json",
@@ -2386,7 +2386,7 @@
 
             $.ajax({
                 type: 'Get',
-                url: "/ComplaintDetails/GetDcMemberList",
+                url: "/Complaint/GetDcMemberList",
                 contentType: "application/json; charset=utf-8",
                 data: { DcNo: dcno },
                 dataType: "json",
@@ -2436,7 +2436,7 @@
 
                 $.ajax({
                     type: 'POST',
-                    url: "/ComplaintDetails/SaveComplaintStatusLog",
+                    url: "/Complaint/SaveComplaintStatusLog",
                     data: Data,
                     contentType: "application/json; charset=utf-8",
                     dataType: "json",
@@ -2496,7 +2496,7 @@
 
             $.ajax({
                 type: 'POST',
-                url: "/ComplaintDetails/SaveComplaintMemberLog",
+                url: "/Complaint/SaveComplaintMemberLog",
                 data: Data,
                 contentType: "application/json; charset=utf-8",
                 dataType: "json",
@@ -2590,7 +2590,7 @@
 
         $.ajax({
             type: 'POST',
-            url: "/ComplaintDetails/SaveComplaintStatusLog",
+            url: "/Complaint/SaveComplaintStatusLog",
             data: Data,
             contentType: "application/json; charset=utf-8",
             dataType: "json",
@@ -2711,13 +2711,13 @@
 
         $.ajax({
             type: 'POST',
-            url: "/ComplaintDetails/GetAllComplaintDetailsReportsFilterSet",
+            url: "/Complaint/GetAllComplaintDetailsReportsFilterSet",
             data: Data,
             contentType: "application/json; charset=utf-8",
             dataType: "json",
             success: function (result) {
                 if (result.data == "Success") {
-                    var url = '@Url.Action("DownloadDetailReport", "ComplaintDetails")' + 
+                    var url = '@Url.Action("DownloadDetailReport", "Complaint")' + 
                         (complaintId ? ('?id=' + encodeURIComponent(complaintId) + '&withAttachments=' + (withAttachments ? 'true' : 'false')) : ('?withAttachments=' + (withAttachments ? 'true' : 'false')));
                     location.href = url;
                 } else {
@@ -2725,7 +2725,7 @@
                 }
             },
             error: function () {
-                var url = '@Url.Action("DownloadDetailReport", "ComplaintDetails")' + 
+                var url = '@Url.Action("DownloadDetailReport", "Complaint")' + 
                     (complaintId ? ('?id=' + encodeURIComponent(complaintId) + '&withAttachments=' + (withAttachments ? 'true' : 'false')) : ('?withAttachments=' + (withAttachments ? 'true' : 'false')));
                 location.href = url;
             }
@@ -2745,7 +2745,7 @@
 
         $.ajax({
             type: "POST",
-            url: "/ComplaintDetails/GetReplyList",
+            url: "/Complaint/GetReplyList",
             data: Data,
             contentType: "application/json; charset=utf-8",
             dataType: "json",
@@ -2834,7 +2834,7 @@
 
                 $.ajax({
                     type: 'POST',
-                    url: "/ComplaintDetails/ComplaintReplyDelete",
+                    url: "/Complaint/ComplaintReplyDelete",
                     data: JSON.stringify(data),
                     contentType: "application/json; charset=utf-8",
                     dataType: "json",
@@ -2878,7 +2878,7 @@
 
         $.ajax({
             type: "POST",
-            url: "/ComplaintDetails/InsertComplaintReply",
+            url: "/Complaint/InsertComplaintReply",
             data: Data,
             dataType: "json",
             success: function (response) {
@@ -2930,7 +2930,7 @@
 
         $.ajax({
             type: "POST",
-            url: "/ComplaintDetails/UpdateComplainantDetails",
+            url: "/Complaint/UpdateComplainantDetails",
             data: JSON.stringify(data),
             contentType: "application/json; charset=utf-8",
             dataType: "json",
@@ -2977,7 +2977,7 @@
 
             $.ajax({
                 type: "POST",
-                url: "/ComplaintDetails/UploadAffidavitCopy",
+                url: "/Complaint/UploadAffidavitCopy",
                 data: data,
                 dataType: "json",
                 success: function (response) {
@@ -3017,7 +3017,7 @@
 
         $.ajax({
             type: "POST",
-            url: "/ComplaintList/GetComplaintAffidavitCopyLog",
+            url: "/Complaint/GetComplaintAffidavitCopyLog",
             contentType: "application/json; charset=utf-8",
             data: Data,
             dataType: "json",
@@ -3088,7 +3088,7 @@
 
             $.ajax({
                 type: "POST",
-                url: "/ComplaintDetails/UploadAdditionalAttachment",
+                url: "/Complaint/UploadAdditionalAttachment",
                 data: data,
                 dataType: "json",
                 success: function (response) {
@@ -3128,7 +3128,7 @@
 
         $.ajax({
             type: "POST",
-            url: "/ComplaintList/GetComplaintAdditionalAttachmentsLog",
+            url: "/Complaint/GetComplaintAdditionalAttachmentsLog",
             contentType: "application/json; charset=utf-8",
             data: Data,
             dataType: "json",
@@ -3147,11 +3147,11 @@
                                 }
                                 var noteBlock = '';
                                 if (item.Description != null && item.Description.trim() !== '') {
-                                    noteBlock = '<div class="col-md-12 mt-3"><div class="title">Note (નોંધ)</div><div class="description">' + item.Description + '</div></div>';
+                                    noteBlock = '<div class="col-md-12 mt-3"><div class="title">Note (àª¨à«‹àª‚àª§)</div><div class="description">' + item.Description + '</div></div>';
                                 }
                                 var addHtml = '<div class="main_card_list main_card_list_border p-12-custome mt-3">'
                                     + '<div class="main_card_list_body"><div class="row">'
-                                    + '<div class="col-md-12"><div class="title">Upload File (ફાઇલ અપલોડ)</div>' + fileBlock + '</div>'
+                                    + '<div class="col-md-12"><div class="title">Upload File (àª«àª¾àª‡àª² àª…àªªàª²à«‹àª¡)</div>' + fileBlock + '</div>'
                                     + noteBlock
                                     + '</div></div></div>';
                                 $('#dvOrderPassed').append(addHtml);
@@ -3181,7 +3181,7 @@
         if (confirm("Are you sure you want to delete this attachment?")) {
             $.ajax({
                 type: "POST",
-                url: "/ComplaintDetails/DeleteAdditionalAttachment",
+                url: "/Complaint/DeleteAdditionalAttachment",
                 data: JSON.stringify({ Id: id }),
                 contentType: "application/json; charset=utf-8",
                 dataType: "json",
@@ -3280,7 +3280,7 @@
 
         $.ajax({
             type: 'POST',
-            url: '/ComplaintDetails/GetSearchData',
+            url: '/Complaint/GetSearchData',
             data: JSON.stringify({ SearchTitle: searchTitle, PageNo: detailsSearchPageNo, PageSize: detailsSearchPageSize }),
             contentType: 'application/json; charset=utf-8',
             dataType: 'json',
@@ -3342,7 +3342,7 @@
 
         $.ajax({
             type: 'POST',
-            url: "/ComplaintDetails/ComplaintAgainstSave",
+            url: "/Complaint/ComplaintAgainstSave",
             data: JSON.stringify(data),
             contentType: "application/json; charset=utf-8",
             dataType: "json",
@@ -3378,7 +3378,7 @@
         }
         $.ajax({
             type: 'POST',
-            url: "/ComplaintDetails/GetComplaintGBMeetingLogList",
+            url: "/Complaint/GetComplaintGBMeetingLogList",
             data: { ComplaintId: complaintId },
             dataType: "json",
             success: function (response) {
@@ -3390,16 +3390,16 @@
                             + '<div class="main_card_list_body">'
                                 + '<div class="row">'
                                     + '<div class="col-md-4">'
-                                        + '<div class="title">Meeting Date (બેઠકની તારીખ)</div>'
+                                        + '<div class="title">Meeting Date (àª¬à«‡àª àª•àª¨à«€ àª¤àª¾àª°à«€àª–)</div>'
                                         + '<div class="description meeting-date-content">' + (item.MeetingDate || '') + '</div>'
                                     + '</div>'
                                     + '<div class="col-md-8">'
-                                        + '<div class="title">Meeting Title (અપલોડ શીર્ષક)</div>'
+                                        + '<div class="title">Meeting Title (àª…àªªàª²à«‹àª¡ àª¶à«€àª°à«àª·àª•)</div>'
                                         + '<div class="description meeting-title-content">' + (item.MeetingTitle || '') + '</div>'
                                     + '</div>'
                                     + '<div class="col-md-12 mt-3">'
                                         + '<div class="title d-flex justify-content-between align-items-center">'
-                                            + '<span>Meeting Note (બેઠકની નોંધ)</span>'
+                                            + '<span>Meeting Note (àª¬à«‡àª àª•àª¨à«€ àª¨à«‹àª‚àª§)</span>'
                                             + '<div>'
                                                 + '<button type="button" class="btn btn-outline-danger btn-sm px-2 py-0 me-1" style="font-size: 11px; line-height: 1.5;" onclick="deleteGBMeetingLog(\'' + item.Id + '\')"><i class="fa-solid fa-trash me-1"></i>Delete</button>'
                                                 + '<button type="button" class="btn btn-outline-info btn-sm px-2 py-0 me-1" style="font-size: 11px; line-height: 1.5;" onclick="editGBMeetingLog(\'' + item.Id + '\', this)"><i class="fa-solid fa-pen-to-square me-1"></i>Edit</button>'
@@ -3450,7 +3450,7 @@
 
         $.ajax({
             type: 'POST',
-            url: "/ComplaintDetails/ComplaintGBMeetingLogSave",
+            url: "/Complaint/ComplaintGBMeetingLogSave",
             data: JSON.stringify(data),
             contentType: "application/json; charset=utf-8",
             dataType: "json",
@@ -3550,7 +3550,7 @@
 
                 $.ajax({
                     type: 'POST',
-                    url: "/ComplaintDetails/ComplaintGBMeetingLogSave",
+                    url: "/Complaint/ComplaintGBMeetingLogSave",
                     data: JSON.stringify(data),
                     contentType: "application/json; charset=utf-8",
                     dataType: "json",
@@ -3699,7 +3699,7 @@
 
                 $.ajax({
                     type: 'POST',
-                    url: "/ComplaintDetails/SaveComplaintStatusLog",
+                    url: "/Complaint/SaveComplaintStatusLog",
                     contentType: "application/json; charset=utf-8",
                     data: Data,
                     dataType: "json",
@@ -3751,7 +3751,7 @@
 
                 $.ajax({
                     type: 'POST',
-                    url: "/ComplaintDetails/StatusUpdate",
+                    url: "/Complaint/StatusUpdate",
                     contentType: "application/json; charset=utf-8",
                     data: Data,
                     dataType: "json",

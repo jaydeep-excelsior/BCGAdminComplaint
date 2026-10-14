@@ -45,7 +45,7 @@
 
         $.ajax({
             type: 'POST',
-            url: '/ComplaintList/SearchComplaintByNumber',
+            url: '/Complaint/SearchComplaintByNumber',
             data: { ComplaintNumber: fullComplaintNumber },
             success: function (response) {
                 if (response.IsSuccess && response.Data != null) {
@@ -354,7 +354,7 @@
 
         $.ajax({
             type: 'POST',
-            url: '/ComplaintList/SearchComplaintComplainantsDetailsByComplaintNumber',
+            url: '/Complaint/SearchComplaintComplainantsDetailsByComplaintNumber',
             data: { ComplaintNumber: fullComplaintNumber },
             success: function (response) {
                 if (response.IsSuccess && response.Data != null) {
@@ -406,7 +406,7 @@
     function GetComplaintBankList() {
         $.ajax({
             type: "POST",
-            url: "/ComplaintDetails/GetComplaintBankList",
+            url: "/Complaint/GetComplaintBankList",
             contentType: "application/json; charset=utf-8",
             dataType: "json",
             success: function (response) {
@@ -449,7 +449,7 @@
         $('#divPaymentDetailList').empty();
         $.ajax({
             type: "POST",
-            url: "/ComplaintDetails/GetComplaintPaymentReceivedLog",
+            url: "/Complaint/GetComplaintPaymentReceivedLog",
             data: JSON.stringify({ ComplaintId: $("#hdfComplaintId").val() }),
             contentType: "application/json; charset=utf-8",
             dataType: "json",
@@ -537,7 +537,7 @@
     function GetComplaintCurrentStatus() {
         $.ajax({
             type: "POST",
-            url: "/ComplaintDetails/GetComplaintCurrentStatus",
+            url: "/Complaint/GetComplaintCurrentStatus",
             contentType: "application/json; charset=utf-8",
             data: JSON.stringify({ ComplaintId: $("#hdfComplaintId").val() }),
             dataType: "json",
@@ -574,7 +574,7 @@
     function GetComplaintPaymentDetail() {
         $.ajax({
             type: "POST",
-            url: "/ComplaintDetails/GetComplaintPaymentDetail",
+            url: "/Complaint/GetComplaintPaymentDetail",
             contentType: "application/json; charset=utf-8",
             data: JSON.stringify({ ComplaintId: $("#hdfComplaintId").val() }),
             dataType: "json",
@@ -722,7 +722,7 @@
             contentType: 'application/json; charset=utf-8',
             dataType: 'json',
             type: 'POST',
-            url: "/ComplaintDetails/GetComplaintPaymentReceived",
+            url: "/Complaint/GetComplaintPaymentReceived",
             data: data,
             success: function (response) {
                 if (response.IsSuccess) {
@@ -765,7 +765,7 @@
     function GetDefendantList() {
         $.ajax({
             type: "POST",
-            url: "/ComplaintDetails/GetOtherList",
+            url: "/Complaint/GetOtherList",
             contentType: "application/json; charset=utf-8",
             data: JSON.stringify({ ComplaintId: $("#hdfComplaintId").val() }),
             dataType: "json",
@@ -868,7 +868,7 @@
             contentType: 'application/json; charset=utf-8',
             dataType: 'json',
             type: 'POST',
-            url: "/ComplaintDetails/ComplaintAgainstUpdate",
+            url: "/Complaint/ComplaintAgainstUpdate",
             data: data,
             success: function (response) {
                 if (response.IsSuccess) {
@@ -901,7 +901,7 @@
     function GetComplaintReplyToList() {
         $.ajax({
             type: "POST",
-            url: "/ComplaintDetails/GetOtherList",
+            url: "/Complaint/GetOtherList",
             contentType: "application/json; charset=utf-8",
             data: JSON.stringify({ ComplaintId: $("#hdfComplaintId").val() }),
             dataType: "json",
@@ -973,7 +973,7 @@
         });
         $.ajax({
             type: 'POST',
-            url: "/ComplaintList/GetComplaintMemberLogList",
+            url: "/Complaint/GetComplaintMemberLogList",
             data: Data,
             contentType: "application/json; charset=utf-8",
             dataType: "json",
@@ -1005,7 +1005,7 @@
         });
         $.ajax({
             type: 'POST',
-            url: "/ComplaintDetails/GetLogList",
+            url: "/Complaint/GetLogList",
             data: Data,
             contentType: "application/json; charset=utf-8",
             dataType: "json",
@@ -1094,7 +1094,7 @@
         $('#drpDcNo').append('<option value="">Select DC Commitee</option>');
         $.ajax({
             type: 'Get',
-            url: "/ComplaintDetails/GetDcNoList",
+            url: "/Complaint/GetDcNoList",
             contentType: "application/json; charset=utf-8",
             dataType: "json",
             success: function (response) {
@@ -1159,7 +1159,7 @@
             if (status == 'New' || status == 'Accepted' || status == 'Rejected' || status == 'Rejected' || status == 'More Detail' || status == 'Payment Done' || status == 'Next General Board' || status == 'Board Has Rejected' || status == 'Hearing') {
                 $.ajax({
                     type: 'POST',
-                    url: "/ComplaintDetails/StatusUpdate",
+                    url: "/Complaint/StatusUpdate",
                     contentType: "application/json; charset=utf-8",
                     data: Data,
                     dataType: "json",
@@ -1193,7 +1193,7 @@
             });
             $.ajax({
                 type: 'POST',
-                url: "/ComplaintDetails/GetDcMemberLists",
+                url: "/Complaint/GetDcMemberLists",
                 contentType: "application/json; charset=utf-8",
                 data: Data,
                 dataType: "json",
@@ -1259,7 +1259,7 @@
 
             $.ajax({
                 type: 'Get',
-                url: "/ComplaintDetails/GetDcMemberList",
+                url: "/Complaint/GetDcMemberList",
                 contentType: "application/json; charset=utf-8",
                 data: { DcNo: dcno },
                 dataType: "json",
@@ -1309,7 +1309,7 @@
 
                 $.ajax({
                     type: 'POST',
-                    url: "/ComplaintDetails/SaveComplaintStatusLog",
+                    url: "/Complaint/SaveComplaintStatusLog",
                     data: Data,
                     contentType: "application/json; charset=utf-8",
                     dataType: "json",
@@ -1369,7 +1369,7 @@
 
             $.ajax({
                 type: 'POST',
-                url: "/ComplaintDetails/SaveComplaintMemberLog",
+                url: "/Complaint/SaveComplaintMemberLog",
                 data: Data,
                 contentType: "application/json; charset=utf-8",
                 dataType: "json",
@@ -1463,7 +1463,7 @@
 
         $.ajax({
             type: 'POST',
-            url: "/ComplaintDetails/SaveComplaintStatusLog",
+            url: "/Complaint/SaveComplaintStatusLog",
             data: Data,
             contentType: "application/json; charset=utf-8",
             dataType: "json",
@@ -1514,7 +1514,7 @@
 
         $.ajax({
             type: 'POST',
-            url: "/ComplaintDetails/GetAllComplaintDetailsReportsFilterSet",
+            url: "/Complaint/GetAllComplaintDetailsReportsFilterSet",
             data: Data,
             contentType: "application/json; charset=utf-8",
             dataType: "json",
@@ -1538,7 +1538,7 @@
 
         $.ajax({
             type: "POST",
-            url: "/ComplaintDetails/GetReplyList",
+            url: "/Complaint/GetReplyList",
             data: Data,
             contentType: "application/json; charset=utf-8",
             dataType: "json",
@@ -1627,7 +1627,7 @@
 
                 $.ajax({
                     type: 'POST',
-                    url: "/ComplaintDetails/ComplaintReplyDelete",
+                    url: "/Complaint/ComplaintReplyDelete",
                     data: JSON.stringify(data),
                     contentType: "application/json; charset=utf-8",
                     dataType: "json",
@@ -1671,7 +1671,7 @@
 
         $.ajax({
             type: "POST",
-            url: "/ComplaintDetails/InsertComplaintReply",
+            url: "/Complaint/InsertComplaintReply",
             data: Data,
             dataType: "json",
             success: function (response) {
@@ -1723,7 +1723,7 @@
 
         $.ajax({
             type: "POST",
-            url: "/ComplaintDetails/UpdateComplainantDetails",
+            url: "/Complaint/UpdateComplainantDetails",
             data: JSON.stringify(data),
             contentType: "application/json; charset=utf-8",
             dataType: "json",
@@ -1770,7 +1770,7 @@
 
             $.ajax({
                 type: "POST",
-                url: "/ComplaintDetails/UploadAffidavitCopy",
+                url: "/Complaint/UploadAffidavitCopy",
                 data: data,
                 dataType: "json",
                 success: function (response) {
@@ -1810,7 +1810,7 @@
 
         $.ajax({
             type: "POST",
-            url: "/ComplaintList/GetComplaintAffidavitCopyLog",
+            url: "/Complaint/GetComplaintAffidavitCopyLog",
             contentType: "application/json; charset=utf-8",
             data: Data,
             dataType: "json",
@@ -1881,7 +1881,7 @@
 
             $.ajax({
                 type: "POST",
-                url: "/ComplaintDetails/UploadAdditionalAttachment",
+                url: "/Complaint/UploadAdditionalAttachment",
                 data: data,
                 dataType: "json",
                 success: function (response) {
@@ -1921,7 +1921,7 @@
 
         $.ajax({
             type: "POST",
-            url: "/ComplaintList/GetComplaintAdditionalAttachmentsLog",
+            url: "/Complaint/GetComplaintAdditionalAttachmentsLog",
             contentType: "application/json; charset=utf-8",
             data: Data,
             dataType: "json",
@@ -1974,7 +1974,7 @@
         if (confirm("Are you sure you want to delete this attachment?")) {
             $.ajax({
                 type: "POST",
-                url: "/ComplaintDetails/DeleteAdditionalAttachment",
+                url: "/Complaint/DeleteAdditionalAttachment",
                 data: JSON.stringify({ Id: id }),
                 contentType: "application/json; charset=utf-8",
                 dataType: "json",
@@ -2073,7 +2073,7 @@
 
         $.ajax({
             type: 'POST',
-            url: '/ComplaintDetails/GetSearchData',
+            url: '/Complaint/GetSearchData',
             data: JSON.stringify({ SearchTitle: searchTitle, PageNo: detailsSearchPageNo, PageSize: detailsSearchPageSize }),
             contentType: 'application/json; charset=utf-8',
             dataType: 'json',
@@ -2135,7 +2135,7 @@
 
         $.ajax({
             type: 'POST',
-            url: "/ComplaintDetails/ComplaintAgainstSave",
+            url: "/Complaint/ComplaintAgainstSave",
             data: JSON.stringify(data),
             contentType: "application/json; charset=utf-8",
             dataType: "json",
@@ -2171,7 +2171,7 @@
         }
         $.ajax({
             type: 'POST',
-            url: "/ComplaintDetails/GetComplaintGBMeetingLogList",
+            url: "/Complaint/GetComplaintGBMeetingLogList",
             data: { ComplaintId: complaintId },
             dataType: "json",
             success: function (response) {
@@ -2241,7 +2241,7 @@
 
         $.ajax({
             type: 'POST',
-            url: "/ComplaintDetails/ComplaintGBMeetingLogSave",
+            url: "/Complaint/ComplaintGBMeetingLogSave",
             data: JSON.stringify(data),
             contentType: "application/json; charset=utf-8",
             dataType: "json",
@@ -2341,7 +2341,7 @@
 
                 $.ajax({
                     type: 'POST',
-                    url: "/ComplaintDetails/ComplaintGBMeetingLogSave",
+                    url: "/Complaint/ComplaintGBMeetingLogSave",
                     data: JSON.stringify(data),
                     contentType: "application/json; charset=utf-8",
                     dataType: "json",

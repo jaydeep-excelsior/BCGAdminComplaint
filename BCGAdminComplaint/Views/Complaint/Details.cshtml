@@ -1,4 +1,4 @@
-@model Tuple<IEnumerable<BCGAdminComplaint.Models.ComplaintListModel>, IEnumerable<BCGAdminComplaint.Models.ComplaintDocumentList>, IEnumerable<BCGAdminComplaint.Models.ComplaintMemberLog>>
+﻿@model Tuple<IEnumerable<BCGAdminComplaint.Models.ComplaintListModel>, IEnumerable<BCGAdminComplaint.Models.ComplaintDocumentList>, IEnumerable<BCGAdminComplaint.Models.ComplaintMemberLog>>
 
 @{
     ViewBag.Title = "Details";
@@ -19,7 +19,7 @@
         <div class="me-2">
             <a class="btn btn-outline-primary waves-effect waves-light white-space-nowrap btn-sm" id="lnkDownload"><i class="fa-solid fa-download me-1"></i> Download</a>
         </div>
-        <a href="/ComplaintList/Index" class="btn btn-outline-primary waves-effect waves-light white-space-nowrap btn-sm"><i class="fa-solid fa-arrow-left me-1"></i> Back</a>
+        <a href="/Complaint/Index" class="btn btn-outline-primary waves-effect waves-light white-space-nowrap btn-sm"><i class="fa-solid fa-arrow-left me-1"></i> Back</a>
 
     </div>
 </div>
@@ -181,16 +181,16 @@
             <div class="card-body">
                 <ul class="nav nav-tabs  nav-tabs-custom" id="myTab" role="tablist">
                     <li class="nav-item" role="presentation">
-                        <a class="nav-link active" id="complaintdetails-tab" data-bs-toggle="tab" data-bs-target="#complaintdetails"  role="tab" aria-controls="complaintdetails" aria-selected="true">Complaint Details</a>
+                        <a class="nav-link active" id="complaintdetails-tab" data-bs-toggle="tab" data-bs-target="#complaintdetails"  role="tab" aria-controls="Complaint" aria-selected="true">Complaint Details</a>
                     </li>
                     @*<li class="nav-item" role="presentation">
                             <a class="nav-link" id="complaintdetails-tab" data-bs-toggle="tab" data-bs-target="#complaintreplyto "  role="tab" aria-controls="complaintreplyto" aria-selected="true">Complaint Reply</a>
                         </li>*@
                 </ul>
                 <div class="tab-content pt-3" id="myTabContent">
-                    <div class="tab-pane fade show active" id="complaintdetails" role="tabpanel" aria-labelledby="complaintdetails-tab">
+                    <div class="tab-pane fade show active" id="Complaint" role="tabpanel" aria-labelledby="complaintdetails-tab">
                         <div class="">
-                            <div class="common_title">Summary | Short Information ( સારાંશ | ટૂંકી માહિતી )</div>
+                            <div class="common_title">Summary | Short Information ( àª¸àª¾àª°àª¾àª‚àª¶ | àªŸà«‚àª‚àª•à«€ àª®àª¾àª¹àª¿àª¤à«€ )</div>
                             <div class="common_description">@ViewBag.Summary</div>
                         </div>
                         <div class="mt-3">
@@ -198,7 +198,7 @@
                             <div class="common_description">@ViewBag.DetailComplaint</div>
                         </div>
                     </div>
-                    <div class="tab-pane fade" id="complaintdetails" role="tabpanel" aria-labelledby="complaintdetails-tab">
+                    <div class="tab-pane fade" id="Complaint" role="tabpanel" aria-labelledby="complaintdetails-tab">
 
                     </div>
 
@@ -307,14 +307,14 @@
                     </select>
                 </div>
                 <div id="adjuntDetails" style="display:none;">
-                    <h6 class="mb-3 border-bottom pb-2">Adjunt Details ( મુલતવી વિગતો )</h6>
+                    <h6 class="mb-3 border-bottom pb-2">Adjunt Details ( àª®à«àª²àª¤àªµà«€ àªµàª¿àª—àª¤à«‹ )</h6>
                     <div class="row">
                         <div class="col-md-12">
-                            <label>Next Date ( આગામી તારીખ )</label>
+                            <label>Next Date ( àª†àª—àª¾àª®à«€ àª¤àª¾àª°à«€àª– )</label>
                             <input name="txtNextDate" id="txtNextDate" type="date" placeholder="DD/MM/YYYY" class="form-control" max="2999-12-31">
                         </div>
                         <div class="col-md-12 mt-3">
-                            <label>Summary | Short Information ( સારાંશ | ટૂંકી માહિતી )</label>
+                            <label>Summary | Short Information ( àª¸àª¾àª°àª¾àª‚àª¶ | àªŸà«‚àª‚àª•à«€ àª®àª¾àª¹àª¿àª¤à«€ )</label>
                             <textarea name="txtSummary" id="txtSummary" placeholder="Please Enter Summary" class="form-control col-md-12" rows="2" cols="20" width="-webkit-fill-available;"></textarea>
 
                         </div>
@@ -339,7 +339,7 @@
                     </div>
                     <div class="mt-3">
 
-                        <label>Summary | Short Information ( સારાંશ | ટૂંકી માહિતી )</label>
+                        <label>Summary | Short Information ( àª¸àª¾àª°àª¾àª‚àª¶ | àªŸà«‚àª‚àª•à«€ àª®àª¾àª¹àª¿àª¤à«€ )</label>
                         <textarea name="txtOrderSummary" id="txtOrderSummary" placeholder="Please Enter Summary" class="form-control col-md-12" rows="2" cols="20" width="-webkit-fill-available;"></textarea>
 
                     </div>
@@ -472,7 +472,7 @@
     function GetComplaintBankList() {
         $.ajax({
             type: "POST",
-            url: "/ComplaintDetails/GetComplaintBankList",
+            url: "/Complaint/GetComplaintBankList",
             contentType: "application/json; charset=utf-8",
             dataType: "json",
             success: function (response) {
@@ -514,7 +514,7 @@
     function GetComplaintCurrentStatus() {
         $.ajax({
             type: "POST",
-            url: "/ComplaintDetails/GetComplaintCurrentStatus",
+            url: "/Complaint/GetComplaintCurrentStatus",
             contentType: "application/json; charset=utf-8",
             data: JSON.stringify({ ComplaintId: $("#hdfComplaintId").val() }),
             dataType: "json",
@@ -555,7 +555,7 @@
     function GetComplaintPaymentDetail() {
         $.ajax({
             type: "POST",
-            url: "/ComplaintDetails/GetComplaintPaymentDetail",
+            url: "/Complaint/GetComplaintPaymentDetail",
             contentType: "application/json; charset=utf-8",
             data: JSON.stringify({ ComplaintId: $("#hdfComplaintId").val() }),
             dataType: "json",
@@ -686,7 +686,7 @@
             contentType: 'application/json; charset=utf-8',
             dataType: 'json',
             type: 'POST',
-            url: "/ComplaintDetails/GetComplaintPaymentReceived",
+            url: "/Complaint/GetComplaintPaymentReceived",
             data: data,
             success: function (response) {
                 if (response.IsSuccess) {
@@ -718,7 +718,7 @@
     function GetOtherList() {
         $.ajax({
             type: "POST",
-            url: "/ComplaintDetails/GetOtherList",
+            url: "/Complaint/GetOtherList",
             contentType: "application/json; charset=utf-8",
             data: JSON.stringify({ ComplaintId: $("#hdfComplaintId").val() }),
             dataType: "json",
@@ -838,7 +838,7 @@
         });
         $.ajax({
             type: 'POST',
-            url: "/ComplaintDetails/GetLogList",
+            url: "/Complaint/GetLogList",
             data: Data,
             contentType: "application/json; charset=utf-8",
             dataType: "json",
@@ -906,7 +906,7 @@
 
         $.ajax({
             type: 'POST',
-            url: "/ComplaintDetails/GetLogDetails",
+            url: "/Complaint/GetLogDetails",
             data: Data,
             contentType: "application/json; charset=utf-8",
             dataType: "json",
@@ -951,7 +951,7 @@
     function GetDcNumberList() {
         $.ajax({
             type: 'Get',
-            url: "/ComplaintDetails/GetDcNoList",
+            url: "/Complaint/GetDcNoList",
             contentType: "application/json; charset=utf-8",
             dataType: "json",
             success: function (response) {
@@ -1008,7 +1008,7 @@
             if (status == 'New' || status == 'Accepted' || status == 'Rejected' || status == 'Rejected' || status == 'More Detail' || status == 'Payment Done' || status == 'Next General Board' || status == 'Hearing') {
                 $.ajax({
                     type: 'POST',
-                    url: "/ComplaintDetails/StatusUpdate",
+                    url: "/Complaint/StatusUpdate",
                     contentType: "application/json; charset=utf-8",
                     data: Data,
                     dataType: "json",
@@ -1035,7 +1035,7 @@
             });
             $.ajax({
                 type: 'POST',
-                url: "/ComplaintDetails/GetDcMemberLists",
+                url: "/Complaint/GetDcMemberLists",
                 contentType: "application/json; charset=utf-8",
                 data: Data,
                 dataType: "json",
@@ -1106,7 +1106,7 @@
 
             $.ajax({
                 type: 'Get',
-                url: "/ComplaintDetails/GetDcMemberList",
+                url: "/Complaint/GetDcMemberList",
                 contentType: "application/json; charset=utf-8",
                 data: { DcNo: dcno },
                 dataType: "json",
@@ -1156,7 +1156,7 @@
 
                 $.ajax({
                     type: 'POST',
-                    url: "/ComplaintDetails/SaveComplaintStatusLog",
+                    url: "/Complaint/SaveComplaintStatusLog",
                     data: Data,
                     contentType: "application/json; charset=utf-8",
                     dataType: "json",
@@ -1212,7 +1212,7 @@
 
             $.ajax({
                 type: 'POST',
-                url: "/ComplaintDetails/SaveComplaintMemberLog",
+                url: "/Complaint/SaveComplaintMemberLog",
                 data: Data,
                 contentType: "application/json; charset=utf-8",
                 dataType: "json",
@@ -1268,7 +1268,7 @@
 
         $.ajax({
             type: 'POST',
-            url: "/ComplaintDetails/SaveComplaintStatusLog",
+            url: "/Complaint/SaveComplaintStatusLog",
             data: Data,
             contentType: "application/json; charset=utf-8",
             dataType: "json",
@@ -1320,13 +1320,13 @@
 
         $.ajax({
             type: 'POST',
-            url: "/ComplaintDetails/GetAllComplaintDetailsReportsFilterSet",
+            url: "/Complaint/GetAllComplaintDetailsReportsFilterSet",
             data: Data,
             contentType: "application/json; charset=utf-8",
             dataType: "json",
             success: function (result) {
                 if (result.data == "Success") {
-                    var url = '@Url.Action("DownloadDetailReport", "ComplaintDetails")' + (complaintId ? ('?id=' + encodeURIComponent(complaintId)) : '');
+                    var url = '@Url.Action("DownloadDetailReport", "Complaint")' + (complaintId ? ('?id=' + encodeURIComponent(complaintId)) : '');
                     location.href = url;
                 } else {
                     swal('Something went wrong!', "", "error");
@@ -1344,7 +1344,7 @@
 
         $.ajax({
             type: "POST",
-            url: "/ComplaintDetails/GetReplyList",
+            url: "/Complaint/GetReplyList",
             data: Data,
             contentType: "application/json; charset=utf-8",
             dataType: "json",
@@ -1472,7 +1472,7 @@
 
         $.ajax({
             type: "POST",
-            url: "/ComplaintDetails/InsertComplaintReply",
+            url: "/Complaint/InsertComplaintReply",
             data: Data,
             dataType: "json",
             success: function (response) {
@@ -1506,7 +1506,7 @@
 
         $.ajax({
             type: "POST",
-            url: "/ComplaintDetails/InsertComplaintReply",
+            url: "/Complaint/InsertComplaintReply",
             data: Data,
             dataType: "json",
             success: function (response) {

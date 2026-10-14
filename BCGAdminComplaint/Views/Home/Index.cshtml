@@ -200,7 +200,7 @@
                                                     + '<div class="d-flex">'
                                                         + '<div class="complaint_number">'
                                                             + '<div class="title">Complaint Number</div>'
-                                                            + '<a class="description" href="/ComplaintDetails/DetailsNew/' + value.Id + '" onclick="document.cookie=\'ComplaintId=' + value.Id + '; path=/\';">' + value.ComplaintNumber + '</a>'
+                                                            + '<a class="description" href="/Complaint/Detail/' + value.Id + '" onclick="document.cookie=\'ComplaintId=' + value.Id + '; path=/\';">' + value.ComplaintNumber + '</a>'
                                                         + '</div>'
                                                     + '</div>'
                                                     + '<div class="d-flex">'
@@ -287,7 +287,7 @@
 
     //    $.ajax({
     //        type: 'POST',
-    //        url: "/ComplaintList/GetComplaintList",
+    //        url: "/Complaint/GetComplaintList",
     //        data: Data,
     //        contentType: "application/json; charset=utf-8",
     //        dataType: "json",
@@ -306,7 +306,7 @@
     //                    }
 
     //                    complaintList.append(
-    //                        '<div class="main_card_list"><div class="main_header_card"><div class="_left_side"><div class="number">' + value.SrNo + '</div><div class="d-flex"><div class="complaint_number"><div class="title">Complaint Number</div><a class="description" href="/ComplaintDetails/Details/' + value.Id + '">' + value.ComplaintNumber + '</a></div></div></div></div><div class="main_card_list_body"><div class="row"><div class="col-md-3 col-sm-6 col-12 mt-3"><div class="title">Full Name</div><div class="description">' + value.FullName + '</div></div><div class="col-md-3 col-sm-6 col-12 mt-3"><div class="title">Email</div><div class="description">' + value.EmailAddress + '</div></div><div class="col-md-3 col-sm-6 col-12 mt-3"><div class="title">Contact Number</div><div class="description">' + value.ContactNumber + '</div></div><div class="col-md-3 col-sm-6 col-12 mt-3"><div class="title">Status</div><div class="description">' + value.Status + '</div></div></div></div></div>')
+    //                        '<div class="main_card_list"><div class="main_header_card"><div class="_left_side"><div class="number">' + value.SrNo + '</div><div class="d-flex"><div class="complaint_number"><div class="title">Complaint Number</div><a class="description" href="/Complaint/Detail/' + value.Id + '">' + value.ComplaintNumber + '</a></div></div></div></div><div class="main_card_list_body"><div class="row"><div class="col-md-3 col-sm-6 col-12 mt-3"><div class="title">Full Name</div><div class="description">' + value.FullName + '</div></div><div class="col-md-3 col-sm-6 col-12 mt-3"><div class="title">Email</div><div class="description">' + value.EmailAddress + '</div></div><div class="col-md-3 col-sm-6 col-12 mt-3"><div class="title">Contact Number</div><div class="description">' + value.ContactNumber + '</div></div><div class="col-md-3 col-sm-6 col-12 mt-3"><div class="title">Status</div><div class="description">' + value.Status + '</div></div></div></div></div>')
     //                });
 
     //            }

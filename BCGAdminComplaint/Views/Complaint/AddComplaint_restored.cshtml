@@ -1,4 +1,4 @@
-@{
+﻿@{
     ViewBag.Title = "Add Complaint";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
@@ -11,13 +11,13 @@
                 <div class="page-title-left mt-1">
                     <ol class="breadcrumb m-0 font-size-13">
                         <li class="breadcrumb-item"><a href="/Home/Index" class="text-muted">Dashboard</a></li>
-                        <li class="breadcrumb-item"><a href="/ComplaintList/Index" class="text-muted">Complaint Management</a></li>
+                        <li class="breadcrumb-item"><a href="/Complaint/Index" class="text-muted">Complaint Management</a></li>
                         <li class="breadcrumb-item active">Add Complaint</li>
                     </ol>
                 </div>
             </div>
             <div class="page-title-right">
-                <a href="/ComplaintList/Index" class="btn btn-outline-primary waves-effect waves-light white-space-nowrap mb-2 mb-md-0 btn-sm"><i class="fa-solid fa-arrow-left me-1"></i> Back</a>
+                <a href="/Complaint/Index" class="btn btn-outline-primary waves-effect waves-light white-space-nowrap mb-2 mb-md-0 btn-sm"><i class="fa-solid fa-arrow-left me-1"></i> Back</a>
             </div>
         </div>
     </div>
@@ -27,33 +27,33 @@
         <div class="row complain-background-color-header">
             <div class="col-md-12 mb-2 details-of-advocate">
                 <h4>
-                    Complainant's Details (àª«àª°àª¿àª¯àª¾àª¦à«€àª¨à«€ àªµàª¿àª—àª¤à«‹)
+                    Complainant's Details (Ã ÂªÂ«Ã ÂªÂ°Ã ÂªÂ¿Ã ÂªÂ¯Ã ÂªÂ¾Ã ÂªÂ¦Ã Â«â‚¬Ã ÂªÂ¨Ã Â«â‚¬ Ã ÂªÂµÃ ÂªÂ¿Ã Âªâ€”Ã ÂªÂ¤Ã Â«â€¹)
                 </h4>
             </div>
             <div class="row">
                 <div class="col-md-4">
                     <div class="form-group mb-3">
                         <label hidden id="hdfComplaintId"></label>
-                        <label for="txtFullName">Full Name (àªªà«‚àª°à«àª‚ àª¨àª¾àª®)</label>
+                        <label for="txtFullName">Full Name (Ã ÂªÂªÃ Â«â€šÃ ÂªÂ°Ã Â«ÂÃ Âªâ€š Ã ÂªÂ¨Ã ÂªÂ¾Ã ÂªÂ®)</label>
                         <input type="text" class="form-control" id="txtFullName" placeholder="Enter Full Name">
                     </div>
                 </div>
                 <div class="col-md-4 mt-3 mt-md-0">
                     <div class="form-group mb-3">
-                        <label for="txtEmailAddress">Email Address (àªˆ - àª®à«‡àªˆàª²)</label>
+                        <label for="txtEmailAddress">Email Address (Ã ÂªË† - Ã ÂªÂ®Ã Â«â€¡Ã ÂªË†Ã ÂªÂ²)</label>
                         <input type="email" class="form-control" id="txtEmailAddress" onchange="isEmail(this)" placeholder="Enter Email Address">
                     </div>
                 </div>
                 <div class="col-md-4 mt-3 mt-md-0">
                     <div class="form-group mb-3">
-                        <label for="txtMobile">Mobile Number (àª®à«‹àª¬àª¾àª‡àª² àª¨àª‚àª¬àª°)</label>
+                        <label for="txtMobile">Mobile Number (Ã ÂªÂ®Ã Â«â€¹Ã ÂªÂ¬Ã ÂªÂ¾Ã Âªâ€¡Ã ÂªÂ² Ã ÂªÂ¨Ã Âªâ€šÃ ÂªÂ¬Ã ÂªÂ°)</label>
                         <input type="number" class="form-control" id="txtMobile" onchange="mobileCheck(event, this)" onkeypress="return isNumberKey(event, this)"
                                placeholder="Enter Contact Numner">
                     </div>
                 </div>
                 <div class="col-md-12 mt-2">
                     <div class="form-group mb-3">
-                        <label for="txtAddress">Address (àª¸àª°àª¨àª¾àª®à«àª‚)</label>
+                        <label for="txtAddress">Address (Ã ÂªÂ¸Ã ÂªÂ°Ã ÂªÂ¨Ã ÂªÂ¾Ã ÂªÂ®Ã Â«ÂÃ Âªâ€š)</label>
                         <input type="text" class="form-control" id="txtAddress" placeholder="Enter Address">
                     </div>
                 </div>
@@ -69,7 +69,7 @@
                 <div class="row details-of-advocate">
                     <div class="col-md-9">
                         <h4>
-                            Details of Advocate - Complained Against (àªœà«‡ àªµàª•à«€àª² àªµàª¿àª°à«àª¦à«àª§ àª«àª°àª¿àª¯àª¾àª¦ àª•àª°àªµàª¾àª®àª¾àª‚ àª†àªµà«€ àª›à«‡ àª¤à«‡àª¨à«€ àªµàª¿àª—àª¤à«‹)
+                            Details of Advocate - Complained Against (Ã ÂªÅ“Ã Â«â€¡ Ã ÂªÂµÃ Âªâ€¢Ã Â«â‚¬Ã ÂªÂ² Ã ÂªÂµÃ ÂªÂ¿Ã ÂªÂ°Ã Â«ÂÃ ÂªÂ¦Ã Â«ÂÃ ÂªÂ§ Ã ÂªÂ«Ã ÂªÂ°Ã ÂªÂ¿Ã ÂªÂ¯Ã ÂªÂ¾Ã ÂªÂ¦ Ã Âªâ€¢Ã ÂªÂ°Ã ÂªÂµÃ ÂªÂ¾Ã ÂªÂ®Ã ÂªÂ¾Ã Âªâ€š Ã Âªâ€ Ã ÂªÂµÃ Â«â‚¬ Ã Âªâ€ºÃ Â«â€¡ Ã ÂªÂ¤Ã Â«â€¡Ã ÂªÂ¨Ã Â«â‚¬ Ã ÂªÂµÃ ÂªÂ¿Ã Âªâ€”Ã ÂªÂ¤Ã Â«â€¹)
                         </h4>
                     </div>
                     <div class="col-md-3 text-md-end text-start mt-md-0 mb-2 mb-md-0">
@@ -81,16 +81,16 @@
             <div class="col-md-12 mt-2">
                 <div id="selectionData">
                     <p class="mb-3 mb-md-1">
-                        Do You Know Mobile Number Or Name Of Advocate ?&nbsp;&nbsp;(àª¶à«àª‚ àª¤àª®à«‡ àª®à«‹àª¬àª¾àªˆàª² àª¨àª‚àª¬àª° àª•à«‡ àªµàª•à«€àª² àª¨àª¾àª® àªœàª¾àª£à«‹ àª›à«‹?)
+                        Do You Know Mobile Number Or Name Of Advocate ?&nbsp;&nbsp;(Ã ÂªÂ¶Ã Â«ÂÃ Âªâ€š Ã ÂªÂ¤Ã ÂªÂ®Ã Â«â€¡ Ã ÂªÂ®Ã Â«â€¹Ã ÂªÂ¬Ã ÂªÂ¾Ã ÂªË†Ã ÂªÂ² Ã ÂªÂ¨Ã Âªâ€šÃ ÂªÂ¬Ã ÂªÂ° Ã Âªâ€¢Ã Â«â€¡ Ã ÂªÂµÃ Âªâ€¢Ã Â«â‚¬Ã ÂªÂ² Ã ÂªÂ¨Ã ÂªÂ¾Ã ÂªÂ® Ã ÂªÅ“Ã ÂªÂ¾Ã ÂªÂ£Ã Â«â€¹ Ã Âªâ€ºÃ Â«â€¹?)
                     </p>
                     <div class="d-flex flex-column flex-md-row">
                         <div class="form-check">
                             <input class="form-check-input" type="radio" name="flexRadioDefault" id="rdYes" value="Y">
-                            <label class="form-check-label" for="rdYes">Yes I Know&nbsp;&nbsp;(àª¹àª¾, àª¹à«àª‚ àªœàª¾àª£à«àª‚ àª›à«àª‚) </label>
+                            <label class="form-check-label" for="rdYes">Yes I Know&nbsp;&nbsp;(Ã ÂªÂ¹Ã ÂªÂ¾, Ã ÂªÂ¹Ã Â«ÂÃ Âªâ€š Ã ÂªÅ“Ã ÂªÂ¾Ã ÂªÂ£Ã Â«ÂÃ Âªâ€š Ã Âªâ€ºÃ Â«ÂÃ Âªâ€š) </label>
                         </div>
                         <div class="form-check ms-md-3 mt-2 mt-md-0">
                             <input class="form-check-input" type="radio" name="flexRadioDefault" id="rdNo" value="N">
-                            <label class="form-check-label" for="rdNo">No, I don't know.&nbsp;&nbsp;(àª¨àª¾, àª¹à«àª‚ àªœàª¾àª£àª¤à«‹/àªœàª¾àª£àª¤à«€ àª¨àª¥à«€)</label>
+                            <label class="form-check-label" for="rdNo">No, I don't know.&nbsp;&nbsp;(Ã ÂªÂ¨Ã ÂªÂ¾, Ã ÂªÂ¹Ã Â«ÂÃ Âªâ€š Ã ÂªÅ“Ã ÂªÂ¾Ã ÂªÂ£Ã ÂªÂ¤Ã Â«â€¹/Ã ÂªÅ“Ã ÂªÂ¾Ã ÂªÂ£Ã ÂªÂ¤Ã Â«â‚¬ Ã ÂªÂ¨Ã ÂªÂ¥Ã Â«â‚¬)</label>
                         </div>
                     </div>
                 </div>
@@ -102,19 +102,19 @@
                         <div class="row">
                             <div class="col-12 col-md-6 col-lg-4">
                                 <div class="mb-3">
-                                    <label for="txtAdvocateName" class="form-label">Advocate Name (àªµàª•à«€àª² àª¨à« àª¨àª¾àª®)</label>
+                                    <label for="txtAdvocateName" class="form-label">Advocate Name (Ã ÂªÂµÃ Âªâ€¢Ã Â«â‚¬Ã ÂªÂ² Ã ÂªÂ¨Ã Â«Â Ã ÂªÂ¨Ã ÂªÂ¾Ã ÂªÂ®)</label>
                                     <input type="text" class="form-control" id="txtAdvocateName" placeholder="Enter Advocate Name">
                                 </div>
                             </div>
                             <div class="col-12 col-md-6 col-lg-4">
                                 <div class="mb-3">
-                                    <label for="txtCity" class="form-label">City(àª¶àª¹à«‡àª°/àª—àª¾àª®)</label>
+                                    <label for="txtCity" class="form-label">City(Ã ÂªÂ¶Ã ÂªÂ¹Ã Â«â€¡Ã ÂªÂ°/Ã Âªâ€”Ã ÂªÂ¾Ã ÂªÂ®)</label>
                                     <input type="text" class="form-control" id="txtCity" placeholder="Enter City">
                                 </div>
                             </div>
                             <div class="col-12 col-md-6 col-lg-4">
                                 <div class="mb-3">
-                                    <label for="txtMobileNo" class="form-label">Mobile No.(àª®à«‹àª¬àª¾àª‡àª² àª¨àª‚àª¬àª°)</label>
+                                    <label for="txtMobileNo" class="form-label">Mobile No.(Ã ÂªÂ®Ã Â«â€¹Ã ÂªÂ¬Ã ÂªÂ¾Ã Âªâ€¡Ã ÂªÂ² Ã ÂªÂ¨Ã Âªâ€šÃ ÂªÂ¬Ã ÂªÂ°)</label>
                                     <input type="text" class="form-control" id="txtMobileNo" placeholder="Enter Mobile No." onchange="mobileCheck(event, this)" onkeypress="return isNumberKey(event, this)">
                                 </div>
                             </div>
@@ -124,7 +124,7 @@
                         </div>
                     </div>
                     <div class="mt-3 hide-element" id="selectDetails">
-                        <p class="mb-1">Search Advocate By Name Or Mobile Number (àª¨àª¾àª® àª…àª¥àªµàª¾ àª®à«‹àª¬àª¾àªˆàª² àª¨àª‚àª¬àª° àª¦à«àªµàª¾àª°àª¾ àªàª¡àªµà«‹àª•à«‡àªŸ àª¶à«‹àª§à«‹)</p>
+                        <p class="mb-1">Search Advocate By Name Or Mobile Number (Ã ÂªÂ¨Ã ÂªÂ¾Ã ÂªÂ® Ã Âªâ€¦Ã ÂªÂ¥Ã ÂªÂµÃ ÂªÂ¾ Ã ÂªÂ®Ã Â«â€¹Ã ÂªÂ¬Ã ÂªÂ¾Ã ÂªË†Ã ÂªÂ² Ã ÂªÂ¨Ã Âªâ€šÃ ÂªÂ¬Ã ÂªÂ° Ã ÂªÂ¦Ã Â«ÂÃ ÂªÂµÃ ÂªÂ¾Ã ÂªÂ°Ã ÂªÂ¾ Ã ÂªÂÃ ÂªÂ¡Ã ÂªÂµÃ Â«â€¹Ã Âªâ€¢Ã Â«â€¡Ã ÂªÅ¸ Ã ÂªÂ¶Ã Â«â€¹Ã ÂªÂ§Ã Â«â€¹)</p>
                         <div class="row">
                             <div class="col-12 col-md-12 col-lg-12">
                                 <input type="text" ID="txtSearch" class="form-control" />
@@ -165,12 +165,12 @@
         <div class="row complain-background-color-header">
             <div class="col-md-12 mb-2 details-of-advocate">
                 <h4>
-                    Complaint Affidavit Copy&nbsp;&nbsp;(àª«àª°àª¿àª¯àª¾àª¦ àª¸à«‹àª—àª‚àª¦àª¨àª¾àª®àª¾àª¨à«€ àª¨àª•àª²)
+                    Complaint Affidavit Copy&nbsp;&nbsp;(Ã ÂªÂ«Ã ÂªÂ°Ã ÂªÂ¿Ã ÂªÂ¯Ã ÂªÂ¾Ã ÂªÂ¦ Ã ÂªÂ¸Ã Â«â€¹Ã Âªâ€”Ã Âªâ€šÃ ÂªÂ¦Ã ÂªÂ¨Ã ÂªÂ¾Ã ÂªÂ®Ã ÂªÂ¾Ã ÂªÂ¨Ã Â«â‚¬ Ã ÂªÂ¨Ã Âªâ€¢Ã ÂªÂ²)
                 </h4>
             </div>
             <div class="col-md-12">
                 <div class="form-group mb-3">
-                    <label for="affiProfileImage">Upload File (àª«àª¾àª‡àª² àª…àªªàª²à«‹àª¡ àª•àª°à«‹)</label>
+                    <label for="affiProfileImage">Upload File (Ã ÂªÂ«Ã ÂªÂ¾Ã Âªâ€¡Ã ÂªÂ² Ã Âªâ€¦Ã ÂªÂªÃ ÂªÂ²Ã Â«â€¹Ã ÂªÂ¡ Ã Âªâ€¢Ã ÂªÂ°Ã Â«â€¹)</label>
                     <input type="file" class="form-control" id="affiProfileImage">
                     <input type="hidden" id="hdfaffiB64ImagePath" />
                     <input type="hidden" id="hdfaffiFileName" />
@@ -190,12 +190,12 @@
         <div class="row complain-background-color-header">
             <div class="col-md-12 mb-2 details-of-advocate">
                 <h4>
-                    If Any Additional Attachments&nbsp;&nbsp;(àªœà«‹ àª•à«‹àªˆ àªµàª§àª¾àª°àª¾àª¨àª¾ àªœà«‹àª¡àª¾àª£à«‹ àª¹à«‹àª¯ àª¤à«‹)
+                    If Any Additional Attachments&nbsp;&nbsp;(Ã ÂªÅ“Ã Â«â€¹ Ã Âªâ€¢Ã Â«â€¹Ã ÂªË† Ã ÂªÂµÃ ÂªÂ§Ã ÂªÂ¾Ã ÂªÂ°Ã ÂªÂ¾Ã ÂªÂ¨Ã ÂªÂ¾ Ã ÂªÅ“Ã Â«â€¹Ã ÂªÂ¡Ã ÂªÂ¾Ã ÂªÂ£Ã Â«â€¹ Ã ÂªÂ¹Ã Â«â€¹Ã ÂªÂ¯ Ã ÂªÂ¤Ã Â«â€¹)
                 </h4>
             </div>
             <div class="col-md-12">
                 <div class="form-group mb-3">
-                    <label for="fuAdditionalsFileUpload">Upload File (àª«àª¾àª‡àª² àª…àªªàª²à«‹àª¡ àª•àª°à«‹)</label>
+                    <label for="fuAdditionalsFileUpload">Upload File (Ã ÂªÂ«Ã ÂªÂ¾Ã Âªâ€¡Ã ÂªÂ² Ã Âªâ€¦Ã ÂªÂªÃ ÂªÂ²Ã Â«â€¹Ã ÂªÂ¡ Ã Âªâ€¢Ã ÂªÂ°Ã Â«â€¹)</label>
                     <input type="file" class="form-control" id="fuAdditionalsFileUpload">
                     <input type="hidden" id="hdfAdditionalsFileB64" />
                     <input type="hidden" id="hdfAdditionalsFileName" />
@@ -203,7 +203,7 @@
             </div>
             <div class="col-md-12 mt-3">
                 <div class="form-group mb-3">
-                    <label for="txtDescription">Note (àª¨à«‹àª‚àª§)</label>
+                    <label for="txtDescription">Note (Ã ÂªÂ¨Ã Â«â€¹Ã Âªâ€šÃ ÂªÂ§)</label>
                     <textarea id="txtDescription" class="form-control" placeholder="Enter Note"></textarea>
                 </div>
             </div>
@@ -211,7 +211,7 @@
                 <input type="button" ID="btnAddFile" class="btn btn-success btn-successedit btn-sm mt-3" value="Add" />
             </div>
             <div class="col-md-12 mt-4 hide-element" id="dvUploadedFilesContainer">
-                <label class="mb-2 fw-bold">Uploaded Files (àª…àªªàª²à«‹àª¡ àª•àª°à«‡àª²à«€ àª«àª¾àª‡àª²à«‹)</label>
+                <label class="mb-2 fw-bold">Uploaded Files (Ã Âªâ€¦Ã ÂªÂªÃ ÂªÂ²Ã Â«â€¹Ã ÂªÂ¡ Ã Âªâ€¢Ã ÂªÂ°Ã Â«â€¡Ã ÂªÂ²Ã Â«â‚¬ Ã ÂªÂ«Ã ÂªÂ¾Ã Âªâ€¡Ã ÂªÂ²Ã Â«â€¹)</label>
                 <div id="dvComplaintFiles">
                 </div>
             </div>
@@ -460,7 +460,7 @@
 
             $.ajax({
                 type: "POST",
-                url: '@Url.Action("GetSearchData", "ComplaintDetails")',
+                url: '@Url.Action("GetSearchData", "Complaint")',
                 contentType: "application/json; charset=utf-8",
                 data: JSON.stringify({ SearchTitle: searchValue, PageNo: searchPageNo, PageSize: searchPageSize }),
                 dataType: "json",
@@ -527,7 +527,7 @@
     function GetComplaintBankList() {
         $.ajax({
             type: "POST",
-            url: "/ComplaintDetails/GetComplaintBankList",
+            url: "/Complaint/GetComplaintBankList",
             contentType: "application/json; charset=utf-8",
             dataType: "json",
             success: function (response) {
@@ -658,7 +658,7 @@
             formData.append('file', file);
         });
         $.ajax({
-            url: '/ComplaintList/AffidavitCopyFiles',
+            url: '/Complaint/AffidavitCopyFiles',
             type: 'POST',
             data: formData,
             cache: false,
@@ -681,7 +681,7 @@
             formData.append('file', file);
         });
         $.ajax({
-            url: '/ComplaintList/AdditionalFilesUpload',
+            url: '/Complaint/AdditionalFilesUpload',
             type: 'POST',
             data: formData,
             cache: false,
@@ -729,7 +729,7 @@
                                                         + '</div>'
                                                     + '</div>'
                                                     + '<div class="mt-2">'
-                                                        + '<label for="inputEmail4 uploadfiledatanotes">Notes (àª¨à«‹àª‚àª§à«‹)</label>'
+                                                        + '<label for="inputEmail4 uploadfiledatanotes">Notes (Ã ÂªÂ¨Ã Â«â€¹Ã Âªâ€šÃ ÂªÂ§Ã Â«â€¹)</label>'
                                                         + '<p class="mb-0" id="lblDescription' + srno + '">' + description + '</p>'
                                                     + '</div>'
                                                 + '</div>'
@@ -902,7 +902,7 @@
 
         $.ajax({
             type: "POST",
-            url: "/ComplaintList/SaveComplaint",
+            url: "/Complaint/SaveComplaint",
             contentType: "application/json; charset=utf-8",
             data: Data,
             dataType: "json",

@@ -11,13 +11,13 @@
                 <div class="page-title-left mt-1">
                     <ol class="breadcrumb m-0 font-size-13">
                         <li class="breadcrumb-item"><a href="/Home/Index" class="text-muted">Dashboard</a></li>
-                        <li class="breadcrumb-item"><a href="/ComplaintList/Index" class="text-muted">Complaint Management</a></li>
+                        <li class="breadcrumb-item"><a href="/Complaint/Index" class="text-muted">Complaint Management</a></li>
                         <li class="breadcrumb-item active">Add Complaint</li>
                     </ol>
                 </div>
             </div>
             <div class="page-title-right">
-                <a href="/ComplaintList/Index" class="btn btn-outline-primary waves-effect waves-light white-space-nowrap mb-2 mb-md-0 btn-sm"><i class="fa-solid fa-arrow-left me-1"></i> Back</a>
+                <a href="/Complaint/Index" class="btn btn-outline-primary waves-effect waves-light white-space-nowrap mb-2 mb-md-0 btn-sm"><i class="fa-solid fa-arrow-left me-1"></i> Back</a>
             </div>
         </div>
     </div>
@@ -463,7 +463,7 @@
 
             $.ajax({
                 type: "POST",
-                url: '@Url.Action("GetSearchData", "ComplaintDetails")',
+                url: '@Url.Action("GetSearchData", "Complaint")',
                 contentType: "application/json; charset=utf-8",
                 data: JSON.stringify({ SearchTitle: searchValue, PageNo: searchPageNo, PageSize: searchPageSize }),
                 dataType: "json",
@@ -544,7 +544,7 @@
     function GetComplaintBankList() {
         $.ajax({
             type: "POST",
-            url: "/ComplaintDetails/GetComplaintBankList",
+            url: "/Complaint/GetComplaintBankList",
             contentType: "application/json; charset=utf-8",
             dataType: "json",
             success: function (response) {
@@ -666,7 +666,7 @@
             formData.append('file', file);
         });
         $.ajax({
-            url: '/ComplaintList/AffidavitCopyFiles',
+            url: '/Complaint/AffidavitCopyFiles',
             type: 'POST',
             data: formData,
             cache: false,
@@ -689,7 +689,7 @@
             formData.append('file', file);
         });
         $.ajax({
-            url: '/ComplaintList/AdditionalFilesUpload',
+            url: '/Complaint/AdditionalFilesUpload',
             type: 'POST',
             data: formData,
             cache: false,
@@ -910,14 +910,14 @@
 
         $.ajax({
             type: "POST",
-            url: "/ComplaintList/SaveComplaint",
+            url: "/Complaint/SaveComplaint",
             contentType: "application/json; charset=utf-8",
             data: Data,
             dataType: "json",
             success: function (response) {
                 if (response.IsSuccess) {
                     swal("Your Complaint Send Successfully.", "", "success");
-                    var url = '/ComplaintList/Index';
+                    var url = '/Complaint/Index';
                     location.href = url;
                 }
                 else {
