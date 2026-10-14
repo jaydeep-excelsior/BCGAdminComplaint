@@ -124,6 +124,8 @@
                 $('#divEnrollmentNo').hide();
                 $('#divStaffSelect').show();
                 $('#txtBarAssociation').val('BCG Staff');
+                $('#txtContactNo').prop('readonly', false);
+                $('#txtEmailAddress').prop('readonly', false);
 
                 if (!isStaffLoaded) {
                     loadBCGStaffList();
@@ -134,6 +136,8 @@
                 $('#divStaffSelect').hide();
                 $('#divEnrollmentNo').show();
                 $('#txtBarAssociation').val('');
+                $('#txtContactNo').prop('readonly', true);
+                $('#txtEmailAddress').prop('readonly', true);
             }
         });
 
@@ -143,8 +147,8 @@
                 var $selected = $(this).find('option:selected');
                 $("#hdfEnrollmentId").val(regId);
                 $("#txtName").val($selected.data('name') || '');
-                $("#txtContactNo").val($selected.data('mobile') || '');
-                $("#txtEmailAddress").val($selected.data('email') || '');
+                $("#txtContactNo").val($selected.data('mobile') || '').prop('readonly', false);
+                $("#txtEmailAddress").val($selected.data('email') || '').prop('readonly', false);
                 $("#txtBarAssociation").val('BCG Staff');
             } else {
                 $("#hdfEnrollmentId").val('0');
@@ -153,6 +157,11 @@
                 $("#txtEmailAddress").val('');
                 if ($('#ddlMemberType').val() === 'S') {
                     $("#txtBarAssociation").val('BCG Staff');
+                    $("#txtContactNo").prop('readonly', false);
+                    $("#txtEmailAddress").prop('readonly', false);
+                } else {
+                    $("#txtContactNo").prop('readonly', true);
+                    $("#txtEmailAddress").prop('readonly', true);
                 }
             }
         });
@@ -244,6 +253,8 @@
         $("#ddlMemberType").val('');
         $('#divStaffSelect').hide();
         $('#divEnrollmentNo').show();
+        $('#txtContactNo').prop('readonly', true);
+        $('#txtEmailAddress').prop('readonly', true);
         resetMemberFields();
     });
 

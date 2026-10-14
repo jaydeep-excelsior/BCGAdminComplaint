@@ -272,7 +272,6 @@
     <Content Include="scripts\jquery-1.10.2.min.map" />
     <Content Include="Views\_ViewStart.cshtml" />
     <Content Include="Views\Reports\ComplaintActionLogReport.cshtml" />
-    <Content Include="Views\Complaint\DetailsNew.cshtml" />
     <Content Include="Views\DCReferredList\Index.cshtml" />
     <Content Include="Views\Complaint\SearchDetail.cshtml" />
     <Content Include="Views\Complaint\AddComplaint.cshtml" />

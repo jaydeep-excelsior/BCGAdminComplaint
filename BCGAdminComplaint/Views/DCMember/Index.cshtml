@@ -21,7 +21,7 @@
                         <span class="input-group-text"><i class="fa-solid fa-magnifying-glass text-muted"></i></span>
                         <input id="txtQuickSearch" class="form-control quicksearchcomplaintmanagement" placeholder="Quick Search (Name, Contact, Email or Member No.)">
                     </div>
-                    <a href="/DCMember/Add" class="btn btn-sm btn-outline-primary me-2 text-nowrap"><i class="fa-solid fa-plus me-1"></i> Add New</a>
+                    <a href="/DCMember/Add" onclick="localStorage.removeItem('EditDCMemberId');" class="btn btn-sm btn-outline-primary me-2 text-nowrap"><i class="fa-solid fa-plus me-1"></i> Add New</a>
                     <a class="btn btn-sm btn-outline-primary text-nowrap" id="addfilter"><i class="fa-solid fa-filter me-1"></i> Filter</a>
                 </div>
             </div>
@@ -296,7 +296,7 @@
 
     function EditDCMemberDataTypeRecord(EditRecordId) {
         localStorage.setItem("EditDCMemberId", EditRecordId);
-        location.href = '/DCMember/Edit?id=' + EditRecordId;
+        location.href = '/DCMember/Edit';
     }
 
     function DCMemberDataInActiveStatus(Id) {

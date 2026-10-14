@@ -92,7 +92,7 @@ namespace BCGAdminComplaint.Controllers
         }
 
         [HttpPost]
-        public ActionResult DCMembersInsert(string Id, string EnrollmentId, string EmailAddress, string Password, string Name, string ContactNo, string BarAssociation, string MemberType = "")
+        public ActionResult DCMembersInsert(string Id, string EnrollmentId, string Name, string ContactNo, string EmailAddress, string BarAssociation, string Password,   string MemberType = "")
         {
             try
             {

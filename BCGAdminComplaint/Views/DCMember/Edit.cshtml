@@ -20,7 +20,7 @@
                         </div>
                     </div>
                     <div class="page-title-right d-flex align-items-center">
-                        <a class="btn btn-sm btn-outline-primary text-nowrap" href="@Url.Action("Index", "DCMember")"><i class="fa-solid fa-arrow-left me-1"></i> Back</a>
+                        <a class="btn btn-sm btn-outline-primary text-nowrap" href="@Url.Action("Index", "DCMember")" onclick="localStorage.removeItem('EditDCMemberId');"><i class="fa-solid fa-arrow-left me-1"></i> Back</a>
                     </div>
                 </div>
             </div>
@@ -114,6 +114,7 @@
 
 <script>
     var isStaffLoaded = false;
+    var isBindingRecord = false;
 
     $(document).ready(function () {
         initStaffSelect2();
@@ -127,6 +128,8 @@
                 $('#divEnrollmentNo').hide();
                 $('#divStaffSelect').show();
                 $('#txtBarAssociation').val('BCG Staff');
+                $('#txtContactNo').prop('readonly', false);
+                $('#txtEmailAddress').prop('readonly', false);
 
                 if (!isStaffLoaded) {
                     loadBCGStaffList();
@@ -137,17 +140,22 @@
                 $('#divStaffSelect').hide();
                 $('#divEnrollmentNo').show();
                 $('#txtBarAssociation').val('');
+                $('#txtContactNo').prop('readonly', true);
+                $('#txtEmailAddress').prop('readonly', true);
             }
         });
 
         $('#ddlBCGStaff').on('change', function () {
+            if (isBindingRecord) {
+                return;
+            }
             var regId = $(this).val();
             if (regId && regId !== "" && regId !== "0") {
                 var $selected = $(this).find('option:selected');
                 $("#hdfEnrollmentId").val(regId);
                 $("#txtName").val($selected.data('name') || '');
-                $("#txtContactNo").val($selected.data('mobile') || '');
-                $("#txtEmailAddress").val($selected.data('email') || '');
+                $("#txtContactNo").val($selected.data('mobile') || '').prop('readonly', false);
+                $("#txtEmailAddress").val($selected.data('email') || '').prop('readonly', false);
                 $("#txtBarAssociation").val('BCG Staff');
             } else {
                 $("#hdfEnrollmentId").val('0');
@@ -156,6 +164,11 @@
                 $("#txtEmailAddress").val('');
                 if ($('#ddlMemberType').val() === 'S') {
                     $("#txtBarAssociation").val('BCG Staff');
+                    $("#txtContactNo").prop('readonly', false);
+                    $("#txtEmailAddress").prop('readonly', false);
+                } else {
+                    $("#txtContactNo").prop('readonly', true);
+                    $("#txtEmailAddress").prop('readonly', true);
                 }
             }
         });
@@ -185,8 +198,10 @@
                     isStaffLoaded = true;
                     initStaffSelect2();
 
-                    if (selectedRegisterId) {
-                        $staff.val(selectedRegisterId).trigger('change');
+                    if (selectedRegisterId && selectedRegisterId != "0") {
+                        isBindingRecord = true;
+                        $staff.val(String(selectedRegisterId)).trigger('change');
+                        isBindingRecord = false;
                     }
                 }
             },
@@ -213,9 +228,16 @@
     function GetRecordDetail() {
         var urlParams = new URLSearchParams(window.location.search);
         var urlId = urlParams.get('id');
-        var VEditDCMemberDataId = urlId || localStorage.getItem("EditDCMemberId") || '0';
+        var VEditDCMemberDataId = localStorage.getItem("EditDCMemberId") || urlId || '0';
         if (urlId) {
             localStorage.setItem("EditDCMemberId", urlId);
+            if (window.history && window.history.replaceState) {
+                window.history.replaceState({}, document.title, '/DCMember/Edit');
+            }
+        }
+        if (!VEditDCMemberDataId || VEditDCMemberDataId === '0') {
+            location.href = '/DCMember/Index';
+            return;
         }
         $.ajax({
             type: "POST",
@@ -241,10 +263,14 @@
             if (d.MemberType === 'S') {
                 $('#divEnrollmentNo').hide();
                 $('#divStaffSelect').show();
+                $('#txtContactNo').prop('readonly', false);
+                $('#txtEmailAddress').prop('readonly', false);
                 loadBCGStaffList(d.EnrollmentId);
             } else {
                 $('#divStaffSelect').hide();
                 $('#divEnrollmentNo').show();
+                $('#txtContactNo').prop('readonly', true);
+                $('#txtEmailAddress').prop('readonly', true);
                 $("#txtEnrollment").val(d.EnroNumber);
             }
         } else {
@@ -256,10 +282,15 @@
             $("#txtName").val('');
             $("#txtContactNo").val('');
             $("#txtBarAssociation").val('');
+            $("#txtContactNo").prop('readonly', true);
+            $("#txtEmailAddress").prop('readonly', true);
         }
     }
 
-    $('#lnkDCMemberDataSaveRecordCancel').click(function () { GetRecordDetail(); });
+    $('#lnkDCMemberDataSaveRecordCancel').click(function () {
+        localStorage.removeItem("EditDCMemberId");
+        location.href = '/DCMember/Index';
+    });
 
     $('#lnkDCMemberDataSaveRecord').click(function () {
         var VDCMemberId = $("#hdfEditDCMemberId").val() == null ? '0' : $("#hdfEditDCMemberId").val() == '' ? '0' : $("#hdfEditDCMemberId").val();
@@ -338,7 +369,10 @@
                     $('#loader_bcg').css('display', 'none');
                     if (VRecordStatus == "UD" || VRecordStatus == "IN") {
                         swal({ title: "Good Job!", text: "Record updated successfully..", icon: "success", showCancelButton: false, confirmButtonColor: '#DD6B55', confirmButtonText: 'Ok' })
-                        .then(function () { location.href = '/DCMember/Index'; });
+                        .then(function () {
+                            localStorage.removeItem("EditDCMemberId");
+                            location.href = '/DCMember/Index';
+                        });
                     } else if (VRecordStatus == "EX") { swal("", "Record Exist..", "warning"); }
                     else { swal("", "Opps! Something Went Wrong.", "warning"); }
                 } else { swal("", "Opps! Something Went Wrong.", "warning"); }
