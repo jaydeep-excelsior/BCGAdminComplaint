@@ -1,0 +1,21 @@
+## Visual Studio
+.vs/
+*.suo
+*.user
+*.userosscache
+*.sln.docstates
+
+## Build Results
+[Bb]in/
+[Oo]bj/
+*.dll
+*.pdb
+*.cache
+
+## Packages
+packages/
+*.nupkg
+
+## Temporary & Test files
+TestResults/
+*.log

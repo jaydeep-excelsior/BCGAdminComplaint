@@ -66,7 +66,7 @@ namespace BCGAdminComplaint.Controllers
                 var DCMemberQuery = UTL.Select(DCMemberL => new
                 {
                     Id = DCMemberL.Id,
-                    Title = DCMemberL.FullName + (!string.IsNullOrEmpty(DCMemberL.MemberType) ? (DCMemberL.MemberType == "B" ? " (BCG MEMBER)" : DCMemberL.MemberType == "O" ? " (CO-OPT MEMBER)" : " (" + DCMemberL.MemberType + ")") : "")
+                    Title = DCMemberL.FullName + (!string.IsNullOrEmpty(DCMemberL.MemberType) ? (DCMemberL.MemberType == "B" ? " (BCG MEMBER)" : DCMemberL.MemberType == "O" ? " (CO-OPT MEMBER)" : DCMemberL.MemberType == "S" ? " (BCG STAFF)" : " (" + DCMemberL.MemberType + ")") : "")
                 }).ToList();
                 ViewBag.DCMemberList = new SelectList(DCMemberQuery, "Id", "Title");
                 ViewBag.IsAdd = "A";
@@ -86,7 +86,7 @@ namespace BCGAdminComplaint.Controllers
                 var DCMemberQuery = UTL.Select(DCMemberL => new
                 {
                     Id = DCMemberL.Id,
-                    Title = DCMemberL.FullName + (!string.IsNullOrEmpty(DCMemberL.MemberType) ? (DCMemberL.MemberType == "B" ? " (BCG MEMBER)" : DCMemberL.MemberType == "O" ? " (CO-OPT MEMBER)" : " (" + DCMemberL.MemberType + ")") : "")
+                    Title = DCMemberL.FullName + (!string.IsNullOrEmpty(DCMemberL.MemberType) ? (DCMemberL.MemberType == "B" ? " (BCG MEMBER)" : DCMemberL.MemberType == "O" ? " (CO-OPT MEMBER)" : DCMemberL.MemberType == "S" ? " (BCG STAFF)" : " (" + DCMemberL.MemberType + ")") : "")
                 }).ToList();
                 ViewBag.DCMemberList = new SelectList(DCMemberQuery, "Id", "Title");
                 ViewBag.IsUpdate = "A";

@@ -200,5 +200,47 @@ namespace BCGAdminComplaint.Controllers
                 return Json(new { data = "" }, JsonRequestBehavior.AllowGet);
             }
         }
+
+        [HttpPost]
+        public ActionResult GetBCGStaffList()
+        {
+            try
+            {
+                if (Request.Cookies["bcg"] == null)
+                {
+                    return RedirectToAction("Index", "Home");
+                }
+                else
+                {
+                    var list = _dCMemberRepository.GetBCGStaffList();
+                    return Json(new { data = list }, JsonRequestBehavior.AllowGet);
+                }
+            }
+            catch (Exception ex)
+            {
+                return Json(new { data = "" }, JsonRequestBehavior.AllowGet);
+            }
+        }
+
+        [HttpPost]
+        public ActionResult GetBCGStaffDetails(Int64 registerId)
+        {
+            try
+            {
+                if (Request.Cookies["bcg"] == null)
+                {
+                    return RedirectToAction("Index", "Home");
+                }
+                else
+                {
+                    var details = _dCMemberRepository.GetBCGStaffDetails(registerId);
+                    return Json(new { data = details }, JsonRequestBehavior.AllowGet);
+                }
+            }
+            catch (Exception ex)
+            {
+                return Json(new { data = "" }, JsonRequestBehavior.AllowGet);
+            }
+        }
     }
 }

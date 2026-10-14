@@ -36,6 +36,7 @@
                         <option selected value="">Select Member Type</option>
                         <option value="B">BCG MEMBER</option>
                         <option value="O">CO-OPT MEMBER</option>
+                        <option value="S">BCG STAFF</option>
                     </select>
                 </div>
                 <div class="form-group col-md-6 col-sm-6 col-12 col-lg-3">
@@ -227,6 +228,8 @@
                 VMemberTypeBadge = 'BCG MEMBER';
             } else if (VMemberType === 'O') {
                 VMemberTypeBadge = 'CO-OPT MEMBER';
+            } else if (VMemberType === 'S') {
+                VMemberTypeBadge = 'BCG STAFF';
             } else if (VMemberType) {
                 VMemberTypeBadge = '';
             }

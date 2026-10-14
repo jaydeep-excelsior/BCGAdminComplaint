@@ -252,6 +252,7 @@
     <Compile Include="Models\DCMember\DCMemberSave.cs" />
     <Compile Include="Models\DCMember\DCMemberEdit.cs" />
     <Compile Include="Models\DCMember\DCMemberEnrollmentDetails.cs" />
+    <Compile Include="Models\DCMember\BCGStaffModel.cs" />
     <Compile Include="Models\DcNumberList.cs" />
     <Compile Include="Repository\HomeRepository.cs" />
     <Compile Include="Repository\ReportsRepository.cs" />
@@ -271,13 +272,11 @@
     <Content Include="scripts\jquery-1.10.2.min.map" />
     <Content Include="Views\_ViewStart.cshtml" />
     <Content Include="Views\Reports\ComplaintActionLogReport.cshtml" />
-    <Content Include="Views\Complaint\Detail.cshtml" />
+    <Content Include="Views\Complaint\DetailsNew.cshtml" />
     <Content Include="Views\DCReferredList\Index.cshtml" />
     <Content Include="Views\Complaint\SearchDetail.cshtml" />
     <Content Include="Views\Complaint\AddComplaint.cshtml" />
     <Content Include="Views\Complaint\SearchComplaint.cshtml" />
-    <Content Include="Views\Shared\_DCMemberLayout.cshtml" />
-    <Content Include="Views\DCMemberLogin\MemberLogin.cshtml" />
     <Content Include="Views\DCMember\Index.cshtml" />
     <Content Include="Views\DCMember\Add.cshtml" />
     <Content Include="Views\DCMember\Edit.cshtml" />

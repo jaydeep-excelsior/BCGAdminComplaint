@@ -217,5 +217,83 @@ namespace BCGAdminComplaint.Repository
             }
             return details;
         }
+
+        public List<BCGStaffModel> GetBCGStaffList()
+        {
+            List<BCGStaffModel> list = new List<BCGStaffModel>();
+            using (SqlConnection conn = new SqlConnection(_connectionString))
+            {
+                string query = @"
+                    SELECT RegisterId, 
+                           RTRIM(LTRIM(ISNULL(FirstName,'') + ' ' + ISNULL(MiddleName,'') + ' ' + ISNULL(Lastname,''))) + ' (' + ISNULL(UserName,'') + ')' AS DisplayText,
+                           RTRIM(LTRIM(ISNULL(FirstName,'') + ' ' + ISNULL(MiddleName,'') + ' ' + ISNULL(Lastname,''))) AS FullName,
+                           ISNULL(UserName,'') AS UserName,
+                           CASE WHEN ISNULL(Mobile, 0) = 0 THEN '' ELSE CAST(Mobile AS NVARCHAR(50)) END AS ContactNumber,
+                           ISNULL(Email,'') AS EmailAddress
+                    FROM tbl_register_mst 
+                    WHERE Flag = 'A' 
+                    ORDER BY FirstName, Lastname";
+                using (SqlCommand cmd = new SqlCommand(query, conn))
+                {
+                    cmd.CommandType = CommandType.Text;
+                    conn.Open();
+                    using (SqlDataReader reader = cmd.ExecuteReader())
+                    {
+                        while (reader.Read())
+                        {
+                            list.Add(new BCGStaffModel
+                            {
+                                RegisterId = Convert.ToInt64(reader["RegisterId"] == null ? "0" : reader["RegisterId"].ToString()),
+                                DisplayText = reader["DisplayText"] == null ? "" : reader["DisplayText"].ToString(),
+                                FullName = reader["FullName"] == null ? "" : reader["FullName"].ToString(),
+                                UserName = reader["UserName"] == null ? "" : reader["UserName"].ToString(),
+                                ContactNumber = reader["ContactNumber"] == null ? "" : reader["ContactNumber"].ToString(),
+                                EmailAddress = reader["EmailAddress"] == null ? "" : reader["EmailAddress"].ToString()
+                            });
+                        }
+                    }
+                }
+            }
+            return list;
+        }
+
+        public BCGStaffModel GetBCGStaffDetails(Int64 registerId)
+        {
+            BCGStaffModel details = null;
+            using (SqlConnection conn = new SqlConnection(_connectionString))
+            {
+                string query = @"
+                    SELECT RegisterId, 
+                           RTRIM(LTRIM(ISNULL(FirstName,'') + ' ' + ISNULL(MiddleName,'') + ' ' + ISNULL(Lastname,''))) + ' (' + ISNULL(UserName,'') + ')' AS DisplayText,
+                           RTRIM(LTRIM(ISNULL(FirstName,'') + ' ' + ISNULL(MiddleName,'') + ' ' + ISNULL(Lastname,''))) AS FullName,
+                           ISNULL(UserName,'') AS UserName,
+                           CASE WHEN ISNULL(Mobile, 0) = 0 THEN '' ELSE CAST(Mobile AS NVARCHAR(50)) END AS ContactNumber,
+                           ISNULL(Email,'') AS EmailAddress
+                    FROM tbl_register_mst 
+                    WHERE RegisterId = @RegisterId";
+                using (SqlCommand cmd = new SqlCommand(query, conn))
+                {
+                    cmd.CommandType = CommandType.Text;
+                    cmd.Parameters.AddWithValue("@RegisterId", registerId);
+                    conn.Open();
+                    using (SqlDataReader reader = cmd.ExecuteReader())
+                    {
+                        if (reader.Read())
+                        {
+                            details = new BCGStaffModel
+                            {
+                                RegisterId = Convert.ToInt64(reader["RegisterId"] == null ? "0" : reader["RegisterId"].ToString()),
+                                DisplayText = reader["DisplayText"] == null ? "" : reader["DisplayText"].ToString(),
+                                FullName = reader["FullName"] == null ? "" : reader["FullName"].ToString(),
+                                UserName = reader["UserName"] == null ? "" : reader["UserName"].ToString(),
+                                ContactNumber = reader["ContactNumber"] == null ? "" : reader["ContactNumber"].ToString(),
+                                EmailAddress = reader["EmailAddress"] == null ? "" : reader["EmailAddress"].ToString()
+                            };
+                        }
+                    }
+                }
+            }
+            return details;
+        }
     }
 }

@@ -34,19 +34,30 @@
                                 <div class="col-xl-4 col-lg-4 col-md-6 col-sm-6 col-12">
                                     <div class="main-details">
                                         <div class="form-group">
-                                            <label for="txtEnrollment">Enrollment No.<span class="text-danger">*</span></label>
-                                            <input type="text" class="form-control" id="txtEnrollment" placeholder="Enter Enrollment No." />
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="col-xl-4 col-lg-4 col-md-6 col-sm-6 col-12">
-                                    <div class="main-details">
-                                        <div class="form-group">
                                             <label for="ddlMemberType">Member Type<span class="text-danger">*</span></label>
                                             <select id="ddlMemberType" class="form-control">
                                                 <option value="">Select Member Type</option>
                                                 <option value="B">BCG MEMBER</option>
                                                 <option value="O">CO-OPT MEMBER</option>
+                                                <option value="S">BCG STAFF</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-xl-4 col-lg-4 col-md-6 col-sm-6 col-12" id="divEnrollmentNo">
+                                    <div class="main-details">
+                                        <div class="form-group">
+                                            <label for="txtEnrollment">Enrollment No.<span class="text-danger">*</span></label>
+                                            <input type="text" class="form-control" id="txtEnrollment" placeholder="Enter Enrollment No." />
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-xl-4 col-lg-4 col-md-6 col-sm-6 col-12" id="divStaffSelect" style="display:none;">
+                                    <div class="main-details">
+                                        <div class="form-group">
+                                            <label for="ddlBCGStaff">Select BCG Staff<span class="text-danger">*</span></label>
+                                            <select id="ddlBCGStaff" class="form-control" style="width: 100%;">
+                                                <option value="">Select BCG Staff</option>
                                             </select>
                                         </div>
                                     </div>
@@ -98,35 +109,142 @@
 </div>
 
 <input type="hidden" id="hdfEnrollmentId" value="0" />
+
 <script>
+    var isStaffLoaded = false;
+
+    $(document).ready(function () {
+        initStaffSelect2();
+
+        $('#ddlMemberType').on('change', function () {
+            var mType = $(this).val();
+            resetMemberFields();
+
+            if (mType === 'S') {
+                $('#divEnrollmentNo').hide();
+                $('#divStaffSelect').show();
+                $('#txtBarAssociation').val('BCG Staff');
+
+                if (!isStaffLoaded) {
+                    loadBCGStaffList();
+                } else {
+                    $('#ddlBCGStaff').val('').trigger('change.select2');
+                }
+            } else {
+                $('#divStaffSelect').hide();
+                $('#divEnrollmentNo').show();
+                $('#txtBarAssociation').val('');
+            }
+        });
+
+        $('#ddlBCGStaff').on('change', function () {
+            var regId = $(this).val();
+            if (regId && regId !== "" && regId !== "0") {
+                var $selected = $(this).find('option:selected');
+                $("#hdfEnrollmentId").val(regId);
+                $("#txtName").val($selected.data('name') || '');
+                $("#txtContactNo").val($selected.data('mobile') || '');
+                $("#txtEmailAddress").val($selected.data('email') || '');
+                $("#txtBarAssociation").val('BCG Staff');
+            } else {
+                $("#hdfEnrollmentId").val('0');
+                $("#txtName").val('');
+                $("#txtContactNo").val('');
+                $("#txtEmailAddress").val('');
+                if ($('#ddlMemberType').val() === 'S') {
+                    $("#txtBarAssociation").val('BCG Staff');
+                }
+            }
+        });
+    });
+
+    function initStaffSelect2() {
+        if ($.fn.select2) {
+            $('#ddlBCGStaff').select2({
+                placeholder: "Select BCG Staff",
+                allowClear: true,
+                width: '100%'
+            });
+        }
+    }
+
+    function loadBCGStaffList(selectedRegisterId) {
+        $.ajax({
+            type: 'POST',
+            url: "/DCMember/GetBCGStaffList",
+            success: function (result) {
+                if (result != null && result.data != null) {
+                    var $staff = $("#ddlBCGStaff");
+                    $staff.empty().append('<option value="">Select BCG Staff</option>');
+                    $.each(result.data, function (i, item) {
+                        $staff.append('<option value="' + item.RegisterId + '" data-name="' + (item.FullName || '') + '" data-mobile="' + (item.ContactNumber || '') + '" data-email="' + (item.EmailAddress || '') + '" data-user="' + (item.UserName || '') + '">' + item.DisplayText + '</option>');
+                    });
+                    isStaffLoaded = true;
+                    initStaffSelect2();
+
+                    if (selectedRegisterId) {
+                        $staff.val(selectedRegisterId).trigger('change');
+                    }
+                }
+            },
+            error: function () {
+                console.log("Error loading BCG Staff list");
+            }
+        });
+    }
+
+    function resetMemberFields() {
+        $("#txtEnrollment").val('');
+        if ($('#ddlBCGStaff').data('select2')) {
+            $('#ddlBCGStaff').val('').trigger('change.select2');
+        } else {
+            $('#ddlBCGStaff').val('');
+        }
+        $("#hdfEnrollmentId").val('0');
+        $("#txtName").val('');
+        $("#txtContactNo").val('');
+        $("#txtEmailAddress").val('');
+        $("#txtBarAssociation").val('');
+    }
+
     $('#lnkDCMemberDataSaveRecord').click(function () {
-        if ($("#txtEnrollment").val() == "") { swal("", "Please enter Enrollment No...", "warning"); return; }
-        if ($("#hdfEnrollmentId").val() == "0") { swal("", "Invalid Enrollment No. Please verify.", "warning"); return; }
-        if ($("#ddlMemberType").val() == "") { swal("", "Please select Member Type...", "warning"); return; }
+        var mType = $("#ddlMemberType").val();
+        if (mType == "") { swal("", "Please select Member Type...", "warning"); return; }
+
+        if (mType === 'S') {
+            if ($("#ddlBCGStaff").val() == "" || $("#hdfEnrollmentId").val() == "0" || $("#hdfEnrollmentId").val() == "") {
+                swal("", "Please select BCG Staff...", "warning");
+                return;
+            }
+        } else {
+            if ($("#txtEnrollment").val() == "") { swal("", "Please enter Enrollment No...", "warning"); return; }
+            if ($("#hdfEnrollmentId").val() == "0" || $("#hdfEnrollmentId").val() == "") {
+                swal("", "Invalid Enrollment No. Please verify.", "warning");
+                return;
+            }
+        }
+
         if ($("#txtContactNo").val() == "") { swal("", "Please enter Contact Number...", "warning"); return; }
 
         var data = {
             Id: '0',
             EnrollmentId: $("#hdfEnrollmentId").val(),
-            MemberType: $("#ddlMemberType").val(),
+            MemberType: mType,
             EmailAddress: $("#txtEmailAddress").val(),
             Password: "",
             Name: $("#txtName").val(),
             ContactNo: $("#txtContactNo").val(),
-            BarAssociation: $("#txtBarAssociation").val()
+            BarAssociation: $("#txtBarAssociation").val() || (mType === 'S' ? 'BCG Staff' : '')
         };
 
         $.when(DCMemberDataSubmitRecord(data)).then(function (r) { console.log(r); }).fail(function (e) { console.log(e); });
     });
 
     $('#lnkDCMemberDataSaveRecordCancel').click(function () {
-        $("#txtEnrollment").val('');
         $("#ddlMemberType").val('');
-        $("#hdfEnrollmentId").val('0');
-        $("#txtName").val('');
-        $("#txtContactNo").val('');
-        $("#txtEmailAddress").val('');
-        $("#txtBarAssociation").val('');
+        $('#divStaffSelect').hide();
+        $('#divEnrollmentNo').show();
+        resetMemberFields();
     });
 
     $("#txtEnrollment").on("blur", function () {

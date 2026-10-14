@@ -1,6 +1,0 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
-<parameters>
-  <parameter name="ConnectionString-Web.config Connection String" description="ConnectionString Connection String used in web.config by the application to access the database." defaultValue="Data Source=tcp:68.178.173.156,55866;Initial Catalog=Barcouncil_09102026; User ID=sa; Password=Adminbcg@272707071" tags="SqlConnectionString">
-    <parameterEntry kind="XmlFile" scope="D:\\Project\\ASP\ \.Net\ Project\\BCG\\Complaint\\BCGAdminComplaint\\BCGAdminComplaint\\obj\\Release\\Package\\PackageTmp\\Web\.config$" match="/configuration/connectionStrings/add[@name='ConnectionString']/@connectionString" />
-  </parameter>
-</parameters>
