@@ -139,6 +139,7 @@
     <Content Include="assets\css\app.min.css" />
     <Content Include="assets\css\bootstrap.min.css" />
     <Content Include="assets\css\Site.css" />
+    <Content Include="assets\css\complaint-management.css" />
     <Content Include="assets\img\accepted.svg" />
     <Content Include="assets\img\approved.svg" />
     <Content Include="assets\img\assistant.svg" />
@@ -213,6 +214,7 @@
     <Compile Include="Controllers\DCMemberController.cs" />
     <Compile Include="Controllers\DCReferredListController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Controllers\NotesController.cs" />
     <Compile Include="Controllers\ReportsController.cs" />
     <Compile Include="DCReferredList.Designer.cs">
       <AutoGen>True</AutoGen>
@@ -254,7 +256,9 @@
     <Compile Include="Models\DCMember\DCMemberEnrollmentDetails.cs" />
     <Compile Include="Models\DCMember\BCGStaffModel.cs" />
     <Compile Include="Models\DcNumberList.cs" />
+    <Compile Include="Models\Notes\AdminComplaintNotesModel.cs" />
     <Compile Include="Repository\HomeRepository.cs" />
+    <Compile Include="Repository\NotesRepository.cs" />
     <Compile Include="Repository\ReportsRepository.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -263,11 +267,12 @@
     <Content Include="ApplicationInsights.config">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Views\Complaint\Details.cshtml" />
+    <Content Include="Views\Complaint\OnlineComplaintDetail.cshtml" />
     <Content Include="Views\Complaint\Index.cshtml" />
     <Content Include="Views\Home\Index.cshtml" />
     <Content Include="Views\Home\Login.cshtml" />
     <Content Include="Views\Reports\ComplaintListReport.cshtml" />
+    <Content Include="Views\Reports\ComplaintReport.cshtml" />
     <Content Include="Views\Shared\_Layout.cshtml" />
     <Content Include="scripts\jquery-1.10.2.min.map" />
     <Content Include="Views\_ViewStart.cshtml" />
@@ -293,6 +298,7 @@
     <Content Include="assets\js\select2.min.js" />
     <Content Include="assets\js\simplebar.min.js" />
     <Content Include="Views\Complaint\Detail.cshtml" />
+    <Content Include="Views\Notes\Index.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

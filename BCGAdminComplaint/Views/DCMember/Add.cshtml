@@ -112,15 +112,41 @@
 
 <script>
     var isStaffLoaded = false;
+    var currentMemberType = '';
 
     $(document).ready(function () {
         initStaffSelect2();
 
         $('#ddlMemberType').on('change', function () {
-            var mType = $(this).val();
+            var newType = $(this).val();
+
+            // BCG MEMBER ('B') and CO-OPT MEMBER ('O') use the exact same process (Enrollment No. lookup)
+            var isCurrentAdvocate = (currentMemberType === 'B' || currentMemberType === 'O');
+            var isNewAdvocate = (newType === 'B' || newType === 'O');
+
+            if (isCurrentAdvocate && isNewAdvocate) {
+                // Same process: preserve existing enrollment and advocate details
+                currentMemberType = newType;
+                $('#divStaffSelect').hide();
+                $('#divEnrollmentNo').show();
+                $('#txtContactNo').prop('readonly', true);
+                $('#txtEmailAddress').prop('readonly', true);
+                return;
+            }
+
+            // If transitioning from initial empty state to an advocate type ('B' or 'O') and enrollment data already exists
+            if ((currentMemberType === '' || !currentMemberType) && isNewAdvocate && $("#txtEnrollment").val() !== '') {
+                currentMemberType = newType;
+                $('#divStaffSelect').hide();
+                $('#divEnrollmentNo').show();
+                $('#txtContactNo').prop('readonly', true);
+                $('#txtEmailAddress').prop('readonly', true);
+                return;
+            }
+
             resetMemberFields();
 
-            if (mType === 'S') {
+            if (newType === 'S') {
                 $('#divEnrollmentNo').hide();
                 $('#divStaffSelect').show();
                 $('#txtBarAssociation').val('BCG Staff');
@@ -139,6 +165,8 @@
                 $('#txtContactNo').prop('readonly', true);
                 $('#txtEmailAddress').prop('readonly', true);
             }
+
+            currentMemberType = newType;
         });
 
         $('#ddlBCGStaff').on('change', function () {
@@ -258,8 +286,19 @@
         resetMemberFields();
     });
 
-    $("#txtEnrollment").on("blur", function () {
-        var enroNumber = $(this).val();
+    $("#txtEnrollment").on("blur change", function () {
+        fetchEnrollmentDetails();
+    });
+
+    $("#txtEnrollment").on("keypress", function (e) {
+        if (e.which === 13) {
+            e.preventDefault();
+            fetchEnrollmentDetails();
+        }
+    });
+
+    function fetchEnrollmentDetails() {
+        var enroNumber = $("#txtEnrollment").val().trim();
         if (enroNumber != "") {
             $.ajax({
                 type: 'POST',
@@ -279,6 +318,7 @@
                         $("#txtContactNo").val('');
                         $("#txtEmailAddress").val('');
                         $("#txtBarAssociation").val('');
+                        swal("", "Enrollment details not found.", "warning");
                     }
                 },
                 error: function () {
@@ -286,7 +326,7 @@
                 }
             });
         }
-    });
+    }
 
     function DCMemberDataSubmitRecord(data) {
         return $.ajax({

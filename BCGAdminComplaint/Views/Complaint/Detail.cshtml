@@ -76,7 +76,7 @@
                         <input type="file" id="fileAdditionalAttachment" class="form-control" />
                     </div>
                     <div class="col-md-12 mb-3">
-                        <label>Note (àª¨à«‹àª‚àª§)</label>
+                        <label>Note (નોંધ)</label>
                         <textarea id="txtAdditionalFileDescription" class="form-control" rows="2"></textarea>
                     </div>
                 </div>
@@ -190,7 +190,7 @@
                             </div>
                             <div>
                                 <h5 class="mb-0 fw-bold text-dark">Complainant's Details</h5>
-                                <span class="text-muted font-size-12">àª«àª°àª¿àª¯àª¾àª¦à«€àª¨à«€ àªµàª¿àª—àª¤à«‹</span>
+                                <span class="text-muted font-size-12">ફરિયાદીની વિગતો</span>
                             </div>
                         </div>
                         <a href="javascript:void(0);" class="btn btn-outline-primary btn-sm" onclick="openComplainantEditModal()"><i class="fa-solid fa-pen-to-square me-1"></i> Edit</a>
@@ -246,14 +246,17 @@
                                 <i class="fa-solid fa-user-tie"></i>
                             </div>
                             <div>
-                                <h5 class="mb-0 fw-bold text-dark">Details of Advocate - Complained Against</h5>
-                                <span class="text-muted font-size-12">àªœà«‡ àªµàª•à«€àª² àªµàª¿àª°à«àª¦à«àª§ àª«àª°àª¿àª¯àª¾àª¦ àª•àª°àªµàª¾àª®àª¾àª‚ àª†àªµà«€ àª›à«‡ àª¤à«‡àª¨à«€ àªµàª¿àª—àª¤à«‹</span>
+                                <h5 class="mb-0 fw-bold text-dark d-flex align-items-center">
+                                    Details of Advocate - Complained Against
+                                    <span id="advocateCountBadge" class="badge bg-primary-subtle text-primary rounded-pill px-2.5 py-1 font-size-11 fw-semibold ms-2" style="display:none;"></span>
+                                </h5>
+                                <span class="text-muted font-size-12">જે વકીલ વિરુદ્ધ ફરિયાદ કરવામાં આવી છે તેની વિગતો</span>
                             </div>
                         </div>
-                        <a href="javascript:void(0);" class="btn btn-outline-primary btn-sm" onclick="openAddMemberModal()"><i class="fa-solid fa-plus me-1"></i> Add Advocate</a>
+                        <a href="javascript:void(0);" class="btn btn-outline-primary btn-sm rounded-pill px-3 fw-semibold shadow-none" onclick="openAddMemberModal()"><i class="fa-solid fa-plus me-1"></i> Add Advocate</a>
                     </div>
                     <div class="main_scroll_complaint_against answer">
-                        <div class="row" id="selectDetails"></div>
+                        <div class="row g-3" id="selectDetails"></div>
                     </div>
                 </div>
             </div>
@@ -263,22 +266,22 @@
                 <div class="card-body p-4">
                     <div class="d-flex justify-content-between align-items-center mb-3 pb-2 border-bottom">
                         <div class="d-flex align-items-center gap-2">
-                            <div class="section-icon-badge bg-primary-subtle text-primary">
+                            <div class="section-icon-badge badge-red">
                                 <i class="fa-solid fa-file-contract"></i>
                             </div>
                             <div>
                                 <h5 class="mb-0 fw-bold text-dark">Complaint Affidavit Copy</h5>
-                                <span class="text-muted font-size-12">àª«àª°àª¿àª¯àª¾àª¦ àª¸à«‹àª—àª‚àª¦àª¨àª¾àª®àª¾àª¨à«€ àª¨àª•àª²</span>
+                                <span class="text-muted font-size-12">ફરિયાદ સોગંદનામાની નકલ</span>
                             </div>
                         </div>
                         <div>
                             @if (ViewBag.AffidavitDocumentList != null && ViewBag.AffidavitDocumentList.Rows.Count > 0)
                             {
-                                <a href="javascript:void(0);" class="btn btn-outline-primary btn-sm" onclick="openAffidavitUploadModal()"><i class="fa-solid fa-pen me-1"></i> Change File</a>
+                                <a href="javascript:void(0);" class="btn btn-outline-primary btn-sm rounded-pill px-3 fw-semibold shadow-none" onclick="openAffidavitUploadModal()"><i class="fa-solid fa-pen me-1"></i> Change File</a>
                             }
                             else
                             {
-                                <a href="javascript:void(0);" class="btn btn-outline-primary btn-sm" onclick="openAffidavitUploadModal()"><i class="fa-solid fa-upload me-1"></i> Upload File</a>
+                                <a href="javascript:void(0);" class="btn btn-outline-primary btn-sm rounded-pill px-3 fw-semibold shadow-none" onclick="openAffidavitUploadModal()"><i class="fa-solid fa-upload me-1"></i> Upload File</a>
                             }
                         </div>
                     </div>
@@ -287,25 +290,31 @@
                         {
                             foreach (System.Data.DataRow dr in ViewBag.AffidavitDocumentList.Rows)
                             {
-                                <div class="main_card_list main_card_list_border p-3 mt-2 rounded-3 shadow-none">
-                                    <div class="main_card_list_body">
-                                        <div class="row">
-                                            <div class="col-md-12">
-                                                <div class="file_name_btn" onclick="getFile('@dr["FilePath"].ToString()')">
-                                                    <div class="name"><i class="fa-solid fa-file-pdf me-2 text-danger"></i>@dr["FileName"].ToString()</div>
-                                                    <div class="view_file"><i class="las la-eye"></i></div>
-                                                </div>
+                                <div class="doc-item-card">
+                                    <div class="doc-info-wrap" onclick="getFile('@dr["FilePath"].ToString()')" style="cursor: pointer;">
+                                        <div class="doc-icon-box">
+                                            <i class="fa-solid fa-file-pdf"></i>
+                                        </div>
+                                        <div style="min-width: 0;">
+                                            <div class="doc-name" title="@dr["FileName"].ToString()">@dr["FileName"].ToString()</div>
+                                            <div class="doc-meta">
+                                                <span class="badge bg-light text-secondary border font-size-11"><i class="fa-solid fa-shield-halved me-1 text-primary"></i> Verified Affidavit</span>
+                                                <span>• Click to preview</span>
                                             </div>
                                         </div>
                                     </div>
+                                    <button type="button" class="btn btn-outline-primary btn-sm rounded-pill px-3 fw-semibold d-inline-flex align-items-center gap-1 shadow-none" onclick="getFile('@dr["FilePath"].ToString()')">
+                                        <i class="fa-regular fa-eye"></i> View
+                                    </button>
                                 </div>
                             }
                         }
                         else
                         {
                             <div class="empty-doc-placeholder text-center">
-                                <i class="fa-regular fa-file-pdf text-muted fs-3 mb-2 d-block opacity-50"></i>
-                                <div class="text-muted font-size-13">No affidavit document attached yet.</div>
+                                <div class="empty-icon-circle"><i class="fa-regular fa-file-pdf"></i></div>
+                                <div class="text-dark fw-semibold font-size-13">No affidavit document attached yet.</div>
+                                <div class="text-muted font-size-12">Upload the verified affidavit copy for this complaint.</div>
                             </div>
                         }
                     </div>
@@ -317,48 +326,59 @@
                 <div class="card-body p-4">
                     <div class="d-flex justify-content-between align-items-center mb-3 pb-2 border-bottom">
                         <div class="d-flex align-items-center gap-2">
-                            <div class="section-icon-badge bg-primary-subtle text-primary">
+                            <div class="section-icon-badge badge-blue">
                                 <i class="fa-solid fa-paperclip"></i>
                             </div>
                             <div>
                                 <h5 class="mb-0 fw-bold text-dark">Additional Attachments</h5>
-                                <span class="text-muted font-size-12">àªœà«‹ àª•à«‹àªˆ àªµàª§àª¾àª°àª¾àª¨àª¾ àªœà«‹àª¡àª¾àª£à«‹ àª¹à«‹àª¯ àª¤à«‹</span>
+                                <span class="text-muted font-size-12">જો કોઈ વધારાના જોડાણો હોય તો</span>
                             </div>
                         </div>
-                        <a href="javascript:void(0);" class="btn btn-outline-primary btn-sm" onclick="openAdditionalAttachmentModal()"><i class="fa-solid fa-upload me-1"></i> Upload File</a>
+                        <a href="javascript:void(0);" class="btn btn-outline-primary btn-sm rounded-pill px-3 fw-semibold shadow-none" onclick="openAdditionalAttachmentModal()"><i class="fa-solid fa-upload me-1"></i> Upload File</a>
                     </div>
                     <div class="main_scroll_complaint_against answer" id="dvOrderPassed">
                         @if (ViewBag.AdditionalDocumentList != null && ViewBag.AdditionalDocumentList.Rows.Count > 0)
                         {
                             foreach (System.Data.DataRow dr in ViewBag.AdditionalDocumentList.Rows)
                             {
-                                <div class="main_card_list main_card_list_border p-3 mt-2 rounded-3 shadow-none">
-                                    <div class="main_card_list_body">
-                                        <div class="row">
-                                            <div class="col-md-12">
-                                                <div class="title mb-1">Uploaded Document File</div>
-                                                <div class="d-flex align-items-center">
-                                                    <div class="file_name_btn flex-grow-1" onclick="getFile('@dr["FilePath"].ToString()')">
-                                                        <div class="name"><i class="fa-solid fa-file-lines me-2 text-primary"></i>@dr["FileName"].ToString()</div>
-                                                        <div class="view_file"><i class="las la-eye"></i></div>
-                                                    </div>
-                                                    <a href="javascript:void(0);" class="btn btn-outline-danger btn-sm ms-2" style="height: 35px; width: 35px; display: flex; align-items: center; justify-content: center; border-radius: 8px;" onclick="deleteAdditionalAttachment(@dr["Id"].ToString())" title="Delete File"><i class="las la-trash fs-5"></i></a>
+                                <div class="attachment-card">
+                                    <div class="attachment-top-row">
+                                        <div class="doc-info-wrap" onclick="getFile('@dr["FilePath"].ToString()')" style="cursor: pointer;">
+                                            <div class="attachment-icon-box">
+                                                <i class="fa-solid fa-file-lines"></i>
+                                            </div>
+                                            <div style="min-width: 0;">
+                                                <div class="doc-name" title="@dr["FileName"].ToString()">@dr["FileName"].ToString()</div>
+                                                <div class="doc-meta">
+                                                    <span class="badge bg-light text-muted border font-size-10"><i class="fa-solid fa-paperclip me-1"></i> Attachment</span>
                                                 </div>
                                             </div>
-                                            <div class="col-md-12 mt-2">
-                                                <div class="title mb-0">Note (àª¨à«‹àª‚àª§)</div>
-                                                <div class="description">@dr["Description"].ToString()</div>
-                                            </div>
+                                        </div>
+                                        <div class="attachment-actions">
+                                            <button type="button" class="btn btn-outline-primary btn-sm rounded-pill px-3 fw-semibold shadow-none" onclick="getFile('@dr["FilePath"].ToString()')">
+                                                <i class="fa-regular fa-eye me-1"></i> View
+                                            </button>
+                                            <button type="button" class="btn btn-outline-danger btn-sm rounded-circle p-0" style="width: 32px; height: 32px; display: inline-flex; align-items: center; justify-content: center;" onclick="deleteAdditionalAttachment(@dr["Id"].ToString())" title="Delete File">
+                                                <i class="fa-solid fa-trash font-size-12"></i>
+                                            </button>
                                         </div>
                                     </div>
+                                    @if (!string.IsNullOrWhiteSpace(dr["Description"] != null ? dr["Description"].ToString() : ""))
+                                    {
+                                        <div class="attachment-note-callout">
+                                            <span class="attachment-note-label"><i class="fa-regular fa-comment-dots text-primary me-1"></i> Note (નોંધ)</span>
+                                            <p class="attachment-note-text">@dr["Description"].ToString()</p>
+                                        </div>
+                                    }
                                 </div>
                             }
                         }
                         else
                         {
                             <div class="empty-doc-placeholder text-center">
-                                <i class="fa-solid fa-paperclip text-muted fs-3 mb-2 d-block opacity-50"></i>
-                                <div class="text-muted font-size-13">No additional attachments uploaded yet.</div>
+                                <div class="empty-icon-circle"><i class="fa-solid fa-paperclip"></i></div>
+                                <div class="text-dark fw-semibold font-size-13">No additional attachments uploaded yet.</div>
+                                <div class="text-muted font-size-12">Click "Upload File" to add supporting documents.</div>
                             </div>
                         }
                     </div>
@@ -370,44 +390,36 @@
                 <div class="card-body p-4">
                     <div class="d-flex justify-content-between align-items-center mb-3 pb-2 border-bottom">
                         <div class="d-flex align-items-center gap-2">
-                            <div class="section-icon-badge bg-primary-subtle text-primary">
+                            <div class="section-icon-badge badge-indigo">
                                 <i class="fa-solid fa-users-rectangle"></i>
                             </div>
                             <div>
                                 <h5 class="mb-0 fw-bold text-dark">Details of G B Meeting</h5>
-                                <span class="text-muted font-size-12">àª¸àª¾àª®àª¾àª¨à«àª¯ àª¸àª­àª¾àª¨à«€ àªµàª¿àª—àª¤à«‹</span>
+                                <span class="text-muted font-size-12">સામાન્ય સભાની વિગતો</span>
                             </div>
                         </div>
-                        <a href="javascript:void(0);" class="btn btn-outline-primary btn-sm" onclick="openComplaintGBMeetingModal()"><i class="fa-solid fa-plus me-1"></i> Add Meeting</a>
+                        <a href="javascript:void(0);" class="btn btn-outline-primary btn-sm rounded-pill px-3 fw-semibold shadow-none" onclick="openComplaintGBMeetingModal()"><i class="fa-solid fa-plus me-1"></i> Add Meeting</a>
                     </div>
                     <div class="main_scroll_complaint_against answer" id="dvGBMeetingList">
                         @if (ViewBag.ComplaintGBMeetingList != null && ViewBag.ComplaintGBMeetingList.Rows.Count > 0)
                         {
                             foreach (System.Data.DataRow dr in ViewBag.ComplaintGBMeetingList.Rows)
                             {
-                                <div class="main_card_list main_card_list_border p-3 mt-2 rounded-3 shadow-none">
-                                    <div class="main_card_list_body">
-                                        <div class="row">
-                                            <div class="col-md-4">
-                                                <div class="title mb-1">Meeting Date (àª¤àª¾àª°à«€àª–)</div>
-                                                <div class="description meeting-date-content fw-semibold">@dr["MeetingDate"].ToString()</div>
-                                            </div>
-                                            <div class="col-md-8">
-                                                <div class="title mb-1">Meeting Title (àª¶à«€àª°à«àª·àª•)</div>
-                                                <div class="description meeting-title-content fw-semibold">@dr["MeetingTitle"].ToString()</div>
-                                            </div>
-                                            <div class="col-md-12 mt-3">
-                                                <div class="title d-flex justify-content-between align-items-center mb-1">
-                                                    <span>Meeting Note (àª¨à«‹àª‚àª§)</span>
-                                                    <div>
-                                                        <button type="button" class="btn btn-outline-danger btn-sm px-2 py-0 me-1" style="font-size: 11px; line-height: 1.5;" onclick="deleteGBMeetingLog('@dr["Id"].ToString()')"><i class="fa-solid fa-trash me-1"></i>Delete</button>
-                                                        <button type="button" class="btn btn-outline-info btn-sm px-2 py-0 me-1" style="font-size: 11px; line-height: 1.5;" onclick="editGBMeetingLog('@dr["Id"].ToString()', this)"><i class="fa-solid fa-pen-to-square me-1"></i>Edit</button>
-                                                        <button type="button" class="btn btn-outline-primary btn-sm px-2 py-0" style="font-size: 11px; line-height: 1.5;" onclick="viewMeetingNote(this)"><i class="fa-solid fa-eye me-1"></i>View Note</button>
-                                                    </div>
-                                                </div>
-                                                <div class="description meeting-note-content p-2 bg-light rounded border">@dr["MeetingNote"].ToString()</div>
-                                            </div>
+                                <div class="gb-meeting-card">
+                                    <div class="gb-header-row">
+                                        <div>
+                                            <span class="gb-date-badge"><i class="fa-regular fa-calendar me-1"></i> <span class="meeting-date-content">@dr["MeetingDate"].ToString()</span></span>
+                                            <h6 class="gb-title meeting-title-content">@dr["MeetingTitle"].ToString()</h6>
                                         </div>
+                                        <div class="gb-actions">
+                                            <button type="button" class="btn btn-outline-primary btn-sm rounded-pill px-2.5 py-1 font-size-11 fw-semibold shadow-none" onclick="viewMeetingNote(this)"><i class="fa-solid fa-eye me-1"></i> View</button>
+                                            <button type="button" class="btn btn-outline-info btn-sm rounded-pill px-2.5 py-1 font-size-11 fw-semibold shadow-none" onclick="editGBMeetingLog('@dr["Id"].ToString()', this)"><i class="fa-solid fa-pen-to-square me-1"></i> Edit</button>
+                                            <button type="button" class="btn btn-outline-danger btn-sm rounded-pill px-2.5 py-1 font-size-11 fw-semibold shadow-none" onclick="deleteGBMeetingLog('@dr["Id"].ToString()')"><i class="fa-solid fa-trash me-1"></i> Delete</button>
+                                        </div>
+                                    </div>
+                                    <div class="gb-note-box">
+                                        <div class="gb-note-label"><i class="fa-regular fa-note-sticky text-indigo me-1"></i> Meeting Note (બેઠકની નોંધ)</div>
+                                        <p class="gb-note-content meeting-note-content">@dr["MeetingNote"].ToString()</p>
                                     </div>
                                 </div>
                             }
@@ -415,8 +427,9 @@
                         else
                         {
                             <div class="empty-doc-placeholder text-center">
-                                <i class="fa-regular fa-calendar-xmark text-muted fs-3 mb-2 d-block opacity-50"></i>
-                                <div class="text-muted font-size-13">No General Board meeting records added yet.</div>
+                                <div class="empty-icon-circle"><i class="fa-regular fa-calendar-xmark"></i></div>
+                                <div class="text-dark fw-semibold font-size-13">No General Board meeting records added yet.</div>
+                                <div class="text-muted font-size-12">Click "Add Meeting" to log an official board meeting entry.</div>
                             </div>
                         }
                     </div>
@@ -428,19 +441,19 @@
                 <div class="card-body p-4">
                     <div class="d-flex align-items-center justify-content-between mb-3 pb-2 border-bottom">
                         <div class="d-flex align-items-center gap-2">
-                            <div class="section-icon-badge bg-primary-subtle text-primary">
-                                <i class="fa-regular fa-comments"></i>
+                            <div class="section-icon-badge badge-teal">
+                                <i class="fa-solid fa-comments"></i>
                             </div>
                             <div>
                                 <h5 class="mb-0 fw-bold text-dark">Advocate Reply & Communications</h5>
-                                <span class="text-muted font-size-12">àªœà«‡ àªµàª•à«€àª² àªµàª¿àª°à«àª¦à«àª§ àª«àª°àª¿àª¯àª¾àª¦ àª•àª°àªµàª¾àª®àª¾àª‚ àª†àªµà«€ àª›à«‡ àª¤à«‡àª¨à«‹ àªœàªµàª¾àª¬</span>
+                                <span class="text-muted font-size-12">જે વકીલ વિરુદ્ધ ફરિયાદ કરવામાં આવી છે તેનો જવાબ</span>
                             </div>
                         </div>
                     </div>
                     <div class="replaycomplaintmain_card mt-2 rounded-3" id="dvreplyData"></div>
-                    <div class="mt-3 p-3 bg-light rounded-3 border">
+                    <div class="reply-composer-card mt-3">
                         <div class="position-relative mb-2">
-                            <textarea type="text" class="form-control bg-white shadow-none" id="txtReply" rows="3" placeholder="Enter reply message or note..."></textarea>
+                            <textarea type="text" class="form-control reply-textarea shadow-none" id="txtReply" rows="3" placeholder="Enter reply message or note..."></textarea>
                             <div class="chat-input-links" id="tooltip-container">
                                 <input type="file" id="fileLoader" name="files" title="Load File" class="d-none" onchange="ShowPreview(this,'Reply')" />
                                 <input type="hidden" id="hdfReplyB64ImagePath" />
@@ -449,12 +462,12 @@
                         </div>
                         <div class="d-flex justify-content-between align-items-center flex-wrap gap-2">
                             <div class="d-flex align-items-center">
-                                <a id="btnReplyUploadFile" class="btn btn-outline-primary btn-sm" onclick="openFiledialog()">
-                                    <i class="fa-solid fa-paperclip me-1"></i> Attach/Upload File
+                                <a id="btnReplyUploadFile" class="btn btn-outline-secondary btn-sm rounded-pill px-3 fw-semibold shadow-none" onclick="openFiledialog()">
+                                    <i class="fa-solid fa-paperclip me-1 text-primary"></i> Attach/Upload File
                                 </a>
                                 <label id="lbldisplayName" class="mb-0 text-muted ms-2" style="font-size: 12px;"></label>
                             </div>
-                            <a id="btnReplySave" class="btn btn-primary btn-sm px-4 shadow-sm"><i class="fa-solid fa-paper-plane me-1"></i> Save Reply</a>
+                            <a id="btnReplySave" class="btn btn-primary btn-sm rounded-pill px-4 fw-semibold shadow-sm"><i class="fa-solid fa-paper-plane me-1"></i> Save Reply</a>
                         </div>
                     </div>
                 </div>
@@ -499,7 +512,7 @@
                             </div>
                             <div>
                                 <h5 class="mb-0 fw-bold text-dark">Payment Details</h5>
-                                <span class="text-muted font-size-12">àªšà«‚àª•àªµàª£à«€àª¨à«€ àªµàª¿àª—àª¤à«‹</span>
+                                <span class="text-muted font-size-12">ચૂકવણીની વિગતો</span>
                             </div>
                         </div>
                     </div>
@@ -509,7 +522,7 @@
                             <div class="kpi-metric-tile kpi-metric-primary">
                                 <div class="d-flex align-items-center justify-content-between">
                                     <span class="kpi-label"><i class="fa-solid fa-coins me-1"></i> Total Amount</span>
-                                    <span class="kpi-value text-primary">â‚¹ <label id="lblTotalAmount" class="mb-0 text-primary fw-bold">0</label></span>
+                                    <span class="kpi-value text-primary">₹ <label id="lblTotalAmount" class="mb-0 text-primary fw-bold">0</label></span>
                                 </div>
                             </div>
                         </div>
@@ -517,7 +530,7 @@
                             <div class="kpi-metric-tile kpi-metric-success">
                                 <div class="d-flex align-items-center justify-content-between">
                                     <span class="kpi-label"><i class="fa-solid fa-circle-check me-1"></i> Paid Amount</span>
-                                    <span class="kpi-value text-success">â‚¹ <label id="lblPaidAmount" class="mb-0 text-success fw-bold">0</label></span>
+                                    <span class="kpi-value text-success">₹ <label id="lblPaidAmount" class="mb-0 text-success fw-bold">0</label></span>
                                 </div>
                             </div>
                         </div>
@@ -525,7 +538,7 @@
                             <div class="kpi-metric-tile kpi-metric-danger">
                                 <div class="d-flex align-items-center justify-content-between">
                                     <span class="kpi-label"><i class="fa-solid fa-clock me-1"></i> Due Amount</span>
-                                    <span class="kpi-value text-danger">â‚¹ <label id="lblDueAmount" class="mb-0 text-danger fw-bold">0</label></span>
+                                    <span class="kpi-value text-danger">₹ <label id="lblDueAmount" class="mb-0 text-danger fw-bold">0</label></span>
                                 </div>
                             </div>
                         </div>
@@ -542,7 +555,7 @@
                         </div>
                         <div>
                             <h5 class="mb-0 fw-bold text-dark">Pay Payment Information</h5>
-                            <span class="text-muted font-size-12">àªšà«àª•àªµàª£à«€àª¨à«€ àªµàª¿àª—àª¤ àª¦àª¾àª–àª² àª•àª°à«‹</span>
+                            <span class="text-muted font-size-12">ચુકવણીની વિગત દાખલ કરો</span>
                         </div>
                     </div>
                     <div class="row g-2">
@@ -595,7 +608,7 @@
                         </div>
                         <div>
                             <h5 class="mb-0 fw-bold text-dark">Payment History</h5>
-                            <span class="text-muted font-size-12">àªšà«àª•àªµàª£à«€àª¨à«€ àªªàª¾àª•à«€ àª°àª¸à«€àª¦à«‹</span>
+                            <span class="text-muted font-size-12">ચુકવણીની પાકી રસીદો</span>
                         </div>
                     </div>
                     <div id="divPaymentDetailList"></div>
@@ -716,7 +729,7 @@
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="addMemberModalLabel">Details of G B Meeting (àª¸àª¾àª®àª¾àª¨à«àª¯ àª¸àª­àª¾àª¨à«€ àªµàª¿àª—àª¤à«‹)</h5>
+                    <h5 class="modal-title" id="addMemberModalLabel">Details of G B Meeting (સામાન્ય સભાની વિગતો)</h5>
                     <a class="btn-close btn-sm" data-bs-dismiss="modal" aria-label="Close"></a>
                 </div>
                 <div class="modal-body">
@@ -747,7 +760,7 @@
         <div class="modal-dialog modal-dialog-centered modal-lg">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="viewMeetingNoteModalLabel">Meeting Note (àª¬à«‡àª àª•àª¨à«€ àª¨à«‹àª‚àª§)</h5>
+                    <h5 class="modal-title" id="viewMeetingNoteModalLabel">Meeting Note (બેઠકની નોંધ)</h5>
                     <a class="btn-close btn-sm" data-bs-dismiss="modal" aria-label="Close"></a>
                 </div>
                 <div class="modal-body">
@@ -1173,6 +1186,13 @@
 
 
 
+    function getInitials(name) {
+        if (!name) return "AD";
+        var parts = name.trim().split(/\s+/);
+        if (parts.length === 1) return parts[0].substring(0, 2).toUpperCase();
+        return (parts[0][0] + parts[parts.length - 1][0]).toUpperCase();
+    }
+
     function GetDefendantList() {
         $.ajax({
             type: "POST",
@@ -1181,66 +1201,78 @@
             data: JSON.stringify({ ComplaintId: $("#hdfComplaintId").val() }),
             dataType: "json",
             success: function (response) {
-                if (response.IsSuccess) {
-                    if (response.Data != null) {
+                $('#selectDetails').empty();
+                if (response.IsSuccess && response.Data != null && response.Data.length > 0) {
+                    $('#advocateCountBadge').text(response.Data.length + (response.Data.length === 1 ? ' Advocate' : ' Advocates')).show();
 
-                        $('#selectDetails').append('');
+                    var TotalAmount = 0;
+                    var colClass = response.Data.length === 1 ? 'col-lg-5 col-md-7 col-12' : 'col-xl-4 col-lg-6 col-md-6 col-12';
 
-                        var TotalAmount = 0;
-                        $.each(response.Data, function (i, row) {
+                    $.each(response.Data, function (i, row) {
+                        var srNo = i + 1;
+                        var EnrollmentNumberTextId = 'txtEnrollmentNumber' + srNo;
+                        var EnrollmentIdHiddenId = 'hdfEnrollmentId' + srNo;
 
-                            var srNo = i + 1;
+                        var enrolBadgeHtml = '';
+                        if (row.EnrollmentNo != null && row.EnrollmentNo.toString().trim() !== '') {
+                            enrolBadgeHtml = '<span class="advocate-enrol-badge" title="Enrollment Number"><i class="fa-solid fa-id-card me-1 text-primary"></i> ' + row.EnrollmentNo.toString().trim() + '</span>';
+                        } else {
+                            enrolBadgeHtml = '<div class="advocate-enrol-input-wrap"><i class="fa-solid fa-pen-to-square text-muted me-1"></i><input id="' + EnrollmentNumberTextId + '" type="text" class="form-control form-control-sm advocate-enrol-input" placeholder="Enrollment No." onchange="EnrollmentNumberOnChange(' + srNo + ')" value=""><input id="' + EnrollmentIdHiddenId + '" type="hidden" value="' + (row.Id || '') + '"></div>';
+                        }
 
-                            var EnrollmentNumberTextId = 'txtEnrollmentNumber' + srNo;
-                            var EnrollmentIdHiddenId = 'hdfEnrollmentId' + srNo;
+                        var advocateName = (row.Name || row.AdvocateName || row.FullName || 'N/A').toString().trim();
+                        var initials = getInitials(advocateName);
+                        var rawAmount = row.Amount == null ? '0' : row.Amount == '' ? '0' : row.Amount;
+                        var displayAmount = (!isNaN(rawAmount) && parseFloat(rawAmount) > 0) ? '₹' + parseFloat(rawAmount).toLocaleString('en-IN') : '₹' + rawAmount;
 
-                            var VSelectDetails = '';
-                            if (row.EnrollmentNo != null) {
-                                if (row.EnrollmentNo != '') {
-                                    VSelectDetails = '<div class="complaint_number mb-1"><div class="title">Enrollment Number</div><a class="description">' + row.EnrollmentNo + '</a></div>';
-                                }
-                                else {
-                                    VSelectDetails = '<input id=' + EnrollmentNumberTextId + ' type="text" class="form-control" placeholder="Enrollment Number"  onchange=EnrollmentNumberOnChange(' + srNo + ') value=""><input id=' + EnrollmentIdHiddenId + ' type="hidden" value=' + row.Id + '>';
-                                }
-                            }
-                            else {
-                                VSelectDetails = '<input id=' + EnrollmentNumberTextId + ' type="text" class="form-control" placeholder="Enrollment Number"  onchange=EnrollmentNumberOnChange(' + srNo + ') value=""><input id=' + EnrollmentIdHiddenId + ' type="hidden" value=' + row.Id + '>';
-                            }
+                        var extraDetailsHtml = '';
+                        if (row.City || row.MobileNo) {
+                            extraDetailsHtml = '<div class="advocate-meta-tags">'
+                                             + (row.City ? '<span class="meta-tag"><i class="fa-solid fa-location-dot me-1 text-muted"></i>' + row.City + '</span>' : '')
+                                             + (row.MobileNo ? '<span class="meta-tag"><i class="fa-solid fa-phone me-1 text-muted"></i>' + row.MobileNo + '</span>' : '')
+                                             + '</div>';
+                        }
 
-                            var selectDetails = '';
-                            selectDetails = '<div class="col-md-4 mb-3"><div class="main_card_list main_card_list_border" ><div class="main_header_card">'
-                                             + '<div class="_left_side complaint_ag__left_side">'
-                                                 + '<div class="number mb-1">' + srNo + '</div>'
-                                                     + VSelectDetails
-                                                 + '</div>'
-                                                 + '<div class="rigth_side"></div>'
-                                             + '</div>'
-                                             + '<div class="main_card_list_body border-bottom">'
-                                                 + '<div class="row">'
-                                                     + '<div class="col-md-12 mt-2">'
-                                                         + '<div class="title">Full Name</div>'
-                                                         + '<div class="description">' + row.Name + '</div>'
-                                                     + '</div>'
-                                                 + '</div>'
-                                             + '</div>'
-                                             + '<div class="main_card_list_body">'
-                                                 + '<div class="row">'
-                                                     + '<div class="col-md-12 mt-2 text-end">'
-                                                         + '<div class="title">Amount: ' + row.Amount + '</div>'
-                                                     + '</div>'
-                                                 + '</div>'
-                                             + '</div>'
-                                         + '</div></div>';
-                            $('#selectDetails').append(selectDetails);
+                        var cardHtml = ''
+                            + '<div class="' + colClass + ' mb-3">'
+                                + '<div class="advocate-card">'
+                                    + '<div class="advocate-card-header">'
+                                        + '<span class="advocate-index-tag">'
+                                            + '<i class="fa-solid fa-hashtag font-size-10 me-1"></i> ' + srNo
+                                        + '</span>'
+                                        + enrolBadgeHtml
+                                    + '</div>'
+                                    + '<div class="advocate-card-body">'
+                                        + '<div class="advocate-profile-group">'
+                                            + '<div class="advocate-avatar-circle">' + initials + '</div>'
+                                            + '<div class="advocate-profile-details">'
+                                                + '<span class="advocate-role-title">Advocate Complained Against</span>'
+                                                + '<h6 class="advocate-name-heading" title="' + advocateName + '">' + advocateName + '</h6>'
+                                            + '</div>'
+                                        + '</div>'
+                                        + extraDetailsHtml
+                                    + '</div>'
+                                    + '<div class="advocate-card-footer">'
+                                        + '<span class="advocate-amount-label">'
+                                            + '<i class="fa-solid fa-receipt text-primary me-1"></i> Claim Fee'
+                                        + '</span>'
+                                        + '<span class="advocate-amount-badge">'
+                                            + displayAmount
+                                        + '</span>'
+                                    + '</div>'
+                                + '</div>'
+                            + '</div>';
 
-                            TotalAmount = TotalAmount + parseFloat(row.Amount == null ? '0' : row.Amount == '' ? '0' : row.Amount);
-                        });
+                        $('#selectDetails').append(cardHtml);
+                        TotalAmount = TotalAmount + parseFloat(rawAmount);
+                    });
 
-                        $("#lblManualFinalAmnt").text(TotalAmount);
-                    }
-                }
-                else {
-
+                    $("#lblManualFinalAmnt").text(TotalAmount);
+                } else {
+                    $('#advocateCountBadge').hide();
+                    var emptyStateHtml = '<div class="col-12"><div class="advocate-empty-state"><div class="empty-icon-wrap"><i class="fa-solid fa-user-slash"></i></div><h6>No Advocates Added</h6><p class="text-muted small mb-0">No advocate complained against has been recorded yet.</p></div></div>';
+                    $('#selectDetails').html(emptyStateHtml);
+                    $("#lblManualFinalAmnt").text(0);
                 }
             }, failure: function (result) {
                 swal('Something went wrong!', '', 'error');
@@ -2257,52 +2289,48 @@
             success: function (response) {
                 $('#dvreplyData').empty();
                 var dcReply = $('#dvreplyData');
-                if (response.IsSuccess) {
+                if (response.IsSuccess && response.Data && response.Data.length > 0) {
                     $.each(response.Data, function (data, row) {
                         var FilePath = "'" + row.FilePath + "'";
                         var deleteBtnHtml = '';
                         if (row.IsShowDeleteButton === 'Y') {
-                            deleteBtnHtml = '<button type="button" class="btn btn-outline-danger btn-sm ms-2 py-0" style="font-size: 11px; line-height: 1.2;" onclick="deleteReply(\'' + row.Id + '\')"><i class="fa-solid fa-trash me-1"></i>Delete</button>';
+                            deleteBtnHtml = '<button type="button" class="btn btn-outline-danger btn-sm rounded-circle p-0 ms-2" style="width: 26px; height: 26px; display: inline-flex; align-items: center; justify-content: center;" onclick="deleteReply(\'' + row.Id + '\')" title="Delete Reply"><i class="fa-solid fa-trash font-size-10"></i></button>';
                         }
-                        var RowItem = '<div class="replaydetailsmain">'
-                                        + '<div class="Sub_titile d-flex justify-content-between sendernamestyle">'
-                                            + '<div class="fw-bold font-size-17 text-dark"><i class="fa-solid fa-user text-muted me-2"></i>' + row.SenderName + '</div>'
+                        var initials = (row.SenderName ? row.SenderName.substring(0, 2).toUpperCase() : 'AD');
+                        var RowItem = '<div class="reply-item-card">'
+                                        + '<div class="reply-header">'
+                                            + '<div class="reply-sender-info">'
+                                                + '<div class="reply-avatar">' + initials + '</div>'
+                                                + '<span class="reply-sender-name">' + (row.SenderName || 'Advocate') + '</span>'
+                                            + '</div>'
                                             + '<div class="d-flex align-items-center">'
-                                                + '<span class="fw-bold font-size-17 text-dark"><i class="fa-regular fa-clock text-muted me-2"></i>' + row.SCreateDate + ' ' + row.SCreateTime + '</span>'
+                                                + '<span class="reply-date-badge"><i class="fa-regular fa-clock me-1"></i>' + row.SCreateDate + ' ' + row.SCreateTime + '</span>'
                                                 + deleteBtnHtml
                                             + '</div>'
                                         + '</div>';
 
                         if (row.Summery != null && row.Summery.trim() !== "") {
-                            RowItem += '<div class="Sub_titile mt-2">'
-                                             + 'Summery | Short Information'
-                                        + '</div>'
-                                        + '<div class="main_contentupdate">'
-                                             + '<p>' + row.Summery + '</p>'
+                            RowItem += '<div class="reply-summary-callout">'
+                                             + '<div class="reply-summary-title"><i class="fa-solid fa-quote-left me-1"></i> Summary | Short Information</div>'
+                                             + '<p class="reply-summary-text">' + row.Summery + '</p>'
                                         + '</div>';
                         }
 
                         if (row.Comprehensive != null && row.Comprehensive.trim() !== "") {
-                            RowItem += '<div class="Sub_titile mt-3">'
-                                             + 'Comprehensive Complaint'
-                                        + '</div>'
-                                        + '<div class="main_contentupdate">'
-                                             + '<p>' + row.Comprehensive + '</p>'
+                            RowItem += '<div class="reply-comprehensive-block">'
+                                             + '<div class="reply-comprehensive-title"><i class="fa-regular fa-file-lines me-1"></i> Comprehensive Response</div>'
+                                             + '<p class="reply-comprehensive-text">' + row.Comprehensive + '</p>'
                                         + '</div>';
                         }
 
                         if (row.FilePath != null && row.FilePath.trim() !== "") {
-                            RowItem += '<div class="Sub_titile mt-3">Attachment</div>'
-                                            + '<div class="main_contentupdate">'
-                                                + '<div class="fileupload_details">'
-                                                    + '<div class="d-flex align-items-center" onclick="getFile(' + FilePath + ')" style="cursor:pointer;" title="Click to view file">'
-                                                        + '<div class="pdf-btn btn-sm">'
-                                                            + '<img src="/assets/img/pdficon.svg">'
-                                                        + '</div>'
-                                                        + '<div class="fileupload_name text-primary text-decoration-underline">' + row.FileName + '</div>'
-                                                    + '</div>'
-                                                + '</div>'
-                                            + '</div>';
+                            RowItem += '<div>'
+                                            + '<div class="reply-attachment-chip" onclick="getFile(' + FilePath + ')" title="Click to view file">'
+                                                + '<i class="fa-solid fa-file-pdf text-danger font-size-16"></i>'
+                                                + '<span class="font-size-12 fw-semibold text-primary">' + row.FileName + '</span>'
+                                                + '<i class="fa-regular fa-eye font-size-11 text-muted ms-1"></i>'
+                                            + '</div>'
+                                        + '</div>';
                         }
 
                         RowItem += '</div>';
@@ -2311,7 +2339,7 @@
                     dcReply.scrollTop(0);
                 }
                 else {
-                    dcReply.append('No data available');
+                    dcReply.html('<div class="empty-doc-placeholder text-center"><div class="empty-icon-circle"><i class="fa-regular fa-comments"></i></div><div class="text-dark fw-semibold font-size-13">No replies or communications logged yet.</div><div class="text-muted font-size-12">Use the reply composer below to log communications.</div></div>');
                 }
             }, failure: function (result) {
                 swal('Something went wrong!', '', 'error');
@@ -2816,7 +2844,7 @@
     }
 
     function viewMeetingNote(btn) {
-        var noteText = $(btn).closest('.col-md-12').find('.meeting-note-content').text();
+        var noteText = $(btn).closest('.gb-meeting-card, .col-md-12, .main_card_list_body').find('.meeting-note-content').text();
         $('#lblViewMeetingNoteText').text(noteText);
         $('#mbViewMeetingNote').modal('show');
     }
@@ -2856,7 +2884,7 @@
     }
 
     function editGBMeetingLog(id, btn) {
-        var $card = $(btn).closest('.main_card_list_body');
+        var $card = $(btn).closest('.gb-meeting-card, .main_card_list_body');
         var title = $card.find('.meeting-title-content').text().trim();
         var dateStr = $card.find('.meeting-date-content').text().trim();
         var noteText = $card.find('.meeting-note-content').text();
@@ -2931,37 +2959,31 @@
                 $container.empty();
                 if (response.IsSuccess && response.Data && response.Data.length > 0) {
                     $.each(response.Data, function (i, item) {
-                        var html = '<div class="main_card_list main_card_list_border p-12-custome mt-3">'
-                            + '<div class="main_card_list_body">'
-                                + '<div class="row">'
-                                    + '<div class="col-md-4">'
-                                        + '<div class="title">Meeting Date (àª¬à«‡àª àª•àª¨à«€ àª¤àª¾àª°à«€àª–)</div>'
-                                        + '<div class="description meeting-date-content">' + (item.MeetingDate || '') + '</div>'
-                                    + '</div>'
-                                    + '<div class="col-md-8">'
-                                        + '<div class="title">Meeting Title (àª…àªªàª²à«‹àª¡ àª¶à«€àª°à«àª·àª•)</div>'
-                                        + '<div class="description meeting-title-content">' + (item.MeetingTitle || '') + '</div>'
-                                    + '</div>'
-                                    + '<div class="col-md-12 mt-3">'
-                                        + '<div class="title d-flex justify-content-between align-items-center">'
-                                            + '<span>Meeting Note (àª¬à«‡àª àª•àª¨à«€ àª¨à«‹àª‚àª§)</span>'
-                                            + '<div>'
-                                                + '<button type="button" class="btn btn-outline-danger btn-sm px-2 py-0 me-1" style="font-size: 11px; line-height: 1.5;" onclick="deleteGBMeetingLog(\'' + item.Id + '\')"><i class="fa-solid fa-trash me-1"></i>Delete</button>'
-                                                + '<button type="button" class="btn btn-outline-info btn-sm px-2 py-0 me-1" style="font-size: 11px; line-height: 1.5;" onclick="editGBMeetingLog(\'' + item.Id + '\', this)"><i class="fa-solid fa-pen-to-square me-1"></i>Edit</button>'
-                                                + '<button type="button" class="btn btn-outline-primary btn-sm px-2 py-0" style="font-size: 11px; line-height: 1.5;" onclick="viewMeetingNote(this)"><i class="fa-solid fa-eye me-1"></i>View Note</button>'
-                                            + '</div>'
-                                        + '</div>'
-                                        + '<div class="description meeting-note-content">' + (item.MeetingNote || '') + '</div>'
-                                    + '</div>'
+                        var html = '<div class="gb-meeting-card">'
+                            + '<div class="gb-header-row">'
+                                + '<div>'
+                                    + '<span class="gb-date-badge"><i class="fa-regular fa-calendar me-1"></i> <span class="meeting-date-content">' + (item.MeetingDate || '') + '</span></span>'
+                                    + '<h6 class="gb-title meeting-title-content">' + (item.MeetingTitle || '') + '</h6>'
                                 + '</div>'
+                                + '<div class="gb-actions">'
+                                    + '<button type="button" class="btn btn-outline-primary btn-sm rounded-pill px-2.5 py-1 font-size-11 fw-semibold shadow-none" onclick="viewMeetingNote(this)"><i class="fa-solid fa-eye me-1"></i> View</button>'
+                                    + '<button type="button" class="btn btn-outline-info btn-sm rounded-pill px-2.5 py-1 font-size-11 fw-semibold shadow-none" onclick="editGBMeetingLog(\'' + item.Id + '\', this)"><i class="fa-solid fa-pen-to-square me-1"></i> Edit</button>'
+                                    + '<button type="button" class="btn btn-outline-danger btn-sm rounded-pill px-2.5 py-1 font-size-11 fw-semibold shadow-none" onclick="deleteGBMeetingLog(\'' + item.Id + '\')"><i class="fa-solid fa-trash me-1"></i> Delete</button>'
+                                + '</div>'
+                            + '</div>'
+                            + '<div class="gb-note-box">'
+                                + '<div class="gb-note-label"><i class="fa-regular fa-note-sticky text-indigo me-1"></i> Meeting Note (બેઠકની નોંધ)</div>'
+                                + '<p class="gb-note-content meeting-note-content">' + (item.MeetingNote || '') + '</p>'
                             + '</div>'
                         + '</div>';
                         $container.append(html);
                     });
+                } else {
+                    $container.html('<div class="empty-doc-placeholder text-center"><div class="empty-icon-circle"><i class="fa-regular fa-calendar-xmark"></i></div><div class="text-dark fw-semibold font-size-13">No General Board meeting records added yet.</div><div class="text-muted font-size-12">Click "Add Meeting" to log an official board meeting entry.</div></div>');
                 }
             },
             error: function () {
-                $('#dvGBMeetingList').empty();
+                $('#dvGBMeetingList').html('<div class="empty-doc-placeholder text-center"><div class="empty-icon-circle"><i class="fa-regular fa-calendar-xmark"></i></div><div class="text-dark fw-semibold font-size-13">No General Board meeting records added yet.</div><div class="text-muted font-size-12">Click "Add Meeting" to log an official board meeting entry.</div></div>');
             }
         });
     }
@@ -3015,14 +3037,13 @@
     }
 
     function triggerBoardHasApproved() {
+        GetDcNumberList();
         // Move the #boardAccept div into the small standalone modal popup
         $('#boardAcceptOnlyModalBody').append($('#boardAccept'));
-        $('#boardAccept').show(); // ensure it's visible inside the new modal
+        $('#boardAccept').removeClass('hide-element').show(); // remove hide-element class (!important) and ensure it's visible
 
         // Show the new modal popup
         $('#boardAcceptOnlyModal').modal('show');
-
-        // Update the dropdown values in the background for consistency
     }
 
     function updateStatusWithReason(status) {
@@ -3211,7 +3232,7 @@
     $(document).ready(function () {
         if (window.history && window.history.replaceState) {
             var currentPath = window.location.pathname.toLowerCase();
-            if (currentPath.indexOf('/complaint/detail/') !== -1 || currentPath.indexOf('/complaint/detailsnew/') !== -1 || window.location.search.toLowerCase().indexOf('id=') !== -1) {
+            if (currentPath.indexOf('/complaint/detail/') !== -1 || window.location.search.toLowerCase().indexOf('id=') !== -1) {
                 window.history.replaceState(null, '', '/Complaint/Detail');
             }
         }
@@ -3221,7 +3242,7 @@
         $('#boardAcceptOnlyModal').on('hidden.bs.modal', function () {
             // Restore #boardAccept to its original place right before #logDetails
             $('#logDetails').before($('#boardAccept'));
-            $('#boardAccept').hide(); // Hide it since the popup closed
+            $('#boardAccept').addClass('hide-element').hide(); // Re-add hide-element class and hide it since the popup closed
         });
     });
 </script>

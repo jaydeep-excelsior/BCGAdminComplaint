@@ -1,44 +1,93 @@
-
 @{
-    ViewBag.Title = "Index";
+    ViewBag.Title = "Complaint Management";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<div>
-    <div class="row mb-2">
-        <div class="col-12">
-            <div class="page-title-box d-sm-flex align-items-center justify-content-between">
-                <div>
-                    <h4 class="mb-sm-0 font-size-18">Complaint Management</h4>
-                    <div class="page-title-left mt-1">
-                        <ol class="breadcrumb m-0 font-size-13">
-                            <li class="breadcrumb-item"><a href="/Home/Index" class="text-muted">Dashboard</a></li>
-                            <li class="breadcrumb-item active">Complaint Management</li>
-                        </ol>
-                    </div>
-                </div>
-                <div class="page-title-right d-flex align-items-center">
-                    <div class="input-group input-group-sm me-2">
-                        <span class="input-group-text"><i class="fa-solid fa-magnifying-glass text-muted"></i></span>
-                        <input id="txtQuickSearch" class="form-control quicksearchcomplaintmanagement" placeholder="Quick Search (Name or contact number or email id or Complaint Number)">
-                    </div>
-                    <a href="/Complaint/AddComplaint" class="btn btn-sm btn-outline-primary me-2 text-nowrap"><i class="fa-solid fa-plus me-1"></i> Add Complaint</a>
-                    <a class="btn btn-sm btn-outline-primary text-nowrap" id="addfilter"><i class="fa-solid fa-filter me-1"></i> Filter</a>
-                </div>
+
+<div class="complaint-container">
+    <!-- Hero Header Banner -->
+    <div class="complaint-hero">
+        <div class="d-flex flex-wrap align-items-center justify-content-between gap-3">
+            <div>
+                <h2 class="complaint-hero-title">
+                    <i class="fa-solid fa-scale-balanced"></i>
+                    Complaint Management
+                    <span class="complaint-hero-badge">Bar Council of Gujarat</span>
+                </h2>
+                <p class="complaint-hero-subtitle">
+                    <i class="fa-solid fa-shield-halved"></i>
+                    Advocate disciplinary proceedings, public grievances & case record tracking
+                </p>
+            </div>
+            <div class="d-flex align-items-center gap-2">
+                <button type="button" class="btn btn-outline-light fw-semibold px-3 shadow-sm btn-hero-summary" id="btnOpenSummaryModal" onclick="openSummaryModal()">
+                    <i class="fa-solid fa-chart-pie me-1"></i> Summary
+                </button>
+                <a href="/Complaint/AddComplaint" class="btn btn-light fw-bold px-3 shadow-sm btn-hero-add">
+                    <i class="fa-solid fa-plus me-1 text-primary"></i> Add Complaint
+                </a>
+                <button type="button" class="btn btn-outline-light fw-semibold px-3 btn-hero-action" id="addfilter">
+                    <i class="fa-solid fa-filter me-1"></i> Filter
+                </button>
             </div>
         </div>
     </div>
-    <div class="card main_filter_div">
-        <div class="card-body">
-            <form action="#">
-                <div class="row">
-                    
+
+
+    <!-- Quick Status Filter Chips -->
+    <div class="quick-chips-wrapper">
+        <div class="quick-chip active-chip" data-status-filter="" onclick="applyQuickStatusChip(this, '')">
+            <i class="fa-solid fa-list-check"></i> All Complaints
+        </div>
+        <div class="quick-chip" data-status-filter="Old" onclick="applyQuickStatusChip(this, 'Old')">
+            <i class="fa-solid fa-clock-rotate-left text-warning"></i> Old
+        </div>
+        <div class="quick-chip" data-status-filter="New" onclick="applyQuickStatusChip(this, 'New')">
+            <i class="fa-solid fa-wand-magic-sparkles text-info"></i> New
+        </div>
+        <div class="quick-chip" data-status-filter="Accepted" onclick="applyQuickStatusChip(this, 'Accepted')">
+            <i class="fa-solid fa-circle-check text-success"></i> Accepted
+        </div>
+        <div class="quick-chip" data-status-filter="More Detail" onclick="applyQuickStatusChip(this, 'More Detail')">
+            <i class="fa-solid fa-circle-info text-warning"></i> More Detail
+        </div>
+        <div class="quick-chip" data-status-filter="Rejected" onclick="applyQuickStatusChip(this, 'Rejected')">
+            <i class="fa-solid fa-ban text-danger"></i> Rejected
+        </div>
+        <div class="quick-chip" data-status-filter="Refer to Board" onclick="applyQuickStatusChip(this, 'Refer to Board')">
+            <i class="fa-solid fa-gavel text-primary"></i> Refer to Board
+        </div>
+        <div class="quick-chip" data-status-filter="Board Accept" onclick="applyQuickStatusChip(this, 'Board Accept')">
+            <i class="fa-solid fa-clipboard-check text-info"></i> Board Accept
+        </div>
+        <div class="quick-chip" data-status-filter="Board Reject" onclick="applyQuickStatusChip(this, 'Board Reject')">
+            <i class="fa-solid fa-file-circle-xmark text-danger"></i> Board Reject
+        </div>
+        <div class="quick-chip" data-status-filter="Board Has Approved" onclick="applyQuickStatusChip(this, 'Board Has Approved')">
+            <i class="fa-solid fa-shield-halved text-success"></i> Board Has Approved
+        </div>
+        <div class="quick-chip" data-status-filter="Board Has Rejected" onclick="applyQuickStatusChip(this, 'Board Has Rejected')">
+            <i class="fa-solid fa-triangle-exclamation text-danger"></i> Board Has Rejected
+        </div>
+    </div>
+
+    <!-- Collapsible Advanced Filter Drawer -->
+    <div class="card main_filter_div shadow-sm">
+        <div class="card-body p-4">
+            <div class="d-flex align-items-center justify-content-between mb-3 border-bottom pb-2">
+                <div class="filter-section-title mb-0">
+                    <i class="fa-solid fa-sliders text-primary"></i> Advanced Search & Filters
                 </div>
-                <div class="row ">
-                    <div class="form-group col-md-6 col-sm-6 col-12 col-lg-3 mt-3">
-                        <label>Status</label>
+                <button type="button" class="btn btn-sm btn-link text-muted p-0 close_filterdiv">
+                    <i class="fa-solid fa-xmark fs-6"></i>
+                </button>
+            </div>
+            <form action="#" onsubmit="event.preventDefault();">
+                <div class="row g-3">
+                    <div class="col-lg-3 col-md-6 col-12">
+                        <label class="filter-input-label">Complaint Status</label>
                         <select id="drpStatus" class="form-control select2">
-                            <option value="">Select Status</option>
+                            <option value="">All Statuses</option>
                             <option value="New">New</option>
                             <option value="Old">Old</option>
                             <option value="Accepted">Accepted</option>
@@ -49,44 +98,46 @@
                             <option value="Board Reject">Board Reject</option>
                             <option value="Board Has Approved">Board Has Approved</option>
                             <option value="Board Has Rejected">Board Has Rejected</option>
-                            @*<option value="Hearing">Hearing</option>
-                            <option value="Adjunt">Adjunt</option>
-                            <option value="Order Passed">Order Passed</option>*@
                         </select>
                     </div>
-                    <div class="form-group col-md-6 col-sm-6 col-12 col-lg-3 mt-3">
-                        <label>Payment Status</label>
+                    <div class="col-lg-3 col-md-6 col-12">
+                        <label class="filter-input-label">Payment Status</label>
                         <select id="drpPaymentStatus" class="form-control select2">
-                            <option value="">Select Payment Status</option>
+                            <option value="">All Payment Statuses</option>
                             <option value="Pending">Pending</option>
                             <option value="Parcel Due">Parcel Due</option>
                             <option value="Completed">Completed</option>
                         </select>
                     </div>
-                    <div class="form-group col-md-6 col-sm-6 col-12 col-lg-3 mt-3">
-                        <label> From Date:</label>
-                        <input name="txtFromDate" id="txtFromDate" type="date" placeholder="DD/MM/YYYY" class="form-control" max="2999-12-31">
+                    <div class="col-lg-3 col-md-6 col-12">
+                        <label class="filter-input-label">From Date</label>
+                        <input name="txtFromDate" id="txtFromDate" type="date" class="form-control filter-input" max="2999-12-31">
                     </div>
-                    <div class="form-group col-md-6 col-sm-6 col-12 col-lg-2 mt-3">
-                        <label> To Date:</label>
-                        <input name="txtToDate" id="txtToDate" type="date" placeholder="DD/MM/YYYY" class="form-control" max="2999-12-31">
+                    <div class="col-lg-3 col-md-6 col-12">
+                        <label class="filter-input-label">To Date</label>
+                        <input name="txtToDate" id="txtToDate" type="date" class="form-control filter-input" max="2999-12-31">
                     </div>
-                    <div class="form-group col-md-4 col-sm-4 col-12 col-lg-2 mt-3">
-                        <label> Year:</label>
-                        <input name="txtYear" id="txtYear" type="number" placeholder="YYYY" class="form-control">
+
+                    <div class="col-lg-3 col-md-4 col-12">
+                        <label class="filter-input-label">Year</label>
+                        <input name="txtYear" id="txtYear" type="number" placeholder="e.g. 2026" class="form-control filter-input">
                     </div>
-                    <div class="form-group col-md-4 col-sm-4 col-12 col-lg-2 mt-3">
-                        <label> From No.:</label>
-                        <input name="txtFromNo" id="txtFromNo" type="number" placeholder="From No." class="form-control">
+                    <div class="col-lg-3 col-md-4 col-12">
+                        <label class="filter-input-label">From Number</label>
+                        <input name="txtFromNo" id="txtFromNo" type="number" placeholder="From No." class="form-control filter-input">
                     </div>
-                    <div class="form-group col-md-4 col-sm-4 col-12 col-lg-2 mt-3">
-                        <label> To No.:</label>
-                        <input name="txtToNo" id="txtToNo" type="number" placeholder="To No." class="form-control">
+                    <div class="col-lg-3 col-md-4 col-12">
+                        <label class="filter-input-label">To Number</label>
+                        <input name="txtToNo" id="txtToNo" type="number" placeholder="To No." class="form-control filter-input">
                     </div>
-                    <div class="form-group col-md-12 mt-3">
-                        <div>
-                            <a id="lnkFilter" class="close_filterdiv btn-sm btn btn-outline-primary waves-effect waves-light btn-sm"><i class="fa-solid fa-magnifying-glass me-1"></i> Search</a>
-                            <a id="btnCancel" class="btn btn-outline-danger waves-effect m-l-5 btn-sm close_filterdiv btn-sm"><i class="fa-solid fa-xmark me-1"></i> Cancel</a>
+                    <div class="col-lg-3 col-md-12 col-12 d-flex align-items-end">
+                        <div class="w-100 d-flex gap-2">
+                            <button type="button" id="lnkFilter" class="btn btn-primary btn-sm flex-fill fw-semibold py-2">
+                                <i class="fa-solid fa-magnifying-glass me-1"></i> Search
+                            </button>
+                            <button type="button" id="btnCancel" class="btn btn-outline-danger btn-sm px-3 py-2 fw-semibold">
+                                <i class="fa-solid fa-rotate-left me-1"></i> Reset
+                            </button>
                         </div>
                     </div>
                 </div>
@@ -94,122 +145,337 @@
         </div>
     </div>
 
-    <div id="tblComplaintList">
-    </div>
-
-    <div id="paginationDiv" class="mt-3 d-flex justify-content-between align-items-center">
-        <div id="entriesInfo" class="fw-bold text-dark mb-0"></div>
-        <ul class="pagination pagination-rounded mb-0" id="paginationList"></ul>
-    </div>
-
-    <div class="modal fade" id="pdfModal" tabindex="-1" role="dialog" aria-hidden="true" style="z-index: 1060;">
-        <div class="modal-dialog modal-dialog-centered modal-xl" style="max-width: 90vw;">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h4 class="modal-title">File Preview</h4>
-                    <a class="btn-close btn-sm" data-dismiss="modal" data-bs-dismiss="modal" aria-hidden="true"></a>
-                </div>
-                <div class="modal-body p-0">
-                    <iframe src="" id="displayPdf" style="width: 100%; height: 80vh; border: none;"></iframe>
-                </div>
-            </div>
+    <!-- Quick Search & Actions Toolbar -->
+    <div class="action-bar-card d-flex flex-wrap align-items-center justify-content-between gap-3">
+        <div class="quick-search-wrap">
+            <i class="fa-solid fa-magnifying-glass quick-search-icon"></i>
+            <input id="txtQuickSearch" class="quick-search-input quicksearchcomplaintmanagement" placeholder="Quick Search by Name, Contact, Email or Complaint No...">
         </div>
+        <div class="d-flex align-items-center gap-2">
+            <span class="text-muted small" id="liveResultsBadge"></span>
+        </div>
+    </div>
+
+    <!-- Complaint Cards List Container -->
+    <div id="tblComplaintList">
+        <!-- Rendered via AJAX -->
+    </div>
+
+    <!-- Pagination & Entries Info -->
+    <div id="paginationDiv" class="pagination-wrapper initially-hidden">
+        <div id="entriesInfo" class="entries-text"></div>
+        <ul class="pagination pagination-rounded mb-0" id="paginationList"></ul>
     </div>
 </div>
 
-<div class="modal fade" id="document" tabindex="-1" role="dialog" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h4 class="modal-title">Document Preview</h4>
-                <a class="btn-close btn-sm" data-dismiss="modal" aria-hidden="true"></a>
-            </div>
-            <div class="modal-body">
-                <div id="tblComplaintDoc" style="display:none;">
+<!-- ==========================================================================
+     MODALS
+     ========================================================================== -->
 
+<!-- Complaint Status Summary Modal -->
+<div class="modal fade" id="complaintSummaryModal" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-xl modal-dialog-scrollable">
+        <div class="modal-content border-0 shadow-lg">
+            <div class="modal-header py-3 px-4">
+                <div class="d-flex align-items-center gap-2">
+                    <div class="summary-modal-icon-badge">
+                        <i class="fa-solid fa-chart-pie"></i>
+                    </div>
+                    <div>
+                        <h5 class="modal-title fw-bold text-dark mb-0 font-size-17">Complaints Status Summary</h5>
+                        <p class="summary-modal-subtitle text-muted mb-0">Click any card to filter complaints list by that status</p>
+                    </div>
                 </div>
-                <div id="tblComplaintDocEmpty" style="display:none;">
-                    <div class="main_card_list mb-2">
-                        <div class="main_card_list_body text-center p-4">
-                            <h6 class="text-danger mb-0">No Upload Complaint Document Files<br/>(ફરિયાદ સોગંદનામાની નકલ)</h6>
+                <div class="d-flex align-items-center gap-2 ms-auto">
+                    <button type="button" class="btn btn-sm btn-outline-primary" id="btnRefreshSummary" onclick="loadComplaintSummary()">
+                        <i class="fa-solid fa-rotate me-1"></i> Refresh
+                    </button>
+                    <button type="button" class="btn-close btn-sm" onclick="closeSummaryModal()" aria-label="Close"></button>
+                </div>
+            </div>
+            <div class="modal-body p-4">
+                <!-- Row 1: Key Overview (Total, Old, New) -->
+                <div class="row g-3 mb-3">
+                    <div class="col-lg-4 col-md-4 col-12">
+                        <div class="summary-metric-card card-blue" onclick="filterBySummaryStatus('')">
+                            <div>
+                                <div class="summary-lbl">Total Complaint</div>
+                                <div class="summary-val text-primary" id="summaryTotal">0</div>
+                                <div class="summary-hint"><i class="fa-solid fa-arrow-right font-size-10"></i> Show all complaints</div>
+                            </div>
+                            <div class="summary-icon-box">
+                                <i class="fa-solid fa-folder-open"></i>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-4 col-md-4 col-sm-6 col-12">
+                        <div class="summary-metric-card card-amber" onclick="filterBySummaryStatus('Old')">
+                            <div>
+                                <div class="summary-lbl">Old</div>
+                                <div class="summary-val text-warning" id="summaryOld">0</div>
+                                <div class="summary-hint"><i class="fa-solid fa-arrow-right font-size-10"></i> Filter Old complaints</div>
+                            </div>
+                            <div class="summary-icon-box">
+                                <i class="fa-solid fa-clock-rotate-left"></i>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-4 col-md-4 col-sm-6 col-12">
+                        <div class="summary-metric-card card-cyan" onclick="filterBySummaryStatus('New')">
+                            <div>
+                                <div class="summary-lbl">New</div>
+                                <div class="summary-val text-info" id="summaryNew">0</div>
+                                <div class="summary-hint"><i class="fa-solid fa-arrow-right font-size-10"></i> Filter New complaints</div>
+                            </div>
+                            <div class="summary-icon-box">
+                                <i class="fa-solid fa-wand-magic-sparkles"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Row 2: Standard Statuses (Accepted, More Detail, Rejected, Refer to Board) -->
+                <div class="row g-3 mb-3">
+                    <div class="col-lg-3 col-md-6 col-sm-6 col-12">
+                        <div class="summary-metric-card card-emerald" onclick="filterBySummaryStatus('Accepted')">
+                            <div>
+                                <div class="summary-lbl">Accepted</div>
+                                <div class="summary-val text-success" id="summaryAccepted">0</div>
+                                <div class="summary-hint"><i class="fa-solid fa-arrow-right font-size-10"></i> Filter Accepted</div>
+                            </div>
+                            <div class="summary-icon-box">
+                                <i class="fa-solid fa-circle-check"></i>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-3 col-md-6 col-sm-6 col-12">
+                        <div class="summary-metric-card card-orange" onclick="filterBySummaryStatus('More Detail')">
+                            <div>
+                                <div class="summary-lbl">More Detail</div>
+                                <div class="summary-val val-orange" id="summaryMoreDetail">0</div>
+                                <div class="summary-hint"><i class="fa-solid fa-arrow-right font-size-10"></i> Filter More Detail</div>
+                            </div>
+                            <div class="summary-icon-box">
+                                <i class="fa-solid fa-circle-info"></i>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-3 col-md-6 col-sm-6 col-12">
+                        <div class="summary-metric-card card-red" onclick="filterBySummaryStatus('Rejected')">
+                            <div>
+                                <div class="summary-lbl">Rejected</div>
+                                <div class="summary-val text-danger" id="summaryRejected">0</div>
+                                <div class="summary-hint"><i class="fa-solid fa-arrow-right font-size-10"></i> Filter Rejected</div>
+                            </div>
+                            <div class="summary-icon-box">
+                                <i class="fa-solid fa-circle-xmark"></i>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-3 col-md-6 col-sm-6 col-12">
+                        <div class="summary-metric-card card-indigo" onclick="filterBySummaryStatus('Refer to Board')">
+                            <div>
+                                <div class="summary-lbl">Refer to Board</div>
+                                <div class="summary-val val-indigo" id="summaryReferToBoard">0</div>
+                                <div class="summary-hint"><i class="fa-solid fa-arrow-right font-size-10"></i> Filter Refer to Board</div>
+                            </div>
+                            <div class="summary-icon-box">
+                                <i class="fa-solid fa-gavel"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Row 3: Board Proceedings & Outcomes (Board Accept, Board Reject, Board Has Approved, Board Has Rejected) -->
+                <div class="row g-3">
+                    <div class="col-lg-3 col-md-6 col-sm-6 col-12">
+                        <div class="summary-metric-card card-teal" onclick="filterBySummaryStatus('Board Accept')">
+                            <div>
+                                <div class="summary-lbl">Board Accept</div>
+                                <div class="summary-val val-teal" id="summaryBoardAccept">0</div>
+                                <div class="summary-hint"><i class="fa-solid fa-arrow-right font-size-10"></i> Filter Board Accept</div>
+                            </div>
+                            <div class="summary-icon-box">
+                                <i class="fa-solid fa-clipboard-check"></i>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-3 col-md-6 col-sm-6 col-12">
+                        <div class="summary-metric-card card-rose" onclick="filterBySummaryStatus('Board Reject')">
+                            <div>
+                                <div class="summary-lbl">Board Reject</div>
+                                <div class="summary-val val-rose" id="summaryBoardReject">0</div>
+                                <div class="summary-hint"><i class="fa-solid fa-arrow-right font-size-10"></i> Filter Board Reject</div>
+                            </div>
+                            <div class="summary-icon-box">
+                                <i class="fa-solid fa-file-circle-xmark"></i>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-3 col-md-6 col-sm-6 col-12">
+                        <div class="summary-metric-card card-green" onclick="filterBySummaryStatus('Board Has Approved')">
+                            <div>
+                                <div class="summary-lbl">Board Has Approved</div>
+                                <div class="summary-val val-green" id="summaryBoardHasApproved">0</div>
+                                <div class="summary-hint"><i class="fa-solid fa-arrow-right font-size-10"></i> Filter Approved</div>
+                            </div>
+                            <div class="summary-icon-box">
+                                <i class="fa-solid fa-shield-halved"></i>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-3 col-md-6 col-sm-6 col-12">
+                        <div class="summary-metric-card card-crimson" onclick="filterBySummaryStatus('Board Has Rejected')">
+                            <div>
+                                <div class="summary-lbl">Board Has Rejected</div>
+                                <div class="summary-val val-crimson" id="summaryBoardHasRejected">0</div>
+                                <div class="summary-hint"><i class="fa-solid fa-arrow-right font-size-10"></i> Filter Rejected</div>
+                            </div>
+                            <div class="summary-icon-box">
+                                <i class="fa-solid fa-triangle-exclamation"></i>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
+            <div class="modal-footer py-2 px-4 d-flex justify-content-between align-items-center">
+                <span class="text-muted small"><i class="fa-solid fa-arrow-pointer me-1 text-primary"></i> Click any card above to close and filter list</span>
+                <button type="button" class="btn btn-secondary btn-sm px-3" onclick="closeSummaryModal()">Close</button>
+            </div>
         </div>
     </div>
 </div>
 
-<div class="modal fade" id="Adjunt" tabindex="-1" role="dialog" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+<!-- PDF Full-Screen / Large Preview Modal -->
+<div class="modal fade" id="pdfModal" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-xl pdf-modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
-                <h4 class="modal-title">Details of Advocate - Complained Against<br>(&#x0A9C;&#x0AC7; &#x0AB5;&#x0A95;&#x0AC0;&#x0AB2; &#x0AB5;&#x0ABF;&#x0AB0;&#x0AC1;&#x0AA6;&#x0ACD;&#x0AA7; &#x0AAB;&#x0AB0;&#x0ABF;&#x0AAF;&#x0ABE;&#x0AA6; &#x0A95;&#x0AB0;&#x0AB5;&#x0ABE;&#x0AAE;&#x0ABE;&#x0A82; &#x0A86;&#x0AB5;&#x0AC0; &#x0A9B;&#x0AC7; &#x0AA4;&#x0AC7;&#x0AA8;&#x0AC0; &#x0AB5;&#x0ABF;&#x0A97;&#x0AA4;&#x0ACB;)</h4>
-                <a class="btn-close btn-sm" data-dismiss="modal" aria-hidden="true"></a>
+                <h5 class="modal-title d-flex align-items-center gap-2">
+                    <i class="fa-solid fa-file-pdf text-danger"></i> Document Preview
+                </h5>
+                <button type="button" class="btn-close btn-sm" data-bs-dismiss="modal" data-dismiss="modal" aria-label="Close"></button>
             </div>
-            <div class="modal-body">
-                <div id="tblComplaintAgaints">
-                </div>
+            <div class="modal-body p-0">
+                <iframe src="" id="displayPdf" class="pdf-preview-iframe"></iframe>
             </div>
         </div>
     </div>
 </div>
 
+<!-- Document List Modal -->
+<div class="modal fade" id="document" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-lg modal-dialog-scrollable">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title d-flex align-items-center gap-2">
+                    <i class="fa-solid fa-folder-open text-primary"></i> Uploaded Complaint Documents
+                </h5>
+                <button type="button" class="btn-close btn-sm" data-bs-dismiss="modal" data-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div id="tblComplaintDoc" class="initially-hidden"></div>
+                <div id="tblComplaintDocEmpty" class="initially-hidden">
+                    <div class="empty-state-box py-4">
+                        <div class="empty-state-icon empty-state-icon-sm">
+                            <i class="fa-solid fa-file-circle-xmark text-muted"></i>
+                        </div>
+                        <h6 class="empty-state-heading fs-6">No Documents Uploaded</h6>
+                        <p class="empty-state-desc mb-0 small text-muted">
+                            No affidavit copy or additional attachment has been uploaded for this complaint.<br/>
+                            (કોઈ ફરિયાદ સોગંદનામાની નકલ અપલોડ કરેલ નથી)
+                        </p>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-outline-secondary btn-sm px-3" data-bs-dismiss="modal" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Adjunt / Advocate Details Modal -->
+<div class="modal fade" id="Adjunt" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-lg modal-dialog-scrollable">
+        <div class="modal-content">
+            <div class="modal-header">
+                <div>
+                    <h5 class="modal-title mb-1 d-flex align-items-center gap-2">
+                        <i class="fa-solid fa-gavel text-primary"></i> Advocate Details (Complained Against)
+                    </h5>
+                    <div class="small text-muted">(જે વકીલ વિરુદ્ધ ફરિયાદ કરવામાં આવી છે તેની વિગતો)</div>
+                </div>
+                <button type="button" class="btn-close btn-sm" data-bs-dismiss="modal" data-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div id="tblComplaintAgaints"></div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-outline-secondary btn-sm px-3" data-bs-dismiss="modal" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Update Complaint Number Modal -->
 <div class="modal fade" id="UpdateComplaintNumberModal" tabindex="-1" role="dialog" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">
             <div class="modal-header">
-                <h4 class="modal-title">Update Complaint Number</h4>
-                <a class="btn-close btn-sm" data-dismiss="modal" data-bs-dismiss="modal" aria-hidden="true"></a>
+                <h5 class="modal-title d-flex align-items-center gap-2">
+                    <i class="fa-solid fa-pen-to-square text-primary"></i> Update Complaint Number
+                </h5>
+                <button type="button" class="btn-close btn-sm" data-bs-dismiss="modal" data-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
                 <input type="hidden" id="hdfUpdateComplaintId" />
                 <div class="form-group mb-3">
-                    <label class="text-muted">Current Complaint Number</label>
+                    <label class="filter-input-label">Current Complaint Number</label>
                     <input type="text" id="lblCurrentComplaintNumber" class="form-control fw-bold bg-light" readonly disabled />
                 </div>
                 <div class="form-group mb-3">
-                    <label>New Complaint Number</label>
+                    <label class="filter-input-label">New Complaint Number</label>
                     <div class="input-group">
-                        <span class="input-group-text">BCG/CMP/</span>
-                        <input type="number" id="txtNewComplaintNumberPart1" class="form-control" placeholder="Number" />
-                        <span class="input-group-text">/</span>
+                        <span class="input-group-text fw-bold text-muted bg-light">BCG/CMP/</span>
+                        <input type="number" id="txtNewComplaintNumberPart1" class="form-control" placeholder="Number (e.g. 118)" />
+                        <span class="input-group-text fw-bold text-muted bg-light">/</span>
                         <select id="txtNewComplaintNumberPart2" class="form-select"></select>
                     </div>
                 </div>
             </div>
             <div class="modal-footer">
-                <a class="btn btn-outline-danger btn-sm" data-dismiss="modal" data-bs-dismiss="modal"><i class="fa-solid fa-xmark me-1"></i> Close</a>
-                <a class="btn btn-outline-primary btn-sm" id="btnUpdateComplaintNumber"><i class="fa-solid fa-pen-to-square me-1"></i> Update</a>
+                <button type="button" class="btn btn-outline-secondary btn-sm px-3" data-bs-dismiss="modal" data-dismiss="modal">Cancel</button>
+                <button type="button" class="btn btn-primary btn-sm px-3 fw-semibold" id="btnUpdateComplaintNumber">
+                    <i class="fa-solid fa-check me-1"></i> Update Number
+                </button>
             </div>
         </div>
     </div>
 </div>
 
+<!-- Share with DC Committee Modal -->
 <div class="modal fade" id="shareDcCommitteeModal" tabindex="-1" role="dialog" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered modal-lg">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title">Share with D.C. Committee Members</h5>
-                <a class="btn-close btn-sm" data-bs-dismiss="modal" aria-hidden="true"></a>
+                <h5 class="modal-title d-flex align-items-center gap-2">
+                    <i class="fa-solid fa-users text-primary"></i> Share with D.C. Committee Members
+                </h5>
+                <button type="button" class="btn-close btn-sm" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
-            <div class="modal-body" style="max-height: 400px; overflow-y: auto;">
-                <div class="row">
-                    <div class="col-12" id="tblShareDcMembers">
-                        <!-- Members will be appended here -->
-                    </div>
-                </div>
+            <div class="modal-body modal-body-scrollable-420">
+                <div id="tblShareDcMembers"></div>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-outline-secondary btn-sm" data-bs-dismiss="modal">Close</button>
-                <button type="button" class="btn btn-outline-primary btn-sm" id="btnShareWithSelectedMembers" style="display: none;">Share</button>
+                <button type="button" class="btn btn-outline-secondary btn-sm px-3" data-bs-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary btn-sm px-3 fw-semibold initially-hidden" id="btnShareWithSelectedMembers">
+                    <i class="fa-solid fa-share-nodes me-1"></i> Share with Selected Members
+                </button>
             </div>
         </div>
     </div>
 </div>
-
-<script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
 
 <script>
     var baseFilter = {
@@ -232,13 +498,65 @@
     $(document).ready(function () {
         initSelect2();
         GetComplaintList();
+
+        $('#complaintSummaryModal').on('show.bs.modal', function () {
+            loadComplaintSummary();
+        });
+
+        // Purge any gray backdrop overlay on modal close
+        $('#complaintSummaryModal').on('hidden.bs.modal hide.bs.modal', function () {
+            $('.modal-backdrop').remove();
+            $('body').removeClass('modal-open').css({ 'overflow': '', 'padding-right': '' });
+            setTimeout(function () {
+                $('.modal-backdrop').remove();
+                $('body').removeClass('modal-open').css({ 'overflow': '', 'padding-right': '' });
+            }, 100);
+        });
+
+        $(document).on('hidden.bs.modal', '.modal', function () {
+            if ($('.modal.show, .modal.in').length === 0) {
+                $('.modal-backdrop').remove();
+                $('body').removeClass('modal-open').css({ 'overflow': '', 'padding-right': '' });
+            }
+        });
+
+        loadComplaintSummary();
     });
+
+    // Helper: Compute status styling attributes
+    function getStatusMeta(status) {
+        var s = (status || "").toLowerCase().trim();
+        if (s.indexOf("board has approved") >= 0) return { color: "approved", badgeClass: "badge-status-approved", icon: "fa-shield-halved" };
+        if (s.indexOf("board has rejected") >= 0) return { color: "board-rejected", badgeClass: "badge-status-board-rejected", icon: "fa-triangle-exclamation" };
+        if (s.indexOf("board accept") >= 0) return { color: "board-accept", badgeClass: "badge-status-board-accept", icon: "fa-clipboard-check" };
+        if (s.indexOf("board reject") >= 0) return { color: "board-reject", badgeClass: "badge-status-board-reject", icon: "fa-file-circle-xmark" };
+        if (s.indexOf("refer to board") >= 0 || s.indexOf("general board") >= 0) return { color: "board", badgeClass: "badge-status-board", icon: "fa-gavel" };
+        if (s.indexOf("accepted") >= 0 || s === "accept") return { color: "accepted", badgeClass: "badge-status-accepted", icon: "fa-circle-check" };
+        if (s.indexOf("rejected") >= 0 || s === "reject") return { color: "rejected", badgeClass: "badge-status-rejected", icon: "fa-ban" };
+        if (s.indexOf("detail") >= 0) return { color: "detail", badgeClass: "badge-status-detail", icon: "fa-circle-info" };
+        if (s.indexOf("old") >= 0) return { color: "old", badgeClass: "badge-status-old", icon: "fa-clock-rotate-left" };
+        if (s.indexOf("new") >= 0) return { color: "new", badgeClass: "badge-status-new", icon: "fa-wand-magic-sparkles" };
+        if (s.indexOf("payment") >= 0) return { color: "payment", badgeClass: "badge-status-payment", icon: "fa-circle-check" };
+        if (s.indexOf("withdrawal") >= 0) return { color: "withdrawal", badgeClass: "badge-status-withdrawal", icon: "fa-arrow-right-from-bracket" };
+        if (s.indexOf("hearing") >= 0) return { color: "hearing", badgeClass: "badge-status-hearing", icon: "fa-scale-balanced" };
+        if (s.indexOf("adjunt") >= 0) return { color: "adjunt", badgeClass: "badge-status-adjunt", icon: "fa-user-shield" };
+        if (s.indexOf("order") >= 0) return { color: "order", badgeClass: "badge-status-order", icon: "fa-stamp" };
+        return { color: "default", badgeClass: "badge-status-default", icon: "fa-tag" };
+    }
+
+    // Helper: Get initials for avatar
+    function getInitials(name) {
+        if (!name) return "CP";
+        var parts = name.trim().split(/\s+/);
+        if (parts.length === 1) return parts[0].substring(0, 2).toUpperCase();
+        return (parts[0][0] + parts[parts.length - 1][0]).toUpperCase();
+    }
 
     function GetComplaintList() {
         var Data = JSON.stringify({
-            baseFilter,
-            Status: $("#drpStatus option:selected").text() == 'Select Status' ? "" : $("#drpStatus option:selected").text().trim(),
-            PaymentStatus: $("#drpPaymentStatus option:selected").text() == 'Select Payment Status' ? "" : $("#drpPaymentStatus option:selected").text().trim(),
+            baseFilter: baseFilter,
+            Status: $("#drpStatus option:selected").text() === 'All Statuses' || $("#drpStatus option:selected").text() === 'Select Status' ? "" : $("#drpStatus option:selected").text().trim(),
+            PaymentStatus: $("#drpPaymentStatus option:selected").text() === 'All Payment Statuses' || $("#drpPaymentStatus option:selected").text() === 'Select Payment Status' ? "" : $("#drpPaymentStatus option:selected").text().trim(),
             FromDate: $("#txtFromDate").val(),
             ToDate: $("#txtToDate").val(),
             Year: $("#txtYear").val(),
@@ -246,6 +564,13 @@
             ToNo: $("#txtToNo").val()
         });
 
+        // Skeleton loading state
+        $("#tblComplaintList").html(
+            '<div class="text-center py-5">'
+            + '<div class="spinner-border text-primary mb-3 spinner-lg" role="status"></div>'
+            + '<div class="text-muted fw-semibold">Loading complaint records...</div>'
+            + '</div>'
+        );
 
         $.ajax({
             type: 'POST',
@@ -258,124 +583,301 @@
                 var complaintList = $("#tblComplaintList");
 
                 if (response.IsSuccess && response.Data && response.Data.length > 0) {
-                    var totalRecords = response.Data[0].TotalRecord;
-                    $.each(response.Data, function (i, value) {
+                    var totalRecords = response.Data[0].TotalRecord || response.Data.length;
 
-                        var paymentStatusClass = "";
-                        if (value.PaymentStatus === "Due") {
-                            paymentStatusClass = "paymentstatusdue";
-                        } else if (value.PaymentStatus === "Paid") {
-                            paymentStatusClass = "paymentstatuspaid";
+                    // Update Top Metric Cards
+                    $("#metricTotal").text(totalRecords);
+                    var newCount = 0;
+                    var boardCount = 0;
+                    var paidCount = 0;
+
+                    $.each(response.Data, function (i, val) {
+                        if (val.Status === 'New' || val.NewStatusCount > 0) newCount++;
+                        if (val.Status === 'Refer to Board') boardCount++;
+                        if (val.PaymentStatus === 'Completed' || val.PaymentStatus === 'Paid') paidCount++;
+                    });
+
+                    $("#metricNew").text(newCount > 0 ? newCount : (response.Data[0].NewStatusCount || 0));
+                    $("#metricBoard").text(boardCount);
+                    $("#metricPaid").text(paidCount);
+
+                    $("#liveResultsBadge").html('<strong>' + totalRecords + '</strong> total records');
+
+                    $.each(response.Data, function (i, value) {
+                        var statusMeta = getStatusMeta(value.Status);
+                        var initials = getInitials(value.FullName);
+
+                        // Payment Status Pill
+                        var paymentBadgeHtml = "";
+                        var pStatus = (value.PaymentStatus || "").trim().toLowerCase();
+                        if (pStatus === "completed" || pStatus === "paid") {
+                            paymentBadgeHtml = '<span class="badge-payment-paid"><i class="fa-solid fa-circle-check"></i> Paid</span>';
+                        } else if (pStatus === "parcel due" || pStatus === "due") {
+                            paymentBadgeHtml = '<span class="badge-payment-due"><i class="fa-solid fa-triangle-exclamation"></i> Due</span>';
+                        } else {
+                            paymentBadgeHtml = '<span class="badge-payment-pending"><i class="fa-solid fa-clock"></i> ' + (value.PaymentStatus || "Pending") + '</span>';
                         }
 
-                        var FinalRowItem = '<div class="main_card_list mb-2 ribbon-wrapper">'
-                                            + (value.NewStatusCount > 0 ? '<div class="corner-ribbon bg-info text-white">New</div>' : '')
-                                            + (value.OldStatusCount > 0 ? '<div class="corner-ribbon bg-warning text-dark">Old</div>' : '')
-                                            + '<div class="main_header_card main_header_card__w_responsive">'
-                                                + '<div class="_left_side">'
-                                                    + '<div id="HdfId">' + value.Id + '</div>'
-                                                    + '<div class="number">' + value.SrNo + '</div>'
-                                                        + '<div class="d-flex mainnewresponsiveleftweb">'
-                                                            + '<div class="complaint_number">'
-                                                                + '<div class="title">Complaint Number</div>'
-                                                                + '<a class="description" href="/Complaint/Detail" onclick="document.cookie=\'ComplaintId=' + value.Id + '; path=/\';">' + value.ComplaintNumber + '</a>'
-                                                            + '</div>'
-                                                            + '<div class="complaint_number">'
-                                                                + '<div class="title">Date & Time</div>'
-                                                                + '<a class="description">' + value.ComplaintsCreateDate + '</a>'
-                                                            + '</div>'
-                                                            + '<div class="complaint_number">'
-                                                                + '<div class="title">Complaint Status</div>'
-                                                                + '<a class="description">' + value.Status + '</a>'
-                                                            + '</div>'
-                                                        + '</div>'
-                                                + '</div>'
-                                                
-                                            + '</div>'
-                                            + '<div class="main_header_card">'
-                                                + '<div class="main_card_list_body">'
-                                                    + '<div class="row">'
-                                                        + '<div class="col-md-3 col-sm-6 col-12 mt-2">'
-                                                            + '<div class="title">Full Name</div>'
-                                                            + '<div class="description">' + value.FullName + '</div>'
-                                                        + '</div>'
-                                                        + '<div class="col-md-2 col-sm-6 col-12 mt-2">'
-                                                            + '<div class="title">Contact Number</div>'
-                                                            + '<div class="description">' + value.ContactNumber + '</div>'
-                                                        + '</div>'
-                                                        + '<div class="col-md-2 col-sm-6 col-12 mt-2">'
-                                                            + '<div class="title">Email</div>'
-                                                            + '<div class="description">' + value.EmailAddress + '</div>'
-                                                        + '</div>'
-                                                        + '<div class="col-md-1 col-sm-6 col-12 mt-2">'
-                                                            + '<div class="title">Total Amt</div>'
-                                                            + '<div class="description">' + value.TotalAmount + '</div>'
-                                                        + '</div>'
-                                                        + '<div class="col-md-1 col-sm-6 col-12 mt-2">'
-                                                            + '<div class="title">Paid Amt</div>'
-                                                            + '<div class="description">' + (value.PaidAmount != null ? value.PaidAmount : 0) + '</div>'
-                                                        + '</div>'
-                                                        + '<div class="col-md-1 col-sm-6 col-12 mt-2">'
-                                                            + '<div class="title">Due Amt</div>'
-                                                            + '<div class="description">' + (value.DueAmount != null ? (value.DueAmount > 0 ? '<span class="text-danger fw-bold">' + value.DueAmount + '</span>' : '0') : 0) + '</div>'
-                                                        + '</div>'
-                                                        + '<div class="col-md-2 col-sm-6 col-12 mt-2">'
-                                                            + '<div class="title">Payment Status</div>'
-                                                            + '<div class="description">' + value.PaymentStatus + '</div>'
-                                                        + '</div>'
+                        // Complaint Status Pill
+                        var statusBadgeHtml = "";
+                        var rawStatus = (value.Status || "").trim();
+                        if (rawStatus !== "") {
+                            statusBadgeHtml = '<span class="badge-soft ' + statusMeta.badgeClass + '"><i class="fa-solid ' + statusMeta.icon + '"></i> ' + rawStatus + '</span>';
+                        }
+
+                        // Advocate strip
+                        var advocateHtml = "";
+                        if (value.ComplainedAgainst && value.ComplainedAgainst.trim() !== "") {
+                            advocateHtml = '<div class="advocate-strip">'
+                                         + '<span class="advocate-strip-label"><i class="fa-solid fa-gavel text-primary me-1"></i> Complained Against:</span>'
+                                         + '<span class="advocate-strip-name">' + value.ComplainedAgainst + '</span>'
+                                         + '</div>';
+                        }
+
+                        // Attachment quick chip if available
+                        var attachmentChipHtml = "";
+                        if (value.AffidavitFilesText || value.AdditionalFilesText) {
+                            var fileName = value.AffidavitFilesText || value.AdditionalFilesText;
+                            attachmentChipHtml = '<div class="attachment-chip"><i class="fa-solid fa-paperclip"></i> ' + fileName + '</div>';
+                        }
+
+                        // Card Action Buttons
+                        var actionsHtml = '<div class="actions-group">';
+
+                        if (value.NewStatusCount > 0) {
+                            actionsHtml += '<button type="button" class="btn-action btn-action-warning" id="lnkOldComplaint"><i class="fa-solid fa-clock-rotate-left"></i> Mark Old</button>';
+                        }
+                        if (value.OldStatusCount > 0) {
+                            actionsHtml += '<button type="button" class="btn-action btn-action-info" id="lnkNewComplaint"><i class="fa-solid fa-wand-magic-sparkles"></i> Mark New</button>';
+                        }
+
+                        actionsHtml += '<a class="btn-action btn-action-primary" href="/Complaint/Detail/' + value.Id + '" onclick="document.cookie=\'ComplaintId=' + value.Id + '; path=/\';"><i class="fa-solid fa-eye text-white"></i> Detail</a>';
+
+                        actionsHtml += '<button type="button" class="btn-action" id="lnkUpdateComplaintNumber"><i class="fa-solid fa-pen-to-square text-primary"></i> Edit Number</button>';
+
+                        if (value.Status === 'Refer to Board') {
+                            actionsHtml += '<button type="button" class="btn-action btn-action-dc" id="lnkShareWithDC"><i class="fa-solid fa-share-nodes"></i> Share with D.C.</button>';
+                        }
+
+                        actionsHtml += '<button type="button" class="btn-action" id="lnkViewDocument" data-bs-toggle="modal" data-bs-target="#document" data-toggle="modal" data-target="#document"><i class="fa-solid fa-file-lines text-primary"></i> Documents</button>';
+                        actionsHtml += '<button type="button" class="btn-action" id="lnkViewAdjunt" data-bs-toggle="modal" data-bs-target="#Adjunt" data-toggle="modal" data-target="#Adjunt"><i class="fa-solid fa-user-shield text-primary"></i> Adjunt Details</button>';
+                        actionsHtml += '<button type="button" class="btn-action btn-action-danger ms-auto" id="lnkDeleteComplaint"><i class="fa-solid fa-trash-can"></i> Delete</button>';
+                        actionsHtml += '</div>';
+
+                        var dueDisplay = value.DueAmount != null && value.DueAmount > 0 
+                                       ? '<span class="text-danger fw-bold">₹' + value.DueAmount + '</span>' 
+                                       : '<span class="text-success fw-semibold">₹0</span>';
+
+                        // Status Ribbon (New / Old status indicator)
+                        var ribbonHtml = "";
+                        var hasRibbonClass = "";
+                        if (value.NewStatusCount > 0) {
+                            ribbonHtml = '<div class="corner-ribbon ribbon-new bg-info text-white">New</div>';
+                            hasRibbonClass = " has-ribbon";
+                        } else if (value.OldStatusCount > 0) {
+                            ribbonHtml = '<div class="corner-ribbon ribbon-old bg-warning text-dark">Old</div>';
+                            hasRibbonClass = " has-ribbon";
+                        }
+
+                        var cardStatusColor = statusMeta.color;
+
+                        var finalCard = ''
+                            + '<div class="complaint-card main_card_list ribbon-wrapper' + hasRibbonClass + '" data-status-color="' + cardStatusColor + '" data-complaint-no="' + (value.ComplaintNumber || '') + '">'
+                                + ribbonHtml
+                                + '<div id="HdfId" class="hidden-field">' + value.Id + '</div>'
+                                + '<div class="complaint-card-header">'
+                                    + '<div class="d-flex align-items-center gap-3">'
+                                        + '<div class="complaint-index-badge">' + (value.SrNo || (i + 1)) + '</div>'
+                                        + '<div class="complaint-number-box complaint_number">'
+                                            + '<a class="complaint-number-link description" href="/Complaint/Detail/' + value.Id + '" onclick="document.cookie=\'ComplaintId=' + value.Id + '; path=/\';">'
+                                                + '<i class="fa-solid fa-folder-closed text-primary complaint-folder-icon"></i>'
+                                                + '<span class="complaint-number-text">' + value.ComplaintNumber + '</span>'
+                                                + '<i class="fa-solid fa-arrow-up-right-from-square text-muted ms-1 complaint-link-icon"></i>'
+                                            + '</a>'
+                                        + '</div>'
+                                    + '</div>'
+                                    + '<div class="complaint-card-meta">'
+                                        + statusBadgeHtml
+                                        + '<span class="complaint-date-text"><i class="fa-regular fa-calendar-days"></i> ' + (value.ComplaintsCreateDate || '') + '</span>'
+                                    + '</div>'
+                                + '</div>'
+                                + '<div class="complaint-card-body">'
+                                    + '<div class="row align-items-center g-3">'
+                                        + '<div class="col-lg-7 col-md-12">'
+                                            + '<div class="d-flex align-items-start gap-3">'
+                                                + '<div class="complainant-avatar">' + initials + '</div>'
+                                                + '<div class="flex-grow-1">'
+                                                    + '<div class="complainant-name">' + (value.FullName || 'Unnamed Complainant') + '</div>'
+                                                    + '<div class="contact-pill-wrap">'
+                                                        + (value.ContactNumber ? '<a href="tel:' + value.ContactNumber + '" class="contact-pill"><i class="fa-solid fa-phone"></i> ' + value.ContactNumber + '</a>' : '')
+                                                        + (value.EmailAddress ? '<a href="mailto:' + value.EmailAddress + '" class="contact-pill"><i class="fa-solid fa-envelope"></i> ' + value.EmailAddress + '</a>' : '')
                                                     + '</div>'
                                                 + '</div>'
                                             + '</div>'
-                                            + '<div class="main_header_card">'
-                                                + '<div class="main_card_list_body">'
-                                                    + '<div class="row mt-2">'
-                                                        + '<div class="rigth_side">'
-                                                            + (value.NewStatusCount > 0 ? '<a class="me-2 btn btn-sm btn-outline-warning waves-effect waves-light btn-sm" id="lnkOldComplaint" role="button"><i class="fa-solid fa-clock-rotate-left me-1"></i> Old</a>' : '')
-                                                            + (value.OldStatusCount > 0 ? '<a class="me-2 btn btn-sm btn-outline-info waves-effect waves-light btn-sm" id="lnkNewComplaint" role="button"><i class="fa-solid fa-clock me-1"></i> New</a>' : '')
-                                                            + '<a class="me-2 btn btn-sm btn-outline-primary waves-effect waves-light btn-sm" id="lnkUpdateComplaintNumber" role="button"><i class="fa-solid fa-pen-to-square me-1"></i> Update Complaint Number</a>'
-                                                            + (value.Status === 'Refer to Board' ? '<a class="me-2 btn btn-sm btn-outline-primary waves-effect waves-light btn-sm" id="lnkShareWithDC" role="button"><i class="fa-solid fa-share-nodes me-1"></i> Share with D.C. Committee</a>' : '')
-                                                            + '<a class="me-2 btn btn-sm btn-outline-primary waves-effect waves-light btn-sm" id="lnkViewDocument" data-toggle="modal" data-target="#document" role="button"><i class="fa-solid fa-file-lines me-1"></i> View Document</a>'
-                                                            + '<a class="btn btn-outline-primary btn-sm waves-effect waves-light btn-sm" id="lnkViewAdjunt" data-toggle="modal" data-target="#Adjunt" role="button"><i class="fa-solid fa-file-lines me-1"></i> &nbsp;View Adjunt</a>'
-                                                            + '<a class="ms-2 btn btn-sm btn-outline-danger waves-effect waves-light btn-sm" id="lnkDeleteComplaint" role="button"><i class="fa-solid fa-trash me-1"></i> Delete</a>'
-                                                        + '</div>'
-                                                    + '</div>'
+                                            + advocateHtml
+                                            + attachmentChipHtml
+                                        + '</div>'
+                                        + '<div class="col-lg-5 col-md-12">'
+                                            + '<div class="financial-box">'
+                                                + '<div class="financial-col">'
+                                                    + '<div class="financial-title">Total Fee</div>'
+                                                    + '<div class="financial-value">₹' + (value.TotalAmount != null ? value.TotalAmount : 0) + '</div>'
                                                 + '</div>'
-                                            + '</div>';
-                        complaintList.append(FinalRowItem);
+                                                + '<div class="financial-col">'
+                                                    + '<div class="financial-title">Paid</div>'
+                                                    + '<div class="financial-value text-success">₹' + (value.PaidAmount != null ? value.PaidAmount : 0) + '</div>'
+                                                + '</div>'
+                                                + '<div class="financial-col">'
+                                                    + '<div class="financial-title">Due</div>'
+                                                    + '<div class="financial-value">' + dueDisplay + '</div>'
+                                                + '</div>'
+                                                + '<div class="financial-col financial-col-last">'
+                                                    + '<div class="financial-title">Status</div>'
+                                                    + '<div class="mt-1">' + paymentBadgeHtml + '</div>'
+                                                + '</div>'
+                                            + '</div>'
+                                        + '</div>'
+                                    + '</div>'
+                                + '</div>'
+                                + '<div class="complaint-card-footer">'
+                                    + actionsHtml
+                                + '</div>'
+                            + '</div>';
+
+                        complaintList.append(finalCard);
                     });
+
+                    $("#paginationDiv").css("display", "flex");
                     RenderPagination(totalRecords);
-                }
-                else {
-                    var emptyHtml = '<div class="empty-state-card">'
-                                  + '<div class="empty-state-icon-box">'
-                                      + '<i class="fa-solid fa-clipboard-list"></i>'
+                } else {
+                    $("#metricTotal").text("0");
+                    $("#metricNew").text("0");
+                    $("#metricBoard").text("0");
+                    $("#metricPaid").text("0");
+                    $("#liveResultsBadge").html('0 records');
+
+                    var emptyHtml = '<div class="empty-state-box">'
+                                  + '<div class="empty-state-icon">'
+                                      + '<i class="fa-solid fa-clipboard-question"></i>'
                                   + '</div>'
-                                  + '<h5 class="empty-state-title">No Complaints Found</h5>'
-                                  + '<p class="empty-state-desc">We couldn\'t find any complaints matching your criteria. Try adjusting your status, date, or number filters.</p>'
-                                  + '<div class="empty-state-badge">'
-                                      + '<i class="fa-solid fa-filter text-primary"></i>'
-                                      + '<span>No records found</span>'
-                                  + '</div>'
+                                  + '<h4 class="empty-state-heading">No Complaints Found</h4>'
+                                  + '<p class="empty-state-desc">We couldn\'t find any complaints matching your active filter criteria. Try clearing search terms or selecting "All Complaints".</p>'
+                                  + '<button type="button" class="btn btn-outline-primary btn-sm fw-semibold px-3" onclick="resetAllFilters()">'
+                                      + '<i class="fa-solid fa-rotate-left me-1"></i> Clear All Filters'
+                                  + '</button>'
                               + '</div>';
                     complaintList.append(emptyHtml);
+                    $("#paginationDiv").hide();
                     $("#paginationList").empty();
                     $("#entriesInfo").empty();
                 }
-
-            }, failure: function (result) {
-                swal('Something went wrong!', '', 'error');
             },
-            error: function (result) {
-                swal('Something went wrong!', '', 'error');
+            error: function () {
+                swal('Something went wrong!', 'Unable to fetch complaint list. Please try again.', 'error');
             }
         });
     }
 
-    $('body').on('click', '#lnkViewDocument', function () {
+    // Quick filter chips click handler
+    function applyQuickStatusChip(elem, statusValue) {
+        $(".quick-chip").removeClass("active-chip");
+        $(elem).addClass("active-chip");
+        $("#drpStatus").val(statusValue).trigger('change');
+        baseFilter.pageNo = 1;
+        GetComplaintList();
+    }
 
+    function quickFilterByStatus(statusVal) {
+        $(".quick-chip").removeClass("active-chip");
+        $('.quick-chip[data-status-filter="' + statusVal + '"]').addClass("active-chip");
+        $("#drpStatus").val(statusVal).trigger('change');
+        baseFilter.pageNo = 1;
+        GetComplaintList();
+    }
+
+    function quickFilterByPayment(payVal) {
+        $("#drpPaymentStatus").val(payVal).trigger('change');
+        baseFilter.pageNo = 1;
+        GetComplaintList();
+    }
+
+    function openSummaryModal() {
+        loadComplaintSummary();
+        $('#complaintSummaryModal').modal('show');
+    }
+
+    function closeSummaryModal() {
+        $('#complaintSummaryModal').modal('hide');
+        $('.modal-backdrop').remove();
+        $('body').removeClass('modal-open').css({ 'overflow': '', 'padding-right': '' });
+        setTimeout(function () {
+            $('.modal-backdrop').remove();
+            $('body').removeClass('modal-open').css({ 'overflow': '', 'padding-right': '' });
+        }, 150);
+    }
+
+    function filterBySummaryStatus(statusVal) {
+        closeSummaryModal();
+        quickFilterByStatus(statusVal);
+    }
+
+    function loadComplaintSummary() {
+        var fromDate = $('#txtFromDate').val();
+        var toDate = $('#txtToDate').val();
+        var year = $('#txtYear').val();
+
+        $('#btnRefreshSummary').html('<i class="fa-solid fa-spinner fa-spin me-1"></i> Refreshing...');
+
+        $.ajax({
+            type: 'POST',
+            url: "/Complaint/GetComplaintSummaryCounts",
+            data: { fromDate: fromDate, toDate: toDate, year: year },
+            dataType: "json",
+            success: function (response) {
+                $('#btnRefreshSummary').html('<i class="fa-solid fa-rotate me-1"></i> Refresh');
+                if (response && response.IsSuccess && response.Data) {
+                    var d = response.Data;
+                    $("#summaryTotal").text(d.TotalComplaint != null ? d.TotalComplaint : 0);
+                    $("#summaryOld").text(d.Old != null ? d.Old : 0);
+                    $("#summaryNew").text(d.New != null ? d.New : 0);
+                    $("#summaryAccepted").text(d.Accepted != null ? d.Accepted : 0);
+                    $("#summaryMoreDetail").text(d.MoreDetail != null ? d.MoreDetail : 0);
+                    $("#summaryRejected").text(d.Rejected != null ? d.Rejected : 0);
+                    $("#summaryReferToBoard").text(d.ReferToBoard != null ? d.ReferToBoard : 0);
+                    $("#summaryBoardAccept").text(d.BoardAccept != null ? d.BoardAccept : 0);
+                    $("#summaryBoardReject").text(d.BoardReject != null ? d.BoardReject : 0);
+                    $("#summaryBoardHasApproved").text(d.BoardHasApproved != null ? d.BoardHasApproved : 0);
+                    $("#summaryBoardHasRejected").text(d.BoardHasRejected != null ? d.BoardHasRejected : 0);
+                }
+            },
+            error: function () {
+                $('#btnRefreshSummary').html('<i class="fa-solid fa-rotate me-1"></i> Refresh');
+            }
+        });
+    }
+
+    function resetAllFilters() {
+        $(".quick-chip").removeClass("active-chip");
+        $('.quick-chip[data-status-filter=""]').addClass("active-chip");
+        baseFilter.pageNo = 1;
+        baseFilter.searchValue = '';
+        $('#txtQuickSearch').val('');
+        $('#drpStatus').val('').trigger('change');
+        $('#drpPaymentStatus').val('').trigger('change');
+        $('#txtFromDate').val('');
+        $('#txtToDate').val('');
+        $('#txtYear').val('');
+        $('#txtFromNo').val('');
+        $('#txtToNo').val('');
+        GetComplaintList();
+    }
+
+    /* Documents Preview Ajax */
+    $('body').on('click', '#lnkViewDocument', function () {
         var currow = $(this).closest('.main_card_list');
-        var CId = currow.find('#HdfId').text();
-        return $.ajax({
+        var CId = currow.find('#HdfId').text().trim();
+
+        $.ajax({
             type: 'POST',
             url: "/Complaint/GetDocument",
             data: { ComplaintId: CId },
@@ -384,52 +886,43 @@
                 var complaintDocList = $("#tblComplaintDoc");
                 var complaintDocEmpty = $("#tblComplaintDocEmpty");
 
-                if (response.IsSuccess) {
+                if (response.IsSuccess && response.Data && response.Data.length > 0) {
                     complaintDocEmpty.hide();
                     complaintDocList.show();
                     $.each(response.Data, function (i, value) {
                         var NhdfFilePathId = 'hdfFilePath' + i;
-                        var FileTitle = value.FileTitle == null ? '' : value.FileTitle;
-                        var FileBlock = '';
-                        if (value.FilePath == null || value.FilePath === '') {
-                            FileBlock = '<div class="text-danger mt-1">No Upload Complaint Document Files (ફરિયાદ સોગંદનામાની નકલ)</div>';
-                        } else {
-                            FileBlock = '<div class="file_name_btn" onclick="getFile(' + i + ')">'
-                                      + '<div class="name">' + value.FileName + '</div>'
-                                      + '<input name=' + NhdfFilePathId + ' id=' + NhdfFilePathId + ' type="hidden" value=' + value.FilePath + '>'
-                                      + '<div class="view_file"><i class="las la-eye"></i></div>'
-                                      + '</div>';
-                        }
-                        var NoteBlock = '';
-                        if (value.Description != null && value.Description.trim() !== '') {
-                            NoteBlock = '<div class="col-md-12 mt-3">'
-                                      + '<div class="title">Note (નોંધ)</div>'
-                                      + '<div class="description">' + value.Description + '</div>'
-                                      + '</div>';
-                        }
-                        var FinalRowItem = '<div class="main_card_list mb-2">'
-                                             + '<div class="main_card_list_body">'
-                                                 + '<div class="row">'
-                                                     + '<div class="col-md-12">'
-                                                         + '<div class="title">File Name</div>'
-                                                         + FileBlock
-                                                     + '</div>'
-                                                     + NoteBlock
-                                                 + '</div>'
-                                             + '</div>'
+                        var isMissing = !value.FilePath || value.FilePath === '';
+                        var ext = (value.FileName || "").split('.').pop().toLowerCase();
+                        var iconClass = ext === 'pdf' ? 'fa-file-pdf text-danger' : (ext === 'jpg' || ext === 'png' || ext === 'jpeg' ? 'fa-file-image text-primary' : 'fa-file-lines text-muted');
+
+                        var cardHtml = '<div class="file-preview-card">'
+                                     + '<div class="file-preview-info">'
+                                         + '<div class="file-icon-box"><i class="fa-solid ' + iconClass + '"></i></div>'
+                                         + '<div>'
+                                             + '<div class="file-name-text">' + (value.FileName || 'Attachment File') + '</div>'
+                                             + (value.Description ? '<div class="file-note-text"><i class="fa-solid fa-comment-dots text-muted me-1"></i> ' + value.Description + '</div>' : '')
                                          + '</div>'
-                        complaintDocList.append(FinalRowItem)
+                                     + '</div>';
+
+                        if (!isMissing) {
+                            cardHtml += '<input name="' + NhdfFilePathId + '" id="' + NhdfFilePathId + '" type="hidden" value="' + value.FilePath + '">'
+                                      + '<button type="button" class="btn btn-sm btn-outline-primary fw-semibold px-3" onclick="getFile(' + i + ')">'
+                                          + '<i class="fa-solid fa-eye me-1"></i> Preview'
+                                      + '</button>';
+                        } else {
+                            cardHtml += '<span class="badge bg-danger-subtle text-danger">File Unavailable</span>';
+                        }
+                        cardHtml += '</div>';
+
+                        complaintDocList.append(cardHtml);
                     });
-                }
-                else {
+                } else {
                     complaintDocList.hide();
                     complaintDocEmpty.show();
                 }
-            }, failure: function (result) {
-                swal('Something went wrong!', '', 'error');
             },
-            error: function (result) {
-                swal('Something went wrong!', '', 'error');
+            error: function () {
+                swal('Something went wrong!', 'Failed to fetch complaint documents.', 'error');
             }
         });
     });
@@ -438,7 +931,7 @@
         var VFilePathId = '#hdfFilePath' + RowId;
         var VFilePath = $(VFilePathId).val();
 
-        if (VFilePath != "") {
+        if (VFilePath && VFilePath !== "") {
             $('#displayPdf').attr('src', VFilePath);
             $('#pdfModal').modal('show');
         }
@@ -450,11 +943,12 @@
         }
     });
 
+    /* Adjunt Details Ajax */
     $('body').on('click', '#lnkViewAdjunt', function () {
-
         var currow = $(this).closest('.main_card_list');
-        var CId = currow.find('#HdfId').text();
-        return $.ajax({
+        var CId = currow.find('#HdfId').text().trim();
+
+        $.ajax({
             type: 'POST',
             url: "/Complaint/GetAdjuntDetails",
             data: { ComplaintId: CId },
@@ -462,52 +956,55 @@
                 $("#tblComplaintAgaints").empty();
                 var complaintAgaintsList = $("#tblComplaintAgaints");
 
-                if (response.IsSuccess) {
+                if (response.IsSuccess && response.Data && response.Data.length > 0) {
                     $.each(response.Data, function (data, value) {
                         var SrNo = data + 1;
-                        var enrNo = value.EnrollmentNo || value.EnrollmentNumber;
-                        var enrHtml = (enrNo != null && enrNo !== '') 
-                            ? '<div class="complaint_number"><div class="title">Enrollment Number</div><a class="description">' + enrNo + '</a></div>' 
-                            : '';
-                        complaintAgaintsList.append(
-                            '<div class="main_card_list mb-3"><div class="main_header_card"><div class="_left_side"><div class="number">' + SrNo + '</div>' + enrHtml + '<div class="complaint_number total"><div class="title">Amount</div><a class="description">' + (value.Amount || 0) + '</a></div></div><div class="rigth_side"></div></div><div class="main_card_list_body"><div class="row"><div class="col-md-12 mt-1"><div class="title">Full Name</div><div class="description">' + (value.Name || '') + '</div></div></div></div></div>');
-                        //'<tr>'
-                        //   + '<td>' + value.SrNo + '</td>'
-                        //   + '<td style="text-align:center;display:none;">' + value.Id + '</td>'
-                        //   + '<td>' + value.Name + '</td>'
-                        //   + '<td>' + value.EnrollmentNumber + '</td>'
-                        //   + '<td>' + value.Amount + '</td>'
-                        //   + '</tr>
-                    });
-                }
-                else {
-                    var emptyAdjunt = '<div class="empty-state-card py-4 my-2">'
-                                    + '<div class="empty-state-icon-box" style="width: 56px; height: 56px; margin-bottom: 12px;">'
-                                        + '<i class="fa-solid fa-file-circle-xmark" style="font-size: 24px;"></i>'
+                        var enrNo = value.EnrollmentNo || value.EnrollmentNumber || 'N/A';
+                        var name = value.Name || 'Advocate Name';
+                        var amount = value.Amount || 0;
+
+                        var adjuntItem = ''
+                            + '<div class="card border mb-3 rounded-3 shadow-none">'
+                                + '<div class="card-body p-3">'
+                                    + '<div class="d-flex align-items-center justify-content-between mb-2">'
+                                        + '<div class="d-flex align-items-center gap-2">'
+                                            + '<span class="badge bg-primary rounded-pill px-2">#' + SrNo + '</span>'
+                                            + '<h6 class="mb-0 fw-bold text-dark">' + name + '</h6>'
+                                        + '</div>'
+                                        + '<span class="badge bg-light text-dark border fw-bold px-3 py-2">₹' + amount + '</span>'
                                     + '</div>'
-                                    + '<h6 class="empty-state-title" style="font-size: 15px;">No Adjunt Records Found</h6>'
-                                    + '<p class="empty-state-desc mb-0" style="font-size: 12.5px;">No adjunt details are available for this complaint.</p>'
+                                    + '<div class="text-muted small">'
+                                        + '<i class="fa-solid fa-id-card text-primary me-1"></i> Enrollment No: <strong class="text-dark">' + enrNo + '</strong>'
+                                    + '</div>'
+                                + '</div>'
+                            + '</div>';
+                        complaintAgaintsList.append(adjuntItem);
+                    });
+                } else {
+                    var emptyAdjunt = '<div class="empty-state-box py-4 my-2">'
+                                    + '<div class="empty-state-icon empty-state-icon-sm">'
+                                        + '<i class="fa-solid fa-user-xmark text-muted"></i>'
+                                    + '</div>'
+                                    + '<h6 class="empty-state-heading fs-6">No Adjunt Records Found</h6>'
+                                    + '<p class="empty-state-desc mb-0 small text-muted">No additional advocate details are recorded for this complaint.</p>'
                                 + '</div>';
                     complaintAgaintsList.append(emptyAdjunt);
                 }
-            }, failure: function (result) {
-                swal('Something went wrong!', '', 'error');
             },
-            error: function (result) {
-                swal('Something went wrong!', '', 'error');
+            error: function () {
+                swal('Something went wrong!', 'Failed to fetch adjunt details.', 'error');
             }
         });
     });
 
+    /* Update Complaint Number */
     $('body').on('click', '#lnkUpdateComplaintNumber', function () {
         var currow = $(this).closest('.main_card_list');
-        var CId = currow.find('#HdfId').text();
-
-        var oldComplaintNumber = currow.find('.complaint_number .description').first().text();
+        var CId = currow.find('#HdfId').text().trim();
+        var oldComplaintNumber = currow.attr('data-complaint-no') || currow.find('.complaint_number .description').first().text().trim();
 
         $('#hdfUpdateComplaintId').val(CId);
         $('#lblCurrentComplaintNumber').val(oldComplaintNumber);
-
         $('#txtNewComplaintNumberPart1').val('');
 
         if ($('#txtNewComplaintNumberPart2 option').length === 0) {
@@ -527,13 +1024,13 @@
         var part2 = $('#txtNewComplaintNumberPart2').val().trim();
 
         if (part1 === "" || part2 === "") {
-            swal("Please enter the number and select a year.", "", "error");
+            swal("Validation Error", "Please enter the number and select a year.", "warning");
             return;
         }
 
         var formatRegex1 = /^\d+$/;
         if (!formatRegex1.test(part1)) {
-            swal("Invalid format! Please enter a valid number.", "", "error");
+            swal("Invalid Format", "Please enter a valid numeric value for the number part.", "error");
             return;
         }
 
@@ -545,15 +1042,15 @@
             data: { ComplaintId: complaintId, ComplaintNumberCode: part1, ComplaintNumber: fullComplaintNumber },
             success: function (response) {
                 if (response.IsSuccess && response.Data === "UD") {
-                    swal("Complaint Number updated successfully!", "", "error");
+                    swal("Updated!", "Complaint Number updated successfully to " + fullComplaintNumber, "success");
                     $('#UpdateComplaintNumberModal').modal('hide');
                     GetComplaintList();
                 } else {
-                    swal("Failed to update complaint number.", "", "error");
+                    swal("Update Failed", "Could not update complaint number.", "error");
                 }
             },
             error: function () {
-                swal("Error updating complaint number.", "", "error");
+                swal("Error", "Server error while updating complaint number.", "error");
             }
         });
     });
@@ -565,17 +1062,19 @@
         $('#hdfUpdateComplaintId').val('');
     });
 
+    /* Delete Complaint */
     $('body').on('click', '#lnkDeleteComplaint', function () {
         var currow = $(this).closest('.main_card_list');
-        var CId = currow.find('#HdfId').text();
+        var CId = currow.find('#HdfId').text().trim();
+        var complaintNo = currow.attr('data-complaint-no') || 'this complaint';
 
         swal({
-            title: "Are you sure?",
-            text: "You want to delete this complaint?",
+            title: "Delete Complaint?",
+            text: "Are you sure you want to delete " + complaintNo + "? This action cannot be undone.",
             icon: "warning",
             showCancelButton: true,
-            confirmButtonColor: "#DD6B55",
-            confirmButtonText: "Yes",
+            confirmButtonColor: "#dc2626",
+            confirmButtonText: "Yes, Delete It",
             cancelButtonText: "Cancel"
         }).then((result) => {
             if (result.isConfirmed) {
@@ -585,31 +1084,32 @@
                     data: { ComplaintId: CId },
                     success: function (response) {
                         if (response.IsSuccess && response.Data === "DE") {
-                            swal("Complaint deleted successfully!", "", "success");
+                            swal("Deleted!", "Complaint deleted successfully.", "success");
                             GetComplaintList();
                         } else {
-                            swal("Failed to delete complaint.", "", "error");
+                            swal("Failed", "Could not delete complaint.", "error");
                         }
                     },
                     error: function () {
-                        swal("Error deleting complaint.", "", "error");
+                        swal("Error", "Server error while deleting complaint.", "error");
                     }
                 });
             }
         });
     });
 
+    /* Mark Old Status */
     $('body').on('click', '#lnkOldComplaint', function () {
         var currow = $(this).closest('.main_card_list');
-        var CId = currow.find('#HdfId').text();
+        var CId = currow.find('#HdfId').text().trim();
 
         swal({
-            title: "Are you sure?",
-            text: "You want to update status to Old?",
+            title: "Mark as Old?",
+            text: "Update this complaint status from New to Old?",
             icon: "warning",
             showCancelButton: true,
-            confirmButtonColor: "#DD6B55",
-            confirmButtonText: "Yes",
+            confirmButtonColor: "#f59e0b",
+            confirmButtonText: "Yes, Update",
             cancelButtonText: "Cancel"
         }).then((result) => {
             if (result.isConfirmed) {
@@ -619,31 +1119,32 @@
                     data: { ComplaintId: CId },
                     success: function (response) {
                         if (response.IsSuccess && response.Data === "UD") {
-                            swal("Status updated successfully!", "", "success");
+                            swal("Updated!", "Status marked as Old successfully.", "success");
                             GetComplaintList();
                         } else {
-                            swal("Failed to update status.", "", "error");
+                            swal("Failed", "Could not update status.", "error");
                         }
                     },
                     error: function () {
-                        swal("Error updating status.", "", "error");
+                        swal("Error", "Server error while updating status.", "error");
                     }
                 });
             }
         });
     });
 
+    /* Mark New Status */
     $('body').on('click', '#lnkNewComplaint', function () {
         var currow = $(this).closest('.main_card_list');
-        var CId = currow.find('#HdfId').text();
+        var CId = currow.find('#HdfId').text().trim();
 
         swal({
-            title: "Are you sure?",
-            text: "You want to update status to New?",
+            title: "Mark as New?",
+            text: "Update this complaint status back to New?",
             icon: "warning",
             showCancelButton: true,
-            confirmButtonColor: "#DD6B55",
-            confirmButtonText: "Yes",
+            confirmButtonColor: "#0284c7",
+            confirmButtonText: "Yes, Update",
             cancelButtonText: "Cancel"
         }).then((result) => {
             if (result.isConfirmed) {
@@ -653,20 +1154,21 @@
                     data: { ComplaintId: CId },
                     success: function (response) {
                         if (response.IsSuccess && response.Data === "UD") {
-                            swal("Status updated successfully!", "", "success");
+                            swal("Updated!", "Status marked as New successfully.", "success");
                             GetComplaintList();
                         } else {
-                            swal("Failed to update status.", "", "error");
+                            swal("Failed", "Could not update status.", "error");
                         }
                     },
                     error: function () {
-                        swal("Error updating status.", "", "error");
+                        swal("Error", "Server error while updating status.", "error");
                     }
                 });
             }
         });
     });
 
+    /* Filter Drawer Actions */
     $('#lnkFilter').click(function () {
         baseFilter.pageNo = 1;
         baseFilter.searchValue = $("#txtQuickSearch").val();
@@ -679,21 +1181,9 @@
         GetComplaintList();
     });
 
-
     $('#btnCancel').click(function () {
-        baseFilter.pageNo = 1;
-        baseFilter.searchValue = '';
-        $('#drpStatus').val('').trigger('change');
-        $('#drpPaymentStatus').val('').trigger('change');
-        $('#txtFromDate').val('');
-        $('#txtToDate').val('');
-        $('#txtYear').val('');
-        $('#txtFromNo').val('');
-        $('#txtToNo').val('');
-        GetComplaintList();
+        resetAllFilters();
     });
-
-    $(".main_filter_div").hide();
 
     $('#addfilter').click(function () {
         $(".main_filter_div").slideToggle(200, function () {
@@ -702,22 +1192,34 @@
     });
 
     $('.close_filterdiv').click(function () {
-        $(".main_filter_div").slideUp();
+        $(".main_filter_div").slideUp(200);
     });
 
+    /* Pagination */
     function RenderPagination(totalRecords) {
+        if (!totalRecords || totalRecords <= 0) {
+            $("#paginationDiv").hide();
+            $("#entriesInfo").empty();
+            $("#paginationList").empty();
+            return;
+        }
+        $("#paginationDiv").css("display", "flex");
         var totalPages = Math.ceil(totalRecords / baseFilter.pageSize);
         var paginationHtml = '';
         $("#paginationList").empty();
 
         var startEntry = totalRecords > 0 ? ((baseFilter.pageNo - 1) * baseFilter.pageSize + 1) : 0;
         var endEntry = Math.min(baseFilter.pageNo * baseFilter.pageSize, totalRecords);
-        $("#entriesInfo").html('Showing ' + startEntry + ' to ' + endEntry + ' of ' + totalRecords + ' entries');
+        $("#entriesInfo").html('Showing <strong class="text-dark">' + startEntry + '</strong> to <strong class="text-dark">' + endEntry + '</strong> of <strong class="text-dark">' + totalRecords + '</strong> complaints');
 
         if (totalPages > 1) {
-            var prevDisabled = baseFilter.pageNo <= 1 ? 'disabled' : '';
-            var prevPage = baseFilter.pageNo > 1 ? baseFilter.pageNo - 1 : 1;
-            paginationHtml += '<li class="page-item ' + prevDisabled + '"><a class="page-link" href="javascript:void(0);" onclick="ChangePage(' + prevPage + ')"><i class="fa-solid fa-chevron-left"></i></a></li>';
+            var isFirst = baseFilter.pageNo <= 1;
+            var prevDisabled = isFirst ? 'disabled' : '';
+            var firstClick = isFirst ? '' : 'onclick="ChangePage(1)"';
+            var prevClick = isFirst ? '' : 'onclick="ChangePage(' + (baseFilter.pageNo - 1) + ')"';
+
+            paginationHtml += '<li class="page-item ' + prevDisabled + '"><a class="page-link" href="javascript:void(0);" ' + firstClick + ' title="First Page" aria-label="First"><i class="fa-solid fa-angles-left"></i></a></li>';
+            paginationHtml += '<li class="page-item ' + prevDisabled + '"><a class="page-link" href="javascript:void(0);" ' + prevClick + ' title="Previous Page" aria-label="Previous"><i class="fa-solid fa-chevron-left"></i></a></li>';
 
             var startPage = Math.max(1, baseFilter.pageNo - 2);
             var endPage = Math.min(totalPages, baseFilter.pageNo + 2);
@@ -727,9 +1229,13 @@
                 paginationHtml += '<li class="page-item ' + activeClass + '"><a class="page-link" href="javascript:void(0);" onclick="ChangePage(' + i + ')">' + i + '</a></li>';
             }
 
-            var nextDisabled = baseFilter.pageNo >= totalPages ? 'disabled' : '';
-            var nextPage = baseFilter.pageNo < totalPages ? baseFilter.pageNo + 1 : totalPages;
-            paginationHtml += '<li class="page-item ' + nextDisabled + '"><a class="page-link" href="javascript:void(0);" onclick="ChangePage(' + nextPage + ')"><i class="fa-solid fa-chevron-right"></i></a></li>';
+            var isLast = baseFilter.pageNo >= totalPages;
+            var nextDisabled = isLast ? 'disabled' : '';
+            var nextClick = isLast ? '' : 'onclick="ChangePage(' + (baseFilter.pageNo + 1) + ')"';
+            var lastClick = isLast ? '' : 'onclick="ChangePage(' + totalPages + ')"';
+
+            paginationHtml += '<li class="page-item ' + nextDisabled + '"><a class="page-link" href="javascript:void(0);" ' + nextClick + ' title="Next Page" aria-label="Next"><i class="fa-solid fa-chevron-right"></i></a></li>';
+            paginationHtml += '<li class="page-item ' + nextDisabled + '"><a class="page-link" href="javascript:void(0);" ' + lastClick + ' title="Last Page" aria-label="Last"><i class="fa-solid fa-angles-right"></i></a></li>';
         }
 
         $("#paginationList").html(paginationHtml);
@@ -738,15 +1244,18 @@
     function ChangePage(page) {
         baseFilter.pageNo = page;
         GetComplaintList();
+        $('html, body').animate({ scrollTop: $(".complaint-hero").offset().top }, 200);
     }
 
+    /* Share with DC Committee */
     $(document).on('click', '#lnkShareWithDC', function () {
-        var complaintId = $(this).closest('.main_card_list').find('#HdfId').text();
+        var currow = $(this).closest('.main_card_list');
+        var complaintId = currow.find('#HdfId').text().trim();
         $('#shareDcCommitteeModal').data('complaintId', complaintId);
         $('#btnShareWithSelectedMembers').hide();
-        
+
         $.ajax({
-            type: 'Get',
+            type: 'GET',
             url: "/Complaint/GetComplaintShareMembers",
             contentType: "application/json; charset=utf-8",
             data: { ComplaintId: complaintId },
@@ -757,40 +1266,34 @@
                     $('#btnShareWithSelectedMembers').show();
                     $.each(response.Data, function (data, value) {
                         var isCheckedStr = (value.Flag === 'A' || value.Flag === null) ? 'checked=""' : '';
-                        
-                        var VShareDcMembersItem = '<div class="main_card_list main_card_list_border mb-2">'
-                                                    + '<div class="main_header_card">'
-                                                        + '<div class="_left_side">'
-                                                            + '<div class="number">' + (data + 1) + '</div>'
-                                                            + '<div class="complaint_number">'
-                                                                + '<div class="title">Enrollment Number</div>'
-                                                                + '<a class="description">' + value.EnroNumber + '</a>'
-                                                            + '</div>'
-                                                            + '<div class="complaint_number">'
-                                                                + '<div class="title">Name</div>'
-                                                                + '<a class="description">' + value.FullName + '</a>'
-                                                            + '</div>'
-                                                            + '<div class="complaint_number">'
-                                                                + '<div class="title">Contact Number</div>'
-                                                                + '<a class="description">' + value.ContactNumber + '</a>'
-                                                            + '</div>'
-                                                        + '</div>'
-                                                        + '<div class="rigth_side_check">'
-                                                            + '<input type="checkbox" class="main_check_style" name="shareDcCheck" value="' + value.MemberId + '" ' + isCheckedStr + '>'
-                                                            + '<i class="las la-check"></i>'
-                                                        + '</div>'
-                                                    + '</div>'
-                                                + '</div>';
-                        $('#tblShareDcMembers').append(VShareDcMembersItem);
+                        var memberInitials = getInitials(value.FullName);
+
+                        var memberCard = ''
+                            + '<div class="dc-member-item">'
+                                + '<div class="dc-member-info">'
+                                    + '<div class="dc-member-avatar">' + memberInitials + '</div>'
+                                    + '<div>'
+                                        + '<div class="fw-bold text-dark">' + (value.FullName || 'Member') + '</div>'
+                                        + '<div class="text-muted small">'
+                                            + '<i class="fa-solid fa-id-card text-primary me-1"></i> ' + (value.EnroNumber || 'N/A')
+                                            + (value.ContactNumber ? ' &bull; <i class="fa-solid fa-phone text-primary me-1 ms-1"></i> ' + value.ContactNumber : '')
+                                        + '</div>'
+                                    + '</div>'
+                                + '</div>'
+                                + '<div>'
+                                    + '<input type="checkbox" class="form-check-custom" name="shareDcCheck" value="' + value.MemberId + '" ' + isCheckedStr + '>'
+                                + '</div>'
+                            + '</div>';
+                        $('#tblShareDcMembers').append(memberCard);
                     });
                 } else {
                     $('#btnShareWithSelectedMembers').hide();
-                    var emptyShare = '<div class="empty-state-card py-4 my-2">'
-                                   + '<div class="empty-state-icon-box" style="width: 56px; height: 56px; margin-bottom: 12px;">'
-                                       + '<i class="fa-solid fa-users-slash" style="font-size: 24px;"></i>'
+                    var emptyShare = '<div class="empty-state-box py-4 my-2">'
+                                   + '<div class="empty-state-icon empty-state-icon-sm">'
+                                       + '<i class="fa-solid fa-users-slash text-muted"></i>'
                                    + '</div>'
-                                   + '<h6 class="empty-state-title" style="font-size: 15px;">No Committee Members Found</h6>'
-                                   + '<p class="empty-state-desc mb-0" style="font-size: 12.5px;">There are no active D.C. committee members to share with.</p>'
+                                   + '<h6 class="empty-state-heading fs-6">No Committee Members Found</h6>'
+                                   + '<p class="empty-state-desc mb-0 small text-muted">There are no active D.C. committee members configured.</p>'
                                + '</div>';
                     $('#tblShareDcMembers').append(emptyShare);
                 }
@@ -798,7 +1301,7 @@
             },
             error: function () {
                 $('#btnShareWithSelectedMembers').hide();
-                swal('Something went wrong!', '', 'error');
+                swal('Something went wrong!', 'Failed to fetch committee members.', 'error');
             }
         });
     });
@@ -806,14 +1309,14 @@
     $(document).on('click', '#btnShareWithSelectedMembers', function () {
         var complaintId = $('#shareDcCommitteeModal').data('complaintId');
         var membersData = [];
-        
+
         $("input[name='shareDcCheck']").each(function () {
             var flag = $(this).is(':checked') ? 'A' : 'D';
             membersData.push($(this).val() + '_' + flag);
         });
 
-        if (membersData.length == 0) {
-            swal("No members found.", "", "warning");
+        if (membersData.length === 0) {
+            swal("Warning", "No members selected.", "warning");
             return;
         }
 
@@ -830,16 +1333,15 @@
             dataType: "json",
             success: function (response) {
                 if (response.IsSuccess) {
-                    swal("Shared successfully with selected members.", "", "success");
+                    swal("Success!", "Complaint shared successfully with selected members.", "success");
                     $('#shareDcCommitteeModal').modal('hide');
                 } else {
-                    swal("Failed to share.", "", "error");
+                    swal("Failed", "Could not share complaint.", "error");
                 }
             },
             error: function () {
-                swal('Something went wrong!', '', 'error');
+                swal('Something went wrong!', 'Server error while sharing with committee.', 'error');
             }
         });
     });
-
 </script>

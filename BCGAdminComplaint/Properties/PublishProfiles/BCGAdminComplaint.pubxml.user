@@ -18,11 +18,14 @@ by editing this MSBuild file. In order to learn more about this please visit htt
     <File Include="assets/css/bootstrap.min.css">
       <publishTime>08/27/2026 17:17:56</publishTime>
     </File>
+    <File Include="assets/css/complaint-management.css">
+      <publishTime>10/15/2026 15:21:55</publishTime>
+    </File>
     <File Include="assets/css/select2.min.css">
       <publishTime>09/14/2026 10:54:58</publishTime>
     </File>
     <File Include="assets/css/Site.css">
-      <publishTime>10/13/2026 19:06:11</publishTime>
+      <publishTime>10/15/2026 14:45:13</publishTime>
     </File>
     <File Include="assets/img/accepted.svg">
       <publishTime>11/22/2023 12:50:06</publishTime>
@@ -91,7 +94,7 @@ by editing this MSBuild file. In order to learn more about this please visit htt
       <publishTime>11/24/2023 10:35:44</publishTime>
     </File>
     <File Include="bin/BCGAdminComplaint.dll">
-      <publishTime>10/13/2026 19:08:15</publishTime>
+      <publishTime>10/15/2026 16:14:22</publishTime>
     </File>
     <File Include="bin/BCG_MasterRepository.dll">
       <publishTime>09/01/2026 16:18:40</publishTime>
@@ -249,6 +252,27 @@ by editing this MSBuild file. In order to learn more about this please visit htt
     <File Include="scripts/modernizr-2.6.2.js">
       <publishTime>11/01/2023 10:24:34</publishTime>
     </File>
+    <File Include="Views/Complaint/AddComplaint.cshtml">
+      <publishTime>10/15/2026 14:56:43</publishTime>
+    </File>
+    <File Include="Views/Complaint/Detail.cshtml">
+      <publishTime>10/15/2026 22:28:38</publishTime>
+    </File>
+    <File Include="Views/Complaint/Details.cshtml">
+      <publishTime>10/14/2026 15:02:15</publishTime>
+    </File>
+    <File Include="Views/Complaint/Index.cshtml">
+      <publishTime>10/15/2026 13:55:03</publishTime>
+    </File>
+    <File Include="Views/Complaint/OnlineComplaintList.cshtml">
+      <publishTime>10/15/2026 13:09:25</publishTime>
+    </File>
+    <File Include="Views/Complaint/SearchComplaint.cshtml">
+      <publishTime>10/15/2026 15:31:31</publishTime>
+    </File>
+    <File Include="Views/Complaint/SearchDetail.cshtml">
+      <publishTime>06/22/2026 12:16:45</publishTime>
+    </File>
     <File Include="Views/ComplaintDetails/Details.cshtml">
       <publishTime>10/13/2026 13:37:28</publishTime>
     </File>
@@ -280,22 +304,22 @@ by editing this MSBuild file. In order to learn more about this please visit htt
       <publishTime>10/13/2026 11:15:07</publishTime>
     </File>
     <File Include="Views/DCMember/Add.cshtml">
-      <publishTime>10/13/2026 10:26:59</publishTime>
+      <publishTime>10/16/2026 00:21:08</publishTime>
     </File>
     <File Include="Views/DCMember/Edit.cshtml">
-      <publishTime>10/13/2026 11:38:11</publishTime>
+      <publishTime>10/16/2026 00:20:38</publishTime>
     </File>
     <File Include="Views/DCMember/Index.cshtml">
-      <publishTime>10/13/2026 11:43:26</publishTime>
+      <publishTime>10/14/2026 13:51:57</publishTime>
     </File>
     <File Include="Views/DCMemberLogin/MemberLogin.cshtml">
       <publishTime>08/27/2026 13:19:42</publishTime>
     </File>
     <File Include="Views/DCReferredList/Index.cshtml">
-      <publishTime>10/13/2026 13:00:28</publishTime>
+      <publishTime>10/14/2026 12:07:48</publishTime>
     </File>
     <File Include="Views/Home/Index.cshtml">
-      <publishTime>10/13/2026 15:09:17</publishTime>
+      <publishTime>10/14/2026 12:28:43</publishTime>
     </File>
     <File Include="Views/Home/Login.cshtml">
       <publishTime>10/12/2026 17:17:26</publishTime>
@@ -306,17 +330,23 @@ by editing this MSBuild file. In order to learn more about this please visit htt
     <File Include="Views/MemberComplaintList/MemberDetails.cshtml">
       <publishTime>10/12/2026 17:19:15</publishTime>
     </File>
+    <File Include="Views/Notes/Index.cshtml">
+      <publishTime>10/14/2026 17:33:31</publishTime>
+    </File>
     <File Include="Views/Reports/ComplaintActionLogReport.cshtml">
-      <publishTime>06/29/2026 19:32:27</publishTime>
+      <publishTime>10/14/2026 12:08:15</publishTime>
     </File>
     <File Include="Views/Reports/ComplaintListReport.cshtml">
-      <publishTime>10/13/2026 18:49:15</publishTime>
+      <publishTime>10/15/2026 15:49:50</publishTime>
+    </File>
+    <File Include="Views/Reports/ComplaintReport.cshtml">
+      <publishTime>10/15/2026 15:49:18</publishTime>
     </File>
     <File Include="Views/Shared/_DCMemberLayout.cshtml">
       <publishTime>10/12/2026 17:16:51</publishTime>
     </File>
     <File Include="Views/Shared/_Layout.cshtml">
-      <publishTime>10/13/2026 19:06:26</publishTime>
+      <publishTime>10/15/2026 15:43:50</publishTime>
     </File>
     <File Include="Views/web.config">
       <publishTime>11/24/2023 10:35:36</publishTime>
@@ -325,7 +355,7 @@ by editing this MSBuild file. In order to learn more about this please visit htt
       <publishTime>06/22/2026 12:16:44</publishTime>
     </File>
     <File Include="Web.config">
-      <publishTime>10/13/2026 19:08:16</publishTime>
+      <publishTime>10/16/2026 09:48:44</publishTime>
     </File>
   </ItemGroup>
 </Project>

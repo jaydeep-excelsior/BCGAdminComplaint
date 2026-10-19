@@ -103,6 +103,13 @@ a {
 
 /* Modern Button Styling (HD Vision & Size Improvements) */
 .btn {
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    vertical-align: middle !important;
+    text-align: center !important;
+    line-height: 1.25 !important;
+    gap: 0.35rem;
     font-weight: 600 !important;
     letter-spacing: 0.3px;
     border-radius: 8px !important;
@@ -114,12 +121,27 @@ a {
         box-shadow: var(--shadow-soft);
     }
 
-    .btn:not(#password-addon) i {
+    .btn:not(#password-addon) i,
+    .btn:not(#password-addon) svg {
+        display: inline-flex !important;
+        align-items: center !important;
+        justify-content: center !important;
         font-size: .9em !important;
-        vertical-align: middle;
+        line-height: 1 !important;
+        vertical-align: 0 !important;
+        margin-top: 0 !important;
+        margin-bottom: 0 !important;
+        align-self: center !important;
     }
 
-
+    .btn > span,
+    .btn > strong,
+    .btn > b {
+        display: inline-flex;
+        align-items: center;
+        line-height: 1.25;
+        align-self: center;
+    }
 
     .btn:focus {
         outline: none !important;
@@ -134,8 +156,9 @@ a {
 }
 
 .btn-sm {
-    font-size: 14px !important;
-    padding: 0.2rem 0.6rem !important;
+    font-size: 13px !important;
+    padding: 0.35rem 0.65rem !important;
+    min-height: 32px;
 }
 
 .btn-outline-primary {

@@ -299,21 +299,24 @@ namespace BCGAdminComplaint.Controllers
             sb.AppendLine("<html lang=\"en\">");
             sb.AppendLine("<head>");
             sb.AppendLine("<meta charset=\"utf-8\" />");
+            sb.AppendLine("<meta http-equiv=\"Content-Type\" content=\"text/html; charset=utf-8\" />");
             sb.AppendLine("<title>DC Referred List Report - Bar Council of Gujarat</title>");
             sb.AppendLine("<style>");
+            sb.AppendLine("@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+Gujarati:wght@400;500;600;700&display=swap');");
             sb.AppendLine("@page { size: A4 landscape; margin: 8mm 10mm 8mm 10mm; }");
             sb.AppendLine("* { box-sizing: border-box; -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; }");
-            sb.AppendLine("body { font-family: 'Segoe UI', 'Helvetica Neue', Arial, sans-serif; font-size: 10px; color: #1e293b; background: #fff; margin: 0; padding: 0; line-height: 1.35; }");
+            sb.AppendLine("body, table, td, th, div, span, p { font-family: 'Noto Sans Gujarati', 'Shruti', 'Nirmala UI', 'Gujarati Sangam MN', 'Segoe UI', 'Helvetica Neue', Arial, sans-serif; }");
+            sb.AppendLine("body { font-size: 10px; color: #1e293b; background: #fff; margin: 0; padding: 0; line-height: 1.35; }");
 
             // Report Header
             sb.AppendLine(".rpt-header { width: 100%; border-collapse: collapse; margin-bottom: 4px; }");
             sb.AppendLine(".rpt-header td { vertical-align: middle; padding: 0; }");
-            sb.AppendLine(".rpt-header .logo-td { width: 56px; }");
-            sb.AppendLine(".rpt-header .logo-td img { height: 48px; width: auto; display: block; }");
-            sb.AppendLine(".rpt-header .title-td { text-align: center; padding: 0 10px; }");
+            sb.AppendLine(".rpt-header .logo-td { width: 48px; max-width: 48px; padding: 0; text-align: left; white-space: nowrap; }");
+            sb.AppendLine(".rpt-header .logo-td img { height: 46px; width: 46px; display: block; margin: 0; }");
+            sb.AppendLine(".rpt-header .title-td { text-align: left; padding: 0 0 0 6px; }");
             sb.AppendLine(".rpt-header .badge-td { width: 220px; text-align: right; }");
-            sb.AppendLine(".org-name { font-size: 16px; font-weight: 800; color: #002b5c; text-transform: uppercase; letter-spacing: 0.6px; margin: 0 0 1px 0; }");
-            sb.AppendLine(".org-addr { font-size: 8.5px; color: #64748b; margin: 0; line-height: 1.25; }");
+            sb.AppendLine(".org-name { font-size: 16px; font-weight: 800; color: #002b5c; text-transform: uppercase; letter-spacing: 0.6px; margin: 0 0 1px 0; text-align: left; }");
+            sb.AppendLine(".org-addr { font-size: 8.5px; color: #64748b; margin: 0; line-height: 1.25; text-align: left; }");
             sb.AppendLine(".doc-badge { display: inline-block; background: #002b5c; color: #fff; padding: 3px 10px; border-radius: 4px; font-weight: 700; font-size: 10px; letter-spacing: 0.4px; text-transform: uppercase; }");
             sb.AppendLine(".doc-badge-sub { font-size: 8px; color: #64748b; font-weight: 600; margin-top: 2px; text-align: right; text-transform: uppercase; letter-spacing: 0.2px; }");
 

@@ -150,4 +150,19 @@ namespace BCGAdminComplaint.Models
         public String SenderName { get; set; }
         public String IsShowDeleteButton { get; set; }
     }
+
+    public class ComplaintSummaryCountsModel
+    {
+        public int TotalComplaint { get; set; }
+        public int Old { get; set; }
+        public int New { get; set; }
+        public int Accepted { get; set; }
+        public int MoreDetail { get; set; }
+        public int Rejected { get; set; }
+        public int ReferToBoard { get; set; }
+        public int BoardAccept { get; set; }
+        public int BoardReject { get; set; }
+        public int BoardHasApproved { get; set; }
+        public int BoardHasRejected { get; set; }
+    }
 }

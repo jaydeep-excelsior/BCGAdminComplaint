@@ -1,4 +1,4 @@
-﻿
+
 @{
     ViewBag.Title = "SearchComplaint";
     Layout = "~/Views/Shared/_Layout.cshtml";
@@ -76,7 +76,7 @@
                         <input type="file" id="fileAdditionalAttachment" class="form-control" />
                     </div>
                     <div class="col-md-12 mb-3">
-                        <label>Note (àª¨à«‹àª‚àª§)</label>
+                        <label>Note (નોંધ)</label>
                         <textarea id="txtAdditionalFileDescription" class="form-control" rows="2"></textarea>
                     </div>
                 </div>
@@ -93,7 +93,7 @@
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title">Details of G B Meeting (àª¸àª¾àª®àª¾àª¨à«àª¯ àª¸àª­àª¾àª¨à«€ àªµàª¿àª—àª¤à«‹)</h5>
+                <h5 class="modal-title">Details of G B Meeting (સામાન્ય સભાની વિગતો)</h5>
                 <a class="btn-close btn-sm" data-bs-dismiss="modal" aria-hidden="true"></a>
             </div>
             <div class="modal-body">
@@ -124,7 +124,7 @@
     <div class="modal-dialog modal-dialog-centered modal-lg">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title">Meeting Note (àª¬à«‡àª àª•àª¨à«€ àª¨à«‹àª‚àª§)</h5>
+                <h5 class="modal-title">Meeting Note (બેઠકની નોંધ)</h5>
                 <a class="btn-close btn-sm" data-bs-dismiss="modal" aria-hidden="true"></a>
             </div>
             <div class="modal-body">
@@ -164,15 +164,20 @@
             </div>
             <div>
                 <h5 class="mb-0 fw-bold text-dark">Search Complaint</h5>
-                <span class="text-muted font-size-12">àª¦àª¾àª–àª² àª•àª°à«‡àª² àª«àª°àª¿àª¯àª¾àª¦ àª¨àª‚àª¬àª° àª…àª¨à«‡ àªµàª°à«àª· àªªàª¸àª‚àª¦ àª•àª°à«€àª¨à«‡ àª¶à«‹àª§ àª•àª°à«‹</span>
+                <span class="text-muted font-size-12">દાખલ કરેલ ફરિયાદ નંબર અને વર્ષ પસંદ કરીને શોધ કરો</span>
             </div>
         </div>
         <div class="row align-items-end g-3">
             <div class="col-md-6 col-lg-5">
-                <label class="form-label font-size-12 fw-semibold text-secondary">Complaint Number (àª«àª°àª¿àª¯àª¾àª¦ àª¨àª‚àª¬àª°)</label>
+                <div class="d-flex align-items-center justify-content-between flex-wrap gap-1 mb-1">
+                    <label class="form-label font-size-12 fw-semibold text-secondary mb-0">Complaint Number (ફરિયાદ નંબર)</label>
+                    <span class="text-muted font-size-11">
+                        <i class="fa-solid fa-circle-info text-info me-1"></i> Format: <code class="text-primary font-size-11">BCG/CMP/[Number]/[Year]</code>
+                    </span>
+                </div>
                 <div class="input-group">
                     <span class="input-group-text bg-light fw-bold text-primary font-size-13">BCG/CMP/</span>
-                    <input type="text" class="form-control" id="txtSearchComplaintNumber" placeholder="e.g. 244" onkeypress="return isNumberKey(event, this)">
+                    <input type="text" class="form-control" id="txtSearchComplaintNumber" placeholder="e.g. 122" onkeypress="return isNumberKey(event, this)">
                     <span class="input-group-text bg-light fw-bold text-muted">/</span>
                     <select class="form-select" id="drpSearchComplaintYear" style="max-width: 140px;">
                         <option value="">Select Year</option>
@@ -187,26 +192,38 @@
                     <button class="btn btn-outline-secondary btn-sm px-3" id="btnClearSearch">
                         <i class="fa-solid fa-rotate-right me-1"></i> Clear
                     </button>
-                    <span class="text-muted font-size-12 ms-lg-2">
-                        <i class="fa-solid fa-circle-info text-info me-1"></i> Format: <code>BCG/CMP/[Number]/[Year]</code>
-                    </span>
                 </div>
             </div>
         </div>
     </div>
 </div>
 
-<!-- Initial Prompt Empty State (Visible before search or when cleared) -->
-<div id="dvSearchEmptyPrompt" class="empty-state-card mb-3">
-    <div class="empty-state-icon">
-        <i class="fa-solid fa-folder-tree"></i>
+<!-- Inline Not Found Alert Banner (Appears if searched case does not exist) -->
+<div id="searchNotFoundAlert" class="alert alert-warning border-0 shadow-sm rounded-3 d-flex align-items-center justify-content-between p-3 mb-3 d-none">
+    <div class="d-flex align-items-center gap-3">
+        <div class="section-icon-badge bg-warning-subtle text-warning">
+            <i class="fa-solid fa-triangle-exclamation"></i>
+        </div>
+        <div>
+            <div class="fw-bold text-dark font-size-14">Complaint Not Found: <span id="notFoundCaseNumber" class="text-primary font-monospace"></span></div>
+            <div class="text-muted font-size-12">No record exists matching this case number. Please verify the complaint number and filing year.</div>
+        </div>
     </div>
-    <h5 class="empty-state-title">Search Complaint Records</h5>
-    <p class="empty-state-desc">Enter the complaint number and select the filing year above, then click <strong>Search Case</strong> to load the full case file, advocate details, meetings, attachments, and payment receipts.</p>
-    <div class="empty-state-badges">
-        <span class="badge bg-light text-secondary border"><i class="fa-solid fa-shield-halved text-primary me-1"></i> Complete Case File</span>
-        <span class="badge bg-light text-secondary border"><i class="fa-solid fa-gavel text-warning me-1"></i> DC Proceedings</span>
-        <span class="badge bg-light text-secondary border"><i class="fa-solid fa-receipt text-success me-1"></i> Payment Logs</span>
+    <button type="button" class="btn-close" onclick="$('#searchNotFoundAlert').addClass('d-none')"></button>
+</div>
+
+<!-- Initial Prompt Empty State (Visible before search or when cleared) -->
+<div id="dvSearchEmptyPrompt" class="empty-state-card mb-4 shadow-sm">
+    <div class="empty-state-icon-box">
+        <i class="fa-solid fa-magnifying-glass-location"></i>
+    </div>
+    <h4 class="empty-state-title fw-bold text-dark mb-2">Search Complaint Records</h4>
+    <p class="empty-state-desc text-muted mb-3" style="max-width: 580px;">Enter the complaint number and select the filing year above, then click <strong>Search Case</strong> to load the full case file, advocate details, meetings, attachments, and payment receipts.</p>
+    <div class="d-flex align-items-center justify-content-center flex-wrap gap-2">
+        <span class="badge bg-light text-secondary border px-3 py-2 rounded-pill"><i class="fa-solid fa-shield-halved text-primary me-1"></i> Complete Case File</span>
+        <span class="badge bg-light text-secondary border px-3 py-2 rounded-pill"><i class="fa-solid fa-gavel text-warning me-1"></i> DC Proceedings</span>
+        <span class="badge bg-light text-secondary border px-3 py-2 rounded-pill"><i class="fa-solid fa-receipt text-success me-1"></i> Payment Receipts</span>
+        <span class="badge bg-light text-secondary border px-3 py-2 rounded-pill"><i class="fa-solid fa-comments text-info me-1"></i> Advocate Communications</span>
     </div>
 </div>
 
@@ -290,7 +307,7 @@
                             </div>
                             <div>
                                 <h5 class="mb-0 fw-bold text-dark">Complainant's Details</h5>
-                                <span class="text-muted font-size-12">àª«àª°àª¿àª¯àª¾àª¦à«€àª¨à«€ àªµàª¿àª—àª¤à«‹</span>
+                                <span class="text-muted font-size-12">ફરિયાદીની વિગતો</span>
                             </div>
                         </div>
                         <a href="javascript:void(0);" class="btn btn-outline-primary btn-sm" onclick="openComplainantEditModal()"><i class="fa-solid fa-pen-to-square me-1"></i> Edit</a>
@@ -346,14 +363,17 @@
                                 <i class="fa-solid fa-user-tie"></i>
                             </div>
                             <div>
-                                <h5 class="mb-0 fw-bold text-dark">Details of Advocate - Complained Against</h5>
-                                <span class="text-muted font-size-12">àªœà«‡ àªµàª•à«€àª² àªµàª¿àª°à«àª¦à«àª§ àª«àª°àª¿àª¯àª¾àª¦ àª•àª°àªµàª¾àª®àª¾àª‚ àª†àªµà«€ àª›à«‡ àª¤à«‡àª¨à«€ àªµàª¿àª—àª¤à«‹</span>
+                                <h5 class="mb-0 fw-bold text-dark d-flex align-items-center">
+                                    Details of Advocate - Complained Against
+                                    <span id="advocateCountBadge" class="badge bg-primary-subtle text-primary rounded-pill px-2.5 py-1 font-size-11 fw-semibold ms-2" style="display:none;"></span>
+                                </h5>
+                                <span class="text-muted font-size-12">જે વકીલ વિરુદ્ધ ફરિયાદ કરવામાં આવી છે તેની વિગતો</span>
                             </div>
                         </div>
-                        <a href="javascript:void(0);" class="btn btn-outline-primary btn-sm" onclick="openAddMemberModal()"><i class="fa-solid fa-plus me-1"></i> Add Advocate</a>
+                        <a href="javascript:void(0);" class="btn btn-outline-primary btn-sm rounded-pill px-3 fw-semibold shadow-none" onclick="openAddMemberModal()"><i class="fa-solid fa-plus me-1"></i> Add Advocate</a>
                     </div>
                     <div class="main_scroll_complaint_against answer">
-                        <div class="row" id="selectDetails"></div>
+                        <div class="row g-3" id="selectDetails"></div>
                     </div>
                 </div>
             </div>
@@ -363,16 +383,16 @@
                 <div class="card-body p-4">
                     <div class="d-flex justify-content-between align-items-center mb-3 pb-2 border-bottom">
                         <div class="d-flex align-items-center gap-2">
-                            <div class="section-icon-badge bg-primary-subtle text-primary">
+                            <div class="section-icon-badge badge-red">
                                 <i class="fa-solid fa-file-contract"></i>
                             </div>
                             <div>
                                 <h5 class="mb-0 fw-bold text-dark">Complaint Affidavit Copy</h5>
-                                <span class="text-muted font-size-12">àª«àª°àª¿àª¯àª¾àª¦ àª¸à«‹àª—àª‚àª¦àª¨àª¾àª®àª¾àª¨à«€ àª¨àª•àª²</span>
+                                <span class="text-muted font-size-12">ફરિયાદ સોગંદનામાની નકલ</span>
                             </div>
                         </div>
                         <div>
-                            <a href="javascript:void(0);" class="btn btn-outline-primary btn-sm" onclick="openAffidavitUploadModal()"><i class="fa-solid fa-upload me-1"></i> Upload File</a>
+                            <a href="javascript:void(0);" class="btn btn-outline-primary btn-sm rounded-pill px-3 fw-semibold shadow-none" onclick="openAffidavitUploadModal()"><i class="fa-solid fa-upload me-1"></i> Upload File</a>
                         </div>
                     </div>
                     <div class="main_scroll_complaint_against answer" id="dvAffidavitCopy"></div>
@@ -384,15 +404,15 @@
                 <div class="card-body p-4">
                     <div class="d-flex justify-content-between align-items-center mb-3 pb-2 border-bottom">
                         <div class="d-flex align-items-center gap-2">
-                            <div class="section-icon-badge bg-primary-subtle text-primary">
+                            <div class="section-icon-badge badge-blue">
                                 <i class="fa-solid fa-paperclip"></i>
                             </div>
                             <div>
                                 <h5 class="mb-0 fw-bold text-dark">Additional Attachments</h5>
-                                <span class="text-muted font-size-12">àªœà«‹ àª•à«‹àªˆ àªµàª§àª¾àª°àª¾àª¨àª¾ àªœà«‹àª¡àª¾àª£à«‹ àª¹à«‹àª¯ àª¤à«‹</span>
+                                <span class="text-muted font-size-12">જો કોઈ વધારાના જોડાણો હોય તો</span>
                             </div>
                         </div>
-                        <a href="javascript:void(0);" class="btn btn-outline-primary btn-sm" onclick="openAdditionalAttachmentModal()"><i class="fa-solid fa-upload me-1"></i> Upload File</a>
+                        <a href="javascript:void(0);" class="btn btn-outline-primary btn-sm rounded-pill px-3 fw-semibold shadow-none" onclick="openAdditionalAttachmentModal()"><i class="fa-solid fa-upload me-1"></i> Upload File</a>
                     </div>
                     <div class="main_scroll_complaint_against answer" id="dvOrderPassed"></div>
                 </div>
@@ -403,15 +423,15 @@
                 <div class="card-body p-4">
                     <div class="d-flex justify-content-between align-items-center mb-3 pb-2 border-bottom">
                         <div class="d-flex align-items-center gap-2">
-                            <div class="section-icon-badge bg-primary-subtle text-primary">
+                            <div class="section-icon-badge badge-indigo">
                                 <i class="fa-solid fa-users-rectangle"></i>
                             </div>
                             <div>
                                 <h5 class="mb-0 fw-bold text-dark">Details of G B Meeting</h5>
-                                <span class="text-muted font-size-12">àª¸àª¾àª®àª¾àª¨à«àª¯ àª¸àª­àª¾àª¨à«€ àªµàª¿àª—àª¤à«‹</span>
+                                <span class="text-muted font-size-12">સામાન્ય સભાની વિગતો</span>
                             </div>
                         </div>
-                        <a href="javascript:void(0);" class="btn btn-outline-primary btn-sm" onclick="openComplaintGBMeetingModal()"><i class="fa-solid fa-plus me-1"></i> Add Meeting</a>
+                        <a href="javascript:void(0);" class="btn btn-outline-primary btn-sm rounded-pill px-3 fw-semibold shadow-none" onclick="openComplaintGBMeetingModal()"><i class="fa-solid fa-plus me-1"></i> Add Meeting</a>
                     </div>
                     <div class="main_scroll_complaint_against answer" id="dvGBMeetingList"></div>
                 </div>
@@ -422,19 +442,19 @@
                 <div class="card-body p-4">
                     <div class="d-flex align-items-center justify-content-between mb-3 pb-2 border-bottom">
                         <div class="d-flex align-items-center gap-2">
-                            <div class="section-icon-badge bg-primary-subtle text-primary">
-                                <i class="fa-regular fa-comments"></i>
+                            <div class="section-icon-badge badge-teal">
+                                <i class="fa-solid fa-comments"></i>
                             </div>
                             <div>
                                 <h5 class="mb-0 fw-bold text-dark">Advocate Reply & Communications</h5>
-                                <span class="text-muted font-size-12">àªœà«‡ àªµàª•à«€àª² àªµàª¿àª°à«àª¦à«àª§ àª«àª°àª¿àª¯àª¾àª¦ àª•àª°àªµàª¾àª®àª¾àª‚ àª†àªµà«€ àª›à«‡ àª¤à«‡àª¨à«‹ àªœàªµàª¾àª¬</span>
+                                <span class="text-muted font-size-12">જે વકીલ વિરુદ્ધ ફરિયાદ કરવામાં આવી છે તેનો જવાબ</span>
                             </div>
                         </div>
                     </div>
                     <div class="replaycomplaintmain_card mt-2 rounded-3" id="dvreplyData"></div>
-                    <div class="mt-3 p-3 bg-light rounded-3 border">
+                    <div class="reply-composer-card mt-3">
                         <div class="position-relative mb-2">
-                            <textarea type="text" class="form-control bg-white shadow-none" id="txtReply" rows="3" placeholder="Enter reply message or note..."></textarea>
+                            <textarea type="text" class="form-control reply-textarea shadow-none" id="txtReply" rows="3" placeholder="Enter reply message or note..."></textarea>
                             <div class="chat-input-links" id="tooltip-container">
                                 <input type="file" id="fileLoader" name="files" title="Load File" class="d-none" onchange="ShowPreview(this,'Reply')" />
                                 <input type="hidden" id="hdfReplyB64ImagePath" />
@@ -443,12 +463,12 @@
                         </div>
                         <div class="d-flex justify-content-between align-items-center flex-wrap gap-2">
                             <div class="d-flex align-items-center">
-                                <a id="btnReplyUploadFile" class="btn btn-outline-primary btn-sm" onclick="openFiledialog()">
-                                    <i class="fa-solid fa-paperclip me-1"></i> Attach/Upload File
+                                <a id="btnReplyUploadFile" class="btn btn-outline-secondary btn-sm rounded-pill px-3 fw-semibold shadow-none" onclick="openFiledialog()">
+                                    <i class="fa-solid fa-paperclip me-1 text-primary"></i> Attach/Upload File
                                 </a>
                                 <label id="lbldisplayName" class="mb-0 text-muted ms-2" style="font-size: 12px;"></label>
                             </div>
-                            <a id="btnReplySave" class="btn btn-primary btn-sm px-4 shadow-sm"><i class="fa-solid fa-paper-plane me-1"></i> Save Reply</a>
+                            <a id="btnReplySave" class="btn btn-primary btn-sm rounded-pill px-4 fw-semibold shadow-sm"><i class="fa-solid fa-paper-plane me-1"></i> Save Reply</a>
                         </div>
                     </div>
                 </div>
@@ -493,7 +513,7 @@
                             </div>
                             <div>
                                 <h5 class="mb-0 fw-bold text-dark">Payment Details</h5>
-                                <span class="text-muted font-size-12">àªšà«‚àª•àªµàª£à«€àª¨à«€ àªµàª¿àª—àª¤à«‹</span>
+                                <span class="text-muted font-size-12">ચૂકવણીની વિગતો</span>
                             </div>
                         </div>
                     </div>
@@ -503,7 +523,7 @@
                             <div class="kpi-metric-tile kpi-metric-primary">
                                 <div class="d-flex align-items-center justify-content-between">
                                     <span class="kpi-label"><i class="fa-solid fa-coins me-1"></i> Total Amount</span>
-                                    <span class="kpi-value text-primary">â‚¹ <label id="lblTotalAmount" class="mb-0 text-primary fw-bold">0</label></span>
+                                    <span class="kpi-value text-primary">₹ <label id="lblTotalAmount" class="mb-0 text-primary fw-bold">0</label></span>
                                 </div>
                             </div>
                         </div>
@@ -511,7 +531,7 @@
                             <div class="kpi-metric-tile kpi-metric-success">
                                 <div class="d-flex align-items-center justify-content-between">
                                     <span class="kpi-label"><i class="fa-solid fa-circle-check me-1"></i> Paid Amount</span>
-                                    <span class="kpi-value text-success">â‚¹ <label id="lblPaidAmount" class="mb-0 text-success fw-bold">0</label></span>
+                                    <span class="kpi-value text-success">₹ <label id="lblPaidAmount" class="mb-0 text-success fw-bold">0</label></span>
                                 </div>
                             </div>
                         </div>
@@ -519,7 +539,7 @@
                             <div class="kpi-metric-tile kpi-metric-danger">
                                 <div class="d-flex align-items-center justify-content-between">
                                     <span class="kpi-label"><i class="fa-solid fa-clock me-1"></i> Due Amount</span>
-                                    <span class="kpi-value text-danger">â‚¹ <label id="lblDueAmount" class="mb-0 text-danger fw-bold">0</label></span>
+                                    <span class="kpi-value text-danger">₹ <label id="lblDueAmount" class="mb-0 text-danger fw-bold">0</label></span>
                                 </div>
                             </div>
                         </div>
@@ -536,7 +556,7 @@
                         </div>
                         <div>
                             <h5 class="mb-0 fw-bold text-dark">Pay Payment Information</h5>
-                            <span class="text-muted font-size-12">àªšà«àª•àªµàª£à«€àª¨à«€ àªµàª¿àª—àª¤ àª¦àª¾àª–àª² àª•àª°à«‹</span>
+                            <span class="text-muted font-size-12">ચુકવણીની વિગત દાખલ કરો</span>
                         </div>
                     </div>
                     <div class="row g-2">
@@ -589,7 +609,7 @@
                         </div>
                         <div>
                             <h5 class="mb-0 fw-bold text-dark">Payment History</h5>
-                            <span class="text-muted font-size-12">àªšà«àª•àªµàª£à«€àª¨à«€ àªªàª¾àª•à«€ àª°àª¸à«€àª¦à«‹</span>
+                            <span class="text-muted font-size-12">ચુકવણીની પાકી રસીદો</span>
                         </div>
                     </div>
                     <div id="divPaymentDetailList"></div>
@@ -779,6 +799,68 @@
         }
     }
 
+    function getInitials(name) {
+        if (!name) return "AD";
+        var parts = name.trim().split(/\s+/);
+        if (parts.length === 1) return parts[0].substring(0, 2).toUpperCase();
+        return (parts[0][0] + parts[parts.length - 1][0]).toUpperCase();
+    }
+
+    function buildAdvocateCardHtml(srNo, item, colClass) {
+        var EnrollmentNumberTextId = 'txtEnrollmentNumber' + srNo;
+        var EnrollmentIdHiddenId = 'hdfEnrollmentId' + srNo;
+
+        var enrolNo = (item.EnrollmentNo || item.EnrollmentNumber || '').toString().trim();
+        var enrolBadgeHtml = '';
+        if (enrolNo !== '') {
+            enrolBadgeHtml = '<span class="advocate-enrol-badge" title="Enrollment Number"><i class="fa-solid fa-id-card me-1 text-primary"></i> ' + enrolNo + '</span>';
+        } else {
+            enrolBadgeHtml = '<div class="advocate-enrol-input-wrap"><i class="fa-solid fa-pen-to-square text-muted me-1"></i><input id="' + EnrollmentNumberTextId + '" type="text" class="form-control form-control-sm advocate-enrol-input" placeholder="Enrollment No." onchange="EnrollmentNumberOnChange(' + srNo + ')" value=""><input id="' + EnrollmentIdHiddenId + '" type="hidden" value="' + (item.Id || '') + '"></div>';
+        }
+
+        var advocateName = (item.Name || item.AdvocateName || item.FullName || 'N/A').toString().trim();
+        var initials = getInitials(advocateName);
+        var rawAmount = item.Amount == null ? '0' : item.Amount == '' ? '0' : item.Amount;
+        var displayAmount = (!isNaN(rawAmount) && parseFloat(rawAmount) > 0) ? '₹' + parseFloat(rawAmount).toLocaleString('en-IN') : '₹' + rawAmount;
+
+        var extraDetailsHtml = '';
+        if (item.City || item.MobileNo) {
+            extraDetailsHtml = '<div class="advocate-meta-tags">'
+                             + (item.City ? '<span class="meta-tag"><i class="fa-solid fa-location-dot me-1 text-muted"></i>' + item.City + '</span>' : '')
+                             + (item.MobileNo ? '<span class="meta-tag"><i class="fa-solid fa-phone me-1 text-muted"></i>' + item.MobileNo + '</span>' : '')
+                             + '</div>';
+        }
+
+        return '<div class="' + colClass + ' mb-3">'
+            + '<div class="advocate-card">'
+                + '<div class="advocate-card-header">'
+                    + '<span class="advocate-index-tag">'
+                        + '<i class="fa-solid fa-hashtag font-size-10 me-1"></i> ' + srNo
+                    + '</span>'
+                    + enrolBadgeHtml
+                + '</div>'
+                + '<div class="advocate-card-body">'
+                    + '<div class="advocate-profile-group">'
+                        + '<div class="advocate-avatar-circle">' + initials + '</div>'
+                        + '<div class="advocate-profile-details">'
+                            + '<span class="advocate-role-title">Advocate Complained Against</span>'
+                            + '<h6 class="advocate-name-heading" title="' + advocateName + '">' + advocateName + '</h6>'
+                        + '</div>'
+                    + '</div>'
+                    + extraDetailsHtml
+                + '</div>'
+                + '<div class="advocate-card-footer">'
+                    + '<span class="advocate-amount-label">'
+                        + '<i class="fa-solid fa-receipt text-primary me-1"></i> Claim Fee'
+                    + '</span>'
+                    + '<span class="advocate-amount-badge">'
+                        + displayAmount
+                    + '</span>'
+                + '</div>'
+            + '</div>'
+        + '</div>';
+    }
+
     var searchTimeout;
     var detailsSearchPageNo = 1;
     var detailsSearchPageSize = 10;
@@ -808,10 +890,22 @@
         }
         $('#drpSearchComplaintYear').val(new Date().getFullYear());
 
-        //if (!$(e.target).closest('.position-relative').length) {
-        //    $('#advocateSearchResults').hide();
-        //}
+        $('#txtSearchComplaintNumber').on('keypress', function (e) {
+            if (e.which === 13) {
+                e.preventDefault();
+                $('#btnSearchComplaint').click();
+            }
+        });
     });
+
+    function quickFillSearch(num, year) {
+        $('#txtSearchComplaintNumber').val(num);
+        if (year) {
+            $('#drpSearchComplaintYear').val(year);
+        }
+        $('#searchNotFoundAlert').addClass('d-none');
+        $('#btnSearchComplaint').click();
+    }
 
     $('#btnSearchComplaint').on('click', function () {
         var numberPart = $('#txtSearchComplaintNumber').val().trim();
@@ -823,6 +917,9 @@
         }
 
         var fullComplaintNumber = 'BCG/CMP/' + numberPart + '/' + yearPart;
+        var $btn = $(this);
+        $btn.prop('disabled', true).html('<i class="fa-solid fa-spinner fa-spin me-1"></i> Searching...');
+        $('#searchNotFoundAlert').addClass('d-none');
 
         $.ajax({
             type: 'POST',
@@ -881,100 +978,86 @@
                     if (data.ComplaintAgainstList != null && data.ComplaintAgainstList !== '') {
                         try {
                             var againstList = JSON.parse(data.ComplaintAgainstList);
-                            $.each(againstList, function (i, item) {
-                                var srNo = i + 1;
-
-                                var EnrollmentNumberTextId = 'txtEnrollmentNumber' + srNo;
-                                var EnrollmentIdHiddenId = 'hdfEnrollmentId' + srNo;
-
-                                var VSelectDetails = '';
-                                var VIsKnownNo = '';
-                                if (item.IsKnown === 'Y' && item.EnrollmentNumber != null && item.EnrollmentNumber !== '') {
-                                    VIsKnownNo = 'nonumber';
-                                    VSelectDetails = '<div class="complaint_number"><div class="title">Enrollment Number</div><a class="description">' + item.EnrollmentNumber + '</a></div>';
-                                }
-                                else {
-                                    VIsKnownNo = 'number';
-                                    VSelectDetails = '<input id=' + EnrollmentNumberTextId + ' type="text" class="form-control txtenrollmentnumberwith" placeholder="Enrollment Number"  onchange=EnrollmentNumberOnChange(' + srNo + ') value=""><input id=' + EnrollmentIdHiddenId + ' type="hidden" value=' + item.Id + '>';
-                                }
-
-                                var extraDetails = '';
-                                if (item.IsKnown === 'N') {
-                                    extraDetails = '</div><div class="row">'
-                                                 + '<div class="col-md-6 mt-2 d-flex flex-column"><div class="title">City</div><div class="description descriptionborderbottom mt-auto">' + (item.City || '&nbsp;') + '</div></div>'
-                                                 + '<div class="col-md-6 mt-2 d-flex flex-column"><div class="title">Mobile No.</div><div class="description descriptionborderbottom mt-auto">' + (item.MobileNo || '&nbsp;') + '</div></div>';
-                                }
-
-                                var againstHtml = '<div class="col-md-4 mb-3"><div class="main_card_list main_card_list_border" ><div class="main_header_card">'
-                                    + '<div class="_left_side">'
-                                        + '<div class="' + VIsKnownNo + '">' + srNo + '</div>'
-                                        + VSelectDetails
-                                    + '</div>'
-                                    + '<div class="rigth_side"></div>'
-                                    + '</div>'
-                                    + '<div class="main_card_list_body">'
-                                        + '<div class="row">'
-                                            + '<div class="col-md-12 mt-2">'
-                                                + '<div class="title">Full Name</div>'
-                                                + '<div class="description descriptionborderbottom">' + (item.AdvocateName || '') + '</div>'
-                                            + '</div>'
-                                            + extraDetails
-                                        + '</div>'
-                                    + '</div>'
-                                    + '<div class="main_card_list_body">'
-                                        + '<div class="row">'
-                                            + '<div class="col-md-12 mt-2 text-end">'
-                                                + '<div class="title">Amount: ' + (item.Amount || 0) + '</div>'
-                                            + '</div>'
-                                        + '</div>'
-                                    + '</div>'
-                                + '</div></div>';
-
-                                $('#selectDetails').append(againstHtml);
-                            });
+                            if (againstList.length > 0) {
+                                $('#advocateCountBadge').text(againstList.length + (againstList.length === 1 ? ' Advocate' : ' Advocates')).show();
+                                var colClass = againstList.length === 1 ? 'col-lg-5 col-md-7 col-12' : 'col-xl-4 col-lg-6 col-md-6 col-12';
+                                $.each(againstList, function (i, item) {
+                                    $('#selectDetails').append(buildAdvocateCardHtml(i + 1, item, colClass));
+                                });
+                            } else {
+                                $('#advocateCountBadge').hide();
+                                var emptyStateHtml = '<div class="col-12"><div class="advocate-empty-state"><div class="empty-icon-wrap"><i class="fa-solid fa-user-slash"></i></div><h6>No Advocates Added</h6><p class="text-muted small mb-0">No advocate complained against has been recorded yet.</p></div></div>';
+                                $('#selectDetails').html(emptyStateHtml);
+                            }
                         } catch (e) { }
+                    } else {
+                        $('#advocateCountBadge').hide();
                     }
 
                     // Fill Affidavit Copy
                     $('#dvAffidavitCopy').empty();
+                    var hasAffidavit = false;
                     if (data.ComplaintAffidavitCopyList != null && data.ComplaintAffidavitCopyList !== '') {
                         try {
                             var affidavitList = JSON.parse(data.ComplaintAffidavitCopyList);
                             $.each(affidavitList, function (i, item) {
                                 if (item.FilePath != null && item.FilePath !== '') {
-                                    var affHtml = '<div class="main_card_list main_card_list_border p-12-custome mt-3">'
-                                        + '<div class="main_card_list_body"><div class="row"><div class="col-md-12">'
-                                        + '<div class="file_name_btn" onclick="getFile(\'' + item.FilePath + '\')"><div class="name">' + (item.FileName || '') + '</div><div class="view_file"><i class="las la-eye"></i></div></div>'
-                                        + '</div></div></div></div>';
+                                    hasAffidavit = true;
+                                    var affHtml = '<div class="doc-item-card">'
+                                        + '<div class="doc-info-wrap" onclick="getFile(\'' + item.FilePath + '\')" style="cursor: pointer;">'
+                                            + '<div class="doc-icon-box"><i class="fa-solid fa-file-pdf"></i></div>'
+                                            + '<div style="min-width: 0;">'
+                                                + '<div class="doc-name" title="' + (item.FileName || '') + '">' + (item.FileName || '') + '</div>'
+                                                + '<div class="doc-meta"><span class="badge bg-light text-secondary border font-size-11"><i class="fa-solid fa-shield-halved me-1 text-primary"></i> Verified Affidavit</span><span>• Click to preview</span></div>'
+                                            + '</div>'
+                                        + '</div>'
+                                        + '<button type="button" class="btn btn-outline-primary btn-sm rounded-pill px-3 fw-semibold d-inline-flex align-items-center gap-1 shadow-none" onclick="getFile(\'' + item.FilePath + '\')">'
+                                            + '<i class="fa-regular fa-eye"></i> View'
+                                        + '</button>'
+                                    + '</div>';
                                     $('#dvAffidavitCopy').append(affHtml);
                                 }
                             });
                         } catch (e) { }
                     }
+                    if (!hasAffidavit) {
+                        $('#dvAffidavitCopy').html('<div class="empty-doc-placeholder text-center"><div class="empty-icon-circle"><i class="fa-regular fa-file-pdf"></i></div><div class="text-dark fw-semibold font-size-13">No affidavit document attached yet.</div><div class="text-muted font-size-12">Upload the verified affidavit copy for this complaint.</div></div>');
+                    }
 
                     // Fill Additional Attachments
                     $('#dvOrderPassed').empty();
+                    var hasAdditional = false;
                     if (data.ComplaintAdditionalAttachmentsList != null && data.ComplaintAdditionalAttachmentsList !== '') {
                         try {
                             var additionalList = JSON.parse(data.ComplaintAdditionalAttachmentsList);
-                            $('#dvOrderPassed').empty();
                             $.each(additionalList, function (i, item) {
-                                var fileBlock = '';
-                                if (item.FilePath != null && item.FilePath !== '') {
-                                    fileBlock = '<div class="file_name_btn" onclick="getFile(\'' + item.FilePath + '\')"><div class="name">' + (item.FileName || '') + '</div><div class="view_file"><i class="las la-eye"></i></div></div>';
-                                }
-                                var noteBlock = '';
+                                hasAdditional = true;
+                                var noteCallout = '';
                                 if (item.Description != null && item.Description.trim() !== '') {
-                                    noteBlock = '<div class="col-md-12 mt-3"><div class="title">Note (àª¨à«‹àª‚àª§)</div><div class="description">' + item.Description + '</div></div>';
+                                    noteCallout = '<div class="attachment-note-callout"><span class="attachment-note-label"><i class="fa-regular fa-comment-dots text-primary me-1"></i> Note (નોંધ)</span><p class="attachment-note-text">' + item.Description + '</p></div>';
                                 }
-                                var addHtml = '<div class="main_card_list main_card_list_border p-12-custome mt-3">'
-                                    + '<div class="main_card_list_body"><div class="row">'
-                                    + '<div class="col-md-12"><div class="title">Upload File (àª«àª¾àª‡àª² àª…àªªàª²à«‹àª¡)</div>' + fileBlock + '</div>'
-                                    + noteBlock
-                                    + '</div></div></div>';
+                                var addHtml = '<div class="attachment-card">'
+                                    + '<div class="attachment-top-row">'
+                                        + '<div class="doc-info-wrap" onclick="getFile(\'' + item.FilePath + '\')" style="cursor: pointer;">'
+                                            + '<div class="attachment-icon-box"><i class="fa-solid fa-file-lines"></i></div>'
+                                            + '<div style="min-width: 0;">'
+                                                + '<div class="doc-name" title="' + (item.FileName || '') + '">' + (item.FileName || '') + '</div>'
+                                                + '<div class="doc-meta"><span class="badge bg-light text-muted border font-size-10"><i class="fa-solid fa-paperclip me-1"></i> Attachment</span></div>'
+                                            + '</div>'
+                                        + '</div>'
+                                        + '<div class="attachment-actions">'
+                                            + '<button type="button" class="btn btn-outline-primary btn-sm rounded-pill px-3 fw-semibold shadow-none" onclick="getFile(\'' + item.FilePath + '\')"><i class="fa-regular fa-eye me-1"></i> View</button>'
+                                            + (item.Id ? '<button type="button" class="btn btn-outline-danger btn-sm rounded-circle p-0" style="width: 32px; height: 32px; display: inline-flex; align-items: center; justify-content: center;" onclick="deleteAdditionalAttachment(' + item.Id + ')" title="Delete File"><i class="fa-solid fa-trash font-size-12"></i></button>' : '')
+                                        + '</div>'
+                                    + '</div>'
+                                    + noteCallout
+                                + '</div>';
                                 $('#dvOrderPassed').append(addHtml);
                             });
                         } catch (e) { }
+                    }
+                    if (!hasAdditional) {
+                        $('#dvOrderPassed').html('<div class="empty-doc-placeholder text-center"><div class="empty-icon-circle"><i class="fa-solid fa-paperclip"></i></div><div class="text-dark fw-semibold font-size-13">No additional attachments uploaded yet.</div><div class="text-muted font-size-12">Click "Upload File" to add supporting documents.</div></div>');
                     }
 
                     // Fill Payment Details
@@ -1058,47 +1141,43 @@
                                     var FilePath = "'" + row.FilePath + "'";
                                     var deleteBtnHtml = '';
                                     if (row.IsShowDeleteButton === 'Y') {
-                                        deleteBtnHtml = '<button type="button" class="btn btn-outline-danger btn-sm ms-2 py-0" style="font-size: 11px; line-height: 1.2;" onclick="deleteReply(\'' + row.Id + '\')"><i class="fa-solid fa-trash me-1"></i>Delete</button>';
+                                        deleteBtnHtml = '<button type="button" class="btn btn-outline-danger btn-sm rounded-circle p-0 ms-2" style="width: 26px; height: 26px; display: inline-flex; align-items: center; justify-content: center;" onclick="deleteReply(\'' + row.Id + '\')" title="Delete Reply"><i class="fa-solid fa-trash font-size-10"></i></button>';
                                     }
-                                    var RowItem = '<div class="replaydetailsmain">'
-                                                    + '<div class="Sub_titile d-flex justify-content-between sendernamestyle">'
-                                                        + '<div class="fw-bold font-size-17 text-dark"><i class="fa-solid fa-user text-muted me-2"></i>' + row.SenderName + '</div>'
+                                    var initials = (row.SenderName ? row.SenderName.substring(0, 2).toUpperCase() : 'AD');
+                                    var RowItem = '<div class="reply-item-card">'
+                                                    + '<div class="reply-header">'
+                                                        + '<div class="reply-sender-info">'
+                                                            + '<div class="reply-avatar">' + initials + '</div>'
+                                                            + '<span class="reply-sender-name">' + (row.SenderName || 'Advocate') + '</span>'
+                                                        + '</div>'
                                                         + '<div class="d-flex align-items-center">'
-                                                            + '<span class="fw-bold font-size-17 text-dark"><i class="fa-regular fa-clock text-muted me-2"></i>' + row.SCreateDate + ' ' + row.SCreateTime + '</span>'
+                                                            + '<span class="reply-date-badge"><i class="fa-regular fa-clock me-1"></i>' + row.SCreateDate + ' ' + row.SCreateTime + '</span>'
                                                             + deleteBtnHtml
                                                         + '</div>'
                                                     + '</div>';
 
                                     if (row.Summery != null && row.Summery.trim() !== "") {
-                                        RowItem += '<div class="Sub_titile mt-2">'
-                                                         + 'Summery | Short Information'
-                                                    + '</div>'
-                                                    + '<div class="main_contentupdate">'
-                                                         + '<p>' + row.Summery + '</p>'
+                                        RowItem += '<div class="reply-summary-callout">'
+                                                         + '<div class="reply-summary-title"><i class="fa-solid fa-quote-left me-1"></i> Summary | Short Information</div>'
+                                                         + '<p class="reply-summary-text">' + row.Summery + '</p>'
                                                     + '</div>';
                                     }
 
                                     if (row.Comprehensive != null && row.Comprehensive.trim() !== "") {
-                                        RowItem += '<div class="Sub_titile mt-3">'
-                                                         + 'Comprehensive Complaint'
-                                                    + '</div>'
-                                                    + '<div class="main_contentupdate">'
-                                                         + '<p>' + row.Comprehensive + '</p>'
+                                        RowItem += '<div class="reply-comprehensive-block">'
+                                                         + '<div class="reply-comprehensive-title"><i class="fa-regular fa-file-lines me-1"></i> Comprehensive Response</div>'
+                                                         + '<p class="reply-comprehensive-text">' + row.Comprehensive + '</p>'
                                                     + '</div>';
                                     }
 
                                     if (row.FilePath != null && row.FilePath.trim() !== "") {
-                                        RowItem += '<div class="Sub_titile mt-3">Attachment</div>'
-                                                        + '<div class="main_contentupdate">'
-                                                            + '<div class="fileupload_details">'
-                                                                + '<div class="d-flex align-items-center" onclick="getFile(\'' + row.FilePath + '\')" style="cursor:pointer;" title="Click to view file">'
-                                                                    + '<div class="pdf-btn btn-sm">'
-                                                                        + '<img src="/assets/img/pdficon.svg">'
-                                                                    + '</div>'
-                                                                    + '<div class="fileupload_name text-primary text-decoration-underline">' + row.FileName + '</div>'
-                                                                + '</div>'
-                                                            + '</div>'
-                                                        + '</div>';
+                                        RowItem += '<div>'
+                                                        + '<div class="reply-attachment-chip" onclick="getFile(\'' + row.FilePath + '\')" title="Click to view file">'
+                                                            + '<i class="fa-solid fa-file-pdf text-danger font-size-16"></i>'
+                                                            + '<span class="font-size-12 fw-semibold text-primary">' + row.FileName + '</span>'
+                                                            + '<i class="fa-regular fa-eye font-size-11 text-muted ms-1"></i>'
+                                                        + '</div>'
+                                                    + '</div>';
                                     }
 
                                     RowItem += '</div>';
@@ -1106,41 +1185,64 @@
                                 });
                             }
                             else {
-                                $('#dvreplyData').empty();
-                                $('#dvreplyData').append('No data available');
+                                $('#dvreplyData').html('<div class="empty-doc-placeholder text-center"><div class="empty-icon-circle"><i class="fa-regular fa-comments"></i></div><div class="text-dark fw-semibold font-size-13">No replies or communications logged yet.</div><div class="text-muted font-size-12">Use the reply composer below to log communications.</div></div>');
                             }
                         }
                         catch (e) {
-                            $('#dvreplyData').empty();
-                            $('#dvreplyData').append('No data available');
+                            $('#dvreplyData').html('<div class="empty-doc-placeholder text-center"><div class="empty-icon-circle"><i class="fa-regular fa-comments"></i></div><div class="text-dark fw-semibold font-size-13">No replies or communications logged yet.</div><div class="text-muted font-size-12">Use the reply composer below to log communications.</div></div>');
                         }
                     }
                     else {
-                        $('#dvreplyData').empty();
-                        $('#dvreplyData').append('No data available');
+                        $('#dvreplyData').html('<div class="empty-doc-placeholder text-center"><div class="empty-icon-circle"><i class="fa-regular fa-comments"></i></div><div class="text-dark fw-semibold font-size-13">No replies or communications logged yet.</div><div class="text-muted font-size-12">Use the reply composer below to log communications.</div></div>');
                     }
 
                     // Show details area
+                    $('#searchNotFoundAlert').addClass('d-none');
                     $('#dvSearchEmptyPrompt').hide();
                     $('#dvComplaintDetailsArea').removeClass('hide-element');
                     getGBMeetingLogs(data.Id);
                 } else {
                     $('#dvComplaintDetailsArea').addClass('hide-element');
                     $('#dvSearchEmptyPrompt').show();
-                    swal(response.Message || 'Complaint not found.', '', 'error');
+                    $('#notFoundCaseNumber').text(fullComplaintNumber);
+                    $('#searchNotFoundAlert').removeClass('d-none');
+                    Swal.fire({
+                        icon: 'warning',
+                        title: 'Complaint Not Found',
+                        html: '<div class="text-center">' +
+                              '  <p class="text-muted mb-3 font-size-14">No complaint record found matching <strong>' + fullComplaintNumber + '</strong>.</p>' +
+                              '  <div class="p-3 bg-light rounded-3 text-start font-size-12 text-secondary border mb-2">' +
+                              '    <div class="d-flex align-items-center gap-2 mb-1 fw-semibold text-dark"><i class="fa-solid fa-circle-info text-primary font-size-14"></i> Search Tips:</div>' +
+                              '    <ul class="mb-0 ps-3">' +
+                              '      <li>Please verify the complaint number and registration year.</li>' +
+                              '      <li>Ensure the complaint has been registered and recorded in the system.</li>' +
+                              '    </ul>' +
+                              '  </div>' +
+                              '</div>',
+                        confirmButtonText: '<i class="fa-solid fa-check me-1"></i> Got it',
+                        customClass: {
+                            popup: 'swal2-modern-popup shadow-lg',
+                            confirmButton: 'btn btn-primary px-4 py-2 rounded-pill'
+                        },
+                        buttonsStyling: false
+                    });
                 }
             },
             error: function () {
                 $('#dvComplaintDetailsArea').addClass('hide-element');
                 $('#dvSearchEmptyPrompt').show();
-                swal('Error searching complaint.', '', 'error');
+                swal('Error searching complaint. Please try again.', '', 'error');
+            },
+            complete: function () {
+                $btn.prop('disabled', false).html('<i class="fa-solid fa-magnifying-glass me-1"></i> Search Case');
             }
         });
     });
 
     $('#btnClearSearch').on('click', function () {
-        $('#txtSearchComplaintNumber').val('');
+        $('#txtSearchComplaintNumber').val('').focus();
         $('#drpSearchComplaintYear').val(new Date().getFullYear());
+        $('#searchNotFoundAlert').addClass('d-none');
         $('#dvComplaintDetailsArea').addClass('hide-element');
         $('#dvSearchEmptyPrompt').show();
         $('#dvGBMeetingList').empty();
@@ -1645,64 +1747,26 @@
                 if (response.IsSuccess) {
                     if (response.Data != null) {
 
-                        $('#selectDetails').append('');
+                        $('#selectDetails').empty();
+                        if (response.Data != null && response.Data.length > 0) {
+                            $('#advocateCountBadge').text(response.Data.length + (response.Data.length === 1 ? ' Advocate' : ' Advocates')).show();
 
-                        var TotalAmount = 0;
-                        $.each(response.Data, function (i, row) {
+                            var TotalAmount = 0;
+                            var colClass = response.Data.length === 1 ? 'col-lg-5 col-md-7 col-12' : 'col-xl-4 col-lg-6 col-md-6 col-12';
 
-                            var srNo = i + 1;
+                            $.each(response.Data, function (i, row) {
+                                $('#selectDetails').append(buildAdvocateCardHtml(i + 1, row, colClass));
+                                var rawAmount = row.Amount == null ? '0' : row.Amount == '' ? '0' : row.Amount;
+                                TotalAmount = TotalAmount + parseFloat(rawAmount);
+                            });
 
-                            var EnrollmentNumberTextId = 'txtEnrollmentNumber' + srNo;
-                            var EnrollmentIdHiddenId = 'hdfEnrollmentId' + srNo;
-
-                            var EnrollmentNumberClass = '';
-
-                            var VSelectDetails = '';
-                            if (row.EnrollmentNo != null) {
-                                if (row.EnrollmentNo != '') {
-                                    EnrollmentNumberClass = 'nonumber';
-                                    VSelectDetails = '<div class="complaint_number"><div class="title">Enrollment Number</div><a class="description">' + row.EnrollmentNo + '</a></div>';
-                                }
-                                else {
-                                    EnrollmentNumberClass = 'number';
-                                    VSelectDetails = '<input id=' + EnrollmentNumberTextId + ' type="text" class="form-control" placeholder="Enrollment Number"  onchange=EnrollmentNumberOnChange(' + srNo + ') value=""><input id=' + EnrollmentIdHiddenId + ' type="hidden" value=' + row.Id + '>';
-                                }
-                            }
-                            else {
-                                EnrollmentNumberClass = 'number';
-                                VSelectDetails = '<input id=' + EnrollmentNumberTextId + ' type="text" class="form-control" placeholder="Enrollment Number"  onchange=EnrollmentNumberOnChange(' + srNo + ') value=""><input id=' + EnrollmentIdHiddenId + ' type="hidden" value=' + row.Id + '>';
-                            }
-
-                            var selectDetails = '';
-                            selectDetails = '<div class="col-md-4 mb-3"><div class="main_card_list main_card_list_border" ><div class="main_header_card">'
-                                             + '<div class="_left_side">'
-                                                 + '<div class="' + EnrollmentNumberClass + '">' + srNo + '</div>'
-                                                     + VSelectDetails
-                                                 + '</div>'
-                                                 + '<div class="rigth_side"></div>'
-                                             + '</div>'
-                                             + '<div class="main_card_list_body">'
-                                                 + '<div class="row">'
-                                                     + '<div class="col-md-12 mt-2">'
-                                                         + '<div class="title">Full Name</div>'
-                                                         + '<div class="description">' + row.Name + '</div>'
-                                                     + '</div>'
-                                                 + '</div>'
-                                             + '</div>'
-                                             + '<div class="main_card_list_body">'
-                                                 + '<div class="row">'
-                                                     + '<div class="col-md-12 mt-2 text-end">'
-                                                         + '<div class="title">Amount: ' + row.Amount + '</div>'
-                                                     + '</div>'
-                                                 + '</div>'
-                                             + '</div>'
-                                         + '</div></div>';
-                            $('#selectDetails').append(selectDetails);
-
-                            TotalAmount = TotalAmount + parseFloat(row.Amount == null ? '0' : row.Amount == '' ? '0' : row.Amount);
-                        });
-
-                        $("#lblManualFinalAmnt").text(TotalAmount);
+                            $("#lblManualFinalAmnt").text(TotalAmount);
+                        } else {
+                            $('#advocateCountBadge').hide();
+                            var emptyStateHtml = '<div class="col-12"><div class="advocate-empty-state"><div class="empty-icon-wrap"><i class="fa-solid fa-user-slash"></i></div><h6>No Advocates Added</h6><p class="text-muted small mb-0">No advocate complained against has been recorded yet.</p></div></div>';
+                            $('#selectDetails').html(emptyStateHtml);
+                            $("#lblManualFinalAmnt").text(0);
+                        }
                     }
                 }
                 else {
@@ -2752,52 +2816,48 @@
             success: function (response) {
                 $('#dvreplyData').empty();
                 var dcReply = $('#dvreplyData');
-                if (response.IsSuccess) {
+                if (response.IsSuccess && response.Data && response.Data.length > 0) {
                     $.each(response.Data, function (data, row) {
                         var FilePath = "'" + row.FilePath + "'";
                         var deleteBtnHtml = '';
                         if (row.IsShowDeleteButton === 'Y') {
-                            deleteBtnHtml = '<button type="button" class="btn btn-outline-danger btn-sm ms-2 py-0" style="font-size: 11px; line-height: 1.2;" onclick="deleteReply(\'' + row.Id + '\')"><i class="fa-solid fa-trash me-1"></i>Delete</button>';
+                            deleteBtnHtml = '<button type="button" class="btn btn-outline-danger btn-sm rounded-circle p-0 ms-2" style="width: 26px; height: 26px; display: inline-flex; align-items: center; justify-content: center;" onclick="deleteReply(\'' + row.Id + '\')" title="Delete Reply"><i class="fa-solid fa-trash font-size-10"></i></button>';
                         }
-                        var RowItem = '<div class="replaydetailsmain">'
-                                        + '<div class="Sub_titile d-flex justify-content-between sendernamestyle">'
-                                            + '<div class="fw-bold font-size-17 text-dark"><i class="fa-solid fa-user text-muted me-2"></i>' + row.SenderName + '</div>'
+                        var initials = (row.SenderName ? row.SenderName.substring(0, 2).toUpperCase() : 'AD');
+                        var RowItem = '<div class="reply-item-card">'
+                                        + '<div class="reply-header">'
+                                            + '<div class="reply-sender-info">'
+                                                + '<div class="reply-avatar">' + initials + '</div>'
+                                                + '<span class="reply-sender-name">' + (row.SenderName || 'Advocate') + '</span>'
+                                            + '</div>'
                                             + '<div class="d-flex align-items-center">'
-                                                + '<span class="fw-bold font-size-17 text-dark"><i class="fa-regular fa-clock text-muted me-2"></i>' + row.SCreateDate + ' ' + row.SCreateTime + '</span>'
+                                                + '<span class="reply-date-badge"><i class="fa-regular fa-clock me-1"></i>' + row.SCreateDate + ' ' + row.SCreateTime + '</span>'
                                                 + deleteBtnHtml
                                             + '</div>'
                                         + '</div>';
 
                         if (row.Summery != null && row.Summery.trim() !== "") {
-                            RowItem += '<div class="Sub_titile mt-2">'
-                                             + 'Summery | Short Information'
-                                        + '</div>'
-                                        + '<div class="main_contentupdate">'
-                                             + '<p>' + row.Summery + '</p>'
+                            RowItem += '<div class="reply-summary-callout">'
+                                             + '<div class="reply-summary-title"><i class="fa-solid fa-quote-left me-1"></i> Summary | Short Information</div>'
+                                             + '<p class="reply-summary-text">' + row.Summery + '</p>'
                                         + '</div>';
                         }
 
                         if (row.Comprehensive != null && row.Comprehensive.trim() !== "") {
-                            RowItem += '<div class="Sub_titile mt-3">'
-                                             + 'Comprehensive Complaint'
-                                        + '</div>'
-                                        + '<div class="main_contentupdate">'
-                                             + '<p>' + row.Comprehensive + '</p>'
+                            RowItem += '<div class="reply-comprehensive-block">'
+                                             + '<div class="reply-comprehensive-title"><i class="fa-regular fa-file-lines me-1"></i> Comprehensive Response</div>'
+                                             + '<p class="reply-comprehensive-text">' + row.Comprehensive + '</p>'
                                         + '</div>';
                         }
 
                         if (row.FilePath != null && row.FilePath.trim() !== "") {
-                            RowItem += '<div class="Sub_titile mt-3">Attachment</div>'
-                                            + '<div class="main_contentupdate">'
-                                                + '<div class="fileupload_details">'
-                                                    + '<div class="d-flex align-items-center" onclick="getFile(' + FilePath + ')" style="cursor:pointer;" title="Click to view file">'
-                                                        + '<div class="pdf-btn btn-sm">'
-                                                            + '<img src="/assets/img/pdficon.svg">'
-                                                        + '</div>'
-                                                        + '<div class="fileupload_name text-primary text-decoration-underline">' + row.FileName + '</div>'
-                                                    + '</div>'
-                                                + '</div>'
-                                            + '</div>';
+                            RowItem += '<div>'
+                                            + '<div class="reply-attachment-chip" onclick="getFile(' + FilePath + ')" title="Click to view file">'
+                                                + '<i class="fa-solid fa-file-pdf text-danger font-size-16"></i>'
+                                                + '<span class="font-size-12 fw-semibold text-primary">' + row.FileName + '</span>'
+                                                + '<i class="fa-regular fa-eye font-size-11 text-muted ms-1"></i>'
+                                            + '</div>'
+                                        + '</div>';
                         }
 
                         RowItem += '</div>';
@@ -2806,7 +2866,7 @@
                     dcReply.scrollTop(0);
                 }
                 else {
-                    dcReply.append('No data available');
+                    dcReply.html('<div class="empty-doc-placeholder text-center"><div class="empty-icon-circle"><i class="fa-regular fa-comments"></i></div><div class="text-dark fw-semibold font-size-13">No replies or communications logged yet.</div><div class="text-muted font-size-12">Use the reply composer below to log communications.</div></div>');
                 }
             }, failure: function (result) {
                 swal('Something went wrong!', '', 'error');
@@ -3023,29 +3083,32 @@
             dataType: "json",
             success: function (response) {
                 $("#dvAffidavitCopy").empty();
-                if (response.IsSuccess) {
-                    if (response.Data != null) {
-                        if (response.Data != '') {
-                            $.each(response.Data, function (i, item) {
-                                if (item.FilePath != null && item.FilePath !== '') {
-                                    var affHtml = '<div class="main_card_list main_card_list_border p-12-custome mt-3">'
-                                        + '<div class="main_card_list_body"><div class="row"><div class="col-md-12">'
-                                        + '<div class="file_name_btn" onclick="getFile(\'' + item.FilePath + '\')"><div class="name">' + (item.FileName || '') + '</div><div class="view_file"><i class="las la-eye"></i></div></div>'
-                                        + '</div></div></div></div>';
-                                    $('#dvAffidavitCopy').append(affHtml);
-                                }
-                            });
+                if (response.IsSuccess && response.Data != null && response.Data.length > 0) {
+                    var hasAffidavit = false;
+                    $.each(response.Data, function (i, item) {
+                        if (item.FilePath != null && item.FilePath !== '') {
+                            hasAffidavit = true;
+                            var affHtml = '<div class="doc-item-card">'
+                                + '<div class="doc-info-wrap" onclick="getFile(\'' + item.FilePath + '\')" style="cursor: pointer;">'
+                                    + '<div class="doc-icon-box"><i class="fa-solid fa-file-pdf"></i></div>'
+                                    + '<div style="min-width: 0;">'
+                                        + '<div class="doc-name" title="' + (item.FileName || '') + '">' + (item.FileName || '') + '</div>'
+                                        + '<div class="doc-meta"><span class="badge bg-light text-secondary border font-size-11"><i class="fa-solid fa-shield-halved me-1 text-primary"></i> Verified Affidavit</span><span>• Click to preview</span></div>'
+                                    + '</div>'
+                                + '</div>'
+                                + '<button type="button" class="btn btn-outline-primary btn-sm rounded-pill px-3 fw-semibold d-inline-flex align-items-center gap-1 shadow-none" onclick="getFile(\'' + item.FilePath + '\')">'
+                                    + '<i class="fa-regular fa-eye"></i> View'
+                                + '</button>'
+                            + '</div>';
+                            $('#dvAffidavitCopy').append(affHtml);
                         }
-                        else {
-                            $("#dvAffidavitCopy").empty();
-                        }
-                    }
-                    else {
-                        $("#dvAffidavitCopy").empty();
+                    });
+                    if (!hasAffidavit) {
+                        $('#dvAffidavitCopy').html('<div class="empty-doc-placeholder text-center"><div class="empty-icon-circle"><i class="fa-regular fa-file-pdf"></i></div><div class="text-dark fw-semibold font-size-13">No affidavit document attached yet.</div><div class="text-muted font-size-12">Upload the verified affidavit copy for this complaint.</div></div>');
                     }
                 }
                 else {
-                    $("#dvAffidavitCopy").empty();
+                    $("#dvAffidavitCopy").html('<div class="empty-doc-placeholder text-center"><div class="empty-icon-circle"><i class="fa-regular fa-file-pdf"></i></div><div class="text-dark fw-semibold font-size-13">No affidavit document attached yet.</div><div class="text-muted font-size-12">Upload the verified affidavit copy for this complaint.</div></div>');
                 }
             }, failure: function (result) {
                 $("#dvAffidavitCopy").empty();
@@ -3134,39 +3197,33 @@
             dataType: "json",
             success: function (response) {
                 $("#dvOrderPassed").empty();
-                if (response.IsSuccess) {
-                    if (response.Data != null) {
-                        if (response.Data != '') {
-                            $.each(response.Data, function (i, item) {
-                                var fileBlock = '';
-                                if (item.FilePath != null && item.FilePath !== '') {
-                                    fileBlock = '<div class="d-flex align-items-center">'
-                                        + '<div class="file_name_btn flex-grow-1" onclick="getFile(\'' + item.FilePath + '\')"><div class="name">' + (item.FileName || '') + '</div><div class="view_file"><i class="las la-eye"></i></div></div>'
-                                        + '<a href="javascript:void(0);" class="btn btn-outline-danger btn-sm ms-2" style="height: 35px; display: flex; align-items: center; justify-content: center;" onclick="deleteAdditionalAttachment(' + item.Id + ')" title="Delete File"><i class="las la-trash fs-5"></i></a>'
-                                        + '</div>';
-                                }
-                                var noteBlock = '';
-                                if (item.Description != null && item.Description.trim() !== '') {
-                                    noteBlock = '<div class="col-md-12 mt-3"><div class="title">Note (àª¨à«‹àª‚àª§)</div><div class="description">' + item.Description + '</div></div>';
-                                }
-                                var addHtml = '<div class="main_card_list main_card_list_border p-12-custome mt-3">'
-                                    + '<div class="main_card_list_body"><div class="row">'
-                                    + '<div class="col-md-12"><div class="title">Upload File (àª«àª¾àª‡àª² àª…àªªàª²à«‹àª¡)</div>' + fileBlock + '</div>'
-                                    + noteBlock
-                                    + '</div></div></div>';
-                                $('#dvOrderPassed').append(addHtml);
-                            });
+                if (response.IsSuccess && response.Data != null && response.Data.length > 0) {
+                    $.each(response.Data, function (i, item) {
+                        var noteCallout = '';
+                        if (item.Description != null && item.Description.trim() !== '') {
+                            noteCallout = '<div class="attachment-note-callout"><span class="attachment-note-label"><i class="fa-regular fa-comment-dots text-primary me-1"></i> Note (નોંધ)</span><p class="attachment-note-text">' + item.Description + '</p></div>';
                         }
-                        else {
-                            $("#dvOrderPassed").empty();
-                        }
-                    }
-                    else {
-                        $("#dvOrderPassed").empty();
-                    }
+                        var addHtml = '<div class="attachment-card">'
+                            + '<div class="attachment-top-row">'
+                                + '<div class="doc-info-wrap" onclick="getFile(\'' + item.FilePath + '\')" style="cursor: pointer;">'
+                                    + '<div class="attachment-icon-box"><i class="fa-solid fa-file-lines"></i></div>'
+                                    + '<div style="min-width: 0;">'
+                                        + '<div class="doc-name" title="' + (item.FileName || '') + '">' + (item.FileName || '') + '</div>'
+                                        + '<div class="doc-meta"><span class="badge bg-light text-muted border font-size-10"><i class="fa-solid fa-paperclip me-1"></i> Attachment</span></div>'
+                                    + '</div>'
+                                + '</div>'
+                                + '<div class="attachment-actions">'
+                                    + '<button type="button" class="btn btn-outline-primary btn-sm rounded-pill px-3 fw-semibold shadow-none" onclick="getFile(\'' + item.FilePath + '\')"><i class="fa-regular fa-eye me-1"></i> View</button>'
+                                    + (item.Id ? '<button type="button" class="btn btn-outline-danger btn-sm rounded-circle p-0" style="width: 32px; height: 32px; display: inline-flex; align-items: center; justify-content: center;" onclick="deleteAdditionalAttachment(' + item.Id + ')" title="Delete File"><i class="fa-solid fa-trash font-size-12"></i></button>' : '')
+                                + '</div>'
+                            + '</div>'
+                            + noteCallout
+                            + '</div>';
+                        $('#dvOrderPassed').append(addHtml);
+                    });
                 }
                 else {
-                    $("#dvOrderPassed").empty();
+                    $("#dvOrderPassed").html('<div class="empty-doc-placeholder text-center"><div class="empty-icon-circle"><i class="fa-solid fa-paperclip"></i></div><div class="text-dark fw-semibold font-size-13">No additional attachments uploaded yet.</div><div class="text-muted font-size-12">Click "Add Attachment" to upload supporting evidence or exhibits.</div></div>');
                 }
             }, failure: function (result) {
                 $("#dvOrderPassed").empty();
@@ -3386,39 +3443,31 @@
                 $container.empty();
                 if (response.IsSuccess && response.Data && response.Data.length > 0) {
                     $.each(response.Data, function (i, item) {
-                        var html = '<div class="main_card_list main_card_list_border p-12-custome mt-3">'
-                            + '<div class="main_card_list_body">'
-                                + '<div class="row">'
-                                    + '<div class="col-md-4">'
-                                        + '<div class="title">Meeting Date (àª¬à«‡àª àª•àª¨à«€ àª¤àª¾àª°à«€àª–)</div>'
-                                        + '<div class="description meeting-date-content">' + (item.MeetingDate || '') + '</div>'
-                                    + '</div>'
-                                    + '<div class="col-md-8">'
-                                        + '<div class="title">Meeting Title (àª…àªªàª²à«‹àª¡ àª¶à«€àª°à«àª·àª•)</div>'
-                                        + '<div class="description meeting-title-content">' + (item.MeetingTitle || '') + '</div>'
-                                    + '</div>'
-                                    + '<div class="col-md-12 mt-3">'
-                                        + '<div class="title d-flex justify-content-between align-items-center">'
-                                            + '<span>Meeting Note (àª¬à«‡àª àª•àª¨à«€ àª¨à«‹àª‚àª§)</span>'
-                                            + '<div>'
-                                                + '<button type="button" class="btn btn-outline-danger btn-sm px-2 py-0 me-1" style="font-size: 11px; line-height: 1.5;" onclick="deleteGBMeetingLog(\'' + item.Id + '\')"><i class="fa-solid fa-trash me-1"></i>Delete</button>'
-                                                + '<button type="button" class="btn btn-outline-info btn-sm px-2 py-0 me-1" style="font-size: 11px; line-height: 1.5;" onclick="editGBMeetingLog(\'' + item.Id + '\', this)"><i class="fa-solid fa-pen-to-square me-1"></i>Edit</button>'
-                                                + '<button type="button" class="btn btn-outline-primary btn-sm px-2 py-0" style="font-size: 11px; line-height: 1.5;" onclick="viewMeetingNote(this)"><i class="fa-solid fa-eye me-1"></i>View Note</button>'
-                                            + '</div>'
-                                        + '</div>'
-                                        + '<div class="description meeting-note-content">' + (item.MeetingNote || '') + '</div>'
-                                    + '</div>'
+                        var html = '<div class="gb-meeting-card">'
+                            + '<div class="gb-header-row">'
+                                + '<div>'
+                                    + '<span class="gb-date-badge"><i class="fa-regular fa-calendar me-1"></i> <span class="meeting-date-content">' + (item.MeetingDate || '') + '</span></span>'
+                                    + '<h6 class="gb-title meeting-title-content">' + (item.MeetingTitle || '') + '</h6>'
                                 + '</div>'
+                                + '<div class="gb-actions">'
+                                    + '<button type="button" class="btn btn-outline-primary btn-sm rounded-pill px-2.5 py-1 font-size-11 fw-semibold shadow-none" onclick="viewMeetingNote(this)"><i class="fa-solid fa-eye me-1"></i> View</button>'
+                                    + '<button type="button" class="btn btn-outline-info btn-sm rounded-pill px-2.5 py-1 font-size-11 fw-semibold shadow-none" onclick="editGBMeetingLog(\'' + item.Id + '\', this)"><i class="fa-solid fa-pen-to-square me-1"></i> Edit</button>'
+                                    + '<button type="button" class="btn btn-outline-danger btn-sm rounded-pill px-2.5 py-1 font-size-11 fw-semibold shadow-none" onclick="deleteGBMeetingLog(\'' + item.Id + '\')"><i class="fa-solid fa-trash me-1"></i> Delete</button>'
+                                + '</div>'
+                            + '</div>'
+                            + '<div class="gb-note-box">'
+                                + '<div class="gb-note-label"><i class="fa-regular fa-note-sticky text-indigo me-1"></i> Meeting Note (બેઠકની નોંધ)</div>'
+                                + '<p class="gb-note-content meeting-note-content">' + (item.MeetingNote || '') + '</p>'
                             + '</div>'
                         + '</div>';
                         $container.append(html);
                     });
                 } else {
-                    $container.html('<div class="empty-doc-placeholder text-center"><i class="fa-regular fa-calendar-xmark text-muted fs-3 mb-2 d-block opacity-50"></i><div class="text-muted font-size-13">No General Board meeting records added yet.</div></div>');
+                    $container.html('<div class="empty-doc-placeholder text-center"><div class="empty-icon-circle"><i class="fa-regular fa-calendar-xmark"></i></div><div class="text-dark fw-semibold font-size-13">No General Board meeting records added yet.</div><div class="text-muted font-size-12">Click "Add Meeting" to log an official board meeting entry.</div></div>');
                 }
             },
             error: function () {
-                $('#dvGBMeetingList').html('<div class="empty-doc-placeholder text-center"><i class="fa-regular fa-calendar-xmark text-muted fs-3 mb-2 d-block opacity-50"></i><div class="text-muted font-size-13">No General Board meeting records added yet.</div></div>');
+                $('#dvGBMeetingList').html('<div class="empty-doc-placeholder text-center"><div class="empty-icon-circle"><i class="fa-regular fa-calendar-xmark"></i></div><div class="text-dark fw-semibold font-size-13">No General Board meeting records added yet.</div><div class="text-muted font-size-12">Click "Add Meeting" to log an official board meeting entry.</div></div>');
             }
         });
     }
@@ -3475,7 +3524,7 @@
     }
 
     function viewMeetingNote(btn) {
-        var noteText = $(btn).closest('.col-md-12').find('.meeting-note-content').text();
+        var noteText = $(btn).closest('.gb-meeting-card, .col-md-12, .main_card_list_body').find('.meeting-note-content').text();
         $('#lblViewMeetingNoteText').text(noteText);
         $('#mbViewMeetingNote').modal('show');
     }
@@ -3515,7 +3564,7 @@
     }
 
     function editGBMeetingLog(id, btn) {
-        var $card = $(btn).closest('.main_card_list_body');
+        var $card = $(btn).closest('.gb-meeting-card, .main_card_list_body');
         var title = $card.find('.meeting-title-content').text().trim();
         var dateStr = $card.find('.meeting-date-content').text().trim();
         var noteText = $card.find('.meeting-note-content').text();

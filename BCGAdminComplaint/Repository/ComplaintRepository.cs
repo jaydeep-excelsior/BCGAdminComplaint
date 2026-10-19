@@ -74,6 +74,39 @@ namespace BCGAdminComplaint.Repository
             }
         }
 
+        public ComplaintSummaryCountsModel GetComplaintSummaryCounts(string fromDate = null, string toDate = null, string year = null)
+        {
+            ExecutionUnit unit = new ExecutionUnit("SP_Get_Complaint_Summary_Counts");
+            unit.AddParameter("FromDate", SqlDbType.NVarChar, ParameterDirection.Input, string.IsNullOrEmpty(fromDate) ? string.Empty : fromDate);
+            unit.AddParameter("ToDate", SqlDbType.NVarChar, ParameterDirection.Input, string.IsNullOrEmpty(toDate) ? string.Empty : toDate);
+            unit.AddParameter("Year", SqlDbType.NVarChar, ParameterDirection.Input, string.IsNullOrEmpty(year) ? string.Empty : year);
+
+            IDataReader reader = DatabaseAccessEngine.ExecuteDataReader(unit);
+            try
+            {
+                ComplaintSummaryCountsModel summary = new ComplaintSummaryCountsModel();
+                if (reader.Read())
+                {
+                    summary.TotalComplaint = DatabaseAccessEngine.GetInt(reader, "TotalComplaint");
+                    summary.Old = DatabaseAccessEngine.GetInt(reader, "Old");
+                    summary.New = DatabaseAccessEngine.GetInt(reader, "New");
+                    summary.Accepted = DatabaseAccessEngine.GetInt(reader, "Accepted");
+                    summary.MoreDetail = DatabaseAccessEngine.GetInt(reader, "MoreDetail");
+                    summary.Rejected = DatabaseAccessEngine.GetInt(reader, "Rejected");
+                    summary.ReferToBoard = DatabaseAccessEngine.GetInt(reader, "ReferToBoard");
+                    summary.BoardAccept = DatabaseAccessEngine.GetInt(reader, "BoardAccept");
+                    summary.BoardReject = DatabaseAccessEngine.GetInt(reader, "BoardReject");
+                    summary.BoardHasApproved = DatabaseAccessEngine.GetInt(reader, "BoardHasApproved");
+                    summary.BoardHasRejected = DatabaseAccessEngine.GetInt(reader, "BoardHasRejected");
+                }
+                return summary;
+            }
+            finally
+            {
+                reader.Close();
+            }
+        }
+
         public List<ComplaintListModel> GetOnlineComplaintList(BaseFilter baseFilter, String Status, String PaymentStatus, String FromDate, String ToDate, String Year, String FromNo, String ToNo,Int64 Id,Int64 ComplaintIds, String ActionMode)
         {
             ExecutionUnit unit = new ExecutionUnit("SP_Get_Online_Complaint_List");

@@ -438,6 +438,25 @@ namespace BCGAdminComplaint.Repository
                     list.ComplaintNumber = DatabaseAccessEngine.GetString(reader, "ComplaintNumber");
                     list.TotalAmount = DatabaseAccessEngine.GetDecimal(reader, "TotalAmount");
                     list.Address = DatabaseAccessEngine.GetString(reader, "Address");
+                    try
+                    {
+                        list.SCreateDate = DatabaseAccessEngine.GetString(reader, "SCreateDate");
+                    }
+                    catch { }
+                    try
+                    {
+                        list.CreateDate = DatabaseAccessEngine.GetDateTime(reader, "CreateDate");
+                        if (string.IsNullOrEmpty(list.SCreateDate) && list.CreateDate != DateTime.MinValue)
+                        {
+                            list.SCreateDate = list.CreateDate.ToString("dd-MM-yyyy hh:mm tt");
+                        }
+                    }
+                    catch { }
+                    try
+                    {
+                        list.Id = DatabaseAccessEngine.GetInt64(reader, "Id");
+                    }
+                    catch { }
                     List.Add(list);
                 }
                 return List;

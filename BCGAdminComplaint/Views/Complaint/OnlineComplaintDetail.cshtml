@@ -1,0 +1,3248 @@
+﻿
+@{
+    ViewBag.Title = "OnlineComplaintDetail";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+<div class="modal fade" id="editComplainantModal" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Edit Complainant Details</h5>
+                <a class="btn-close btn-sm" data-bs-dismiss="modal" aria-hidden="true"></a>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-md-12 mb-3">
+                        <label>Full Name</label>
+                        <input type="text" id="txtEditFullName" class="form-control" />
+                    </div>
+                    <div class="col-md-12 mb-3">
+                        <label>Email Address</label>
+                        <input type="text" id="txtEditEmail" class="form-control" />
+                    </div>
+                    <div class="col-md-12 mb-3">
+                        <label>Mobile No.</label>
+                        <input type="text" id="txtEditContact" class="form-control" />
+                    </div>
+                    <div class="col-md-12 mb-3">
+                        <label>Address</label>
+                        <textarea id="txtEditAddress" class="form-control" rows="3"></textarea>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-outline-secondary btn-sm" data-bs-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-outline-primary btn-sm" onclick="saveComplainantDetails()">Update</button>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal fade" id="uploadAffidavitModal" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Upload Affidavit Copy</h5>
+                <a class="btn-close btn-sm" data-bs-dismiss="modal" aria-hidden="true"></a>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-md-12 mb-3">
+                        <label>Select File</label>
+                        <input type="file" id="fileAffidavitCopy" class="form-control" />
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-outline-secondary btn-sm" data-bs-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-outline-primary btn-sm" onclick="saveAffidavitCopy()">Upload</button>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal fade" id="uploadAdditionalAttachmentModal" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Upload Additional Attachment</h5>
+                <a class="btn-close btn-sm" data-bs-dismiss="modal" aria-hidden="true"></a>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+
+                    <div class="col-md-12 mb-3">
+                        <label>Select File</label>
+                        <input type="file" id="fileAdditionalAttachment" class="form-control" />
+                    </div>
+                    <div class="col-md-12 mb-3">
+                        <label>Note (નોંધ)</label>
+                        <textarea id="txtAdditionalFileDescription" class="form-control" rows="2"></textarea>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-outline-secondary btn-sm" data-bs-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-outline-primary btn-sm" onclick="saveAdditionalAttachment()">Upload</button>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="row mb-2">
+    <div class="col-12">
+        <div class="page-title-box d-sm-flex align-items-center justify-content-between">
+            <div>
+                <h4 class="mb-sm-0 font-size-18">Complaint Details</h4>
+                <div class="page-title-left mt-1">
+                    <ol class="breadcrumb m-0 font-size-13">
+                        <li class="breadcrumb-item"><a href="/Home/Index" class="text-muted">Dashboard</a></li>
+                        <li class="breadcrumb-item"><a href="/Complaint/OnlineComplaintList" class="text-muted">Online Complaint Management</a></li>
+                        <li class="breadcrumb-item active">Online Complaint Details</li>
+                        <li class="breadcrumb-item active"><b class="comnumcolr">@ViewBag.ComplaintNumber</b></li>
+                    </ol>
+                </div>
+            </div>
+            <div class="page-title-right">
+                <a href="/Complaint/Index" class="btn btn-outline-primary waves-effect waves-light white-space-nowrap btn-sm"><i class="fa-solid fa-arrow-left me-1"></i> Back</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Primary Hidden Inputs for Controller / AJAX -->
+<input type="hidden" id="hdfComplaintId" value="@ViewBag.ComplaintId" />
+<input type="hidden" id="hdfStatus" value="@ViewBag.Status" />
+
+<!-- 1. Executive Top Hero Card -->
+<div class="card complaint-hero-card mb-3 shadow-sm border-0">
+    <div class="card-body p-4">
+        <div class="d-flex align-items-start gap-3">
+            <div class="complaint-hero-icon">
+                <i class="fa-solid fa-scale-balanced"></i>
+            </div>
+            <div class="flex-grow-1">
+                <!-- Row 1: Complaint # on Left, Status Tag in Top Right Div -->
+                <div class="d-flex align-items-center justify-content-between flex-wrap gap-2 mb-2">
+                    <h4 class="mb-0 fw-bold text-dark hero-title-text me-2">#@ViewBag.ComplaintNumber</h4>
+                    <div class="ms-auto">
+                        <span id="txtComplaintStatus" class="complaint-status-pill">@ViewBag.Status</span>
+                    </div>
+                </div>
+
+                <!-- Row 2: Meta Chips -->
+                <div class="d-flex align-items-center flex-wrap gap-2 mb-3">
+                    <span class="hero-meta-item"><i class="fa-regular fa-calendar-check text-primary"></i> Filed: <strong class="text-dark" id="lblComplaintDateTime">@ViewBag.SCreateDate</strong></span>
+                    <span class="hero-meta-item"><i class="fa-regular fa-user text-primary"></i> Complainant: <strong class="text-dark">@ViewBag.FullName</strong></span>
+                    @if (ViewBag.DcNumber != null && !string.IsNullOrEmpty(ViewBag.DcNumber.ToString()) && ViewBag.DcNumber.ToString() != "0")
+                    {
+                        <span class="hero-meta-item"><i class="fa-solid fa-gavel text-warning"></i> DC Committee: <strong class="text-dark">@(string.IsNullOrEmpty((string)ViewBag.DcCommitteeTitle) ? ViewBag.DcNumber : ViewBag.DcCommitteeTitle)</strong></span>
+                    }
+                </div>
+
+                <!-- Row 3: Buttons Start on Left Side -->
+                <div class="d-flex align-items-center flex-wrap gap-2">
+                    <div class="hero-action-toolbar">
+                        <a class="hero-action-btn" id="lnkDownload" href="javascript:void(0);" onclick="chooseDownloadPdfOption()">
+                            <span class="btn-icon-badge badge-pdf"><i class="fa-solid fa-file-pdf"></i></span>
+                            <span>Download PDF</span>
+                        </a>
+                        <a href="javascript:void(0);" class="hero-action-btn" onclick="openComplainantEditModal()">
+                            <span class="btn-icon-badge badge-edit"><i class="fa-solid fa-pen-to-square"></i></span>
+                            <span>Edit Details</span>
+                        </a>
+                        <a href="javascript:void(0);" class="hero-action-btn" id="lnkManageStatus" onclick="openManageStatusModal()">
+                            <span class="btn-icon-badge badge-history"><i class="fa-solid fa-clock-rotate-left"></i></span>
+                            <span>Status History</span>
+                        </a>
+                        <a class="hero-action-btn" id="lnkShareACopy" href="javascript:void(0);">
+                            <span class="btn-icon-badge badge-share"><i class="fa-solid fa-share-nodes"></i></span>
+                            <span>Share with Advocate</span>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Dynamic Status Action Buttons Row -->
+        <div class="hero-action-bar-row is-hidden" id="heroActionBarRow" style="display: none;">
+            <div class="d-flex align-items-center flex-wrap gap-2">
+                <span class="hero-action-label-badge"><i class="fa-solid fa-bolt me-1 text-warning"></i> Available Actions:</span>
+                <div class="d-flex flex-wrap gap-2" id="divActionButtons">
+                    <!-- Buttons will be injected here via Javascript based on status -->
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="mb-3 pb-3">
+    <div class="row">
+        <!-- LEFT COLUMN: Main Case Details & Files -->
+        <div class="col-lg-8 col-md-12 mb-lg-0 mb-3">
+
+            <!-- Card 1: Complainant Details -->
+            <div class="card mb-3 border-0 shadow-sm rounded-3">
+                <div class="card-body p-4">
+                    <div class="d-flex justify-content-between align-items-center mb-3 pb-2 border-bottom">
+                        <div class="d-flex align-items-center gap-2">
+                            <div class="section-icon-badge bg-primary-subtle text-primary">
+                                <i class="fa-solid fa-user-shield"></i>
+                            </div>
+                            <div>
+                                <h5 class="mb-0 fw-bold text-dark">Complainant's Details</h5>
+                                <span class="text-muted font-size-12">ફરિયાદીની વિગતો</span>
+                            </div>
+                        </div>
+                        <a href="javascript:void(0);" class="btn btn-outline-primary btn-sm" onclick="openComplainantEditModal()"><i class="fa-solid fa-pen-to-square me-1"></i> Edit</a>
+                    </div>
+
+                    <div class="row g-3">
+                        <div class="col-md-4 col-sm-6">
+                            <div class="complainant-field-tile">
+                                <div class="tile-icon-wrap"><i class="fa-regular fa-user"></i></div>
+                                <div class="tile-content">
+                                    <span class="tile-label">Full Name</span>
+                                    <div class="tile-value" id="lblComplainantFullName">@ViewBag.FullName</div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-4 col-sm-6">
+                            <div class="complainant-field-tile">
+                                <div class="tile-icon-wrap"><i class="fa-regular fa-envelope"></i></div>
+                                <div class="tile-content">
+                                    <span class="tile-label">Email Address</span>
+                                    <div class="tile-value" id="lblComplainantEmail">@ViewBag.EmailAddress</div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-4 col-sm-6">
+                            <div class="complainant-field-tile">
+                                <div class="tile-icon-wrap"><i class="fa-solid fa-phone"></i></div>
+                                <div class="tile-content">
+                                    <span class="tile-label">Mobile Number</span>
+                                    <div class="tile-value" id="lblComplainantContact">@ViewBag.ContactNumber</div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-12">
+                            <div class="complainant-field-tile">
+                                <div class="tile-icon-wrap"><i class="fa-solid fa-location-dot"></i></div>
+                                <div class="tile-content">
+                                    <span class="tile-label">Residential / Postal Address</span>
+                                    <div class="tile-value" id="lblComplainantAddress">@ViewBag.Address</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Card 2: Details of Advocate - Complained Against -->
+            <div class="card mb-3 border-0 shadow-sm rounded-3">
+                <div class="card-body p-4">
+                    <div class="d-flex justify-content-between align-items-center mb-3 pb-2 border-bottom">
+                        <div class="d-flex align-items-center gap-2">
+                            <div class="section-icon-badge bg-primary-subtle text-primary">
+                                <i class="fa-solid fa-user-tie"></i>
+                            </div>
+                            <div>
+                                <h5 class="mb-0 fw-bold text-dark d-flex align-items-center">
+                                    Details of Advocate - Complained Against
+                                    <span id="advocateCountBadge" class="badge bg-primary-subtle text-primary rounded-pill px-2.5 py-1 font-size-11 fw-semibold ms-2" style="display:none;"></span>
+                                </h5>
+                                <span class="text-muted font-size-12">જે વકીલ વિરુદ્ધ ફરિયાદ કરવામાં આવી છે તેની વિગતો</span>
+                            </div>
+                        </div>
+                        <a href="javascript:void(0);" class="btn btn-outline-primary btn-sm rounded-pill px-3 fw-semibold shadow-none" onclick="openAddMemberModal()"><i class="fa-solid fa-plus me-1"></i> Add Advocate</a>
+                    </div>
+                    <div class="main_scroll_complaint_against answer">
+                        <div class="row g-3" id="selectDetails"></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Card 3: Complaint Affidavit Copy -->
+            <div class="card mb-3 border-0 shadow-sm rounded-3">
+                <div class="card-body p-4">
+                    <div class="d-flex justify-content-between align-items-center mb-3 pb-2 border-bottom">
+                        <div class="d-flex align-items-center gap-2">
+                            <div class="section-icon-badge badge-red">
+                                <i class="fa-solid fa-file-contract"></i>
+                            </div>
+                            <div>
+                                <h5 class="mb-0 fw-bold text-dark">Complaint Affidavit Copy</h5>
+                                <span class="text-muted font-size-12">ફરિયાદ સોગંદનામાની નકલ</span>
+                            </div>
+                        </div>
+                        <div>
+                            @if (ViewBag.AffidavitDocumentList != null && ViewBag.AffidavitDocumentList.Rows.Count > 0)
+                            {
+                                <a href="javascript:void(0);" class="btn btn-outline-primary btn-sm rounded-pill px-3 fw-semibold shadow-none" onclick="openAffidavitUploadModal()"><i class="fa-solid fa-pen me-1"></i> Change File</a>
+                            }
+                            else
+                            {
+                                <a href="javascript:void(0);" class="btn btn-outline-primary btn-sm rounded-pill px-3 fw-semibold shadow-none" onclick="openAffidavitUploadModal()"><i class="fa-solid fa-upload me-1"></i> Upload File</a>
+                            }
+                        </div>
+                    </div>
+                    <div class="main_scroll_complaint_against answer" id="dvAffidavitCopy">
+                        @if (ViewBag.AffidavitDocumentList != null && ViewBag.AffidavitDocumentList.Rows.Count > 0)
+                        {
+                            foreach (System.Data.DataRow dr in ViewBag.AffidavitDocumentList.Rows)
+                            {
+                                <div class="doc-item-card">
+                                    <div class="doc-info-wrap" onclick="getFile('@dr["FilePath"].ToString()')" style="cursor: pointer;">
+                                        <div class="doc-icon-box">
+                                            <i class="fa-solid fa-file-pdf"></i>
+                                        </div>
+                                        <div style="min-width: 0;">
+                                            <div class="doc-name" title="@dr["FileName"].ToString()">@dr["FileName"].ToString()</div>
+                                            <div class="doc-meta">
+                                                <span class="badge bg-light text-secondary border font-size-11"><i class="fa-solid fa-shield-halved me-1 text-primary"></i> Verified Affidavit</span>
+                                                <span>• Click to preview</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <button type="button" class="btn btn-outline-primary btn-sm rounded-pill px-3 fw-semibold d-inline-flex align-items-center gap-1 shadow-none" onclick="getFile('@dr["FilePath"].ToString()')">
+                                        <i class="fa-regular fa-eye"></i> View
+                                    </button>
+                                </div>
+                            }
+                        }
+                        else
+                        {
+                            <div class="empty-doc-placeholder text-center">
+                                <div class="empty-icon-circle"><i class="fa-regular fa-file-pdf"></i></div>
+                                <div class="text-dark fw-semibold font-size-13">No affidavit document attached yet.</div>
+                                <div class="text-muted font-size-12">Upload the verified affidavit copy for this complaint.</div>
+                            </div>
+                        }
+                    </div>
+                </div>
+            </div>
+
+            <!-- Card 4: Additional Attachments -->
+            <div class="card mb-3 border-0 shadow-sm rounded-3">
+                <div class="card-body p-4">
+                    <div class="d-flex justify-content-between align-items-center mb-3 pb-2 border-bottom">
+                        <div class="d-flex align-items-center gap-2">
+                            <div class="section-icon-badge badge-blue">
+                                <i class="fa-solid fa-paperclip"></i>
+                            </div>
+                            <div>
+                                <h5 class="mb-0 fw-bold text-dark">Additional Attachments</h5>
+                                <span class="text-muted font-size-12">જો કોઈ વધારાના જોડાણો હોય તો</span>
+                            </div>
+                        </div>
+                        <a href="javascript:void(0);" class="btn btn-outline-primary btn-sm rounded-pill px-3 fw-semibold shadow-none" onclick="openAdditionalAttachmentModal()"><i class="fa-solid fa-upload me-1"></i> Upload File</a>
+                    </div>
+                    <div class="main_scroll_complaint_against answer" id="dvOrderPassed">
+                        @if (ViewBag.AdditionalDocumentList != null && ViewBag.AdditionalDocumentList.Rows.Count > 0)
+                        {
+                            foreach (System.Data.DataRow dr in ViewBag.AdditionalDocumentList.Rows)
+                            {
+                                <div class="attachment-card">
+                                    <div class="attachment-top-row">
+                                        <div class="doc-info-wrap" onclick="getFile('@dr["FilePath"].ToString()')" style="cursor: pointer;">
+                                            <div class="attachment-icon-box">
+                                                <i class="fa-solid fa-file-lines"></i>
+                                            </div>
+                                            <div style="min-width: 0;">
+                                                <div class="doc-name" title="@dr["FileName"].ToString()">@dr["FileName"].ToString()</div>
+                                                <div class="doc-meta">
+                                                    <span class="badge bg-light text-muted border font-size-10"><i class="fa-solid fa-paperclip me-1"></i> Attachment</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="attachment-actions">
+                                            <button type="button" class="btn btn-outline-primary btn-sm rounded-pill px-3 fw-semibold shadow-none" onclick="getFile('@dr["FilePath"].ToString()')">
+                                                <i class="fa-regular fa-eye me-1"></i> View
+                                            </button>
+                                            <button type="button" class="btn btn-outline-danger btn-sm rounded-circle p-0" style="width: 32px; height: 32px; display: inline-flex; align-items: center; justify-content: center;" onclick="deleteAdditionalAttachment(@dr["Id"].ToString())" title="Delete File">
+                                                <i class="fa-solid fa-trash font-size-12"></i>
+                                            </button>
+                                        </div>
+                                    </div>
+                                    @if (!string.IsNullOrWhiteSpace(dr["Description"] != null ? dr["Description"].ToString() : ""))
+                                    {
+                                        <div class="attachment-note-callout">
+                                            <span class="attachment-note-label"><i class="fa-regular fa-comment-dots text-primary me-1"></i> Note (નોંધ)</span>
+                                            <p class="attachment-note-text">@dr["Description"].ToString()</p>
+                                        </div>
+                                    }
+                                </div>
+                            }
+                        }
+                        else
+                        {
+                            <div class="empty-doc-placeholder text-center">
+                                <div class="empty-icon-circle"><i class="fa-solid fa-paperclip"></i></div>
+                                <div class="text-dark fw-semibold font-size-13">No additional attachments uploaded yet.</div>
+                                <div class="text-muted font-size-12">Click "Upload File" to add supporting documents.</div>
+                            </div>
+                        }
+                    </div>
+                </div>
+            </div>
+
+            <!-- Card 5: Details of G B Meeting -->
+            <div class="card mb-3 border-0 shadow-sm rounded-3">
+                <div class="card-body p-4">
+                    <div class="d-flex justify-content-between align-items-center mb-3 pb-2 border-bottom">
+                        <div class="d-flex align-items-center gap-2">
+                            <div class="section-icon-badge badge-indigo">
+                                <i class="fa-solid fa-users-rectangle"></i>
+                            </div>
+                            <div>
+                                <h5 class="mb-0 fw-bold text-dark">Details of G B Meeting</h5>
+                                <span class="text-muted font-size-12">સામાન્ય સભાની વિગતો</span>
+                            </div>
+                        </div>
+                        <a href="javascript:void(0);" class="btn btn-outline-primary btn-sm rounded-pill px-3 fw-semibold shadow-none" onclick="openComplaintGBMeetingModal()"><i class="fa-solid fa-plus me-1"></i> Add Meeting</a>
+                    </div>
+                    <div class="main_scroll_complaint_against answer" id="dvGBMeetingList">
+                        @if (ViewBag.ComplaintGBMeetingList != null && ViewBag.ComplaintGBMeetingList.Rows.Count > 0)
+                        {
+                            foreach (System.Data.DataRow dr in ViewBag.ComplaintGBMeetingList.Rows)
+                            {
+                                <div class="gb-meeting-card">
+                                    <div class="gb-header-row">
+                                        <div>
+                                            <span class="gb-date-badge"><i class="fa-regular fa-calendar me-1"></i> <span class="meeting-date-content">@dr["MeetingDate"].ToString()</span></span>
+                                            <h6 class="gb-title meeting-title-content">@dr["MeetingTitle"].ToString()</h6>
+                                        </div>
+                                        <div class="gb-actions">
+                                            <button type="button" class="btn btn-outline-primary btn-sm rounded-pill px-2.5 py-1 font-size-11 fw-semibold shadow-none" onclick="viewMeetingNote(this)"><i class="fa-solid fa-eye me-1"></i> View</button>
+                                            <button type="button" class="btn btn-outline-info btn-sm rounded-pill px-2.5 py-1 font-size-11 fw-semibold shadow-none" onclick="editGBMeetingLog('@dr["Id"].ToString()', this)"><i class="fa-solid fa-pen-to-square me-1"></i> Edit</button>
+                                            <button type="button" class="btn btn-outline-danger btn-sm rounded-pill px-2.5 py-1 font-size-11 fw-semibold shadow-none" onclick="deleteGBMeetingLog('@dr["Id"].ToString()')"><i class="fa-solid fa-trash me-1"></i> Delete</button>
+                                        </div>
+                                    </div>
+                                    <div class="gb-note-box">
+                                        <div class="gb-note-label"><i class="fa-regular fa-note-sticky text-indigo me-1"></i> Meeting Note (બેઠકની નોંધ)</div>
+                                        <p class="gb-note-content meeting-note-content">@dr["MeetingNote"].ToString()</p>
+                                    </div>
+                                </div>
+                            }
+                        }
+                        else
+                        {
+                            <div class="empty-doc-placeholder text-center">
+                                <div class="empty-icon-circle"><i class="fa-regular fa-calendar-xmark"></i></div>
+                                <div class="text-dark fw-semibold font-size-13">No General Board meeting records added yet.</div>
+                                <div class="text-muted font-size-12">Click "Add Meeting" to log an official board meeting entry.</div>
+                            </div>
+                        }
+                    </div>
+                </div>
+            </div>
+
+            <!-- Card 6: Details of Advocate Reply To -->
+            <div class="card mb-3 border-0 shadow-sm rounded-3">
+                <div class="card-body p-4">
+                    <div class="d-flex align-items-center justify-content-between mb-3 pb-2 border-bottom">
+                        <div class="d-flex align-items-center gap-2">
+                            <div class="section-icon-badge badge-teal">
+                                <i class="fa-solid fa-comments"></i>
+                            </div>
+                            <div>
+                                <h5 class="mb-0 fw-bold text-dark">Advocate Reply & Communications</h5>
+                                <span class="text-muted font-size-12">જે વકીલ વિરુદ્ધ ફરિયાદ કરવામાં આવી છે તેનો જવાબ</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="replaycomplaintmain_card mt-2 rounded-3" id="dvreplyData"></div>
+                    <div class="reply-composer-card mt-3">
+                        <div class="position-relative mb-2">
+                            <textarea type="text" class="form-control reply-textarea shadow-none" id="txtReply" rows="3" placeholder="Enter reply message or note..."></textarea>
+                            <div class="chat-input-links" id="tooltip-container">
+                                <input type="file" id="fileLoader" name="files" title="Load File" class="d-none" onchange="ShowPreview(this,'Reply')" />
+                                <input type="hidden" id="hdfReplyB64ImagePath" />
+                                <input type="hidden" id="hdfReplyFileName" />
+                            </div>
+                        </div>
+                        <div class="d-flex justify-content-between align-items-center flex-wrap gap-2">
+                            <div class="d-flex align-items-center">
+                                <a id="btnReplyUploadFile" class="btn btn-outline-secondary btn-sm rounded-pill px-3 fw-semibold shadow-none" onclick="openFiledialog()">
+                                    <i class="fa-solid fa-paperclip me-1 text-primary"></i> Attach/Upload File
+                                </a>
+                                <label id="lbldisplayName" class="mb-0 text-muted ms-2" style="font-size: 12px;"></label>
+                            </div>
+                            <a id="btnReplySave" class="btn btn-primary btn-sm rounded-pill px-4 fw-semibold shadow-sm"><i class="fa-solid fa-paper-plane me-1"></i> Save Reply</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- RIGHT COLUMN: Payment Details & Quick Sidebar -->
+        <div class="col-md-12 col-lg-4">
+
+            <!-- Quick Actions Card -->
+            <div class="card mb-3 border-0 shadow-sm rounded-3">
+                <div class="card-body p-4">
+                    <h6 class="fw-bold text-dark mb-3 pb-2 border-bottom"><i class="fa-solid fa-sliders text-primary me-2"></i>Quick Actions</h6>
+                    <div class="d-grid gap-2">
+                        <button type="button" class="btn btn-outline-primary btn-sm d-flex align-items-center justify-content-between py-2 px-3 text-start quick-action-btn" onclick="openComplainantEditModal()">
+                            <span><i class="fa-solid fa-user-pen me-2"></i> Edit Complainant</span>
+                            <i class="fa-solid fa-chevron-right text-muted font-size-11"></i>
+                        </button>
+                        <button type="button" class="btn btn-outline-primary btn-sm d-flex align-items-center justify-content-between py-2 px-3 text-start quick-action-btn" onclick="openManageStatusModal()">
+                            <span><i class="fa-solid fa-clock-rotate-left me-2"></i> Status History & Log</span>
+                            <i class="fa-solid fa-chevron-right text-muted font-size-11"></i>
+                        </button>
+                        <button type="button" class="btn btn-outline-primary btn-sm d-flex align-items-center justify-content-between py-2 px-3 text-start quick-action-btn" onclick="$('#lnkShareACopy').click()">
+                            <span><i class="fa-solid fa-share-nodes me-2"></i> Share Copy with Advocate</span>
+                            <i class="fa-solid fa-chevron-right text-muted font-size-11"></i>
+                        </button>
+                        <button type="button" class="btn btn-outline-primary btn-sm d-flex align-items-center justify-content-between py-2 px-3 text-start quick-action-btn" onclick="chooseDownloadPdfOption()">
+                            <span><i class="fa-solid fa-file-pdf me-2"></i> Download Case PDF</span>
+                            <i class="fa-solid fa-chevron-right text-muted font-size-11"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Payment Details KPI Card -->
+            <div class="card mb-3 border-0 shadow-sm rounded-3">
+                <div class="card-body p-4">
+                    <div class="d-flex align-items-center justify-content-between mb-3 pb-2 border-bottom">
+                        <div class="d-flex align-items-center gap-2">
+                            <div class="section-icon-badge bg-success-subtle text-success">
+                                <i class="fa-solid fa-receipt"></i>
+                            </div>
+                            <div>
+                                <h5 class="mb-0 fw-bold text-dark">Payment Details</h5>
+                                <span class="text-muted font-size-12">ચૂકવણીની વિગતો</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row g-2 mb-1">
+                        <div class="col-12">
+                            <div class="kpi-metric-tile kpi-metric-primary">
+                                <div class="d-flex align-items-center justify-content-between">
+                                    <span class="kpi-label"><i class="fa-solid fa-coins me-1"></i> Total Amount</span>
+                                    <span class="kpi-value text-primary">₹ <label id="lblTotalAmount" class="mb-0 text-primary fw-bold">0</label></span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-12">
+                            <div class="kpi-metric-tile kpi-metric-success">
+                                <div class="d-flex align-items-center justify-content-between">
+                                    <span class="kpi-label"><i class="fa-solid fa-circle-check me-1"></i> Paid Amount</span>
+                                    <span class="kpi-value text-success">₹ <label id="lblPaidAmount" class="mb-0 text-success fw-bold">0</label></span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-12">
+                            <div class="kpi-metric-tile kpi-metric-danger">
+                                <div class="d-flex align-items-center justify-content-between">
+                                    <span class="kpi-label"><i class="fa-solid fa-clock me-1"></i> Due Amount</span>
+                                    <span class="kpi-value text-danger">₹ <label id="lblDueAmount" class="mb-0 text-danger fw-bold">0</label></span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Pay Payment Information (Shown dynamically when due amount > 0) -->
+            <div class="card mb-3 border-0 shadow-sm rounded-3 d-none" id="divPayPayment">
+                <div class="card-body p-4">
+                    <div class="d-flex align-items-center gap-2 mb-3 pb-2 border-bottom">
+                        <div class="section-icon-badge bg-primary-subtle text-primary">
+                            <i class="fa-solid fa-money-bill-wave"></i>
+                        </div>
+                        <div>
+                            <h5 class="mb-0 fw-bold text-dark">Pay Payment Information</h5>
+                            <span class="text-muted font-size-12">ચુકવણીની વિગત દાખલ કરો</span>
+                        </div>
+                    </div>
+                    <div class="row g-2">
+                        <div class="col-md-6">
+                            <label for="txtReceiptNumber" class="form-label font-size-12 fw-semibold">Receipt Number</label>
+                            <input type="text" maxlength="15" id="txtReceiptNumber" placeholder="Receipt Number" class="form-control form-control-sm" onkeypress="return isNumberKey(event, this)">
+                        </div>
+                        <div class="col-md-6">
+                            <label for="txtReceiptDate" class="form-label font-size-12 fw-semibold">Receipt Date</label>
+                            <input type="date" id="txtReceiptDate" class="form-control form-control-sm">
+                        </div>
+                        <div class="col-md-4 mt-2">
+                            <label for="ddlPaymentMode" class="form-label font-size-12 fw-semibold">Receipt By</label>
+                            <select id="ddlPaymentMode" class="form-select form-select-sm" onchange="ddlPaymentModeChange()">
+                                <option selected="selected" value="0">Select Payment Mode</option>
+                                <option value="CASH">CASH</option>
+                                <option value="D.D.">D.D.</option>
+                                <option value="OUTSTANDING">OUTSTANDING</option>
+                                <option value="RTGS">RTGS</option>
+                                <option value="JOURNAL">JOURNAL</option>
+                            </select>
+                        </div>
+                        <div class="col-md-4 mt-2">
+                            <label for="txtTransactionDate" class="form-label font-size-12 fw-semibold">Transaction Date</label>
+                            <input type="date" id="txtTransactionDate" class="form-control form-control-sm">
+                        </div>
+                        <div class="col-md-4 mt-2 hide-element" id="divTransactionNumber">
+                            <label for="txtTransactionNumber" class="form-label font-size-12 fw-semibold">Transaction Number</label>
+                            <input type="text" maxlength="15" id="txtTransactionNumber" placeholder="Transaction Number" class="form-control form-control-sm">
+                        </div>
+                        <div class="col-12 mt-2 hide-element" id="divBank">
+                            <label for="ddlBank" class="form-label font-size-12 fw-semibold">Bank</label>
+                            <select id="ddlBank" class="form-select form-select-sm select2">
+                                <option value="0">Select Bank</option>
+                            </select>
+                        </div>
+                        <div class="col-12 text-end mt-3">
+                            <a class="btn btn-primary btn-sm px-3" id="lnkSavePayment"><i class="fa-solid fa-check me-1"></i> Save Payment</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Payment Information Log (Shown dynamically if payment log exists) -->
+            <div class="card mb-3 border-0 shadow-sm rounded-3 d-none" id="divPaymentDetail">
+                <div class="card-body p-4">
+                    <div class="d-flex align-items-center gap-2 mb-3 pb-2 border-bottom">
+                        <div class="section-icon-badge bg-info-subtle text-info">
+                            <i class="fa-solid fa-file-invoice-dollar"></i>
+                        </div>
+                        <div>
+                            <h5 class="mb-0 fw-bold text-dark">Payment History</h5>
+                            <span class="text-muted font-size-12">ચુકવણીની પાકી રસીદો</span>
+                        </div>
+                    </div>
+                    <div id="divPaymentDetailList"></div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<!-- Modals moved to root level to prevent backdrop gray-out/overlay issue -->
+<div class="modal fade" id="filePreviewModal" tabindex="-1" role="dialog">
+    <div class="modal-dialog modal-dialog-centered modal-xl" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title mb-0">File Preview</h5>
+                <a class="btn-close btn-sm" data-bs-dismiss="modal" aria-hidden="true"></a>
+            </div>
+            <div class="modal-body p-0">
+                <iframe src="" id="displayPdf"></iframe>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal fade" id="MemberList" role="dialog">
+    <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title mt-0" id="mySmallModalLabel">Member List</h5>
+                <a class="btn-close btn-sm" data-dismiss="modal" aria-hidden="true"></a>
+            </div>
+            <div class="modal-body">
+                <div id="tblMemberList">
+                </div>
+            </div>
+            <div class="modal-footer justify-content-end">
+                <a id="btnAddToList" name="btnAddToList" class="btn btn-outline-primary waves-effect waves-light btn-sm">Add</a>
+            </div>
+        </div>
+        <!-- /.modal-content -->
+    </div>
+</div>
+<div class="modal fade" id="manageStatusModal" tabindex="-1" role="dialog" aria-labelledby="manageStatusModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable" style="max-width: 780px; width: 95%;">
+        <div class="modal-content status-modal-content border-0 shadow-lg">
+            <div class="modal-header bg-white px-4 py-3 border-bottom d-flex align-items-center justify-content-between">
+                <div class="d-flex align-items-center">
+                    <div class="status-modal-icon-wrap me-3">
+                        <i class="fa-solid fa-clock-rotate-left"></i>
+                    </div>
+                    <div>
+                        <h5 class="modal-title fw-bold text-dark mb-0" id="manageStatusModalLabel">Complaint Status History</h5>
+                        <span class="text-muted font-size-12">Complete activity log & lifecycle remarks</span>
+                    </div>
+                </div>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body p-4 status-modal-body">
+                <div id="boardAccept" class="hide-element boxborder mb-3 bg-white p-3 rounded-3 shadow-sm">
+                    <h6 class="mb-3 border-bottom pb-2 fw-bold text-primary"><i class="fa-solid fa-gavel me-2"></i>Board Has Approved Details</h6>
+                    <div class="row align-items-end mb-3">
+                        <div class="col-md-4">
+                            <label class="form-label fw-semibold">DC Case No.</label>
+                            <input name="txtDCNumber" id="txtDCNumber" type="text" class="form-control">
+                        </div>
+                        <div class="col-md-5">
+                            <label class="form-label fw-semibold">Select DC Committee</label>
+                            <div class="d-flex align-items-center">
+                                <input type="hidden" id="hdfDcNumber" value="@ViewBag.DcNumber" />
+                                <select id="drpDcNo" class="form-control" onchange="ddlDcNumber()">
+                                    <option value="">Select DC Committee</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <a id="lnkAddMember" class="btn btn-sm btn-outline-primary waves-effect waves-light text-nowrap"><i class="fa-solid fa-user-plus me-1"></i> Add Member</a>
+                        </div>
+                    </div>
+                    <div id="tbldcDetails">
+                    </div>
+                    <div class="row">
+                        <div class="form-group col-md-12">
+                            <div>
+                                <a id="lnkSaveBoardAccept" class="btn btn-outline-primary waves-effect waves-light btn-sm"><i class="fa-solid fa-check me-1"></i> Save</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div id="logDetails" class="status-timeline-container">
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal fade" id="addMemberModal" tabindex="-1" role="dialog" aria-labelledby="addMemberModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="addMemberModalLabel">Add Member</h5>
+                <a class="btn-close btn-sm" data-bs-dismiss="modal" aria-label="Close"></a>
+            </div>
+            <div class="modal-body" style="overflow: visible;">
+                <div class="mb-3 position-relative">
+                    <label for="txtNewEnrollmentNumber" class="form-label font-size-14 fw-bold">Search Advocate By Name Or Mobile Number</label>
+                    <input type="text" class="form-control" id="txtNewEnrollmentNumber" placeholder="Search Advocate..." autocomplete="off">
+                    <input type="hidden" id="hdfSelectedEnrollmentNumber" value="">
+                    <ul class="list-group position-absolute w-100 mt-1" id="advocateSearchResults" style="display:none; z-index: 1000; max-height: 200px; overflow-y: auto; box-shadow: 0 4px 6px rgba(0,0,0,0.1);"></ul>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-outline-danger btn-sm" data-bs-dismiss="modal"><i class="fa-solid fa-xmark me-1"></i> Cancel</button>
+                <button type="button" class="btn btn-outline-primary btn-sm" onclick="saveNewMember()"><i class="fa-solid fa-save me-1"></i> Save</button>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal fade" id="mbComplaintGBMeeting" tabindex="-1" role="dialog" aria-labelledby="addMemberModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="addMemberModalLabel">Details of G B Meeting (સામાન્ય સભાની વિગતો)</h5>
+                <a class="btn-close btn-sm" data-bs-dismiss="modal" aria-label="Close"></a>
+            </div>
+            <div class="modal-body">
+                <input type="hidden" id="hdfGBMeetingId" value="0" />
+                <div class="row">
+                    <div class="col-md-12 mb-3">
+                        <label>Meeting Title</label>
+                        <input type="text" id="txtMeetingTitle" class="form-control" />
+                    </div>
+                    <div class="col-md-12 mb-3">
+                        <label>Meeting Date</label>
+                        <input type="date" id="txtMeetingDate" class="form-control" />
+                    </div>
+                    <div class="col-md-12 mb-3">
+                        <label>Meeting Note</label>
+                        <textarea id="txtMeetingNote" class="form-control" rows="3"></textarea>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <a class="btn btn-outline-secondary btn-sm" data-bs-dismiss="modal">Close</a>
+                <a class="btn btn-outline-primary btn-sm" onclick="saveGBMeetingLog()">Save</a>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal fade" id="mbViewMeetingNote" tabindex="-1" role="dialog" aria-labelledby="viewMeetingNoteModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="viewMeetingNoteModalLabel">Meeting Note (બેઠકની નોંધ)</h5>
+                <a class="btn-close btn-sm" data-bs-dismiss="modal" aria-label="Close"></a>
+            </div>
+            <div class="modal-body">
+                <div id="lblViewMeetingNoteText" style="white-space: pre-wrap; font-size: 14px; line-height: 1.6; max-height: 400px; overflow-y: auto;"></div>
+            </div>
+            <div class="modal-footer">
+                <a class="btn btn-outline-secondary btn-sm" data-bs-dismiss="modal">Close</a>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal fade" id="boardAcceptOnlyModal" role="dialog">
+    <div class="modal-dialog modal-dialog-centered modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title mt-0">Board Has Approved Details</h5>
+                <a class="btn-close btn-sm" data-bs-dismiss="modal" aria-hidden="true"></a>
+            </div>
+            <div class="modal-body" id="boardAcceptOnlyModalBody">
+                <!-- boardAccept div will be moved here dynamically -->
+            </div>
+        </div>
+    </div>
+</div>
+</div>
+<script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+<script>
+    function initBankSelect2() {
+        if ($.fn.select2) {
+            if ($('#ddlBank').hasClass("select2-hidden-accessible")) {
+                $('#ddlBank').select2('destroy');
+            }
+            $('#ddlBank').select2({
+                placeholder: 'Select Bank',
+                allowClear: false,
+                width: '100%'
+            });
+        }
+    }
+
+    $(document).ready(function () {
+        initBankSelect2();
+        GetComplaintBankList();
+        GetComplaintCurrentStatus();
+        GetComplaintPaymentDetail();
+        GetDefendantList();
+        GetComplaintReplyToList();
+        GetDcNumberList();
+        GetLogList();
+        GetReplyList(0);
+        $("#txtOrderSummary").val('');
+        var now = new Date();
+        var day = ("0" + now.getDate()).slice(-2);
+        var month = ("0" + (now.getMonth() + 1)).slice(-2);
+        var today = now.getFullYear() + "-" + (month) + "-" + (day);
+        $('#txtTransactionDate').val(today);
+        $('#txtReceiptDate').val(today);
+    });
+
+    function isNumberKey(evt, element) {
+
+        var charCode = (evt.which) ? evt.which : event.keyCode
+        //if (charCode > 31 && (charCode < 48 || charCode > 57) && !(charCode == 8) && (charCode == 46 || charCode == 44))
+        if (charCode >= 48 && charCode <= 57)
+            return true;
+        else {
+            swal("Please enter valid number.", "", "error");
+            return false;
+        }
+        return false;
+    }
+
+    function openFiledialog() {
+        $("#fileLoader").click();
+    }
+
+    function GetComplaintBankList() {
+        $.ajax({
+            type: "POST",
+            url: "/Complaint/GetComplaintBankList",
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            success: function (response) {
+                $("#ddlBank").empty();
+                $("#ddlBank").append('<option value="0">Select Bank</option>');
+                if (response.IsSuccess) {
+                    if (response.Data != null) {
+                        if (response.Data != '') {
+
+                            $.each(response.Data, function (i, item) {
+                                $("#ddlBank").append('<option value="' + item.Id + '">' + item.BankName + '</option>');
+                            });
+                        }
+                    }
+                }
+                initBankSelect2();
+            }, failure: function (result) {
+                $("#ddlBank").empty();
+                $("#ddlBank").append('<option value="0">Select Bank</option>');
+                initBankSelect2();
+            },
+            error: function (result) {
+                $("#ddlBank").empty();
+                $("#ddlBank").append('<option value="0">Select Bank</option>');
+                initBankSelect2();
+            }
+        });
+    }
+
+    function GetComplaintPaymentReceivedLog() {
+        $('#divPaymentDetailList').empty();
+        $.ajax({
+            type: "POST",
+            url: "/Complaint/GetComplaintPaymentReceivedLog",
+            data: JSON.stringify({ ComplaintId: $("#hdfComplaintId").val() }),
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            success: function (response) {
+                if (response.IsSuccess) {
+                    if (response.Data != null) {
+                        if (response.Data != '') {
+                            $.each(response.Data, function (i, item) {
+                                var paymentitemnew = '';
+                                var hideCashDetailsNew = (item.PaymentMode && item.PaymentMode.toUpperCase() === 'CASH') ? 'd-none' : '';
+                                paymentitemnew = '<div class="row">'
+                                                    + '<div class="col-md-4 mt-1">'
+                                                        + '<div class="form-group">'
+                                                            + '<label>Receipt Number</label>'
+                                                            + '<label class="form-control">' + item.ReceiptNumber + '</label>'
+                                                        + '</div>'
+                                                    + '</div>'
+                                                    + '<div class="col-md-4 mt-1">'
+                                                        + '<div class="form-group">'
+                                                            + '<label>Receipt Date</label>'
+                                                            + '<label class="form-control">' + item.ReceiptDate + '</label>'
+                                                        + '</div>'
+                                                    + '</div>'
+                                                    + '<div class="col-md-4 mt-1">'
+                                                            + '<div class="form-group">'
+                                                                + '<label>Paid Amount</label>'
+                                                                + '<label class="form-control">' + item.PaidAmount + '</label>'
+                                                            + '</div>'
+                                                        + '</div>'
+                                                    + '<div class="col-md-4 mt-1">'
+                                                        + '<div class="form-group">'
+                                                            + '<label>Receipt By</label>'
+                                                            + '<label class="form-control">' + item.PaymentMode + '</label>'
+                                                        + '</div>'
+                                                    + '</div>'
+                                                    + '<div class="col-md-4 mt-1 ' + hideCashDetailsNew + '">'
+                                                        + '<div class="form-group">'
+                                                            + '<label>Transaction No.</label>'
+                                                            + '<label class="form-control">' + item.TransactionNumber + '</label>'
+                                                        + '</div>'
+                                                    + '</div>'
+                                                    + '<div class="col-md-4 mt-1">'
+                                                        + '<div class="form-group">'
+                                                            + '<label>Transaction Date</label>'
+                                                            + '<label class="form-control">' + item.TransactionDate + '</label>'
+                                                        + '</div>'
+                                                    + '</div>'
+                                                    + '<div class="col-md-12 mt-1 ' + hideCashDetailsNew + '">'
+                                                        + '<div class="form-group descriptionborderbottom mb-2">'
+                                                            + '<label>Bank</label>'
+                                                            + '<label class="form-control">' + item.BankName + '</label>'
+                                                        + '</div>'
+                                                    + '</div>'
+                                                + '</div>';
+
+                                $('#divPaymentDetailList').append(paymentitemnew);
+                                $('#divPaymentDetail').removeClass('d-none');
+                            });
+                        }
+                        else {
+                            $('#divPaymentDetailList').empty();
+                            $('#divPaymentDetail').addClass('d-none');
+                        }
+                    }
+                    else {
+                        $('#divPaymentDetailList').empty();
+                        $('#divPaymentDetail').addClass('d-none');
+                    }
+                }
+                else {
+                    $('#divPaymentDetailList').empty();
+                    $('#divPaymentDetail').addClass('d-none');
+                }
+            }, failure: function (result) {
+                $('#divPaymentDetailList').empty();
+                $('#divPaymentDetail').addClass('d-none');
+            },
+            error: function (result) {
+                $('#divPaymentDetailList').empty();
+                $('#divPaymentDetail').addClass('d-none');
+            }
+        });
+    }
+
+    function GetComplaintCurrentStatus() {
+        $.ajax({
+            type: "POST",
+            url: "/Complaint/GetComplaintCurrentStatus",
+            contentType: "application/json; charset=utf-8",
+            data: JSON.stringify({ ComplaintId: $("#hdfComplaintId").val() }),
+            dataType: "json",
+            success: function (response) {
+                if (response.IsSuccess) {
+                    if (response.Data != null) {
+                        if (response.Data != '') {
+                            var VComplaintCurrentStatus = response.Data[0].Status;
+                            $('#txtComplaintStatus').text(VComplaintCurrentStatus);
+                            updateActionButtonsUI(VComplaintCurrentStatus);
+                        }
+                        else {
+                            var VComplaintCurrentStatus = '@ViewBag.Status';
+                            $('#txtComplaintStatus').text(VComplaintCurrentStatus);
+                            updateActionButtonsUI(VComplaintCurrentStatus);
+                        }
+                    }
+                    else {
+                        var VComplaintCurrentStatus = '@ViewBag.Status';
+                        $('#txtComplaintStatus').text(VComplaintCurrentStatus);
+                        updateActionButtonsUI(VComplaintCurrentStatus);
+                    }
+                }
+                else {
+                    var VComplaintCurrentStatus = '@ViewBag.Status';
+                    $('#txtComplaintStatus').text(VComplaintCurrentStatus);
+                    updateActionButtonsUI(VComplaintCurrentStatus);
+                }
+            }, failure: function (result) {
+                swal('Something went wrong!', '', 'error');
+            },
+            error: function (result) {
+                swal('Something went wrong!', '', 'error');
+            }
+        });
+    }
+
+    function GetComplaintPaymentDetail() {
+        $.ajax({
+            type: "POST",
+            url: "/Complaint/GetComplaintPaymentDetail",
+            contentType: "application/json; charset=utf-8",
+            data: JSON.stringify({ ComplaintId: $("#hdfComplaintId").val() }),
+            dataType: "json",
+            success: function (response) {
+                if (response.IsSuccess) {
+                    if (response.Data != null) {
+                        if (response.Data != '') {
+                            var VTotalAmount = response.Data[0].TotalAmount;
+                            var VPaidAmount = response.Data[0].PaidAmount;
+                            var VDueAmount = response.Data[0].DueAmount;
+                            var VPaymentStatus = response.Data[0].PaymentStatus;
+                            var VStatus = response.Data[0].Status;
+
+                            $('#lblTotalAmount').html(VTotalAmount);
+                            $('#lblPaidAmount').html(VPaidAmount);
+                            $('#lblDueAmount').html(VDueAmount);
+
+                            if (parseFloat(VDueAmount) > 0) {
+                                $('#divPayPayment').removeClass("d-none");
+                            }
+                            else {
+
+                                $('#divPayPayment').addClass("d-none");
+                            }
+
+                            GetComplaintPaymentReceivedLog();
+                        }
+                        else {
+                            $('#lblTotalAmount').html('0');
+                            $('#lblPaidAmount').html('0');
+                            $('#lblDueAmount').html('0');
+                        }
+                    }
+                    else {
+                        $('#lblTotalAmount').html('0');
+                        $('#lblPaidAmount').html('0');
+                        $('#lblDueAmount').html('0');
+                    }
+                }
+                else {
+                    $('#lblTotalAmount').html('0');
+                    $('#lblPaidAmount').html('0');
+                    $('#lblDueAmount').html('0');
+                }
+            }, failure: function (result) {
+                $('#lblTotalAmount').html('0');
+                $('#lblPaidAmount').html('0');
+                $('#lblDueAmount').html('0');
+            },
+            error: function (result) {
+                $('#lblTotalAmount').html('0');
+                $('#lblPaidAmount').html('0');
+                $('#lblDueAmount').html('0');
+            }
+        });
+    }
+
+    function ddlPaymentModeChange() {
+        var val = $('#ddlPaymentMode').val();
+        if (val == "D.D." || val == "OUTSTANDING" || val == "RTGS" || val == "JOURNAL") {
+            $('#divTransactionNumber').css('display', 'block');
+            $('#divBank').css('display', 'block');
+            setTimeout(function () { initBankSelect2(); }, 50);
+        } else {
+            $('#divTransactionNumber').css('display', 'none');
+            $('#divBank').css('display', 'none');
+        }
+    }
+
+    $('#lnkSavePayment').on('click', function () {
+
+        var IsSave = 1;
+        var VDueAmount = parseFloat($('#lblDueAmount').text() == null ? '0' : $('#lblDueAmount').text() == '' ? '0' : $('#lblDueAmount').text());
+        var VReceiptNumber = $('#txtReceiptNumber').val() == null ? '' : $.trim($('#txtReceiptNumber').val());
+        var VReceiptDate = $('#txtReceiptDate').val() == null ? '' : $.trim($('#txtReceiptDate').val());
+        var VPaymentMode = $('#ddlPaymentMode').val() == null ? '' : $('#ddlPaymentMode').val() == 'Select' ? '' : $('#ddlPaymentMode').val() == '0' ? '' : $('#ddlPaymentMode').val();
+        var VTransactionNumber = $('#txtTransactionNumber').val() == null ? '' : $.trim($('#txtTransactionNumber').val());
+        var VTransactionDate = $('#txtTransactionDate').val() == null ? '' : $.trim($('#txtTransactionDate').val());
+        var VBankId = $('#ddlBank').val() == null ? '0' : $('#ddlBank').val() == 'Select' ? '0' : $('#ddlBank').val() == '' ? '0' : $('#ddlBank').val();
+
+        if (VDueAmount <= 0) {
+            swal("The due amount is zero.", "", "error");
+            IsSave = 0;
+            return;
+        }
+        if (VReceiptNumber == '') {
+            swal("Please input receipt number.", "", "error");
+            IsSave = 0;
+            return;
+        }
+        if (VReceiptDate == '') {
+            swal("Please input receipt date.", "", "error");
+            IsSave = 0;
+            return;
+        }
+        if (VPaymentMode == '') {
+            swal("Please select receipt by.", "", "error");
+            IsSave = 0;
+            return;
+        }
+
+        if (VPaymentMode == 'CASH') {
+            if (VTransactionDate == '') {
+                swal("Please input transaction date.", "", "error");
+                IsSave = 0;
+                return;
+            }
+        } else if (VPaymentMode == 'D.D.' || VPaymentMode == 'OUTSTANDING' || VPaymentMode == 'RTGS' || VPaymentMode == 'JOURNAL') {
+            if (VTransactionDate == '') {
+                swal("Please input transaction date.", "", "error");
+                IsSave = 0;
+                return;
+            }
+            if (VTransactionNumber == '') {
+                swal("Please input transaction number.", "", "error");
+                IsSave = 0;
+                return;
+            }
+            if (parseInt(VBankId) == 0) {
+                swal("Please select bank.", "", "error");
+                IsSave = 0;
+                return;
+            }
+        }
+
+        if (IsSave == 1) {
+            var data = JSON.stringify({
+                ComplaintId: $("#hdfComplaintId").val(),
+                PaidAmount: VDueAmount,
+                PaidOn: VReceiptDate,
+                PaymentMode: VPaymentMode,
+                TransactionNumber: VTransactionNumber,
+                TransactionDate: VTransactionDate,
+                BankId: VBankId,
+                ReceiptNumber: VReceiptNumber,
+                ReceiptDate: VReceiptDate
+            });
+
+            $.when(SubmitComplaintPayment(data)).then(function (response) {
+            }).fail(function (err) {
+                console.log(err);
+            });
+        }
+    });
+
+    function SubmitComplaintPayment(data) {
+        return $.ajax({
+            contentType: 'application/json; charset=utf-8',
+            dataType: 'json',
+            type: 'POST',
+            url: "/Complaint/GetComplaintPaymentReceived",
+            data: data,
+            success: function (response) {
+                if (response.IsSuccess) {
+                    if (response.Data != null) {
+                        if (response.Data != '') {
+                            swal('Complaint payment received successfully.', "", "success");
+                            GetComplaintPaymentDetail();
+                            GetComplaintCurrentStatus();
+                            $("#txtComplaintStatus").text(response.Data[0].ComplaintStatus)
+                        }
+                        else {
+                            swal('Opps! Something Went Wrong.', "", "error");
+                        }
+                    }
+                    else {
+                        swal('Opps! Something Went Wrong.', "", "error");
+                    }
+                }
+                else {
+                    swal('Opps! Something Went Wrong.', "", "error");
+                }
+            },
+            error: function (xhr, ajaxOptions, thrownError) {
+                swal('Opps! Something Went Wrong.', "", "error");
+            }
+        });
+    }
+
+
+
+    function getInitials(name) {
+        if (!name) return "AD";
+        var parts = name.trim().split(/\s+/);
+        if (parts.length === 1) return parts[0].substring(0, 2).toUpperCase();
+        return (parts[0][0] + parts[parts.length - 1][0]).toUpperCase();
+    }
+
+    function GetDefendantList() {
+        $.ajax({
+            type: "POST",
+            url: "/Complaint/GetOtherList",
+            contentType: "application/json; charset=utf-8",
+            data: JSON.stringify({ ComplaintId: $("#hdfComplaintId").val() }),
+            dataType: "json",
+            success: function (response) {
+                $('#selectDetails').empty();
+                if (response.IsSuccess && response.Data != null && response.Data.length > 0) {
+                    $('#advocateCountBadge').text(response.Data.length + (response.Data.length === 1 ? ' Advocate' : ' Advocates')).show();
+
+                    var TotalAmount = 0;
+                    var colClass = response.Data.length === 1 ? 'col-lg-5 col-md-7 col-12' : 'col-xl-4 col-lg-6 col-md-6 col-12';
+
+                    $.each(response.Data, function (i, row) {
+                        var srNo = i + 1;
+                        var EnrollmentNumberTextId = 'txtEnrollmentNumber' + srNo;
+                        var EnrollmentIdHiddenId = 'hdfEnrollmentId' + srNo;
+
+                        var enrolBadgeHtml = '';
+                        if (row.EnrollmentNo != null && row.EnrollmentNo.toString().trim() !== '') {
+                            enrolBadgeHtml = '<span class="advocate-enrol-badge" title="Enrollment Number"><i class="fa-solid fa-id-card me-1 text-primary"></i> ' + row.EnrollmentNo.toString().trim() + '</span>';
+                        } else {
+                            enrolBadgeHtml = '<div class="advocate-enrol-input-wrap"><i class="fa-solid fa-pen-to-square text-muted me-1"></i><input id="' + EnrollmentNumberTextId + '" type="text" class="form-control form-control-sm advocate-enrol-input" placeholder="Enrollment No." onchange="EnrollmentNumberOnChange(' + srNo + ')" value=""><input id="' + EnrollmentIdHiddenId + '" type="hidden" value="' + (row.Id || '') + '"></div>';
+                        }
+
+                        var advocateName = (row.Name || row.AdvocateName || row.FullName || 'N/A').toString().trim();
+                        var initials = getInitials(advocateName);
+                        var rawAmount = row.Amount == null ? '0' : row.Amount == '' ? '0' : row.Amount;
+                        var displayAmount = (!isNaN(rawAmount) && parseFloat(rawAmount) > 0) ? '₹' + parseFloat(rawAmount).toLocaleString('en-IN') : '₹' + rawAmount;
+
+                        var extraDetailsHtml = '';
+                        if (row.City || row.MobileNo) {
+                            extraDetailsHtml = '<div class="advocate-meta-tags">'
+                                             + (row.City ? '<span class="meta-tag"><i class="fa-solid fa-location-dot me-1 text-muted"></i>' + row.City + '</span>' : '')
+                                             + (row.MobileNo ? '<span class="meta-tag"><i class="fa-solid fa-phone me-1 text-muted"></i>' + row.MobileNo + '</span>' : '')
+                                             + '</div>';
+                        }
+
+                        var cardHtml = ''
+                            + '<div class="' + colClass + ' mb-3">'
+                                + '<div class="advocate-card">'
+                                    + '<div class="advocate-card-header">'
+                                        + '<span class="advocate-index-tag">'
+                                            + '<i class="fa-solid fa-hashtag font-size-10 me-1"></i> ' + srNo
+                                        + '</span>'
+                                        + enrolBadgeHtml
+                                    + '</div>'
+                                    + '<div class="advocate-card-body">'
+                                        + '<div class="advocate-profile-group">'
+                                            + '<div class="advocate-avatar-circle">' + initials + '</div>'
+                                            + '<div class="advocate-profile-details">'
+                                                + '<span class="advocate-role-title">Advocate Complained Against</span>'
+                                                + '<h6 class="advocate-name-heading" title="' + advocateName + '">' + advocateName + '</h6>'
+                                            + '</div>'
+                                        + '</div>'
+                                        + extraDetailsHtml
+                                    + '</div>'
+                                    + '<div class="advocate-card-footer">'
+                                        + '<span class="advocate-amount-label">'
+                                            + '<i class="fa-solid fa-receipt text-primary me-1"></i> Claim Fee'
+                                        + '</span>'
+                                        + '<span class="advocate-amount-badge">'
+                                            + displayAmount
+                                        + '</span>'
+                                    + '</div>'
+                                + '</div>'
+                            + '</div>';
+
+                        $('#selectDetails').append(cardHtml);
+                        TotalAmount = TotalAmount + parseFloat(rawAmount);
+                    });
+
+                    $("#lblManualFinalAmnt").text(TotalAmount);
+                } else {
+                    $('#advocateCountBadge').hide();
+                    var emptyStateHtml = '<div class="col-12"><div class="advocate-empty-state"><div class="empty-icon-wrap"><i class="fa-solid fa-user-slash"></i></div><h6>No Advocates Added</h6><p class="text-muted small mb-0">No advocate complained against has been recorded yet.</p></div></div>';
+                    $('#selectDetails').html(emptyStateHtml);
+                    $("#lblManualFinalAmnt").text(0);
+                }
+            }, failure: function (result) {
+                swal('Something went wrong!', '', 'error');
+            },
+            error: function (result) {
+                swal('Something went wrong!', '', 'error');
+            }
+        });
+    }
+
+    function EnrollmentNumberOnChange(SrNo) {
+        var EnrollmentNumberTextId = '#txtEnrollmentNumber' + SrNo;
+        var EnrollmentIdHiddenId = '#hdfEnrollmentId' + SrNo;
+        var VId = $(EnrollmentIdHiddenId).val()
+        var VEnrollmentNumber = $(EnrollmentNumberTextId).val();
+
+        var data = JSON.stringify({
+            Id: VId,
+            EnrollmentNumber: VEnrollmentNumber
+        });
+
+        $.when(SubmitComplaintAgainstUpdate(data)).then(function (response) {
+        }).fail(function (err) {
+            console.log(err);
+        });
+    };
+
+    function SubmitComplaintAgainstUpdate(data) {
+        return $.ajax({
+            contentType: 'application/json; charset=utf-8',
+            dataType: 'json',
+            type: 'POST',
+            url: "/Complaint/ComplaintAgainstUpdate",
+            data: data,
+            success: function (response) {
+                if (response.IsSuccess) {
+                    if (response.Data != null) {
+                        if (response.Data != '') {
+                            var VReturnStatus = response.Data[0].ReturnStatus == null ? '' : response.Data[0].ReturnStatus;
+                            if (VReturnStatus == 'UD') {
+                                swal('Complaint against detail update successfully.', "", "success");
+                                GetDefendantList();
+                            }
+                        }
+                        else {
+                            swal('Opps! Something Went Wrong.', "", "error");
+                        }
+                    }
+                    else {
+                        swal('Opps! Something Went Wrong.', "", "error");
+                    }
+                }
+                else {
+                    swal('Opps! Something Went Wrong.', "", "error");
+                }
+            },
+            error: function (xhr, ajaxOptions, thrownError) {
+                swal('Opps! Something Went Wrong.', "", "error");
+            }
+        });
+    }
+
+    function GetComplaintReplyToList() {
+        $.ajax({
+            type: "POST",
+            url: "/Complaint/GetOtherList",
+            contentType: "application/json; charset=utf-8",
+            data: JSON.stringify({ ComplaintId: $("#hdfComplaintId").val() }),
+            dataType: "json",
+            success: function (response) {
+                if (response.IsSuccess) {
+                    if (response.Data != null) {
+                        if (response.Data[0].IsKnown == "Y") {
+
+                            $.each(response.Data, function (i, row) {
+                                var srNo = i + 1;
+                                if (srNo == 1) {
+                                    $('#myTab').append('<li class="nav-item" role="presentation">'
+                                        + '<input type="hidden" id="hdfSenderId" value=' + row.AdvocateId + ' />'
+                                        + '<a class="nav-link active" id="defendantreplay-tab" data-bs-toggle="tab" data-bs-target="#defendantreplay"  role="tab" aria-controls="defendantreplay" aria-selected="false" onclick="GetReplyList(' + row.AdvocateId + ')">' + row.Name + '</a>'
+                                    + '</li>');
+                                }
+                                else {
+                                    $('#myTab').append('<li class="nav-item" role="presentation">'
+                                        + '<input type="hidden" id="hdfSenderId" value=' + row.AdvocateId + ' />'
+                                        + '<a class="nav-link" id="defendantreplay-tab" data-bs-toggle="tab" data-bs-target="#defendantreplay"  role="tab" aria-controls="defendantreplay" aria-selected="false" onclick="GetReplyList(' + row.AdvocateId + ')">' + row.Name + '</a>'
+                                    + '</li>');
+                                }
+
+                                if (srNo == 1) {
+                                    GetReplyList(row.AdvocateId)
+                                    $("#defendantreplay").addClass("active show");
+                                }
+                            });
+                        }
+                        else {
+                            $('#myTab').append('');
+                        }
+                    }
+                }
+                else {
+
+                }
+            }, failure: function (result) {
+                swal('Something went wrong!', '', 'error');
+            },
+            error: function (result) {
+                swal('Something went wrong!', '', 'error');
+            }
+        });
+    }
+
+    function copyMemberLink(url, btn) {
+        if (!url) return;
+        var originalHtml = $(btn).html();
+        if (navigator.clipboard && navigator.clipboard.writeText) {
+            navigator.clipboard.writeText(url).then(function () {
+                $(btn).html('<i class="fa-solid fa-check text-success me-1"></i>Copied!');
+                setTimeout(function () { $(btn).html(originalHtml); }, 2000);
+            }).catch(function () {
+                fallbackCopyText(url, btn, originalHtml);
+            });
+        } else {
+            fallbackCopyText(url, btn, originalHtml);
+        }
+    }
+
+    function fallbackCopyText(text, btn, originalHtml) {
+        var textArea = document.createElement("textarea");
+        textArea.value = text;
+        textArea.style.position = "fixed";
+        textArea.style.left = "-9999px";
+        document.body.appendChild(textArea);
+        textArea.focus();
+        textArea.select();
+        try {
+            document.execCommand('copy');
+            $(btn).html('<i class="fa-solid fa-check text-success me-1"></i>Copied!');
+            setTimeout(function () { $(btn).html(originalHtml); }, 2000);
+        } catch (err) {
+            prompt("Copy this URL:", text);
+        }
+        document.body.removeChild(textArea);
+    }
+
+    function openDcMemberListView(dcId) {
+        if (!dcId) return;
+        var hdfComplaintIds = '#hdfComplaintid' + dcId;
+        var memberContainer = $('#dcMemberList_' + dcId);
+        var chevronId = '#chevron_dcMember_' + dcId;
+        var btnTextId = '#btnText_dcMember_' + dcId;
+
+        // Toggle: if already visible, slide up
+        if (memberContainer.is(':visible')) {
+            memberContainer.slideUp(200);
+            $(chevronId).removeClass('rotate-180');
+            $(btnTextId).text('View Members');
+            return;
+        }
+
+        // If already rendered, slide down
+        if (memberContainer.find('.dc-member-item-card').length > 0) {
+            memberContainer.slideDown(200);
+            $(chevronId).addClass('rotate-180');
+            $(btnTextId).text('Hide Members');
+            return;
+        }
+
+        memberContainer.html(
+            '<div class="text-center py-3 text-muted">' +
+            '  <div class="spinner-border spinner-border-sm text-primary me-2" role="status"></div>' +
+            '  <span>Loading committee members...</span>' +
+            '</div>'
+        ).show();
+
+        var VComplaintId = $(hdfComplaintIds).val();
+        var Data = JSON.stringify({
+            ComplaintId: VComplaintId
+        });
+
+        $.ajax({
+            type: 'POST',
+            url: "/Complaint/GetComplaintMemberLogList",
+            data: Data,
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            success: function (response) {
+                if (response != null && response.Data != null && response.Data.length > 0) {
+                    $(chevronId).addClass('rotate-180');
+                    $(btnTextId).text('Hide Members (' + response.Data.length + ')');
+
+                    var cardsHtml = '<div class="dc-members-grid">';
+
+                    $.each(response.Data, function (index, mvalue) {
+                        var rIdx = index + 1;
+                        var portalUrl = 'https://dcpanel.barcouncilofgujarat.org/BoardComplaint/OnlineComplaintDetail/' + (mvalue.ComplaintDetailEncryptCode || '');
+                        var contactNo = (mvalue.ContactNumber || '').toString().trim();
+                        var enroNo = (mvalue.EnroNumber || 'N/A').toString().trim();
+                        var fullName = (mvalue.FullName || 'Member').toString().trim();
+                        var emailAddr = (mvalue.EmailAddress || '').toString().trim();
+
+                        var initials = '';
+                        var nameParts = fullName.split(' ');
+                        if (nameParts.length >= 2 && nameParts[0] && nameParts[1]) {
+                            initials = nameParts[0].charAt(0) + nameParts[1].charAt(0);
+                        } else if (nameParts.length === 1 && nameParts[0]) {
+                            initials = nameParts[0].substring(0, 2);
+                        } else {
+                            initials = '#' + rIdx;
+                        }
+                        initials = initials.toUpperCase();
+
+                        cardsHtml +=
+                            '<div class="dc-member-item-card">' +
+                            '  <div class="dc-member-card-inner">' +
+                            '    <div class="dc-member-header-row">' +
+                            '      <div class="dc-member-profile">' +
+                            '        <div class="dc-member-avatar" title="' + escapeHtml(fullName) + '">' +
+                            '          <span>' + escapeHtml(initials) + '</span>' +
+                            '          <span class="dc-member-seq">#' + rIdx + '</span>' +
+                            '        </div>' +
+                            '        <div class="dc-member-meta">' +
+                            '          <h6 class="dc-member-fullname">' + escapeHtml(fullName) + '</h6>' +
+                            '          <div class="dc-member-tags">' +
+                            '            <span class="dc-enro-badge" title="Enrollment Number">' +
+                            '              <i class="fa-solid fa-id-card me-1 text-primary"></i>' + escapeHtml(enroNo) +
+                            '            </span>' +
+                            '            ' + (contactNo ?
+                                            '<a href="tel:' + escapeHtml(contactNo) + '" class="dc-phone-badge" title="Call Member">' +
+                                            '  <i class="fa-solid fa-phone me-1 text-success"></i>' + escapeHtml(contactNo) +
+                                            '</a>' :
+                                            '<span class="dc-phone-badge text-muted"><i class="fa-solid fa-phone-slash me-1"></i>No Contact</span>') +
+                            '            ' + (emailAddr ?
+                                            '<a href="mailto:' + escapeHtml(emailAddr) + '" class="dc-email-badge" title="Email Member">' +
+                                            '  <i class="fa-solid fa-envelope me-1 text-primary"></i>' + escapeHtml(emailAddr) +
+                                            '</a>' :
+                                            '<span class="dc-email-badge text-muted" title="No Email Address"><i class="fa-solid fa-envelope-open me-1"></i>No Email</span>') +
+                            '          </div>' +
+                            '        </div>' +
+                            '      </div>' +
+                            '    </div>' +
+                            '    <div class="dc-member-footer-row">' +
+                            '      <div class="dc-portal-actions">' +
+                            '        <span class="dc-portal-label"><i class="fa-solid fa-shield-halved me-1 text-primary"></i>Hearing Portal:</span>' +
+                            '        <button type="button" class="btn btn-outline-secondary btn-sm dc-copy-link-btn" onclick="copyMemberLink(\'' + portalUrl.replace(/'/g, "\\'") + '\', this)" title="Copy Portal Link">' +
+                            '          <i class="fa-regular fa-copy me-1"></i>Copy Link' +
+                            '        </button>' +
+                            '      </div>' +
+                            '      <button type="button" class="btn btn-outline-primary btn-sm dc-send-sms-btn" onclick="sendComplaintLink(' + (mvalue.Id || 0) + ', \'' + contactNo.replace(/'/g, "\\'") + '\', \'' + emailAddr.replace(/'/g, "\\'") + '\')">' +
+                            '        <i class="fa-solid fa-paper-plane me-1"></i>Send Complaint Link' +
+                            '      </button>' +
+                            '    </div>' +
+                            '  </div>' +
+                            '</div>';
+                    });
+
+                    cardsHtml += '</div>';
+                    memberContainer.html(cardsHtml).slideDown(200);
+                } else {
+                    $(chevronId).removeClass('rotate-180');
+                    $(btnTextId).text('View Members');
+                    memberContainer.html(
+                        '<div class="p-3 text-center text-muted bg-white rounded-3 border mt-2">' +
+                        '  <i class="fa-solid fa-users-slash me-1"></i> No committee members assigned.' +
+                        '</div>'
+                    ).slideDown(200);
+                }
+            },
+            error: function (result) {
+                $(chevronId).removeClass('rotate-180');
+                $(btnTextId).text('View Members');
+                memberContainer.hide().empty();
+                swal('Something went wrong!', '', 'error');
+            }
+        });
+    }
+
+    function getStatusTheme(status) {
+        var s = (status || '').toString().trim().toLowerCase();
+        if (s === 'rejected' || s.indexOf('reject') !== -1) {
+            return {
+                markerClass: 'marker-danger',
+                pillClass: 'pill-danger',
+                summaryClass: 'summary-danger',
+                icon: 'fa-solid fa-xmark',
+                title: status || 'Rejected'
+            };
+        } else if (s === 'accepted' || s.indexOf('accept') !== -1) {
+            return {
+                markerClass: 'marker-success',
+                pillClass: 'pill-success',
+                summaryClass: 'summary-success',
+                icon: 'fa-solid fa-check',
+                title: status || 'Accepted'
+            };
+        } else if (s.indexOf('approved') !== -1) {
+            return {
+                markerClass: 'marker-success',
+                pillClass: 'pill-success',
+                summaryClass: 'summary-success',
+                icon: 'fa-solid fa-circle-check',
+                title: status || 'Approved'
+            };
+        } else if (s === 'more detail' || s.indexOf('detail') !== -1 || s.indexOf('query') !== -1) {
+            return {
+                markerClass: 'marker-warning',
+                pillClass: 'pill-warning',
+                summaryClass: 'summary-warning',
+                icon: 'fa-solid fa-circle-question',
+                title: status || 'More Detail'
+            };
+        } else if (s.indexOf('withdraw') !== -1) {
+            return {
+                markerClass: 'marker-secondary',
+                pillClass: 'pill-secondary',
+                summaryClass: 'summary-secondary',
+                icon: 'fa-solid fa-arrow-right-from-bracket',
+                title: status || 'Withdrawal Granted'
+            };
+        } else if (s === 'order passed' || s.indexOf('order') !== -1) {
+            return {
+                markerClass: 'marker-purple',
+                pillClass: 'pill-purple',
+                summaryClass: 'summary-purple',
+                icon: 'fa-solid fa-gavel',
+                title: status || 'Order Passed'
+            };
+        } else if (s === 'adjunt' || s.indexOf('adjourn') !== -1) {
+            return {
+                markerClass: 'marker-teal',
+                pillClass: 'pill-teal',
+                summaryClass: 'summary-teal',
+                icon: 'fa-solid fa-calendar-days',
+                title: status || 'Adjourned'
+            };
+        } else if (s === 'new') {
+            return {
+                markerClass: 'marker-primary',
+                pillClass: 'pill-primary',
+                summaryClass: 'summary-primary',
+                icon: 'fa-solid fa-file-circle-plus',
+                title: status || 'New'
+            };
+        } else if (s === 'refer to board' || s.indexOf('refer') !== -1 || s.indexOf('general board') !== -1) {
+            return {
+                markerClass: 'marker-info',
+                pillClass: 'pill-info',
+                summaryClass: 'summary-info',
+                icon: 'fa-solid fa-gavel',
+                title: status || 'Refer to Board'
+            };
+        } else if (s === 'board accept') {
+            return {
+                markerClass: 'marker-success',
+                pillClass: 'pill-success',
+                summaryClass: 'summary-success',
+                icon: 'fa-solid fa-check',
+                title: status || 'Board Accept'
+            };
+        } else if (s === 'board has approved') {
+            return {
+                markerClass: 'marker-success',
+                pillClass: 'pill-success',
+                summaryClass: 'summary-success',
+                icon: 'fa-solid fa-check-double',
+                title: status || 'Board Has Approved'
+            };
+        } else {
+            return {
+                markerClass: 'marker-info',
+                pillClass: 'pill-info',
+                summaryClass: 'summary-info',
+                icon: 'fa-solid fa-circle-dot',
+                title: status || 'Updated'
+            };
+        }
+    }
+
+    function escapeHtml(text) {
+        if (!text) return '';
+        return $('<div>').text(text).html();
+    }
+
+    function GetLogList() {
+        var Data = JSON.stringify({
+            ComplaintId: $("#hdfComplaintId").val()
+        });
+        $.ajax({
+            type: 'POST',
+            url: "/Complaint/GetLogList",
+            data: Data,
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            success: function (response) {
+                if (response.IsSuccess) {
+                    $('#logDetails').empty();
+                    if (!response.Data || response.Data.length === 0) {
+                        $('#logDetails').html(
+                            '<div class="text-center py-5">' +
+                            '  <div class="mb-3 text-muted"><i class="fa-solid fa-clock-rotate-left fa-3x opacity-50"></i></div>' +
+                            '  <h6 class="fw-bold text-secondary">No Status History Available</h6>' +
+                            '  <p class="text-muted small mb-0">No status logs have been recorded for this complaint yet.</p>' +
+                            '</div>'
+                        );
+                        return;
+                    }
+                    $.each(response.Data, function (data, value) {
+                        var theme = getStatusTheme(value.Status);
+                        var oldStatusHtml = '';
+                        if (value.OldStatus && value.OldStatus.toString().trim() !== '') {
+                            oldStatusHtml = '<span class="status-old-pill" title="Previous Status"><i class="fa-solid fa-arrow-left me-1"></i> Prev: ' + escapeHtml(value.OldStatus) + '</span>';
+                        }
+
+                        var extraContent = '';
+                        if (value.Status == "Adjunt") {
+                            extraContent = '<div class="status-next-date-box mt-3">' +
+                                '<i class="fa-regular fa-calendar-check text-primary"></i>' +
+                                '<span><strong>Next Hearing Date:</strong> ' + escapeHtml(value.SNextDate || '-') + '</span>' +
+                                '</div>';
+                        } else if (value.Status == "Order Passed") {
+                            var FilePath = "'" + (value.OrderFilePath || '').replace(/'/g, "\\'") + "'";
+                            extraContent = '<div class="mt-3">' +
+                                '<a href="javascript:void(0);" class="status-doc-chip" onclick="getFile(' + FilePath + ')">' +
+                                '  <i class="fa-solid fa-file-pdf text-danger fs-5"></i>' +
+                                '  <span class="doc-name">' + escapeHtml(value.OrderFileName || 'Order Document') + '</span>' +
+                                '  <span class="badge bg-primary-subtle text-primary ms-2"><i class="fa-solid fa-arrow-up-right-from-square me-1"></i>View</span>' +
+                                '</a>' +
+                                '</div>';
+                        } else if (value.Status == "Board Has Approved") {
+                            var dcMemberListId = 'dcMemberList_' + value.Id;
+                            var hdfCommitteeIds = 'hdfCommitteeId' + value.Id;
+                            var hdfComplaintIds = 'hdfComplaintid' + value.Id;
+                            extraContent =
+                                '<div class="dc-approved-section">' +
+                                '  <div class="dc-committee-card">' +
+                                '    <div class="dc-committee-card-header">' +
+                                '      <div class="dc-committee-info-group">' +
+                                '        <div class="dc-committee-badge-icon">' +
+                                '          <i class="fa-solid fa-users-line"></i>' +
+                                '        </div>' +
+                                '        <div>' +
+                                '          <div class="dc-committee-subtitle">Assigned Disciplinary Committee</div>' +
+                                '          <div class="dc-committee-main-title">' +
+                                '            <span class="dc-title-text">' + escapeHtml(value.CommitteTitle || 'Disciplinary Committee') + '</span>' +
+                                '            <span class="dc-status-chip"><i class="fa-solid fa-circle-check me-1"></i>Allocated</span>' +
+                                '          </div>' +
+                                '        </div>' +
+                                '      </div>' +
+                                '      <button type="button" class="btn dc-view-members-btn" onclick="openDcMemberListView(' + value.Id + ')">' +
+                                '        <i id="icon_dcMember_' + value.Id + '" class="fa-solid fa-users-viewfinder"></i>' +
+                                '        <span id="btnText_dcMember_' + value.Id + '">View Members</span>' +
+                                '        <i id="chevron_dcMember_' + value.Id + '" class="fa-solid fa-chevron-down transition-transform"></i>' +
+                                '      </button>' +
+                                '    </div>' +
+                                '    <input type="hidden" id="' + hdfCommitteeIds + '" value="' + (value.CommitteeId || '') + '">' +
+                                '    <input type="hidden" id="' + hdfComplaintIds + '" value="' + (value.ComplaintId || '') + '">' +
+                                '    <div id="' + dcMemberListId + '" class="dc-members-container" style="display:none;"></div>' +
+                                '  </div>' +
+                                '</div>';
+                        }
+
+                        var st = (value.Status || '').toString().trim().toLowerCase();
+                        var summaryText = (value.Summary || '').toString().trim();
+                        if (!summaryText) {
+                            if (st === 'new') {
+                                summaryText = 'Complaint has been successfully registered in the system. It is currently under initial administrative verification and scrutiny.';
+                            } else if (st === 'accepted') {
+                                summaryText = 'Complaint has been scrutinized and accepted for further proceedings. The matter will be placed before the General Board for consideration.';
+                            } else if (st === 'refer to board' || st === 'next general board') {
+                                summaryText = "Complaint has been referred to the General Board for consideration. Awaiting the Board's review and decision in the upcoming meeting.";
+                            } else if (st === 'board accept') {
+                                summaryText = "The General Board has accepted the complaint. Pending formal board approval and committee allocation.";
+                            } else if (st === 'board has approved') {
+                                summaryText = "The General Board has formally approved the complaint. The matter has been referred to the Disciplinary Committee for conducting inquiry and hearing proceedings.";
+                            }
+                        }
+
+                        var summaryHtml = '';
+                        if (summaryText !== '') {
+                            var isStatusNote = (st === 'new' || st === 'accepted' || st === 'refer to board' || st === 'next general board' || st === 'board accept' || st === 'board has approved');
+                            var summaryLabel = isStatusNote ? 'Status Remarks' : 'Reason / Remarks';
+                            summaryHtml = '<div class="status-summary-callout ' + theme.summaryClass + '">' +
+                                '  <div class="status-summary-label">' +
+                                '    <i class="fa-solid fa-quote-left opacity-75"></i> ' + summaryLabel +
+                                '  </div>' +
+                                '  <div class="status-summary-text">' + escapeHtml(summaryText) + '</div>' +
+                                '</div>';
+                        }
+
+                        var itemHtml =
+                            '<div class="status-timeline-item">' +
+                            '  <div class="status-timeline-marker ' + theme.markerClass + '" title="' + escapeHtml(theme.title) + '">' +
+                            '    <i class="' + theme.icon + '"></i>' +
+                            '  </div>' +
+                            '  <div class="status-timeline-card">' +
+                            '    <div class="status-timeline-header">' +
+                            '      <div class="status-badge-group">' +
+                            '        <span class="status-pill ' + theme.pillClass + '">' +
+                            '          <i class="' + theme.icon + '"></i>' + escapeHtml(value.Status) +
+                            '        </span>' +
+                            '        ' + oldStatusHtml +
+                            '      </div>' +
+                            '      <div class="status-meta">' +
+                            '        <span class="status-user" title="Updated by">' +
+                            '          <i class="fa-solid fa-user-shield text-primary opacity-75 me-1"></i>' + escapeHtml(value.Name || 'Admin') +
+                            '        </span>' +
+                            '        <span class="status-date" title="Timestamp">' +
+                            '          <i class="fa-regular fa-clock text-muted me-1"></i>' + escapeHtml(value.SNextDate || '') +
+                            '        </span>' +
+                            '      </div>' +
+                            '    </div>' +
+                            '    ' + extraContent +
+                            '    ' + summaryHtml +
+                            '  </div>' +
+                            '</div>';
+
+                        $('#logDetails').append(itemHtml);
+                    });
+                }
+            },
+            failure: function (result) {
+                swal('Something went wrong!', '', 'error');
+            },
+            error: function (result) {
+                swal('Something went wrong!', '', 'error');
+            }
+        });
+    }
+
+    function GetDcNumberList() {
+        $.ajax({
+            type: 'Get',
+            url: "/Complaint/GetDcNoList",
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            success: function (response) {
+                if (response.IsSuccess) {
+                    $.each(response.Data, function (data, value) {
+                        $("#drpDcNo").append('<option value=' + value.Id + '>' + value.DcTitle + '</option>');
+                    });
+                }
+                else {
+                }
+            }, failure: function (result) {
+                swal('Something went wrong!', '', 'error');
+            },
+            error: function (result) {
+                swal('Something went wrong!', '', 'error');
+            }
+        });
+    }
+
+
+
+    // Share a copy with the advocate
+    $('#lnkShareACopy').on('click', function () {
+        var complaintId = $("#hdfComplaintId").val();
+        if (!complaintId || complaintId === "0") {
+            swal("Complaint ID not found.", "", "error");
+            return;
+        }
+        var Data = JSON.stringify({
+            ComplaintId: complaintId
+        });
+        $.ajax({
+            type: 'POST',
+            url: "/Complaint/GetAllComplaintDetailsReportsFilterSet",
+            data: Data,
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            success: function (result) {
+                if (result.data == "Success") {
+                    var url = '@Url.Action("DownloadDetailReport", "Complaint")' + (complaintId ? ('?id=' + encodeURIComponent(complaintId)) : '');
+                    window.open(url, '_blank');
+                    swal('PDF generated successfully. You can share it with the advocate.', "", "success");
+                } else {
+                    swal('Something went wrong!', "", "error");
+                }
+            },
+            error: function () {
+                swal('Something went wrong!', "", "error");
+            }
+        });
+    });
+
+    function ddlDcNumber() {
+        if ($('#drpDcNo option:selected').text() != "Select DC Commitee") {
+            var dcno = $('#drpDcNo option:selected').val();
+            var Data = JSON.stringify({
+                ComplaintId: $("#hdfComplaintId").val(),
+                CommitteeId: dcno
+            });
+            $.ajax({
+                type: 'POST',
+                url: "/Complaint/GetDcMemberLists",
+                contentType: "application/json; charset=utf-8",
+                data: Data,
+                dataType: "json",
+                success: function (response) {
+                    $('#tbldcDetails').empty();
+                    var dcDetails = $('#tbldcDetails');
+                    if (response.IsSuccess) {
+                        $.each(response.Data, function (data, value) {
+                            dcDetails.append(
+                                '<div class="main_card_list main_card_list_border mb-2"><div class="main_header_card"><div class="_left_side"><div class="number">' + value.SrNo + '</div><div class="complaint_number"><div class="title">Enrollment Number</div><a class="description">' + value.EnroNumber + '</a></div></div><div class="rigth_side_check"><input type="checkbox" class="main_check_style" name="dcCheck" value="' + value.MemberId + '" checked=""><i class="las la-check"></i></div></div><div class="main_card_list_body"><div class="row"><div class="col-md-6 mt-3"><div class="title">Name</div><div class="description">' + value.FullName + '</div></div><div class="col-md-6 mt-3"><div class="title">Contact Number</div><div class="description">' + value.ContactNumber + '</div></div></div></div></div>'
+                             )
+                        });
+                    }
+                    else {
+                    }
+                }, failure: function (result) {
+                    swal('Something went wrong!', '', 'error');
+                },
+                error: function (result) {
+                    swal('Something went wrong!', '', 'error');
+                }
+            });
+        }
+        else {
+            swal("Select Committee", "", "error");
+        }
+    }
+
+    $('#btnAddToList').on('click', function () {
+        var addtoMainList = [];
+        addtoMainList.length = 0;
+        $.each($("input[name='dcMemberCheck']"), function () {
+
+            var currentRows = $(this).closest(".main_card_list");
+            var val = $(this).is(":checked");
+
+            if (val == 1) {
+                var memberId = $(this).val();
+                console.log("Selected MemberId:", memberId);
+
+                addtoMainList.push({
+                    IsChecked: "1",
+                    MemberId: memberId,
+                    EnroNumber: currentRows.find(".enrolnumberid").html(),
+                    Name: currentRows.find(".nameid").html(),
+                    ContactNumber: currentRows.find(".contectid").html()
+                });
+            }
+        });
+
+        var dcDetails = $('#tbldcDetails');
+
+        if (addtoMainList.length > 0) {
+
+            for (var i = 0; i < addtoMainList.length; i++) {
+                var id = $('#tbldcDetails > .main_card_list').length;
+                var srno = id + 1;
+                dcDetails.append('<div class="main_card_list main_card_list_border mb-2"><div class="main_header_card"><div class="_left_side"><div class="number">' + srno + '</div><div class="complaint_number"><div class="title">Enrollment Number</div><a class="description">' + addtoMainList[i].EnroNumber + '</a></div></div><div class="rigth_side_check"><input type="checkbox" class="main_check_style" name="dcCheck" value="' + addtoMainList[i].MemberId + '" checked=""><i class="las la-check"></i></div></div><div class="main_card_list_body"><div class="row"><div class="col-md-6 mt-3"><div class="title">Name</div><div class="description">' + addtoMainList[i].Name + '</div></div><div class="col-md-6 mt-3"><div class="title">Contact Number</div><div class="description">' + addtoMainList[i].ContactNumber + '</div></div></div></div></div>')
+            }
+        }
+        $("#MemberList").modal('hide');
+    });
+
+    $('#lnkAddMember').on('click', function () {
+
+        if ($('#drpDcNo option:selected').text() != "Select DC Commitee") {
+            var dcno = $('#drpDcNo option:selected').val();
+
+            $.ajax({
+                type: 'Get',
+                url: "/Complaint/GetDcMemberListNotExist",
+                contentType: "application/json; charset=utf-8",
+                data: { DcNo: dcno },
+                dataType: "json",
+                success: function (response) {
+                    $('#tblMemberList').empty();
+                    var dcDetails = $('#tblMemberList');
+
+                    if (response.IsSuccess) {
+                        if (response.Data != null) {
+                            if (response.Data != '') {
+                                $("#MemberList").modal('show');
+                                $.each(response.Data, function (data, value) {
+                                    dcDetails.append('<div class="main_card_list main_card_list_border mb-3"><div class="main_header_card"><div class="_left_side"><div class="number">' + value.SrNo + '</div><div class="complaint_number"><div class="title">Enrollment Number</div><a class="description enrolnumberid">' + value.EnroNumber + '</a></div></div><div class="rigth_side_check"><input type="checkbox" class="main_check_style" name="dcMemberCheck" value="' + value.MemberId + '"><i class="las la-check"></i></div></div><div class="main_card_list_body"><div class="row"><div class="col-md-6 mt-3"><div class="title">Name</div><div class="description nameid">' + value.FullName + '</div></div><div class="col-md-6 mt-3"><div class="title">Contact Number</div><div class="description contectid">' + value.ContactNumber + '</div></div></div></div></div>')
+                                });
+                            }
+                        }
+                    }
+                    else {
+                        dcDetails.append('No data available');
+                    }
+                }, failure: function (result) {
+                    swal('Something went wrong!', '', 'error');
+                },
+                error: function (result) {
+                    swal('Something went wrong!', '', 'error');
+                }
+            });
+        }
+        else {
+            swal("Select Committee", "", "error");
+        }
+    });
+
+    $('#lnkSaveAdjuntDetails').on('click', function () {
+        if ($("#txtNextDate").val() != null) {
+
+            if ($("#txtNextDate").val() != "") {
+                var Data = JSON.stringify({
+                    NextDate: $("#txtNextDate").val(),
+                    Summary: $("#txtSummary").val(),
+                    ComplaintId: $("#hdfComplaintId").val(),
+                    CompalintStatus: "Adjunt",
+                    OrderFileName: "",
+                    OrderFilePath: "",
+                });
+
+                $.ajax({
+                    type: 'POST',
+                    url: "/Complaint/SaveComplaintStatusLog",
+                    data: Data,
+                    contentType: "application/json; charset=utf-8",
+                    dataType: "json",
+                    success: function (response) {
+                        if (response.IsSuccess) {
+                            $("#txtNextDate").val('');
+                            $("#txtSummary").val('');
+                            $('#adjuntDetails').css('display', 'none');
+                            $('#ActionLog').modal('hide');
+                            $('#manageStatusModal').modal('hide');
+                            swal("Details save successfully", "", "success");
+                            GetComplaintCurrentStatus();
+                            GetLogList();
+                        }
+                        else {
+                            swal("Something went wrong", "", "error");
+                        }
+                    }
+                });
+            }
+            else {
+                swal("Please select date", "", "error");
+            }
+        }
+        else {
+            swal("Please select date", "", "error");
+        }
+    });
+
+    $('#lnkCancelAdjuntDetails').on('click', function () {
+        $('#txtNextDate').val('');
+        $('#txtSummary').val('');
+        $('#adjuntDetails').css('display', 'none');
+
+    });
+
+    $('#lnkSaveBoardAccept').on('click', function () {
+
+        if ($('#drpDcNo option:selected').text() == "Select DC Commitee") {
+            swal("Please select DC Commitee", "", "error");
+        }
+        else if ($('#txtDCNumber').val() == "") {
+            swal("Please enter DC Case No.", "", "error");
+        }
+        else {
+
+            var MemberListArr = [];
+            MemberListArr.length = 0;
+
+            $.each($("input[name='dcCheck']"), function () {
+                var val = $(this).is(":checked");
+                if (val == 1) {
+                    MemberListArr.push({
+                        MemberId: $(this).val(),
+                        IsChecked: "1"
+                    });
+                }
+            });
+
+            var Data = JSON.stringify({
+                ComplaintId: $("#hdfComplaintId").val(),
+                CompalintStatus: "Board Has Approved",
+                memberList: MemberListArr,
+                CommitteeId: $('#drpDcNo option:selected').val(),
+                DCReferenceNumber: $("#txtDCNumber").val()
+            });
+
+            $.ajax({
+                type: 'POST',
+                url: "/Complaint/SaveComplaintMemberLog",
+                data: Data,
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                success: function (response) {
+                    if (response.IsSuccess) {
+                        if (response.Message == "IN") {
+                            swal("DC Committee Board Has Approved successfully.", "", "success");
+                            // Close boardAccept div and clear all fields
+                            $('#drpDcNo').empty();
+                            $('#drpDcNo').append('<option value="">Select DC Commitee</option>');
+                            $('#txtDCNumber').val('');
+                            $('#tbldcDetails').empty();
+                            $('#boardAccept').css('display', 'none');
+                            GetComplaintCurrentStatus();
+                            GetLogList();
+                            $("#manageStatusModal").modal('hide');
+                            $("#boardAcceptOnlyModal").modal('hide');
+                        }
+                        else if (response.Message == "EX") {
+                            swal("DC Case No. already exists.", "", "error");
+                        }
+                        else {
+                            swal("Opps! Something Went Wrong.", "", "error");
+                        }
+                    }
+                    else {
+                        swal("Opps! Something Went Wrong.", "", "error");
+                    }
+                }
+            });
+        }
+    });
+
+    function ShowPreview(input, txt) {
+        if (input.files && input.files[0]) {
+            var reader = new FileReader();
+            reader.onload = function (e) {
+                var PPath = e.target.result;
+                if (txt == "Order") {
+                    document.getElementById("hdfB64ImagePath").value = PPath
+                    document.getElementById("hdfFileName").value = input.files[0].name
+                    $("#imgProfileImage").prop('src', e.target.result)
+              .css('visibility', 'visible')
+                }
+                else {
+                    document.getElementById("hdfReplyB64ImagePath").value = PPath
+                    document.getElementById("hdfReplyFileName").value = input.files[0].name
+                    $('#lbldisplayName').text(input.files[0].name);
+                }
+            };
+            reader.readAsDataURL(input.files[0]);
+        }
+    }
+
+    var FileName;
+
+    $('#lnkSaveOrderDetails').on('click', function () {
+        FileName = $("#hdfFileName").val();
+        var Data = JSON.stringify({
+            NextDate: "",
+            Summary: $("#txtOrderSummary").val(),
+            ComplaintId: $("#hdfComplaintId").val(),
+            CompalintStatus: "Order Passed",
+            OrderFileName: $("#hdfFileName").val(),
+            OrderFilePath: $('#hdfB64ImagePath').val(),
+        });
+
+        $.ajax({
+            type: 'POST',
+            url: "/Complaint/SaveComplaintStatusLog",
+            data: Data,
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            success: function (response) {
+                if (response.IsSuccess) {
+                    $("#txtOrderSummary").val('');
+                    $('#orderFile').val('');
+                    $("#hdfB64ImagePath").val('');
+                    $("#hdfFileName").val('');
+                    $("#OrderPassed").addClass('hide-element');
+                    $("#OrderPassed").hide();
+                    swal("Order File save successfully", "", "success");
+                    GetComplaintCurrentStatus();
+                    GetLogList();
+                }
+                else {
+                    swal("Data already Exists", "", "error");
+                }
+            }
+        });
+    });
+
+    function getFile(filepath) {
+        if (filepath == "") return;
+        var ext = filepath.split('.').pop().toLowerCase();
+        var previewExts = ['pdf', 'jpg', 'jpeg', 'png', 'gif', 'bmp', 'svg', 'webp'];
+        if (previewExts.indexOf(ext) > -1) {
+            $('#displayPdf').attr('src', filepath);
+            $('#filePreviewModal').modal('show');
+        } else {
+            var a = document.createElement('a');
+            a.href = filepath;
+            a.download = filepath.split('/').pop();
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+        }
+    }
+
+    $('#filePreviewModal').on('hidden.bs.modal', function () {
+        $('#displayPdf').attr('src', '');
+    });
+
+    function chooseDownloadPdfOption() {
+        if (typeof Swal !== 'undefined') {
+            Swal.fire({
+                title: '<div style="display:flex; align-items:center; justify-content:space-between; width:100%; text-align:left;">' +
+                       '  <span style="font-size:18px; font-weight:700; color:#1e293b; display:flex; align-items:center; gap:8px;">' +
+                       '    <i class="fa-solid fa-file-pdf text-danger"></i> Download Case PDF' +
+                       '  </span>' +
+                       '  <button type="button" class="btn-close btn-sm" onclick="Swal.close()" aria-label="Close" style="font-size:12px; cursor:pointer;"></button>' +
+                       '</div>',
+                html: '<div style="text-align:left; width:100%;">' +
+                      '  <div style="font-size:13px; color:#64748b; margin-bottom:16px; text-align:left;">Please select which PDF version you want to download:</div>' +
+                      '  <div style="display:flex; flex-direction:column; gap:11px; text-align:left; width:100%;">' +
+                      '    <button type="button" id="swalBtnDlWith" class="swal-dl-btn" style="display:flex; align-items:center; justify-content:space-between; padding:13px 15px; border:1.5px solid #0d6efd; background:#f0f7ff; border-radius:10px; cursor:pointer; width:100%; text-align:left;">' +
+                      '      <div style="display:flex; align-items:center; gap:12px; text-align:left;">' +
+                      '        <div style="width:36px; height:36px; border-radius:8px; background:#dbeafe; display:flex; align-items:center; justify-content:center; flex-shrink:0;">' +
+                      '          <i class="fa-solid fa-paperclip" style="font-size:17px; color:#0d6efd;"></i>' +
+                      '        </div>' +
+                      '        <div style="text-align:left;">' +
+                      '          <div style="font-weight:700; font-size:13.5px; color:#0f172a; text-align:left; line-height:1.3;">With Attached Documents</div>' +
+                      '          <div style="font-size:11.5px; color:#64748b; text-align:left; margin-top:2px;">Complete Case Dossier + All Uploaded Files</div>' +
+                      '        </div>' +
+                      '      </div>' +
+                      '      <i class="fa-solid fa-chevron-right" style="color:#0d6efd; font-size:12px;"></i>' +
+                      '    </button>' +
+                      '    <button type="button" id="swalBtnDlWithout" class="swal-dl-btn" style="display:flex; align-items:center; justify-content:space-between; padding:13px 15px; border:1.5px solid #cbd5e1; background:#ffffff; border-radius:10px; cursor:pointer; width:100%; text-align:left;">' +
+                      '      <div style="display:flex; align-items:center; gap:12px; text-align:left;">' +
+                      '        <div style="width:36px; height:36px; border-radius:8px; background:#fee2e2; display:flex; align-items:center; justify-content:center; flex-shrink:0;">' +
+                      '          <i class="fa-solid fa-file-pdf" style="font-size:17px; color:#dc3545;"></i>' +
+                      '        </div>' +
+                      '        <div style="text-align:left;">' +
+                      '          <div style="font-weight:700; font-size:13.5px; color:#0f172a; text-align:left; line-height:1.3;">Without Attached Documents</div>' +
+                      '          <div style="font-size:11.5px; color:#64748b; text-align:left; margin-top:2px;">Official Proceedings Summary Only</div>' +
+                      '        </div>' +
+                      '      </div>' +
+                      '      <i class="fa-solid fa-chevron-right" style="color:#94a3b8; font-size:12px;"></i>' +
+                      '    </button>' +
+                      '  </div>' +
+                      '</div>',
+                showConfirmButton: false,
+                showCancelButton: false,
+                buttonsStyling: false,
+                customClass: {
+                    popup: 'swal-pdf-modal p-4 shadow-lg text-start',
+                    title: 'text-start w-100 p-0 m-0',
+                    htmlContainer: 'text-start w-100 p-0 m-0'
+                },
+                didOpen: function () {
+                    $('#swalBtnDlWith').on('click', function () {
+                        Swal.close();
+                        downloadComplaintPdf(true);
+                    });
+                    $('#swalBtnDlWithout').on('click', function () {
+                        Swal.close();
+                        downloadComplaintPdf(false);
+                    });
+                }
+            });
+        } else {
+            downloadComplaintPdf(true);
+        }
+    }
+
+    function downloadComplaintPdf(withAttachments) {
+        var complaintId = $("#hdfComplaintId").val();
+        if (!complaintId) {
+            var pathParts = window.location.pathname.split('/');
+            var lastPart = pathParts[pathParts.length - 1];
+            if (!isNaN(lastPart) && parseInt(lastPart) > 0) {
+                complaintId = lastPart;
+            }
+        }
+        var Data = JSON.stringify({
+            ComplaintId: complaintId
+        });
+
+        $.ajax({
+            type: 'POST',
+            url: "/Complaint/GetAllComplaintDetailsReportsFilterSet",
+            data: Data,
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            success: function (result) {
+                if (result.data == "Success") {
+                    var url = '@Url.Action("DownloadDetailReport", "Complaint")' +
+                        (complaintId ? ('?id=' + encodeURIComponent(complaintId) + '&withAttachments=' + (withAttachments ? 'true' : 'false')) : ('?withAttachments=' + (withAttachments ? 'true' : 'false')));
+                    location.href = url;
+                } else {
+                    swal('Something went wrong!', "", "error");
+                }
+            },
+            error: function () {
+                var url = '@Url.Action("DownloadDetailReport", "Complaint")' +
+                    (complaintId ? ('?id=' + encodeURIComponent(complaintId) + '&withAttachments=' + (withAttachments ? 'true' : 'false')) : ('?withAttachments=' + (withAttachments ? 'true' : 'false')));
+                location.href = url;
+            }
+        });
+    }
+
+    $('#lnkDownload').on('click', function () {
+        chooseDownloadPdfOption();
+    });
+
+    function GetReplyList(id) {
+        $('#hdfSenderId').val(id);
+        var Data = JSON.stringify({
+            SenderId: 0,
+            ComplaintId: $("#hdfComplaintId").val(),
+        });
+
+        $.ajax({
+            type: "POST",
+            url: "/Complaint/GetReplyList",
+            data: Data,
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            success: function (response) {
+                $('#dvreplyData').empty();
+                var dcReply = $('#dvreplyData');
+                if (response.IsSuccess && response.Data && response.Data.length > 0) {
+                    $.each(response.Data, function (data, row) {
+                        var FilePath = "'" + row.FilePath + "'";
+                        var deleteBtnHtml = '';
+                        if (row.IsShowDeleteButton === 'Y') {
+                            deleteBtnHtml = '<button type="button" class="btn btn-outline-danger btn-sm rounded-circle p-0 ms-2" style="width: 26px; height: 26px; display: inline-flex; align-items: center; justify-content: center;" onclick="deleteReply(\'' + row.Id + '\')" title="Delete Reply"><i class="fa-solid fa-trash font-size-10"></i></button>';
+                        }
+                        var initials = (row.SenderName ? row.SenderName.substring(0, 2).toUpperCase() : 'AD');
+                        var RowItem = '<div class="reply-item-card">'
+                                        + '<div class="reply-header">'
+                                            + '<div class="reply-sender-info">'
+                                                + '<div class="reply-avatar">' + initials + '</div>'
+                                                + '<span class="reply-sender-name">' + (row.SenderName || 'Advocate') + '</span>'
+                                            + '</div>'
+                                            + '<div class="d-flex align-items-center">'
+                                                + '<span class="reply-date-badge"><i class="fa-regular fa-clock me-1"></i>' + row.SCreateDate + ' ' + row.SCreateTime + '</span>'
+                                                + deleteBtnHtml
+                                            + '</div>'
+                                        + '</div>';
+
+                        if (row.Summery != null && row.Summery.trim() !== "") {
+                            RowItem += '<div class="reply-summary-callout">'
+                                             + '<div class="reply-summary-title"><i class="fa-solid fa-quote-left me-1"></i> Summary | Short Information</div>'
+                                             + '<p class="reply-summary-text">' + row.Summery + '</p>'
+                                        + '</div>';
+                        }
+
+                        if (row.Comprehensive != null && row.Comprehensive.trim() !== "") {
+                            RowItem += '<div class="reply-comprehensive-block">'
+                                             + '<div class="reply-comprehensive-title"><i class="fa-regular fa-file-lines me-1"></i> Comprehensive Response</div>'
+                                             + '<p class="reply-comprehensive-text">' + row.Comprehensive + '</p>'
+                                        + '</div>';
+                        }
+
+                        if (row.FilePath != null && row.FilePath.trim() !== "") {
+                            RowItem += '<div>'
+                                            + '<div class="reply-attachment-chip" onclick="getFile(' + FilePath + ')" title="Click to view file">'
+                                                + '<i class="fa-solid fa-file-pdf text-danger font-size-16"></i>'
+                                                + '<span class="font-size-12 fw-semibold text-primary">' + row.FileName + '</span>'
+                                                + '<i class="fa-regular fa-eye font-size-11 text-muted ms-1"></i>'
+                                            + '</div>'
+                                        + '</div>';
+                        }
+
+                        RowItem += '</div>';
+                        dcReply.prepend(RowItem);
+                    });
+                    dcReply.scrollTop(0);
+                }
+                else {
+                    dcReply.html('<div class="empty-doc-placeholder text-center"><div class="empty-icon-circle"><i class="fa-regular fa-comments"></i></div><div class="text-dark fw-semibold font-size-13">No replies or communications logged yet.</div><div class="text-muted font-size-12">Use the reply composer below to log communications.</div></div>');
+                }
+            }, failure: function (result) {
+                swal('Something went wrong!', '', 'error');
+            },
+            error: function (result) {
+                swal('Something went wrong!', '', 'error');
+            }
+        });
+    }
+
+    function deleteReply(id) {
+        Swal.fire({
+            title: 'Are you sure?',
+            text: "You want to delete this reply?",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Yes, delete it!'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                var data = {
+                    Id: id
+                };
+
+                $.ajax({
+                    type: 'POST',
+                    url: "/Complaint/ComplaintReplyDelete",
+                    data: JSON.stringify(data),
+                    contentType: "application/json; charset=utf-8",
+                    dataType: "json",
+                    success: function (response) {
+                        if (response.IsSuccess) {
+                            Swal.fire("Deleted!", "Reply deleted successfully.", "success");
+                            GetReplyList($('#hdfSenderId').val());
+                        } else {
+                            Swal.fire("Failed!", response.Message || "Failed to delete reply.", "error");
+                        }
+                    },
+                    error: function (result) {
+                        Swal.fire("Error!", "Error deleting reply.", "error");
+                    }
+                });
+            }
+        });
+    }
+
+    function openManageStatusModal() {
+        GetLogList();
+        $('#manageStatusModal').modal('show');
+    }
+
+    $('#btnReplySave').on('click', function () {
+
+        var replyMessage = $('#txtReply').val() ? $('#txtReply').val().trim() : "";
+        var fileName = $("#hdfReplyFileName").val() ? $("#hdfReplyFileName").val().trim() : "";
+
+        if (replyMessage === "" && fileName === "") {
+            swal("Please enter a message or upload a file.", "", "error");
+            return false;
+        }
+
+        var Data = {
+            ComplaintId: $("#hdfComplaintId").val(),
+            ReplyMessage: $('#txtReply').val(),
+            FileName: $("#hdfReplyFileName").val(),
+            FilePath: $('#hdfReplyB64ImagePath').val(),
+        };
+
+        $.ajax({
+            type: "POST",
+            url: "/Complaint/InsertComplaintReply",
+            data: Data,
+            dataType: "json",
+            success: function (response) {
+                if (response.IsSuccess) {
+                    swal('Reply Sent Successfully.', "", "success");
+                    $('#txtReply').val('');
+                    $('#lbldisplayName').text('');
+                    GetReplyList($('#hdfSenderId').val());
+                }
+                else {
+                    swal('Something went wrong!', "", "error");
+                }
+            }, failure: function (result) {
+                swal('Something went wrong!', '', 'error');
+            },
+            error: function (result) {
+                swal('Something went wrong!', '', 'error');
+            }
+        });
+    });
+
+    function accordian_new(element) {
+        var $element = $(element);
+        if ($element.hasClass("active")) {
+            $element.removeClass("active").parent().parent().next(".answer").slideUp();
+        } else {
+            $(".main_btn_acc.active").removeClass("active").parent().parent().next(".answer").slideUp();
+            $element.addClass("active").parent().parent().next(".answer").slideDown();
+        }
+        return false;
+    }
+
+    function openComplainantEditModal() {
+        $('#txtEditFullName').val($('#lblComplainantFullName').text().trim());
+        $('#txtEditEmail').val($('#lblComplainantEmail').text().trim());
+        $('#txtEditContact').val($('#lblComplainantContact').text().trim());
+        $('#txtEditAddress').val($('#lblComplainantAddress').text().trim());
+        $('#editComplainantModal').modal('show');
+    }
+
+    function saveComplainantDetails() {
+        var data = {
+            Id: $('#hdfComplaintId').val(),
+            FullName: $('#txtEditFullName').val(),
+            EmailAddress: $('#txtEditEmail').val(),
+            ContactNumber: $('#txtEditContact').val(),
+            Address: $('#txtEditAddress').val()
+        };
+
+        $.ajax({
+            type: "POST",
+            url: "/Complaint/UpdateComplainantDetails",
+            data: JSON.stringify(data),
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            success: function (response) {
+                if (response.IsSuccess) {
+                    $('#editComplainantModal').modal('hide');
+                    swal(response.Message, "", "success");
+                    location.reload();
+                } else {
+                    swal(response.Message, "", "error");
+                }
+            },
+            error: function (result) {
+                swal('An error occurred while updating details.', "", "error");
+            }
+        });
+    }
+
+    function openAffidavitUploadModal() {
+        $('#fileAffidavitCopy').val('');
+        $('#uploadAffidavitModal').modal('show');
+    }
+
+    function saveAffidavitCopy() {
+        var fileUpload = $("#fileAffidavitCopy").get(0);
+        var files = fileUpload.files;
+
+        if (files.length === 0) {
+            swal("Please select a file to upload.", "", "error");
+            return;
+        }
+
+        var file = files[0];
+        var reader = new FileReader();
+
+        reader.onload = function (e) {
+            var base64File = e.target.result;
+
+            var data = {
+                ComplaintId: $('#hdfComplaintId').val(),
+                FileName: file.name,
+                Base64File: base64File
+            };
+
+            $.ajax({
+                type: "POST",
+                url: "/Complaint/UploadAffidavitCopy",
+                data: data,
+                dataType: "json",
+                success: function (response) {
+                    if (response.IsSuccess) {
+                        $('#uploadAffidavitModal').modal('hide');
+                        $('#fileAffidavitCopy').val('');
+                        swal(response.Message, "", "success");
+                        location.reload();
+                    } else {
+                        swal(response.Message, "", "error");
+                    }
+                },
+                error: function (result) {
+                    swal('An error occurred while uploading the file.', "", "error");
+                }
+            });
+        };
+
+        reader.readAsDataURL(file);
+    }
+
+    function openAdditionalAttachmentModal() {
+        $('#fileAdditionalAttachment').val('');
+        $('#txtAdditionalFileDescription').val('');
+        $('#uploadAdditionalAttachmentModal').modal('show');
+    }
+
+    function saveAdditionalAttachment() {
+        var fileUpload = $("#fileAdditionalAttachment").get(0);
+        var description = $('#txtAdditionalFileDescription').val();
+        var files = fileUpload.files;
+
+        if (files.length === 0) {
+            swal("Please select a file to upload.", "", "error");
+            return;
+        }
+
+        var file = files[0];
+        var reader = new FileReader();
+
+        reader.onload = function (e) {
+            var base64File = e.target.result;
+
+            var data = {
+                ComplaintId: $('#hdfComplaintId').val(),
+                FileTitle: '',
+                FileName: file.name,
+                Base64File: base64File,
+                Description: description
+            };
+
+            $.ajax({
+                type: "POST",
+                url: "/Complaint/UploadAdditionalAttachment",
+                data: data,
+                dataType: "json",
+                success: function (response) {
+                    if (response.IsSuccess) {
+                        $('#uploadAdditionalAttachmentModal').modal('hide');
+                        $('#fileAdditionalAttachment').val('');
+                        swal(response.Message, "", "success");
+                        location.reload();
+                    } else {
+                        swal(response.Message, "", "error");
+                    }
+                },
+                error: function (result) {
+                    swal('An error occurred while uploading the attachment.', "", "error");
+                }
+            });
+        };
+
+        reader.readAsDataURL(file);
+    }
+
+    function deleteAdditionalAttachment(id) {
+        if (confirm("Are you sure you want to delete this attachment?")) {
+            $.ajax({
+                type: "POST",
+                url: "/Complaint/DeleteAdditionalAttachment",
+                data: JSON.stringify({ Id: id }),
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                success: function (response) {
+                    if (response.IsSuccess) {
+                        swal(response.Message, "", "success");
+                        location.reload();
+                    } else {
+                        swal(response.Message, "", "error");
+                    }
+                },
+                error: function (result) {
+                    swal('An error occurred while deleting the attachment.', "", "error");
+                }
+            });
+        }
+    }
+    function openAddMemberModal() {
+        $('#txtNewEnrollmentNumber').val('');
+        $('#hdfSelectedEnrollmentNumber').val('');
+        $('#advocateSearchResults').hide().empty();
+        $('#addMemberModal').modal('show');
+    }
+
+    function openComplaintGBMeetingModal() {
+        $('#hdfGBMeetingId').val('0');
+        $('#txtMeetingTitle').val('');
+        $('#txtMeetingDate').val('');
+        $('#txtMeetingNote').val('');
+        $('#mbComplaintGBMeeting').modal('show');
+    }
+
+    // Automatic stacking of multiple Bootstrap modals
+    $(document).on('show.bs.modal', '.modal', function () {
+        var zIndex = 1050 + (10 * $('.modal.show').length);
+        $(this).css('z-index', zIndex);
+        setTimeout(function () {
+            $('.modal-backdrop').not('.modal-stack').css('z-index', zIndex - 1).addClass('modal-stack');
+        }, 0);
+    });
+
+    $(document).on('hidden.bs.modal', '.modal', function () {
+        $(this).css('z-index', '');
+        $('.modal.show').each(function (index) {
+            var zIndex = 1050 + (10 * index);
+            $(this).css('z-index', zIndex);
+        });
+        $('.modal-backdrop').each(function (index) {
+            var zIndex = 1049 + (10 * index);
+            $(this).css('z-index', zIndex);
+        });
+        if ($('.modal.show').length > 0) {
+            setTimeout(function () {
+                $(document.body).addClass('modal-open');
+            }, 0);
+        }
+    });
+
+    var searchTimeout;
+    var detailsSearchPageNo = 1;
+    var detailsSearchPageSize = 10;
+    var detailsIsLoading = false;
+    var detailsHasMore = true;
+    var detailsCurrentSearch = "";
+
+    $('#txtNewEnrollmentNumber').on('input', function () {
+        clearTimeout(searchTimeout);
+        var searchTitle = $(this).val().trim();
+        $('#hdfSelectedEnrollmentNumber').val('');
+
+        if (searchTitle.length < 1) {
+            $('#advocateSearchResults').hide().empty();
+            detailsSearchPageNo = 1;
+            detailsHasMore = true;
+            detailsCurrentSearch = "";
+            return;
+        }
+
+        // Reset pagination on new search
+        detailsCurrentSearch = searchTitle;
+        detailsSearchPageNo = 1;
+        detailsHasMore = true;
+        $('#advocateSearchResults').empty();
+
+        searchTimeout = setTimeout(function () {
+            loadDetailsSearchData(searchTitle, true);
+        }, 500);
+    });
+
+    // Scroll event for lazy loading in DetailsNew search results
+    $('#advocateSearchResults').on('scroll', function () {
+        var container = $(this);
+        if (container.scrollTop() + container.innerHeight() >= container[0].scrollHeight - 20) {
+            if (!detailsIsLoading && detailsHasMore && detailsCurrentSearch !== "") {
+                detailsSearchPageNo++;
+                loadDetailsSearchData(detailsCurrentSearch, false);
+            }
+        }
+    });
+
+    function loadDetailsSearchData(searchTitle, isNewSearch) {
+        if (detailsIsLoading) return;
+        detailsIsLoading = true;
+
+        var $results = $('#advocateSearchResults');
+        if (isNewSearch) {
+            $results.empty();
+        }
+        $results.append('<li id="detailsSearchLoader" class="list-group-item text-center"><i class="fa-solid fa-spinner fa-spin"></i> Loading...</li>');
+        $results.show();
+
+        $.ajax({
+            type: 'POST',
+            url: '/Complaint/GetSearchData',
+            data: JSON.stringify({ SearchTitle: searchTitle, PageNo: detailsSearchPageNo, PageSize: detailsSearchPageSize }),
+            contentType: 'application/json; charset=utf-8',
+            dataType: 'json',
+            success: function (response) {
+                $('#detailsSearchLoader').remove();
+                detailsIsLoading = false;
+
+                if (response && response.data && response.data.length > 0) {
+                    $.each(response.data, function (index, item) {
+                        var displayText = item.FullName + ' (' + item.EnroNumber + ') - ' + (item.ContactNumber || '');
+                        var $li = $('<li class="list-group-item list-group-item-action" style="cursor: pointer;"></li>')
+                            .text(displayText)
+                            .on('click', function () {
+                                $('#txtNewEnrollmentNumber').val(displayText);
+                                $('#hdfSelectedEnrollmentNumber').val(item.EnroNumber);
+                                $results.hide();
+                            });
+                        $results.append($li);
+                    });
+                    $results.show();
+
+                    // Check if more data exists
+                    var totalRecord = response.totalRecord || 0;
+                    var totalLoaded = $results.find('.list-group-item-action').length;
+                    if (totalLoaded >= totalRecord || response.data.length < detailsSearchPageSize) {
+                        detailsHasMore = false;
+                    }
+                } else {
+                    detailsHasMore = false;
+                    if (isNewSearch) {
+                        $results.append('<li class="list-group-item text-muted">No advocates found</li>');
+                        $results.show();
+                    }
+                }
+            },
+            error: function () {
+                $('#detailsSearchLoader').remove();
+                detailsIsLoading = false;
+                if (isNewSearch) {
+                    $results.hide().empty();
+                }
+            }
+        });
+    }
+
+    $(document).on('click', function (e) {
+        if (!$(e.target).closest('.position-relative').length) {
+            $('#advocateSearchResults').hide();
+        }
+    });
+
+    function saveNewMember() {
+        var enrollmentNo = $('#hdfSelectedEnrollmentNumber').val().trim();
+        if (enrollmentNo === "") {
+            swal("Please select an Advocate from the search results.", "", "error");
+            return;
+        }
+
+        var complaintId = $("#hdfComplaintId").val();
+
+        var data = {
+            Id: complaintId,
+            EnrollmentNumber: enrollmentNo
+        };
+
+        $.ajax({
+            type: 'POST',
+            url: "/Complaint/ComplaintAgainstSave",
+            data: JSON.stringify(data),
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            success: function (response) {
+                if (response.IsSuccess) {
+                    swal("Member added successfully!", "", "success");
+                    $('#addMemberModal').modal('hide');
+                    $('#selectDetails').empty();
+                    location.reload();
+                } else {
+                    swal("Failed to add member. Please check the Enrollment Number.", "", "error");
+                }
+            },
+            error: function (result) {
+                swal("Error adding member.", "", "error");
+            }
+        });
+    }
+
+    function saveGBMeetingLog() {
+        var id = $('#hdfGBMeetingId').val() || "0";
+        var complaintId = $("#hdfComplaintId").val();
+        var meetingTitle = $('#txtMeetingTitle').val().trim();
+        var meetingDate = $('#txtMeetingDate').val().trim();
+        var meetingNote = $('#txtMeetingNote').val().trim();
+
+        if (meetingTitle === "") {
+            swal("Please enter Meeting Title.", "", "error");
+            return;
+        }
+        if (meetingDate === "") {
+            swal("Please select Meeting Date.", "", "error");
+            return;
+        }
+
+        var data = {
+            Id: id,
+            ComplaintId: complaintId,
+            MeetingTitle: meetingTitle,
+            MeetingDate: meetingDate,
+            MeetingNote: meetingNote,
+            ActionMode: id !== "0" ? "Update" : "Save"
+        };
+
+        $.ajax({
+            type: 'POST',
+            url: "/Complaint/ComplaintGBMeetingLogSave",
+            data: JSON.stringify(data),
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            success: function (response) {
+                if (response.IsSuccess) {
+                    var returnStatus = (response.Data && response.Data[0] && response.Data[0].ReturnStatus) ? response.Data[0].ReturnStatus : '';
+                    if (returnStatus === 'UD') {
+                        swal("GB Meeting Details updated successfully!", "", "success");
+                    } else {
+                        swal("GB Meeting Details saved successfully!", "", "success");
+                    }
+                    $('#mbComplaintGBMeeting').modal('hide');
+                    getGBMeetingLogs(complaintId);
+                } else {
+                    swal("Failed to save GB Meeting Details.", "", "error");
+                }
+            },
+            error: function (result) {
+                swal("Error saving GB Meeting Details.", "", "error");
+            }
+        });
+    }
+
+    function viewMeetingNote(btn) {
+        var noteText = $(btn).closest('.gb-meeting-card, .col-md-12, .main_card_list_body').find('.meeting-note-content').text();
+        $('#lblViewMeetingNoteText').text(noteText);
+        $('#mbViewMeetingNote').modal('show');
+    }
+
+    function formatDateForInput(dateStr) {
+        if (!dateStr) return '';
+        var d = new Date(dateStr);
+        if (!isNaN(d.getTime())) {
+            var day = ("0" + d.getDate()).slice(-2);
+            var month = ("0" + (d.getMonth() + 1)).slice(-2);
+            return d.getFullYear() + "-" + month + "-" + day;
+        }
+
+        var parts = dateStr.split(/[\/\-\s]/);
+        if (parts.length >= 3) {
+            var day = parts[0];
+            var month = parts[1];
+            var year = parts[2];
+            var months = ["jan", "feb", "mar", "apr", "may", "jun", "jul", "aug", "sep", "oct", "nov", "dec"];
+            var monthLower = month.toLowerCase();
+            for (var i = 0; i < months.length; i++) {
+                if (monthLower.indexOf(months[i]) === 0) {
+                    month = i + 1;
+                    break;
+                }
+            }
+            month = ("0" + month).slice(-2);
+            day = ("0" + day).slice(-2);
+            if (year.length === 2) {
+                year = "20" + year;
+            }
+            if (year.length === 4) {
+                return year + "-" + month + "-" + day;
+            }
+        }
+        return '';
+    }
+
+    function editGBMeetingLog(id, btn) {
+        var $card = $(btn).closest('.gb-meeting-card, .main_card_list_body');
+        var title = $card.find('.meeting-title-content').text().trim();
+        var dateStr = $card.find('.meeting-date-content').text().trim();
+        var noteText = $card.find('.meeting-note-content').text();
+
+        $('#hdfGBMeetingId').val(id);
+        $('#txtMeetingTitle').val(title);
+        $('#txtMeetingDate').val(formatDateForInput(dateStr));
+        $('#txtMeetingNote').val(noteText);
+        $('#mbComplaintGBMeeting').modal('show');
+    }
+
+    function deleteGBMeetingLog(id) {
+        Swal.fire({
+            title: 'Are you sure?',
+            text: "You want to delete this GB Meeting log?",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Yes, delete it!'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                var complaintId = $("#hdfComplaintId").val();
+                var data = {
+                    Id: id,
+                    ComplaintId: complaintId,
+                    MeetingTitle: "",
+                    MeetingDate: "",
+                    MeetingNote: "",
+                    ActionMode: "DeleteUpdate"
+                };
+
+                $.ajax({
+                    type: 'POST',
+                    url: "/Complaint/ComplaintGBMeetingLogSave",
+                    data: JSON.stringify(data),
+                    contentType: "application/json; charset=utf-8",
+                    dataType: "json",
+                    success: function (response) {
+                        if (response.IsSuccess) {
+                            var returnStatus = (response.Data && response.Data[0] && response.Data[0].ReturnStatus) ? response.Data[0].ReturnStatus : '';
+                            if (returnStatus === 'UD') {
+                                Swal.fire("Deleted!", "GB Meeting Details deleted successfully.", "success");
+                            } else {
+                                Swal.fire("Deleted!", "GB Meeting Details deleted.", "success");
+                            }
+                            getGBMeetingLogs(complaintId);
+                        } else {
+                            Swal.fire("Failed!", "Failed to delete GB Meeting Details.", "error");
+                        }
+                    },
+                    error: function (result) {
+                        Swal.fire("Error!", "Error deleting GB Meeting Details.", "error");
+                    }
+                });
+            }
+        });
+    }
+
+    function getGBMeetingLogs(complaintId) {
+        if (!complaintId || complaintId === "0") {
+            $('#dvGBMeetingList').empty();
+            return;
+        }
+        $.ajax({
+            type: 'POST',
+            url: "/Complaint/GetComplaintGBMeetingLogList",
+            data: { ComplaintId: complaintId },
+            dataType: "json",
+            success: function (response) {
+                var $container = $('#dvGBMeetingList');
+                $container.empty();
+                if (response.IsSuccess && response.Data && response.Data.length > 0) {
+                    $.each(response.Data, function (i, item) {
+                        var html = '<div class="gb-meeting-card">'
+                            + '<div class="gb-header-row">'
+                                + '<div>'
+                                    + '<span class="gb-date-badge"><i class="fa-regular fa-calendar me-1"></i> <span class="meeting-date-content">' + (item.MeetingDate || '') + '</span></span>'
+                                    + '<h6 class="gb-title meeting-title-content">' + (item.MeetingTitle || '') + '</h6>'
+                                + '</div>'
+                                + '<div class="gb-actions">'
+                                    + '<button type="button" class="btn btn-outline-primary btn-sm rounded-pill px-2.5 py-1 font-size-11 fw-semibold shadow-none" onclick="viewMeetingNote(this)"><i class="fa-solid fa-eye me-1"></i> View</button>'
+                                    + '<button type="button" class="btn btn-outline-info btn-sm rounded-pill px-2.5 py-1 font-size-11 fw-semibold shadow-none" onclick="editGBMeetingLog(\'' + item.Id + '\', this)"><i class="fa-solid fa-pen-to-square me-1"></i> Edit</button>'
+                                    + '<button type="button" class="btn btn-outline-danger btn-sm rounded-pill px-2.5 py-1 font-size-11 fw-semibold shadow-none" onclick="deleteGBMeetingLog(\'' + item.Id + '\')"><i class="fa-solid fa-trash me-1"></i> Delete</button>'
+                                + '</div>'
+                            + '</div>'
+                            + '<div class="gb-note-box">'
+                                + '<div class="gb-note-label"><i class="fa-regular fa-note-sticky text-indigo me-1"></i> Meeting Note (બેઠકની નોંધ)</div>'
+                                + '<p class="gb-note-content meeting-note-content">' + (item.MeetingNote || '') + '</p>'
+                            + '</div>'
+                        + '</div>';
+                        $container.append(html);
+                    });
+                } else {
+                    $container.html('<div class="empty-doc-placeholder text-center"><div class="empty-icon-circle"><i class="fa-regular fa-calendar-xmark"></i></div><div class="text-dark fw-semibold font-size-13">No General Board meeting records added yet.</div><div class="text-muted font-size-12">Click "Add Meeting" to log an official board meeting entry.</div></div>');
+                }
+            },
+            error: function () {
+                $('#dvGBMeetingList').html('<div class="empty-doc-placeholder text-center"><div class="empty-icon-circle"><i class="fa-regular fa-calendar-xmark"></i></div><div class="text-dark fw-semibold font-size-13">No General Board meeting records added yet.</div><div class="text-muted font-size-12">Click "Add Meeting" to log an official board meeting entry.</div></div>');
+            }
+        });
+    }
+
+    function applyStatusBadgeStyle(status) {
+        var $badge = $('#txtComplaintStatus');
+        $badge.removeClass('badge-status-new badge-status-accepted badge-status-rejected badge-status-warning badge-status-info badge-status-purple');
+        var s = (status || '').toString().trim().toLowerCase();
+        if (s.indexOf('accept') !== -1 || s.indexOf('approved') !== -1) {
+            $badge.addClass('badge-status-accepted');
+        } else if (s.indexOf('reject') !== -1) {
+            $badge.addClass('badge-status-rejected');
+        } else if (s.indexOf('more detail') !== -1 || s.indexOf('pending') !== -1 || s.indexOf('payment') !== -1) {
+            $badge.addClass('badge-status-warning');
+        } else if (s.indexOf('board') !== -1) {
+            $badge.addClass('badge-status-info');
+        } else if (s.indexOf('order') !== -1) {
+            $badge.addClass('badge-status-purple');
+        } else {
+            $badge.addClass('badge-status-new');
+        }
+    }
+
+    function updateActionButtonsUI(status) {
+        var html = '';
+        var s = (status || '').toString().trim().toLowerCase();
+        applyStatusBadgeStyle(status);
+        if (s === 'new' || s === 'old' || s === 'more detail' || s === 'payment done') {
+            html = '<a href="javascript:void(0);" class="btn btn-outline-success waves-effect waves-light white-space-nowrap btn-sm me-2" onclick="updateStatusDirectly(\'Accepted\')"><i class="fa-solid fa-check me-1"></i> Accept</a>' +
+                   '<a href="javascript:void(0);" class="btn btn-outline-warning waves-effect waves-light white-space-nowrap btn-sm me-2" onclick="updateStatusWithReason(\'More Detail\')"><i class="fa-solid fa-info-circle me-1"></i> More Detail</a>' +
+                   '<a href="javascript:void(0);" class="btn btn-outline-danger waves-effect waves-light white-space-nowrap btn-sm me-2" onclick="updateStatusWithReason(\'Rejected\')"><i class="fa-solid fa-times me-1"></i> Reject</a>' +
+                   '<a href="javascript:void(0);" class="btn btn-outline-secondary waves-effect waves-light white-space-nowrap btn-sm" onclick="updateStatusWithReason(\'Withdrawal Granted\')"><i class="fa-solid fa-arrow-right-from-bracket me-1"></i> Withdrawal Granted</a>';
+        } else if (s === 'accepted') {
+            html = '<a href="javascript:void(0);" class="btn btn-outline-info waves-effect waves-light white-space-nowrap btn-sm" onclick="updateStatusDirectly(\'Refer to Board\')"><i class="fa-solid fa-gavel me-1"></i> Refer to Board</a>';
+        } else if (s === 'next general board' || s === 'refer to board') {
+            html = '<a href="javascript:void(0);" class="btn btn-outline-success waves-effect waves-light white-space-nowrap btn-sm me-2" onclick="updateStatusDirectly(\'Board Accept\')"><i class="fa-solid fa-check-double me-1"></i> Board Accept</a>' +
+                   '<a href="javascript:void(0);" class="btn btn-outline-danger waves-effect waves-light white-space-nowrap btn-sm" onclick="updateStatusWithReason(\'Board Reject\')"><i class="fa-solid fa-ban me-1"></i> Board Reject</a>';
+        } else if (s === 'board accept') {
+            html = '<a href="javascript:void(0);" class="btn btn-outline-success waves-effect waves-light white-space-nowrap btn-sm me-2" onclick="triggerBoardHasApproved()"><i class="fa-solid fa-check-double me-1"></i> Board Has Approved</a>' +
+                   '<a href="javascript:void(0);" class="btn btn-outline-danger waves-effect waves-light white-space-nowrap btn-sm" onclick="updateStatusWithReason(\'Board Has Rejected\')"><i class="fa-solid fa-ban me-1"></i> Board Has Rejected</a>';
+        }
+
+        $('#divActionButtons').html(html);
+        if (!html || html.trim() === '') {
+            $('#divActionButtons').empty().hide();
+            $('#heroActionBarRow').addClass('is-hidden').hide();
+        } else {
+            $('#divActionButtons').show();
+            $('#heroActionBarRow').removeClass('is-hidden').show();
+        }
+    }
+
+    function triggerBoardHasApproved() {
+        GetDcNumberList();
+        // Move the #boardAccept div into the small standalone modal popup
+        $('#boardAcceptOnlyModalBody').append($('#boardAccept'));
+        $('#boardAccept').removeClass('hide-element').show(); // remove hide-element class (!important) and ensure it's visible
+
+        // Show the new modal popup
+        $('#boardAcceptOnlyModal').modal('show');
+    }
+
+    function updateStatusWithReason(status) {
+        var title = status;
+        var labelText = "Please enter reason/detail:";
+        var placeholderText = "Enter details here...";
+        var confirmColor = "#DD6B55";
+        var confirmBtnText = "Submit";
+        var iconType = "warning";
+
+        if (status === 'Rejected' || status === 'Board Has Rejected' || status === 'Board Reject') {
+            var isBoardReject = (status === 'Board Has Rejected' || status === 'Board Reject');
+            title = isBoardReject ? "Board Reject" : "Reject Complaint";
+            labelText = isBoardReject ? "Please enter reason for board rejection:" : "Please enter reason for rejection:";
+            placeholderText = isBoardReject ? "Enter board rejection reason here..." : "Enter rejection reason here...";
+            confirmBtnText = "Reject";
+        } else if (status === 'More Detail') {
+            title = "More Detail";
+            labelText = "Please enter reason/detail:";
+            placeholderText = "Enter more details here...";
+            confirmColor = "#ffb822";
+            confirmBtnText = "Submit";
+            iconType = "info";
+        } else if (status === 'Withdrawal Granted') {
+            title = "Withdrawal Granted";
+            labelText = "Please enter reason for withdrawal:";
+            placeholderText = "Enter withdrawal reason here...";
+            confirmColor = "#6c757d";
+            confirmBtnText = "Submit";
+            iconType = "info";
+        }
+
+        Swal.fire({
+            title: title,
+            html: '<p class="text-start">' + labelText + ' <span class="text-danger fw-bold">*</span></p>',
+            icon: iconType,
+            input: 'textarea',
+            inputPlaceholder: placeholderText,
+            showCancelButton: true,
+            confirmButtonColor: confirmColor,
+            confirmButtonText: confirmBtnText,
+            cancelButtonText: "Cancel",
+            customClass: {
+                popup: 'swal2-reason-modal'
+            },
+            inputValidator: function (value) {
+                if (!value || !value.trim()) {
+                    return (status === 'Board Has Rejected' || status === 'Board Reject')
+                        ? 'Please enter reason for board rejection is required'
+                        : 'Please enter reason is required';
+                }
+            }
+        }).then(function (result) {
+            if (result.isConfirmed) {
+                var reason = result.value.trim();
+                var Data = JSON.stringify({
+                    NextDate: "",
+                    Summary: reason,
+                    ComplaintId: $("#hdfComplaintId").val(),
+                    CompalintStatus: status,
+                    OrderFileName: "",
+                    OrderFilePath: ""
+                });
+
+                $.ajax({
+                    type: 'POST',
+                    url: "/Complaint/SaveComplaintStatusLog",
+                    contentType: "application/json; charset=utf-8",
+                    data: Data,
+                    dataType: "json",
+                    success: function (response) {
+                        if (response.IsSuccess) {
+                            Swal.fire("Success!", "Status updated successfully.", "success");
+                            GetComplaintCurrentStatus();
+                            GetLogList();
+                        } else {
+                            Swal.fire("Error!", response.Message || "Something went wrong!", "error");
+                        }
+                    },
+                    error: function () {
+                        Swal.fire('Something went wrong!', '', 'error');
+                    }
+                });
+            }
+        });
+    }
+
+    function rejectComplaint(status) {
+        updateStatusWithReason(status || 'Rejected');
+    }
+
+    function updateStatusWithNote(status) {
+        updateStatusWithReason(status);
+    }
+
+    function updateStatusDirectly(status) {
+        if (status === 'Rejected' || status === 'Board Has Rejected' || status === 'More Detail' || status === 'Withdrawal Granted') {
+            updateStatusWithReason(status);
+            return;
+        }
+
+        Swal.fire({
+            title: "Are you sure?",
+            text: "You want to change the status to " + status + "?",
+            icon: "warning",
+            showCancelButton: true,
+            confirmButtonColor: "#DD6B55",
+            confirmButtonText: "Yes",
+            cancelButtonText: "No"
+        }).then((result) => {
+            if (result.isConfirmed) {
+                var Data = JSON.stringify({
+                    ComplaintId: $("#hdfComplaintId").val(),
+                    Status: status
+                });
+
+                $.ajax({
+                    type: 'POST',
+                    url: "/Complaint/StatusUpdate",
+                    contentType: "application/json; charset=utf-8",
+                    data: Data,
+                    dataType: "json",
+                    success: function (response) {
+                        if (response.IsSuccess) {
+                            Swal.fire("Success!", "Status updated successfully.", "success");
+                            GetComplaintCurrentStatus();
+                            GetLogList();
+                        } else {
+                            Swal.fire("Error!", response.Message || "Something went wrong!", "error");
+                        }
+                    },
+                    failure: function (result) {
+                        Swal.fire('Something went wrong!', '', 'error');
+                    },
+                    error: function (result) {
+                        Swal.fire('Something went wrong!', '', 'error');
+                    }
+                });
+            }
+        });
+    }
+
+    function sendComplaintLink(dcId, mobileNumber, emailAddress) {
+        if (typeof Swal !== 'undefined') {
+            Swal.fire({
+                title: 'Sending Link...',
+                text: 'Please wait while sending the complaint link to ' + (emailAddress || 'member') + '...',
+                allowOutsideClick: false,
+                didOpen: function () {
+                    Swal.showLoading();
+                }
+            });
+        }
+
+        $.ajax({
+            type: "POST",
+            url: "/Complaint/SendComplaintLinkSMS",
+            data: JSON.stringify({ dcId: dcId, mobileNumber: mobileNumber, emailAddress: emailAddress || "" }),
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            success: function (response) {
+                if (response.IsSuccess) {
+                    if (typeof Swal !== 'undefined') {
+                        Swal.fire("Sent!", response.Message, "success");
+                    } else {
+                        swal("Sent!", response.Message, "success");
+                    }
+                } else {
+                    if (typeof Swal !== 'undefined') {
+                        Swal.fire("Error!", response.Message || "Something went wrong!", "error");
+                    } else {
+                        swal("Error!", response.Message || "Something went wrong!", "error");
+                    }
+                }
+            },
+            error: function (result) {
+                if (typeof Swal !== 'undefined') {
+                    Swal.fire('Something went wrong!', '', 'error');
+                } else {
+                    swal('Something went wrong!', '', 'error');
+                }
+            }
+        });
+    }
+
+    $(document).ready(function () {
+        if (window.history && window.history.replaceState) {
+            var currentPath = window.location.pathname.toLowerCase();
+            if (currentPath.indexOf('/Complaint/OnlineComplaintDetail/') !== -1 ||  window.location.search.toLowerCase().indexOf('id=') !== -1) {
+                window.history.replaceState(null, '', '/Complaint/OnlineComplaintDetail');
+            }
+        }
+
+        updateActionButtonsUI('@ViewBag.Status');
+
+        $('#boardAcceptOnlyModal').on('hidden.bs.modal', function () {
+            // Restore #boardAccept to its original place right before #logDetails
+            $('#logDetails').before($('#boardAccept'));
+            $('#boardAccept').addClass('hide-element').hide(); // Re-add hide-element class and hide it since the popup closed
+        });
+    });
+</script>

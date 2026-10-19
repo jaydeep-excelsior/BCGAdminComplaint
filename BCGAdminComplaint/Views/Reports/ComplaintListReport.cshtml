@@ -98,104 +98,104 @@
                 <div class="col-md-12 mt-3">
                     <div class="p-3 bg-light rounded border">
                         <div class="d-flex flex-wrap justify-content-between align-items-center mb-2 pb-2 border-bottom">
-                            <span class="fw-bold text-dark font-size-13">
-                                <i class="fa-solid fa-table-columns text-primary me-1"></i> Select Report Columns for Export (PDF &amp; Excel):
-                                <span class="badge bg-primary ms-1" id="lblSelectedCount">15 selected</span>
+                            <span class="fw-bold text-dark font-size-16 d-inline-flex align-items-center">
+                                <i class="fa-solid fa-table-columns text-primary me-2 font-size-17"></i> Select Report Columns for Export (PDF &amp; Excel):
+                                <span class="badge bg-secondary ms-2 font-size-12 px-2 py-1" id="lblSelectedCount">0 selected</span>
                             </span>
                             <div class="btn-group btn-group-sm">
-                                <button type="button" class="btn btn-outline-primary btn-sm py-0 px-2 me-2" id="btnSelectAllCols"><i class="fa-solid fa-check-double me-1"></i> Select All</button>
-                                <button type="button" class="btn btn-outline-secondary btn-sm py-0 px-2" id="btnClearAllCols"><i class="fa-solid fa-rotate-left me-1"></i> Clear</button>
+                                <button type="button" class="btn btn-outline-primary btn-sm px-2 me-2 font-size-12" id="btnSelectAllCols"><i class="fa-solid fa-check-double me-1"></i> Select All</button>
+                                <button type="button" class="btn btn-outline-secondary btn-sm px-2 font-size-12" id="btnClearAllCols"><i class="fa-solid fa-rotate-left me-1"></i> Clear</button>
                             </div>
                         </div>
                         <div class="row g-2" id="colSelectionList">
-                            <div class="col-6 col-sm-4 col-md-3 col-lg-2">
+                            <div class="col-6 col-sm-4 col-md-3 col-lg-3">
                                 <div class="form-check">
-                                    <input class="form-check-input chk-col-select" type="checkbox" value="SrNo" id="col_SrNo" checked>
-                                    <label class="form-check-label font-size-12" for="col_SrNo">#</label>
-                                </div>
-                            </div>
-                            <div class="col-6 col-sm-4 col-md-3 col-lg-2">
-                                <div class="form-check">
-                                    <input class="form-check-input chk-col-select" type="checkbox" value="ComplaintNumber" id="col_ComplaintNumber" checked>
-                                    <label class="form-check-label font-size-12" for="col_ComplaintNumber">Complaint Number</label>
-                                </div>
-                            </div>
-                            <div class="col-6 col-sm-4 col-md-3 col-lg-2">
-                                <div class="form-check">
-                                    <input class="form-check-input chk-col-select" type="checkbox" value="ComplaintsCreateDate" id="col_ComplaintsCreateDate" checked>
-                                    <label class="form-check-label font-size-12" for="col_ComplaintsCreateDate">Created Date</label>
-                                </div>
-                            </div>
-                            <div class="col-6 col-sm-4 col-md-3 col-lg-2">
-                                <div class="form-check">
-                                    <input class="form-check-input chk-col-select" type="checkbox" value="ComplainedAgainst" id="col_ComplainedAgainst" checked>
-                                    <label class="form-check-label font-size-12" for="col_ComplainedAgainst">Complained Against</label>
-                                </div>
-                            </div>
-                            <div class="col-6 col-sm-4 col-md-3 col-lg-2">
-                                <div class="form-check">
-                                    <input class="form-check-input chk-col-select" type="checkbox" value="FullName" id="col_FullName" checked>
-                                    <label class="form-check-label font-size-12" for="col_FullName">Full Name</label>
-                                </div>
-                            </div>
-                            <div class="col-6 col-sm-4 col-md-3 col-lg-2">
-                                <div class="form-check">
-                                    <input class="form-check-input chk-col-select" type="checkbox" value="ContactNumber" id="col_ContactNumber" checked>
-                                    <label class="form-check-label font-size-12" for="col_ContactNumber">Contact Number</label>
-                                </div>
-                            </div>
-                            <div class="col-6 col-sm-4 col-md-3 col-lg-2">
-                                <div class="form-check">
-                                    <input class="form-check-input chk-col-select" type="checkbox" value="EmailAddress" id="col_EmailAddress" checked>
-                                    <label class="form-check-label font-size-12" for="col_EmailAddress">Email</label>
+                                    <input class="form-check-input chk-col-select" type="checkbox" value="SrNo" id="col_SrNo">
+                                    <label class="form-check-label font-size-13" for="col_SrNo">#</label>
                                 </div>
                             </div>
                             <div class="col-6 col-sm-4 col-md-3 col-lg-3">
                                 <div class="form-check">
-                                    <input class="form-check-input chk-col-select" type="checkbox" value="AffidavitFilesText" id="col_AffidavitFilesText" checked>
-                                    <label class="form-check-label font-size-12" for="col_AffidavitFilesText">Complaint Affidavit Copy</label>
+                                    <input class="form-check-input chk-col-select" type="checkbox" value="ComplaintNumber" id="col_ComplaintNumber">
+                                    <label class="form-check-label font-size-13" for="col_ComplaintNumber">Complaint Number</label>
                                 </div>
                             </div>
                             <div class="col-6 col-sm-4 col-md-3 col-lg-3">
                                 <div class="form-check">
-                                    <input class="form-check-input chk-col-select" type="checkbox" value="AdditionalFilesText" id="col_AdditionalFilesText" checked>
-                                    <label class="form-check-label font-size-12" for="col_AdditionalFilesText">Additional Attachments</label>
-                                </div>
-                            </div>
-                            <div class="col-6 col-sm-4 col-md-3 col-lg-2">
-                                <div class="form-check">
-                                    <input class="form-check-input chk-col-select" type="checkbox" value="TotalAmount" id="col_TotalAmount" checked>
-                                    <label class="form-check-label font-size-12" for="col_TotalAmount">Total Amount</label>
-                                </div>
-                            </div>
-                            <div class="col-6 col-sm-4 col-md-3 col-lg-2">
-                                <div class="form-check">
-                                    <input class="form-check-input chk-col-select" type="checkbox" value="PaidAmount" id="col_PaidAmount" checked>
-                                    <label class="form-check-label font-size-12" for="col_PaidAmount">Paid Amount</label>
-                                </div>
-                            </div>
-                            <div class="col-6 col-sm-4 col-md-3 col-lg-2">
-                                <div class="form-check">
-                                    <input class="form-check-input chk-col-select" type="checkbox" value="DueAmount" id="col_DueAmount" checked>
-                                    <label class="form-check-label font-size-12" for="col_DueAmount">Due Amount</label>
-                                </div>
-                            </div>
-                            <div class="col-6 col-sm-4 col-md-3 col-lg-2">
-                                <div class="form-check">
-                                    <input class="form-check-input chk-col-select" type="checkbox" value="PaymentStatus" id="col_PaymentStatus" checked>
-                                    <label class="form-check-label font-size-12" for="col_PaymentStatus">Payment Status</label>
+                                    <input class="form-check-input chk-col-select" type="checkbox" value="ComplaintsCreateDate" id="col_ComplaintsCreateDate">
+                                    <label class="form-check-label font-size-13" for="col_ComplaintsCreateDate">Created Date</label>
                                 </div>
                             </div>
                             <div class="col-6 col-sm-4 col-md-3 col-lg-3">
                                 <div class="form-check">
-                                    <input class="form-check-input chk-col-select" type="checkbox" value="PaymentInfoText" id="col_PaymentInfoText" checked>
-                                    <label class="form-check-label font-size-12" for="col_PaymentInfoText">Payment Information</label>
+                                    <input class="form-check-input chk-col-select" type="checkbox" value="ComplainedAgainst" id="col_ComplainedAgainst">
+                                    <label class="form-check-label font-size-13" for="col_ComplainedAgainst">Complained Against</label>
                                 </div>
                             </div>
-                            <div class="col-6 col-sm-4 col-md-3 col-lg-2">
+                            <div class="col-6 col-sm-4 col-md-3 col-lg-3">
                                 <div class="form-check">
-                                    <input class="form-check-input chk-col-select" type="checkbox" value="Status" id="col_Status" checked>
-                                    <label class="form-check-label font-size-12" for="col_Status">Status</label>
+                                    <input class="form-check-input chk-col-select" type="checkbox" value="FullName" id="col_FullName">
+                                    <label class="form-check-label font-size-13" for="col_FullName">Full Name</label>
+                                </div>
+                            </div>
+                            <div class="col-6 col-sm-4 col-md-3 col-lg-3">
+                                <div class="form-check">
+                                    <input class="form-check-input chk-col-select" type="checkbox" value="ContactNumber" id="col_ContactNumber">
+                                    <label class="form-check-label font-size-13" for="col_ContactNumber">Contact Number</label>
+                                </div>
+                            </div>
+                            <div class="col-6 col-sm-4 col-md-3 col-lg-3">
+                                <div class="form-check">
+                                    <input class="form-check-input chk-col-select" type="checkbox" value="EmailAddress" id="col_EmailAddress">
+                                    <label class="form-check-label font-size-13" for="col_EmailAddress">Email</label>
+                                </div>
+                            </div>
+                            <div class="col-6 col-sm-4 col-md-3 col-lg-3">
+                                <div class="form-check">
+                                    <input class="form-check-input chk-col-select" type="checkbox" value="AffidavitFilesText" id="col_AffidavitFilesText">
+                                    <label class="form-check-label font-size-13" for="col_AffidavitFilesText">Complaint Affidavit Copy</label>
+                                </div>
+                            </div>
+                            <div class="col-6 col-sm-4 col-md-3 col-lg-3">
+                                <div class="form-check">
+                                    <input class="form-check-input chk-col-select" type="checkbox" value="AdditionalFilesText" id="col_AdditionalFilesText">
+                                    <label class="form-check-label font-size-13" for="col_AdditionalFilesText">Additional Attachments</label>
+                                </div>
+                            </div>
+                            <div class="col-6 col-sm-4 col-md-3 col-lg-3">
+                                <div class="form-check">
+                                    <input class="form-check-input chk-col-select" type="checkbox" value="TotalAmount" id="col_TotalAmount">
+                                    <label class="form-check-label font-size-13" for="col_TotalAmount">Total Amount</label>
+                                </div>
+                            </div>
+                            <div class="col-6 col-sm-4 col-md-3 col-lg-3">
+                                <div class="form-check">
+                                    <input class="form-check-input chk-col-select" type="checkbox" value="PaidAmount" id="col_PaidAmount">
+                                    <label class="form-check-label font-size-13" for="col_PaidAmount">Paid Amount</label>
+                                </div>
+                            </div>
+                            <div class="col-6 col-sm-4 col-md-3 col-lg-3">
+                                <div class="form-check">
+                                    <input class="form-check-input chk-col-select" type="checkbox" value="DueAmount" id="col_DueAmount">
+                                    <label class="form-check-label font-size-13" for="col_DueAmount">Due Amount</label>
+                                </div>
+                            </div>
+                            <div class="col-6 col-sm-4 col-md-3 col-lg-3">
+                                <div class="form-check">
+                                    <input class="form-check-input chk-col-select" type="checkbox" value="PaymentStatus" id="col_PaymentStatus">
+                                    <label class="form-check-label font-size-13" for="col_PaymentStatus">Payment Status</label>
+                                </div>
+                            </div>
+                            <div class="col-6 col-sm-4 col-md-3 col-lg-3">
+                                <div class="form-check">
+                                    <input class="form-check-input chk-col-select" type="checkbox" value="PaymentInfoText" id="col_PaymentInfoText">
+                                    <label class="form-check-label font-size-13" for="col_PaymentInfoText">Payment Information</label>
+                                </div>
+                            </div>
+                            <div class="col-6 col-sm-4 col-md-3 col-lg-3">
+                                <div class="form-check">
+                                    <input class="form-check-input chk-col-select" type="checkbox" value="Status" id="col_Status">
+                                    <label class="form-check-label font-size-13" for="col_Status">Status</label>
                                 </div>
                             </div>
                         </div>
@@ -240,8 +240,8 @@
         </div>
     </div>
 
-    <div id="paginationDiv" class="mt-3 d-flex justify-content-between align-items-center">
-        <div id="entriesInfo" class="fw-bold text-dark mb-0"></div>
+    <div id="paginationDiv" class="pagination-wrapper mt-3">
+        <div id="entriesInfo" class="entries-text"></div>
         <ul class="pagination pagination-rounded mb-0" id="paginationList"></ul>
     </div>
 </div>
@@ -566,6 +566,7 @@
         $('#filePreviewModal, #complaintDetailsModal, #paymentModal').appendTo('body');
         $(".main_filter_div").hide();
         initSelect2();
+        updateSelectedColCount();
         GetComplaintList();
     });
 
@@ -678,12 +679,16 @@
 
         var startEntry = totalRecords > 0 ? ((baseFilter.pageNo - 1) * baseFilter.pageSize + 1) : 0;
         var endEntry = Math.min(baseFilter.pageNo * baseFilter.pageSize, totalRecords);
-        $("#entriesInfo").html('Showing ' + startEntry + ' to ' + endEntry + ' of ' + totalRecords + ' entries');
+        $("#entriesInfo").html('Showing <strong class="text-dark">' + startEntry + '</strong> to <strong class="text-dark">' + endEntry + '</strong> of <strong class="text-dark">' + totalRecords + '</strong> entries');
 
         if (totalPages > 1) {
-            var prevDisabled = baseFilter.pageNo <= 1 ? 'disabled' : '';
-            var prevPage = baseFilter.pageNo > 1 ? baseFilter.pageNo - 1 : 1;
-            paginationHtml += '<li class="page-item ' + prevDisabled + '"><a class="page-link" href="javascript:void(0);" onclick="ChangePage(' + prevPage + ')"><i class="fa-solid fa-chevron-left"></i></a></li>';
+            var isFirst = baseFilter.pageNo <= 1;
+            var prevDisabled = isFirst ? 'disabled' : '';
+            var firstClick = isFirst ? '' : 'onclick="ChangePage(1)"';
+            var prevClick = isFirst ? '' : 'onclick="ChangePage(' + (baseFilter.pageNo - 1) + ')"';
+
+            paginationHtml += '<li class="page-item ' + prevDisabled + '"><a class="page-link" href="javascript:void(0);" ' + firstClick + ' title="First Page" aria-label="First"><i class="fa-solid fa-angles-left"></i></a></li>';
+            paginationHtml += '<li class="page-item ' + prevDisabled + '"><a class="page-link" href="javascript:void(0);" ' + prevClick + ' title="Previous Page" aria-label="Previous"><i class="fa-solid fa-chevron-left"></i></a></li>';
 
             var startPage = Math.max(1, baseFilter.pageNo - 2);
             var endPage = Math.min(totalPages, baseFilter.pageNo + 2);
@@ -693,9 +698,13 @@
                 paginationHtml += '<li class="page-item ' + activeClass + '"><a class="page-link" href="javascript:void(0);" onclick="ChangePage(' + i + ')">' + i + '</a></li>';
             }
 
-            var nextDisabled = baseFilter.pageNo >= totalPages ? 'disabled' : '';
-            var nextPage = baseFilter.pageNo < totalPages ? baseFilter.pageNo + 1 : totalPages;
-            paginationHtml += '<li class="page-item ' + nextDisabled + '"><a class="page-link" href="javascript:void(0);" onclick="ChangePage(' + nextPage + ')"><i class="fa-solid fa-chevron-right"></i></a></li>';
+            var isLast = baseFilter.pageNo >= totalPages;
+            var nextDisabled = isLast ? 'disabled' : '';
+            var nextClick = isLast ? '' : 'onclick="ChangePage(' + (baseFilter.pageNo + 1) + ')"';
+            var lastClick = isLast ? '' : 'onclick="ChangePage(' + totalPages + ')"';
+
+            paginationHtml += '<li class="page-item ' + nextDisabled + '"><a class="page-link" href="javascript:void(0);" ' + nextClick + ' title="Next Page" aria-label="Next"><i class="fa-solid fa-chevron-right"></i></a></li>';
+            paginationHtml += '<li class="page-item ' + nextDisabled + '"><a class="page-link" href="javascript:void(0);" ' + lastClick + ' title="Last Page" aria-label="Last"><i class="fa-solid fa-angles-right"></i></a></li>';
         }
 
         $("#paginationList").html(paginationHtml);
@@ -733,7 +742,7 @@
         $('#txtYear').val('');
         $('#txtFromNo').val('');
         $('#txtToNo').val('');
-        $('.chk-col-select').prop('checked', true);
+        $('.chk-col-select').prop('checked', false);
         updateSelectedColCount();
         GetComplaintList();
     });
@@ -742,6 +751,11 @@
         var count = $('.chk-col-select:checked').length;
         var total = $('.chk-col-select').length;
         $('#lblSelectedCount').text(count + ' of ' + total + ' selected');
+        if (count === 0) {
+            $('#lblSelectedCount').removeClass('bg-primary').addClass('bg-secondary');
+        } else {
+            $('#lblSelectedCount').removeClass('bg-secondary').addClass('bg-primary');
+        }
     }
 
     $(document).on('change', '.chk-col-select', function () {

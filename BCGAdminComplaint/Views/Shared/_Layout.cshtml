@@ -17,7 +17,8 @@
     <link href="~/assets/css/bootstrap.min.css" rel="stylesheet" />
     <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
     <link href="~/assets/css/app.min.css" rel="stylesheet" />
-    <link href="~/assets/css/Site.css?v=28" rel="stylesheet" />
+    <link href="~/assets/css/Site.css?v=29" rel="stylesheet" />
+    <link href="~/assets/css/complaint-management.css?v=12" rel="stylesheet" />
     <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
 </head>
@@ -50,13 +51,15 @@
 
         <a href="/DCReferredList/Index" class="sidemenulink"><i class="fa-solid fa-gavel"></i>DC Referred List</a>
 
+        <a href="/Notes/Index" class="sidemenulink"><i class="fa-solid fa-note-sticky"></i>Notes</a>
+
         <div class="sidemenu-item-collapsed">
             <a href="javascript:void(0)" class="sidemenulink sidemenu-toggle">
                 <i class="fa-solid fa-chart-pie"></i>Reports
                 <i class="fa-solid fa-chevron-down toggle-icon" style="font-size: 10px; margin-top: 4px; float: right; margin-right: 12px;"></i>
             </a>
             <div class="sidemenu-submenu" style="display: none; padding-left: 20px; background-color: #f1effd; border-radius: 4px; margin-top: 2px; margin-bottom: 2px;">
-                <a href="/Reports/ComplaintListReport" class="sidemenulink" style="padding: 8px 0;"><i class="fa-solid fa-file-invoice me-2"></i>Complaint List</a>
+                <a href="/Reports/ComplaintReport" class="sidemenulink" style="padding: 8px 0;"><i class="fa-solid fa-file-invoice me-2"></i>Complaint Report</a>
             </div>
         </div>
 
@@ -116,12 +119,17 @@
                                             <i class="fa-solid fa-gavel"></i><span key="t-dashboards">DC Referred List</span>
                                         </a>
                                     </li>
+                                    <li class="nav-item">
+                                        <a class="nav-link arrow-none" href="/Notes/Index" role="button">
+                                            <i class="fa-solid fa-note-sticky"></i><span key="t-notes">Notes</span>
+                                        </a>
+                                    </li>
                                     <li class="nav-item dropdown">
                                         <a class="nav-link dropdown-toggle arrow-none" href="#" id="reports" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                                             <i class="fa-solid fa-chart-pie"></i><span key="t-reports">Reports</span> <div class="arrow-down"></div>
                                         </a>
                                         <div class="dropdown-menu dropdown-menu-start" aria-labelledby="reports">
-                                            <a href="/Reports/ComplaintListReport" class="dropdown-item d-flex align-items-center" key="t-reports"><i class="fa-solid fa-file-invoice me-2"></i>Complaint List</a>
+                                            <a href="/Reports/ComplaintReport" class="dropdown-item d-flex align-items-center" key="t-reports"><i class="fa-solid fa-file-invoice me-2"></i>Complaint Report</a>
                                         </div>
                                     </li>
                                     <li class="nav-item dropdown">
@@ -190,9 +198,14 @@
             var callback = (typeof b === 'function') ? b : (typeof c === 'function') ? c : null;
             var config = {
                 buttonsStyling: false,
+                showConfirmButton: true,
+                showDenyButton: false,
+                showCancelButton: false,
                 customClass: {
-                    confirmButton: 'btn btn-outline-primary',
-                    cancelButton: 'btn btn-outline-secondary ms-2'
+                    popup: 'swal2-modern-popup shadow-lg',
+                    confirmButton: 'btn btn-primary px-4 py-2 rounded-pill',
+                    denyButton: 'btn btn-outline-danger px-4 py-2 ms-2 rounded-pill',
+                    cancelButton: 'btn btn-outline-secondary px-4 py-2 ms-2 rounded-pill'
                 }
             };
 
