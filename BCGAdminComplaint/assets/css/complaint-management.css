@@ -442,6 +442,20 @@
         line-height: 1.3;
     }
 
+    .complaint-number-static,
+    .complaint-number-static.description {
+        font-size: 18px !important;
+        font-weight: 700 !important;
+        color: #0b2b5c !important;
+        text-decoration: none;
+        letter-spacing: 0.2px;
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        line-height: 1.3;
+        cursor: default;
+    }
+
     .complaint-number-link:hover,
     .complaint-number-link.description:hover,
     a.complaint-number-link:hover {

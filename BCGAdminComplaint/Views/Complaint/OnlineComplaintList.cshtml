@@ -402,8 +402,6 @@
                             actionsHtml += '<button type="button" class="btn-action btn-action-danger" id="lnkRejectComplaint"><i class="fa-solid fa-circle-xmark"></i> Reject</button>';
                         }
 
-                        actionsHtml += '<a class="btn-action btn-action-primary" href="/Complaint/OnlineComplaintDetail/' + value.Id + '" onclick="document.cookie=\'OnlineComplaintId=' + value.Id + '; path=/\';"><i class="fa-solid fa-eye text-white"></i> Detail</a>';
-
                         actionsHtml += '<button type="button" class="btn-action" id="lnkViewDocument" data-bs-toggle="modal" data-bs-target="#document" data-toggle="modal" data-target="#document"><i class="fa-solid fa-file-lines text-primary"></i> Documents</button>';
                         actionsHtml += '<button type="button" class="btn-action" id="lnkViewAdjunt" data-bs-toggle="modal" data-bs-target="#Adjunt" data-toggle="modal" data-target="#Adjunt"><i class="fa-solid fa-user-shield text-primary"></i> Adjunt Details</button>';
                         actionsHtml += '<button type="button" class="btn-action btn-action-danger ms-auto" id="lnkDeleteComplaint"><i class="fa-solid fa-trash-can"></i> Delete</button>';
@@ -434,11 +432,10 @@
                                     + '<div class="d-flex align-items-center gap-3">'
                                         + '<div class="complaint-index-badge">' + (value.SrNo || (i + 1)) + '</div>'
                                         + '<div class="complaint-number-box complaint_number">'
-                                            + '<a class="complaint-number-link description" href="/Complaint/OnlineComplaintDetail/' + value.Id + '" onclick="document.cookie=\'OnlineComplaintId=' + value.Id + '; path=/\';">'
+                                            + '<span class="complaint-number-static description">'
                                                 + '<i class="fa-solid fa-globe text-primary complaint-header-icon"></i>'
                                                 + '<span class="complaint-number-text">' + value.ComplaintNumber + '</span>'
-                                                + '<i class="fa-solid fa-arrow-up-right-from-square text-muted ms-1 complaint-link-icon"></i>'
-                                            + '</a>'
+                                            + '</span>'
                                         + '</div>'
                                     + '</div>'
                                     + '<div class="complaint-card-meta">'

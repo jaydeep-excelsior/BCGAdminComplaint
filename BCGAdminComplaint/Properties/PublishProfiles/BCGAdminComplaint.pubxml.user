@@ -19,7 +19,7 @@ by editing this MSBuild file. In order to learn more about this please visit htt
       <publishTime>08/27/2026 17:17:56</publishTime>
     </File>
     <File Include="assets/css/complaint-management.css">
-      <publishTime>10/15/2026 15:21:55</publishTime>
+      <publishTime>10/19/2026 12:42:25</publishTime>
     </File>
     <File Include="assets/css/select2.min.css">
       <publishTime>09/14/2026 10:54:58</publishTime>
@@ -94,7 +94,7 @@ by editing this MSBuild file. In order to learn more about this please visit htt
       <publishTime>11/24/2023 10:35:44</publishTime>
     </File>
     <File Include="bin/BCGAdminComplaint.dll">
-      <publishTime>10/15/2026 16:14:22</publishTime>
+      <publishTime>10/19/2026 12:54:21</publishTime>
     </File>
     <File Include="bin/BCG_MasterRepository.dll">
       <publishTime>09/01/2026 16:18:40</publishTime>
@@ -256,7 +256,7 @@ by editing this MSBuild file. In order to learn more about this please visit htt
       <publishTime>10/15/2026 14:56:43</publishTime>
     </File>
     <File Include="Views/Complaint/Detail.cshtml">
-      <publishTime>10/15/2026 22:28:38</publishTime>
+      <publishTime>10/19/2026 12:36:16</publishTime>
     </File>
     <File Include="Views/Complaint/Details.cshtml">
       <publishTime>10/14/2026 15:02:15</publishTime>
@@ -264,8 +264,11 @@ by editing this MSBuild file. In order to learn more about this please visit htt
     <File Include="Views/Complaint/Index.cshtml">
       <publishTime>10/15/2026 13:55:03</publishTime>
     </File>
+    <File Include="Views/Complaint/OnlineComplaintDetail.cshtml">
+      <publishTime>10/19/2026 12:36:11</publishTime>
+    </File>
     <File Include="Views/Complaint/OnlineComplaintList.cshtml">
-      <publishTime>10/15/2026 13:09:25</publishTime>
+      <publishTime>10/19/2026 12:42:47</publishTime>
     </File>
     <File Include="Views/Complaint/SearchComplaint.cshtml">
       <publishTime>10/15/2026 15:31:31</publishTime>
@@ -355,7 +358,7 @@ by editing this MSBuild file. In order to learn more about this please visit htt
       <publishTime>06/22/2026 12:16:44</publishTime>
     </File>
     <File Include="Web.config">
-      <publishTime>10/16/2026 09:48:44</publishTime>
+      <publishTime>10/19/2026 12:54:21</publishTime>
     </File>
   </ItemGroup>
 </Project>
